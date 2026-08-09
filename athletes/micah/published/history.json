@@ -1,0 +1,144 @@
+{
+ "consecutive_no_rest_weeks": 1,
+ "consecutive_running_days": 13,
+ "is_block_volume_peak": true,
+ "long_run_trend": [
+  {
+   "date": "2026-07-12",
+   "hr_avg": 145,
+   "miles": 12.0
+  },
+  {
+   "date": "2026-07-26",
+   "hr_avg": 151,
+   "miles": 10.73
+  },
+  {
+   "date": "2026-08-02",
+   "hr_avg": 140,
+   "miles": 10.55
+  }
+ ],
+ "longest_running_day_streak_in_window": 13,
+ "pace_creep": false,
+ "pace_creep_note": "Evaluable now that prior weeks are taken at face value from Runalyze, and the answer is no creep -- because there is no repeated session type to creep. The block's quality sessions were 2026-07-02 4x500m at 6:01-6:26/mi (HR 174 avg), 2026-07-14 3x1000m at 5:50-5:53/mi (HR 165), 2026-07-19 5K race, then 2026-07-28 8x800m at 6:31-6:39/mi (HR 155) and 2026-07-30 15x1:00 at 6:14-6:34/mi (HR 160). The first two ran well above the 162 sub-T ceiling and are interval work, not sub-threshold. 07-28 is the block's FIRST genuine sub-T session. Two sub-T sessions of different rep lengths one week apart is not a progression series. Note the direction of change: the block switched loading type from fast interval work to sub-threshold, which is the 'abrupt change in loading type' shape from the injury history -- though toward easier work.",
+ "quality_sessions": [
+  {
+   "date": "2026-07-02",
+   "hr_avg": 174,
+   "id": 188283199,
+   "paces": [
+    "6:26",
+    "6:16",
+    "6:13",
+    "6:01"
+   ],
+   "structure": "4x500m w/ 100m jog",
+   "type": "interval"
+  },
+  {
+   "date": "2026-07-14",
+   "hr_avg": 165,
+   "id": 191423361,
+   "paces": [
+    "5:50",
+    "5:53",
+    "5:50"
+   ],
+   "structure": "3x1000m",
+   "type": "interval"
+  },
+  {
+   "date": "2026-07-19",
+   "hr_avg": 179,
+   "id": 192663285,
+   "structure": "5K race effort",
+   "type": "race"
+  },
+  {
+   "date": "2026-07-28",
+   "hr_avg": 155,
+   "id": 195056957,
+   "structure": "8x800m w/ 200m jog",
+   "type": "sub-threshold"
+  },
+  {
+   "date": "2026-07-30",
+   "hr_avg": 160,
+   "id": 195547303,
+   "structure": "15x1:00 w/ 30s jog",
+   "type": "sub-threshold"
+  }
+ ],
+ "quality_share_measured_from_manifest": [
+  "2026-07-20"
+ ],
+ "quality_share_note": "3 of the 4 window weeks are measured from Runalyze splits rather than authored manifests — weaker evidence than a graded week.",
+ "quality_share_provenance": {
+  "caveat": "MEASURED FROM RUNALYZE SPLITS, NOT FROM AUTHORED MANIFESTS -- weaker evidence than a graded week and it must not be mistaken for manifest-grade data. None of these four weeks has a manifest, so each session's rep count was read off its splits rather than from a prescription, and the sessions were identified by rep structure rather than by what the plan asked for. Backfilled 2026-08-05 so quality-share-drift is live on its first graded week; recompute from manifests as they are authored.",
+  "definition": "First rep to last rep of each quality session, plus a race's whole duration, over the week's total moving seconds. Computed by the same grade_week.core_seconds() that grades a live week, so the baseline and the weeks measured against it are the same measurement.",
+  "detector_note": "Six of the seven candidate sessions segmented with the detected rep count matching the count read off the splits. The exception is 07-02's 6x100m, where the floats are LONGER than the reps and median-distance classification marks the wrong segments -- it reported 11 reps against 6. Excluded on other grounds anyway, but worth recording as a real limit of unassisted detection.",
+  "sessions": {
+   "2026-06-29": "07-02 4x200m (366s) + 4x500m (573s). The same day's 6x100m in 16-18s is EXCLUDED: reps of a few seconds are `neuromuscular`, which sits in REPORTED_ROLES and not QUALITY_ROLES, so quality_seconds() would not count it either.",
+   "2026-07-06": "07-07 400/600/400/200/400 off standing rests (1167s) + 07-10 11x400m w/ 120m float (1516s). BOTH were absent from `quality_sessions` below, which was assembled for pace-creep and is not an exhaustive list -- 07-10 averages 151 bpm, under the 162 sub-T ceiling, and would have been missed by a heart-rate filter alone. Its rep structure is unmistakable.",
+   "2026-07-13": "07-14 3x1000m (879s) + the 07-19 Portland 5K at its full 1152s.",
+   "2026-07-20": "07-26's four descending miles inside a 10.7-mile run -- 7:15, 6:57, 6:45, 6:31 with easy miles either side (1649s). ATHLETE-CONFIRMED 2026-08-05 as prescribed work rather than a long run pushed in the middle; without it the week reads 0% and the mean drops to 6.9%."
+  }
+ },
+ "quality_share_weeks": {
+  "2026-06-29": 0.0453,
+  "2026-07-06": 0.1221,
+  "2026-07-13": 0.1068,
+  "2026-07-20": 0.0674
+ },
+ "quality_share_window": 0.0854,
+ "resting_hr_note": "Falling, not rising: 47.0 -> 43.0 bpm across the block (-4.0). rubric.md calls a sustained rise the signal that outweighs everything else in the document; this is the opposite and is the strongest available reassurance against the flags below.",
+ "resting_hr_weekly_mean": {
+  "2026-06-22": 47.0,
+  "2026-06-29": 43.7,
+  "2026-07-06": 44.7,
+  "2026-07-13": 44.3,
+  "2026-07-20": 44.0,
+  "2026-07-27": 43.0,
+  "2026-08-03": 44.2
+ },
+ "weeks": {
+  "2026-06-22": {
+   "miles": 38.1,
+   "rest_days": 1,
+   "running_days": 6
+  },
+  "2026-06-29": {
+   "miles": 37.92,
+   "rest_days": 1,
+   "running_days": 6
+  },
+  "2026-07-06": {
+   "miles": 42.17,
+   "rest_days": 1,
+   "running_days": 6
+  },
+  "2026-07-13": {
+   "miles": 36.94,
+   "rest_days": 1,
+   "running_days": 6
+  },
+  "2026-07-20": {
+   "easy_pct": 79,
+   "graded": 79,
+   "miles": 46.31,
+   "note": "Graded 2026-08-05. Workout execution is not scored: the week's only quality work is the Sunday progression, and hr.progression_tiers is null.",
+   "phase": "General Prep",
+   "quality_share": 0.0674,
+   "rest_days": 1,
+   "running_days": 6,
+   "structure_pct": 83,
+   "week_type": "Recovery"
+  },
+  "2026-07-27": {
+   "miles": 50.3,
+   "rest_days": 0,
+   "running_days": 7
+  }
+ }
+}

@@ -1,0 +1,489 @@
+{
+ "csv": "2026-07-13,Race,General Prep,36.9,89,67,88,none",
+ "facts": {
+  "doubles": 0,
+  "easy_seconds": 16984,
+  "long_run_miles": 0.0,
+  "long_run_share": 0.0,
+  "miles": 36.940517378509504,
+  "non_run_days": [],
+  "planned_seconds": [
+   20700.0,
+   20700.0
+  ],
+  "quality_days": 2,
+  "quality_seconds": 2031,
+  "quality_share": 0.10681041283197476,
+  "rest_days": 1,
+  "running_days": 6,
+  "seconds": 19015,
+  "surface_miles": {
+   "road": 31.565656565656564,
+   "track": 5.374860812852939
+  },
+  "surface_share": {
+   "road": 0.8544995794785534,
+   "track": 0.1455004205214466
+  },
+  "volume_vs_plan": 0.9185990338164252
+ },
+ "flags": [
+  {
+   "status": "clear",
+   "token": "unilateral-complaint",
+   "why": "no complaint word in the week's 1 note(s); Runalyze daily notes and activity descriptions are NOT searched"
+  },
+  {
+   "status": "not-evaluable",
+   "token": "consecutive-compromised",
+   "why": "1 quality session(s) this week; the flag needs two to find two in a row"
+  },
+  {
+   "status": "not-evaluable",
+   "token": "novel-loading",
+   "why": "no run in this manifest carries any of ('novel', 'off_library', 'novel_surface'); novelty is authored, never detected, so an un-annotated week has nothing to report"
+  },
+  {
+   "status": "clear",
+   "token": "pace-creep",
+   "why": "Evaluable now that prior weeks are taken at face value from Runalyze, and the answer is no creep -- because there is no repeated session type to creep. The block's quality sessions were 2026-07-02 4x500m at 6:01-6:26/mi (HR 174 avg), 2026-07-14 3x1000m at 5:50-5:53/mi (HR 165), 2026-07-19 5K race, then 2026-07-28 8x800m at 6:31-6:39/mi (HR 155) and 2026-07-30 15x1:00 at 6:14-6:34/mi (HR 160). The first two ran well above the 162 sub-T ceiling and are interval work, not sub-threshold. 07-28 is the block's FIRST genuine sub-T session. Two sub-T sessions of different rep lengths one week apart is not a progression series. Note the direction of change: the block switched loading type from fast interval work to sub-threshold, which is the 'abrupt change in loading type' shape from the injury history -- though toward easier work."
+  },
+  {
+   "status": "clear",
+   "token": "no-rest-day",
+   "why": "1 consecutive weeks without a rest day, 13 consecutive running days (fires at 3 weeks or 21 days); this week had 1"
+  },
+  {
+   "status": "clear",
+   "token": "quality-share-drift",
+   "why": "10.7% this week against a 4-week mean of 8.5% — 25% above it (fires past 50%). 3 of the 4 window weeks are measured from Runalyze splits rather than authored manifests â€” weaker evidence than a graded week."
+  }
+ ],
+ "phase": "General Prep",
+ "results": [
+  {
+   "date": "2026-07-14",
+   "detail": null,
+   "earned": null,
+   "hr_avg": 127,
+   "hr_max": 147,
+   "id": 191423347,
+   "km": 3.19,
+   "miles": 1.9821741032370952,
+   "pace": 483.8121931034483,
+   "pct": null,
+   "prescribed": "warmup for the 3x1000m",
+   "role": "volume_only",
+   "seconds": 959,
+   "surface": "road",
+   "total": null
+  },
+  {
+   "ceiling": "5000m pace",
+   "date": "2026-07-14",
+   "detail": {
+    "autolaps": [],
+    "cooldown": null,
+    "core_seconds": 879,
+    "data_quality": [],
+    "detected_reps": 3,
+    "laps_recovered": false,
+    "prescribed_reps": [
+     3,
+     3
+    ],
+    "recoveries": 0,
+    "recoveries_failed": 0,
+    "recovery_failure_pct": null,
+    "rep_hr": [
+     156,
+     169,
+     175
+    ],
+    "rep_paces": [
+     350.40889064039413,
+     352.6450996015936,
+     349.92750300601205
+    ],
+    "sets": [
+     {
+      "band": null,
+      "band_display": null,
+      "band_how": "interval",
+      "closing_faster": null,
+      "closing_reps": 0,
+      "detected_reps": 3,
+      "mode": "interval",
+      "pct": 67.02127659574468,
+      "prescribed_reps": 3,
+      "rep_hr": [
+       156,
+       169,
+       175
+      ],
+      "rep_paces": [
+       350.40889064039413,
+       352.6450996015936,
+       349.92750300601205
+      ],
+      "rep_rows": [
+       {
+        "band": [
+         217.45088682096556,
+         227.45088682096556
+        ],
+        "closing": false,
+        "dist_km": 1.015,
+        "dur": 221,
+        "hr_avg": 156,
+        "hr_max": 172,
+        "label": "1000m",
+        "ok": true,
+        "pace": 350.40889064039413,
+        "reason": ""
+       },
+       {
+        "band": [
+         217.45088682096556,
+         227.45088682096556
+        ],
+        "closing": false,
+        "dist_km": 1.004,
+        "dur": 220,
+        "hr_avg": 169,
+        "hr_max": 180,
+        "label": "1000m",
+        "ok": true,
+        "pace": 352.6450996015936,
+        "reason": ""
+       },
+       {
+        "band": [
+         217.45088682096556,
+         227.45088682096556
+        ],
+        "closing": false,
+        "dist_km": 0.998,
+        "dur": 217,
+        "hr_avg": 175,
+        "hr_max": 183,
+        "label": "1000m",
+        "ok": false,
+        "pace": 349.92750300601205,
+        "reason": "3:37 faster than 5000m pace 217.451s"
+       }
+      ],
+      "rep_seconds": [
+       221,
+       220,
+       217
+      ],
+      "unbanded_seconds": 0,
+      "work_seconds": 658
+     }
+    ],
+    "slivers": [],
+    "suspect_seconds": 0,
+    "unassisted_reps": null,
+    "work_seconds": 658
+   },
+   "earned": 441,
+   "hr_avg": 165,
+   "hr_max": 183,
+   "id": 191423361,
+   "km": 3.68,
+   "miles": 2.286645987433389,
+   "pace": 416.33029565217396,
+   "pct": 67.02127659574468,
+   "prescribed": "3x1000m @ ~5k",
+   "rep_band": "rep_3min",
+   "role": "interval",
+   "seconds": 952,
+   "surface": "track",
+   "total": 658
+  },
+  {
+   "date": "2026-07-14",
+   "detail": null,
+   "earned": null,
+   "hr_avg": 143,
+   "hr_max": 155,
+   "id": 191423377,
+   "km": 2.65,
+   "miles": 1.6466336594289348,
+   "pace": 556.8937539622642,
+   "pct": null,
+   "prescribed": "jog between the reps and the cooldown",
+   "role": "volume_only",
+   "seconds": 917,
+   "surface": "road",
+   "total": null
+  },
+  {
+   "date": "2026-07-14",
+   "detail": null,
+   "earned": null,
+   "hr_avg": 136,
+   "hr_max": 145,
+   "id": 191423383,
+   "km": 3.02,
+   "miles": 1.8765410005567484,
+   "pace": 537.1585271523179,
+   "pct": null,
+   "prescribed": "cooldown for the 3x1000m",
+   "role": "volume_only",
+   "seconds": 1008,
+   "surface": "road",
+   "total": null
+  },
+  {
+   "ceiling": "137",
+   "date": "2026-07-15",
+   "detail": null,
+   "duration": {
+    "actual": 3637,
+    "factor": 1.0,
+    "pct": 1.0277777777777777,
+    "prescribed": [
+     3600.0,
+     3600.0
+    ],
+    "reason": null
+   },
+   "duration_factor": 1.0,
+   "earned": 3260.0,
+   "hr_avg": 128,
+   "hr_max": 144,
+   "hr_pct": 89.63431399505086,
+   "id": 191657477,
+   "km": 10.51,
+   "miles": 6.5306112304143795,
+   "pace": 556.915711512845,
+   "pct": 89.63431399505086,
+   "prescribed": "60 min easy",
+   "prescribed_seconds": 3600,
+   "role": "easy",
+   "seconds": 3637,
+   "surface": "road",
+   "total": 3637
+  },
+  {
+   "ceiling": "137",
+   "date": "2026-07-16",
+   "detail": null,
+   "duration": {
+    "actual": 3479,
+    "factor": 1.0,
+    "pct": -3.361111111111111,
+    "prescribed": [
+     3600.0,
+     3600.0
+    ],
+    "reason": null
+   },
+   "duration_factor": 1.0,
+   "earned": 3351.0,
+   "hr_avg": 128,
+   "hr_max": 141,
+   "hr_pct": 96.34847613571017,
+   "id": 191923849,
+   "km": 10.35,
+   "miles": 6.431191839656406,
+   "pace": 540.9572730434783,
+   "pct": 96.34847613571017,
+   "prescribed": "60 min easy",
+   "prescribed_seconds": 3600,
+   "role": "easy",
+   "seconds": 3479,
+   "surface": "road",
+   "total": 3478
+  },
+  {
+   "ceiling": "137",
+   "date": "2026-07-17",
+   "detail": null,
+   "duration": {
+    "actual": 2359,
+    "factor": 1.0,
+    "pct": -1.7083333333333333,
+    "prescribed": [
+     2400.0,
+     2400.0
+    ],
+    "reason": null
+   },
+   "duration_factor": 1.0,
+   "earned": 1977.0,
+   "hr_avg": 129,
+   "hr_max": 153,
+   "hr_pct": 83.80669775328529,
+   "id": 192052553,
+   "km": 7.1,
+   "miles": 4.411735464885071,
+   "pace": 534.7102107042253,
+   "pct": 83.80669775328529,
+   "prescribed": "40 min easy, w/ 4x 15s strides",
+   "prescribed_seconds": 2400,
+   "role": "easy",
+   "seconds": 2359,
+   "surface": "road",
+   "total": 2359
+  },
+  {
+   "ceiling": "137",
+   "date": "2026-07-18",
+   "detail": null,
+   "duration": {
+    "actual": 2370,
+    "factor": 1.0,
+    "pct": -1.25,
+    "prescribed": [
+     2400.0,
+     2400.0
+    ],
+    "reason": null
+   },
+   "duration_factor": 1.0,
+   "earned": 1981.0,
+   "hr_avg": 127,
+   "hr_max": 145,
+   "hr_pct": 83.55124420075917,
+   "id": 192402483,
+   "km": 7.48,
+   "miles": 4.647856517935258,
+   "pace": 509.9124705882353,
+   "pct": 83.55124420075917,
+   "prescribed": "40 min easy",
+   "prescribed_seconds": 2400,
+   "role": "easy",
+   "seconds": 2370,
+   "surface": "road",
+   "total": 2371
+  },
+  {
+   "date": "2026-07-19",
+   "detail": null,
+   "earned": null,
+   "hr_avg": 137,
+   "hr_max": 150,
+   "id": 192658261,
+   "km": 3.05,
+   "miles": 1.8951821363238683,
+   "pace": 513.9347724590165,
+   "pct": null,
+   "prescribed": "race warmup",
+   "role": "volume_only",
+   "seconds": 974,
+   "surface": "road",
+   "total": null
+  },
+  {
+   "ceiling": "none (race)",
+   "date": "2026-07-19",
+   "detail": {
+    "race": {
+     "halves": {
+      "delta_pct": 7.194244604316546,
+      "first": 556,
+      "second": 596
+     },
+     "pace": 372.8165055923553,
+     "seconds": 1152,
+     "splits": [
+      {
+       "at_mi": 1.0,
+       "hr_avg": 170,
+       "hr_max": 182,
+       "partial": false,
+       "seconds": 351
+      },
+      {
+       "at_mi": 2.0,
+       "hr_avg": 184,
+       "hr_max": 185,
+       "partial": false,
+       "seconds": 379
+      },
+      {
+       "at_mi": 3.0,
+       "hr_avg": 184,
+       "hr_max": 185,
+       "partial": false,
+       "seconds": 388
+      },
+      {
+       "at_mi": 3.09,
+       "hr_avg": 184,
+       "hr_max": 184,
+       "length_mi": 0.09,
+       "partial": true,
+       "seconds": 34
+      }
+     ],
+     "total_mi": 3.089991947029348
+    }
+   },
+   "earned": null,
+   "hr_avg": 179,
+   "hr_max": 185,
+   "id": 192663285,
+   "km": 4.97,
+   "miles": 3.0882148254195494,
+   "pace": 373.03104386317915,
+   "pct": null,
+   "prescribed": "Track 5k",
+   "role": "race",
+   "seconds": 1152,
+   "surface": "track",
+   "total": null
+  },
+  {
+   "date": "2026-07-19",
+   "detail": null,
+   "earned": null,
+   "hr_avg": 144,
+   "hr_max": 152,
+   "id": 192667871,
+   "km": 3.45,
+   "miles": 2.143730613218802,
+   "pace": 563.5036382608696,
+   "pct": null,
+   "prescribed": "race cooldown",
+   "role": "volume_only",
+   "seconds": 1208,
+   "surface": "road",
+   "total": null
+  }
+ ],
+ "scores": {
+  "easy": {
+   "earned": 10569.0,
+   "pct": 89.22752216124947,
+   "total": 11845
+  },
+  "week": {
+   "earned": 11010.0,
+   "pct": 88.05886587219068,
+   "total": 12503
+  },
+  "workout": {
+   "earned": 441,
+   "pct": 67.02127659574468,
+   "total": 658
+  }
+ },
+ "structure": {
+  "checks": {
+   "long_run_share": true,
+   "outdoor_run": true,
+   "quality_days_met": true,
+   "rest_days_met": false,
+   "session_work_volume": false,
+   "volume_vs_plan": false
+  },
+  "pct": 50.0
+ },
+ "warnings": [],
+ "week_start": "2026-07-13",
+ "week_type": "Race"
+}

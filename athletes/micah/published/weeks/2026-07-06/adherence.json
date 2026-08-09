@@ -1,0 +1,527 @@
+{
+ "csv": "2026-07-06,Volume,General Prep,42.2,38,8,38,novel-loading",
+ "facts": {
+  "doubles": 0,
+  "easy_seconds": 20798,
+  "long_run_miles": 12.004891434025293,
+  "long_run_share": 0.2846618535435391,
+  "miles": 42.17246281714786,
+  "non_run_days": [],
+  "planned_seconds": [
+   19500.0,
+   19500.0
+  ],
+  "quality_days": 1,
+  "quality_seconds": 1167,
+  "quality_share": 0.05312997951286137,
+  "rest_days": 1,
+  "running_days": 6,
+  "seconds": 21965,
+  "surface_miles": {
+   "road": 39.25823192555476,
+   "track": 2.914230891593096
+  },
+  "surface_share": {
+   "road": 0.9308973036687784,
+   "track": 0.06910269633122144
+  },
+  "volume_vs_plan": 1.1264102564102565
+ },
+ "flags": [
+  {
+   "status": "clear",
+   "token": "unilateral-complaint",
+   "why": "no complaint word in the week's 1 note(s); Runalyze daily notes and activity descriptions are NOT searched"
+  },
+  {
+   "status": "not-evaluable",
+   "token": "consecutive-compromised",
+   "why": "1 quality session(s) this week; the flag needs two to find two in a row"
+  },
+  {
+   "status": "fired",
+   "token": "novel-loading",
+   "why": "Four repetition reps of four different distances, then a sub-T mile, then 5x300m in spikes -- three modes in one session, and more total volume at speed than any session in the library in a Volume week at the block's volume peak"
+  },
+  {
+   "status": "clear",
+   "token": "pace-creep",
+   "why": "Evaluable now that prior weeks are taken at face value from Runalyze, and the answer is no creep -- because there is no repeated session type to creep. The block's quality sessions were 2026-07-02 4x500m at 6:01-6:26/mi (HR 174 avg), 2026-07-14 3x1000m at 5:50-5:53/mi (HR 165), 2026-07-19 5K race, then 2026-07-28 8x800m at 6:31-6:39/mi (HR 155) and 2026-07-30 15x1:00 at 6:14-6:34/mi (HR 160). The first two ran well above the 162 sub-T ceiling and are interval work, not sub-threshold. 07-28 is the block's FIRST genuine sub-T session. Two sub-T sessions of different rep lengths one week apart is not a progression series. Note the direction of change: the block switched loading type from fast interval work to sub-threshold, which is the 'abrupt change in loading type' shape from the injury history -- though toward easier work."
+  },
+  {
+   "status": "clear",
+   "token": "no-rest-day",
+   "why": "1 consecutive weeks without a rest day, 13 consecutive running days (fires at 3 weeks or 21 days); this week had 1"
+  },
+  {
+   "status": "clear",
+   "token": "quality-share-drift",
+   "why": "5.3% this week against a 4-week mean of 8.5% — 38% below it (fires past 50%). 3 of the 4 window weeks are measured from Runalyze splits rather than authored manifests â€” weaker evidence than a graded week."
+  }
+ ],
+ "phase": "General Prep",
+ "results": [
+  {
+   "date": "2026-07-07",
+   "detail": null,
+   "earned": null,
+   "hr_avg": 121,
+   "hr_max": 139,
+   "id": 189636489,
+   "km": 3.24,
+   "miles": 2.013242662848962,
+   "pace": 514.5927111111112,
+   "pct": null,
+   "prescribed": "warmup for the repetition set",
+   "role": "volume_only",
+   "seconds": 1036,
+   "surface": "road",
+   "total": null
+  },
+  {
+   "ceiling": "date pace + 162/166",
+   "compromised": true,
+   "date": "2026-07-07",
+   "detail": {
+    "autolaps": [],
+    "cooldown": {
+     "above": 65,
+     "pct": 38.01169590643275,
+     "threshold": 140,
+     "total": 171
+    },
+    "core_seconds": 1167,
+    "data_quality": [
+     "reps [4] dip >12 bpm below their neighbours — check strap"
+    ],
+    "detected_reps": 5,
+    "laps_recovered": true,
+    "prescribed_reps": [
+     5,
+     5
+    ],
+    "recoveries": 0,
+    "recoveries_failed": 0,
+    "recovery_failure_pct": null,
+    "rep_hr": [
+     145,
+     164,
+     158,
+     141,
+     152
+    ],
+    "rep_paces": [
+     314.51646700507615,
+     312.62594594594594,
+     303.2683417085427,
+     268.224,
+     364.30423880597016
+    ],
+    "sets": [
+     {
+      "band": null,
+      "band_display": null,
+      "band_how": "repetition",
+      "closing_faster": true,
+      "closing_reps": 1,
+      "detected_reps": 4,
+      "mode": "repetition",
+      "pct": 11.0,
+      "prescribed_reps": 4,
+      "rep_hr": [
+       145,
+       164,
+       158,
+       141
+      ],
+      "rep_paces": [
+       314.51646700507615,
+       312.62594594594594,
+       303.2683417085427,
+       268.224
+      ],
+      "rep_rows": [
+       {
+        "band": [
+         84.74341843633182,
+         88.74341843633182
+        ],
+        "closing": false,
+        "dist_km": 0.394,
+        "dur": 77,
+        "hr_avg": 145,
+        "hr_max": 168,
+        "label": "400m",
+        "ok": false,
+        "pace": 314.51646700507615,
+        "reason": "1:17 faster than 3000m pace 84.7434s"
+       },
+       {
+        "band": [
+         127.11512765449774,
+         133.11512765449774
+        ],
+        "closing": false,
+        "dist_km": 0.592,
+        "dur": 115,
+        "hr_avg": 164,
+        "hr_max": 179,
+        "label": "600m",
+        "ok": false,
+        "pace": 312.62594594594594,
+        "reason": "1:55 faster than 3000m pace 127.115s"
+       },
+       {
+        "band": [
+         84.74341843633182,
+         88.74341843633182
+        ],
+        "closing": false,
+        "dist_km": 0.398,
+        "dur": 75,
+        "hr_avg": 158,
+        "hr_max": 178,
+        "label": "400m",
+        "ok": false,
+        "pace": 303.2683417085427,
+        "reason": "1:15 faster than 3000m pace 84.7434s"
+       },
+       {
+        "band": [
+         42.37170921816591,
+         44.37170921816591
+        ],
+        "closing": true,
+        "dist_km": 0.198,
+        "dur": 33,
+        "hr_avg": 141,
+        "hr_max": 171,
+        "label": "200m",
+        "ok": true,
+        "pace": 268.224,
+        "reason": ""
+       }
+      ],
+      "rep_seconds": [
+       77,
+       115,
+       75,
+       33
+      ],
+      "unbanded_seconds": 0,
+      "work_seconds": 300
+     },
+     {
+      "band": "rep_6min",
+      "band_display": "6:59-7:14/mi",
+      "band_how": "named",
+      "detected_reps": 1,
+      "mode": "subt",
+      "pct": 0.0,
+      "prescribed_reps": 1,
+      "rep_hr": [
+       152
+      ],
+      "rep_paces": [
+       364.30423880597016
+      ],
+      "rep_rows": [
+       {
+        "dist_km": 0.402,
+        "dur": 91,
+        "hr_avg": 152,
+        "hr_max": 168,
+        "hr_min": 113,
+        "ok": false,
+        "pace": 364.30423880597016,
+        "reason": "peaked 168",
+        "suspect": false,
+        "work": true
+       }
+      ],
+      "rep_seconds": [
+       91
+      ],
+      "work_seconds": 91
+     }
+    ],
+    "slivers": [
+     {
+      "dist_km": 0.048,
+      "dur": 183,
+      "index": 1
+     },
+     {
+      "dist_km": 0.032,
+      "dur": 172,
+      "index": 9
+     }
+    ],
+    "suspect_seconds": 0,
+    "unassisted_reps": 4,
+    "work_seconds": 391
+   },
+   "earned": 33,
+   "hr_avg": 142,
+   "hr_max": 179,
+   "id": 189636509,
+   "km": 2.35,
+   "miles": 1.460222301757735,
+   "novel_reason": "Four repetition reps of four different distances, then a sub-T mile, then 5x300m in spikes -- three modes in one session, and more total volume at speed than any session in the library",
+   "off_library": true,
+   "pace": 916.298839148936,
+   "pct": 8.439897698209718,
+   "prescribed": "400m, 600m, 400m, 200m at Repetition, 1 mile Sub-T, 5x300m in spikes",
+   "role": "mixed",
+   "seconds": 1338,
+   "sets": [
+    {
+     "mode": "repetition",
+     "reps": 4,
+     "target_pace": "3000m"
+    },
+    {
+     "mode": "subt",
+     "rep_band": "rep_6min",
+     "reps": 1
+    }
+   ],
+   "surface": "track",
+   "total": 391
+  },
+  {
+   "date": "2026-07-07",
+   "detail": null,
+   "earned": null,
+   "hr_avg": 144,
+   "hr_max": 152,
+   "id": 189636521,
+   "km": 2.34,
+   "miles": 1.4540085898353614,
+   "pace": 521.3174153846154,
+   "pct": null,
+   "prescribed": "part of the abandoned sub-T mile, then cooldown",
+   "role": "volume_only",
+   "seconds": 758,
+   "surface": "track",
+   "total": null
+  },
+  {
+   "date": "2026-07-07",
+   "detail": null,
+   "earned": null,
+   "hr_avg": 134,
+   "hr_max": 141,
+   "id": 189636525,
+   "km": 2.63,
+   "miles": 1.6342062355841882,
+   "pace": 506.05607908745253,
+   "pct": null,
+   "prescribed": "cooldown",
+   "role": "volume_only",
+   "seconds": 827,
+   "surface": "road",
+   "total": null
+  },
+  {
+   "ceiling": "137",
+   "date": "2026-07-08",
+   "detail": null,
+   "duration": {
+    "actual": 3211,
+    "factor": 0.8983333333333333,
+    "pct": 7.033333333333333,
+    "prescribed": [
+     3000.0,
+     3000.0
+    ],
+    "reason": null
+   },
+   "duration_factor": 0.8983333333333333,
+   "earned": 2441.67,
+   "hr_avg": 132,
+   "hr_max": 145,
+   "hr_pct": 85.15037593984962,
+   "id": 189910023,
+   "km": 9.69,
+   "miles": 6.021086852779765,
+   "pace": 533.2924235294118,
+   "pct": 76.49342105263158,
+   "prescribed": "50 min easy",
+   "prescribed_seconds": 3000,
+   "role": "easy",
+   "seconds": 3211,
+   "surface": "road",
+   "total": 3192
+  },
+  {
+   "ceiling": "137",
+   "date": "2026-07-09",
+   "detail": null,
+   "duration": {
+    "actual": 3580,
+    "factor": 1.0,
+    "pct": -0.5555555555555556,
+    "prescribed": [
+     3600.0,
+     3600.0
+    ],
+    "reason": null
+   },
+   "duration_factor": 1.0,
+   "earned": 1989.0,
+   "hr_avg": 134,
+   "hr_max": 151,
+   "hr_pct": 55.55865921787709,
+   "id": 190152831,
+   "km": 10.65,
+   "miles": 6.617603197327607,
+   "pace": 540.9813633802817,
+   "pct": 55.55865921787709,
+   "prescribed": "60 min easy",
+   "prescribed_seconds": 3600,
+   "role": "easy",
+   "seconds": 3580,
+   "surface": "road",
+   "total": 3580
+  },
+  {
+   "ceiling": "none (neuromuscular)",
+   "date": "2026-07-10",
+   "detail": null,
+   "earned": null,
+   "hr_avg": 151,
+   "hr_max": 180,
+   "id": 190412463,
+   "km": 10.88,
+   "miles": 6.760518571542194,
+   "pace": 507.5054470588235,
+   "pct": null,
+   "prescribed": "11x~.22 mile hill repeats",
+   "role": "neuromuscular",
+   "seconds": 3431,
+   "surface": "road",
+   "total": null
+  },
+  {
+   "date": "2026-07-11",
+   "detail": null,
+   "earned": null,
+   "hr_avg": 125,
+   "hr_max": 139,
+   "id": 190565319,
+   "km": 2.83,
+   "miles": 1.758480474031655,
+   "pace": 556.1619901060071,
+   "pct": null,
+   "prescribed": "first half of the 30 min easy",
+   "role": "volume_only",
+   "seconds": 978,
+   "surface": "road",
+   "total": null
+  },
+  {
+   "ceiling": "137",
+   "date": "2026-07-11",
+   "detail": null,
+   "duration": null,
+   "duration_factor": 1.0,
+   "earned": 270.0,
+   "hr_avg": 145,
+   "hr_max": 165,
+   "hr_pct": 22.613065326633166,
+   "id": 190565367,
+   "km": 3.94,
+   "miles": 2.4482024974150955,
+   "pace": 487.7047553299493,
+   "pct": 22.613065326633166,
+   "prescribed": "30 min easy",
+   "role": "easy",
+   "seconds": 1194,
+   "surface": "road",
+   "total": 1194
+  },
+  {
+   "ceiling": "137/140/143",
+   "date": "2026-07-12",
+   "detail": null,
+   "duration": {
+    "actual": 5612,
+    "factor": 1.0,
+    "pct": 3.925925925925926,
+    "prescribed": [
+     5400.0,
+     5400.0
+    ],
+    "reason": null
+   },
+   "duration_factor": 1.0,
+   "earned": 512.0,
+   "hr_avg": 145,
+   "hr_max": 157,
+   "hr_pct": 9.123307198859587,
+   "id": 190812757,
+   "is_long": true,
+   "km": 19.32,
+   "miles": 12.004891434025293,
+   "pace": 467.4761142857143,
+   "pct": 9.123307198859587,
+   "prescribed": "90 min easy/long",
+   "prescribed_seconds": 5400,
+   "role": "long",
+   "seconds": 5612,
+   "surface": "road",
+   "total": 5612
+  }
+ ],
+ "scores": {
+  "easy": {
+   "earned": 5212.67,
+   "pct": 38.39055825600236,
+   "total": 13578
+  },
+  "week": {
+   "earned": 5245.67,
+   "pct": 37.55222277901067,
+   "total": 13969
+  },
+  "workout": {
+   "earned": 33,
+   "pct": 8.439897698209718,
+   "total": 391
+  }
+ },
+ "structure": {
+  "checks": {
+   "long_run_share": false,
+   "outdoor_run": true,
+   "quality_days_met": false,
+   "rest_days_met": null,
+   "session_work_volume": false,
+   "volume_vs_plan": false
+  },
+  "pct": 20.0
+ },
+ "warnings": [
+  {
+   "date": "2026-07-07",
+   "id": 189636509,
+   "kind": "sliver",
+   "text": "2026-07-07 189636509: split #2 is 48 m / 3:03 — a lap fired early. Reps are graded as recorded; merge it into rep 1 in Runalyze."
+  },
+  {
+   "date": "2026-07-07",
+   "id": 189636509,
+   "kind": "sliver",
+   "text": "2026-07-07 189636509: split #10 is 32 m / 2:52 — a lap fired early. Reps are graded as recorded; merge it into rep 9 in Runalyze."
+  },
+  {
+   "date": "2026-07-07",
+   "id": 189636509,
+   "kind": "laps-recovered",
+   "text": "2026-07-07 189636509: the laps as recorded read as 4 rep(s); the prescribed 5 were recovered from pace. The score is right; the Runalyze file still needs correcting."
+  }
+ ],
+ "week_start": "2026-07-06",
+ "week_type": "Volume"
+}

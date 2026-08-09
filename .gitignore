@@ -1,0 +1,6 @@
+# Per-machine, exactly as in the private repo.
+web/node_modules/
+web/.next/
+web/out/
+web/next-env.d.ts
+web/tsconfig.tsbuildinfo

@@ -1,0 +1,512 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+ * THIS IS THE ONLY COPY OF THE PALETTE. It was carried verbatim from
+ * scripts/report/viewer.css while the standalone file:// page still existed;
+ * that page was retired on 2026-08-07 and its stylesheet went with it, so there
+ * is nothing left to keep in step.
+ *
+ * The palette hex values below are MEASUREMENTS, not preferences: the
+ * categorical slots were validated for colour-vision deficiency in both modes
+ * (deutan dE 9.2 light / 9.4 dark against a target of 8). Re-typing them into a
+ * Tailwind config would make that a transcription of a measurement, which is
+ * the failure mode notes/skill-review.md item 3 exists to prevent -- so the
+ * `@theme inline` block at the foot POINTS AT these variables instead of
+ * restating their values, and `bg-surface-1` cannot drift from
+ * `var(--surface-1)`.
+ * ------------------------------------------------------------------------- */
+
+/* Report card styles.
+ *
+ * Colour roles come from the data-viz reference palette, declared once here and
+ * referenced by ROLE everywhere below, so the light/dark pair swaps in one
+ * place. The dark values are declared under BOTH the media query and the
+ * [data-theme] scope: the query follows the OS, the attribute follows the
+ * page's own toggle, and the toggle has to win in both directions.
+ *
+ * Categorical slots 1-3 only. The calendar's run/background split uses slots 1
+ * and 2, whose adjacent CVD separation validates in both modes (deutan dE 9.2
+ * light / 9.4 dark against a target of 8). Slot 3 sits below 3:1 on the light
+ * surface, so anything wearing it also carries a direct label or a table row --
+ * every chart here has a table beside it, which is what discharges that.
+ *
+ * Status colours are reserved for pass/fail and score severity and are never
+ * used as a series colour.
+ */
+
+:root {
+  color-scheme: light;
+
+  --surface-1: #fcfcfb;
+  --page: #f9f9f7;
+  --text-primary: #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted: #898781;
+  --grid: #e1e0d9;
+  --axis: #c3c2b7;
+  --border: rgba(11, 11, 11, 0.10);
+
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+
+  --good: #0ca30c;
+  --warning: #fab219;
+  --serious: #ec835a;
+  --critical: #d03b3b;
+  --success-text: #006300;
+
+  /* The meter track is NEUTRAL, not a step of the blue ramp. The fill carries
+   * severity and changes hue with the score, so a saturated blue track under a
+   * yellow fill read as a second series rather than as the unfilled remainder. */
+  --track: #e8e7e1;
+
+  --radius: 10px;
+  --gap: 2px;
+  --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --surface-1: #1a1a19;
+    --page: #0d0d0d;
+    --text-primary: #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted: #898781;
+    --grid: #2c2c2a;
+    --axis: #383835;
+    --border: rgba(255, 255, 255, 0.10);
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --series-3: #199e70;
+    --success-text: #0ca30c;
+    --track: #34332f;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface-1: #1a1a19;
+  --page: #0d0d0d;
+  --text-primary: #ffffff;
+  --text-secondary: #c3c2b7;
+  --text-muted: #898781;
+  --grid: #2c2c2a;
+  --axis: #383835;
+  --border: rgba(255, 255, 255, 0.10);
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --series-3: #199e70;
+  --success-text: #0ca30c;
+  --track: #34332f;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0 0 4rem;
+  background: var(--page);
+  color: var(--text-primary);
+  font: 15px/1.55 var(--sans);
+}
+
+/* ------------------------------------------------------------------ chrome */
+
+.topbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.5rem clamp(1rem, 4vw, 2.5rem) 0.5rem;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+h1 { font-size: 1.4rem; margin: 0; letter-spacing: -0.01em; }
+.sub { margin: 0.15rem 0 0; color: var(--text-secondary); font-size: 0.9rem; }
+
+.ghost {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.ghost:hover { background: var(--surface-1); color: var(--text-primary); }
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 1rem;
+  padding: 0.5rem clamp(1rem, 4vw, 2.5rem) 1rem;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.field { display: flex; flex-direction: column; gap: 0.25rem; }
+.field > span {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+.field select {
+  font: inherit;
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface-1);
+  color: var(--text-primary);
+  min-width: 15rem;
+}
+
+.tabs { display: flex; gap: 0.25rem; margin-left: auto; }
+.tab {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+.tab:hover { color: var(--text-primary); }
+.tab[aria-selected="true"] {
+  background: var(--surface-1);
+  border-color: var(--border);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+main {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 4vw, 2.5rem);
+  display: grid;
+  gap: 1rem;
+}
+
+/* ------------------------------------------------------------------- cards */
+
+.card {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.25rem 1.25rem;
+  margin-bottom: 1rem;
+}
+.card > h2 {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+  margin: 0 0 0.9rem;
+  font-weight: 600;
+}
+.card > h3 { font-size: 1rem; margin: 1.4rem 0 0.6rem; }
+.note {
+  color: var(--text-secondary);
+  font-size: 0.86rem;
+  margin: 0.6rem 0 0;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+/* ------------------------------------------------------- figures and meters */
+
+.hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.75rem 2rem;
+}
+.hero .figure {
+  font-size: 3.25rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  /* Proportional figures, deliberately: tabular-nums makes a big number loose. */
+}
+.hero .of { color: var(--text-muted); font-size: 1rem; font-weight: 400; }
+
+.meters { display: grid; gap: 0.7rem; margin-top: 1rem; }
+.meter-row {
+  display: grid;
+  grid-template-columns: 11rem 1fr 3.2rem;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+}
+.meter-row > .label { color: var(--text-secondary); }
+.meter-row > .value {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+.meter {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--track);
+  overflow: hidden;
+}
+.meter > i { display: block; height: 100%; border-radius: 999px; }
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  padding: 0.1rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  display: inline-block; flex: none;
+}
+
+/* ------------------------------------------------------------------ tables */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.87rem;
+}
+th, td {
+  text-align: left;
+  padding: 0.4rem 0.55rem;
+  border-bottom: 1px solid var(--grid);
+  vertical-align: top;
+}
+th {
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+tbody tr:last-child td { border-bottom: none; }
+tr.clickable { cursor: pointer; }
+tr.clickable:hover td { background: var(--page); }
+tr.is-open td { background: var(--page); }
+.scroll-x { overflow-x: auto; }
+
+.muted { color: var(--text-muted); }
+.sec { color: var(--text-secondary); }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.82em;
+}
+
+/* Status is never colour alone: every one of these ships with a glyph or a
+ * word beside it. */
+.ok { color: var(--success-text); }
+.bad { color: var(--critical); }
+.warn { color: var(--serious); }
+
+/* -------------------------------------------------------------- flags/notes */
+
+.flag {
+  display: grid;
+  grid-template-columns: auto 12.5rem 1fr;
+  gap: 0.5rem 0.75rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--grid);
+  font-size: 0.87rem;
+  align-items: baseline;
+}
+.flag:last-child { border-bottom: none; }
+.flag .token { font-weight: 600; }
+.flag .why { color: var(--text-secondary); }
+
+.banner {
+  border-left: 3px solid var(--warning);
+  background: var(--page);
+  padding: 0.6rem 0.85rem;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: 0.87rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+.banner.stop { border-left-color: var(--critical); }
+
+details.prose { border-top: 1px solid var(--grid); padding-top: 0.5rem; }
+details.prose > summary {
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  padding: 0.3rem 0;
+}
+.prose-body { font-size: 0.9rem; max-width: 74ch; }
+.prose-body h1 { font-size: 1.15rem; margin: 1.2rem 0 0.5rem; }
+.prose-body h2 { font-size: 1rem; margin: 1.2rem 0 0.5rem; }
+.prose-body h3 { font-size: 0.92rem; margin: 1rem 0 0.4rem; }
+.prose-body blockquote {
+  margin: 0.8rem 0;
+  padding: 0.1rem 0 0.1rem 0.9rem;
+  border-left: 2px solid var(--axis);
+  color: var(--text-secondary);
+}
+.prose-body code {
+  background: var(--page);
+  padding: 0.05rem 0.3rem;
+  border-radius: 4px;
+  font-size: 0.86em;
+}
+.prose-body pre {
+  background: var(--page);
+  padding: 0.7rem 0.85rem;
+  border-radius: var(--radius);
+  overflow-x: auto;
+}
+.prose-body pre code { background: none; padding: 0; }
+.prose-body table { margin: 0.6rem 0; }
+.prose-body hr { border: none; border-top: 1px solid var(--grid); margin: 1.2rem 0; }
+
+/* ------------------------------------------------------------------ charts */
+
+.chart { width: 100%; display: block; overflow: visible; }
+.chart text { font-family: var(--sans); }
+.axis-label { fill: var(--text-muted); font-size: 11px; }
+.gridline { stroke: var(--grid); stroke-width: 1; }
+.baseline { stroke: var(--axis); stroke-width: 1; }
+/* Solid, never dashed -- a dashed rule reads as "projection" when it is a
+ * measured ceiling. Weight and colour carry the distinction instead. */
+.ceiling { stroke: var(--critical); stroke-width: 1.5; }
+.series-line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.marker { stroke: var(--surface-1); stroke-width: 2; }
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  margin: 0 0 0.6rem;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+.legend-item { display: inline-flex; align-items: center; gap: 0.4rem; }
+.swatch {
+  width: 11px; height: 11px; border-radius: 3px;
+  display: inline-block; flex: none;
+}
+
+.small-multiples {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.1rem;
+}
+.sm-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin: 0 0 0.1rem;
+}
+.sm-sub { font-size: 0.76rem; color: var(--text-muted); margin: 0 0 0.35rem; }
+
+/* --------------------------------------------------------------- calendar */
+
+.cal-weeks { display: grid; gap: 0.35rem; }
+.cal-row {
+  display: grid;
+  grid-template-columns: 5.5rem repeat(7, 1fr);
+  gap: 0.35rem;
+  align-items: stretch;
+}
+.cal-head { color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.cal-label { color: var(--text-muted); font-size: 0.76rem; align-self: center; font-variant-numeric: tabular-nums; }
+.cal-cell {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  min-height: 3.1rem;
+  padding: 0.25rem 0.35rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--surface-1);
+  cursor: default;
+}
+.cal-cell.empty { border-style: none; background: transparent; }
+.cal-cell .d { font-size: 0.7rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.cal-cell .v { font-size: 0.78rem; font-variant-numeric: tabular-nums; font-weight: 600; }
+.cal-bar { display: flex; height: 5px; gap: var(--gap); margin-top: 0.2rem; }
+.cal-bar > i { display: block; height: 100%; border-radius: 2px; }
+.cal-cell.over { border-color: var(--critical); }
+
+.tooltip {
+  position: fixed;
+  z-index: 50;
+  pointer-events: none;
+  background: var(--surface-1);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.45rem 0.6rem;
+  font-size: 0.8rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+  max-width: 22rem;
+}
+.tooltip b { font-weight: 600; }
+.tooltip .row { display: flex; justify-content: space-between; gap: 1rem; }
+
+.empty-state {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  padding: 1rem 0;
+}
+
+@media (max-width: 640px) {
+  .meter-row { grid-template-columns: 8rem 1fr 3rem; }
+  .flag { grid-template-columns: auto 1fr; }
+  .flag .why { grid-column: 1 / -1; }
+  .cal-row { grid-template-columns: 3.6rem repeat(7, 1fr); }
+}
+
+
+/* Tailwind tokens, pointing at the variables above. `inline` so a utility
+ * resolves to `var(--...)` at use rather than baking today's value in, which is
+ * what keeps the light/dark swap working through both the media query and the
+ * [data-theme] attribute. */
+@theme inline {
+  --color-surface-1: var(--surface-1);
+  --color-page: var(--page);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-grid: var(--grid);
+  --color-axis: var(--axis);
+  --color-series-1: var(--series-1);
+  --color-series-2: var(--series-2);
+  --color-series-3: var(--series-3);
+  --color-good: var(--good);
+  --color-warning: var(--warning);
+  --color-serious: var(--serious);
+  --color-critical: var(--critical);
+  --color-track: var(--track);
+  --font-sans: var(--sans);
+}
+
+/* Tailwind's preflight strips list markers and indentation, which the old page
+ * inherited from the user-agent stylesheet. The notes are full of lists, so
+ * they are restored HERE, below the palette block rather than inside it: that
+ * block is the report card's own styling and this is a fix for what Tailwind
+ * took away. */
+.prose-body ul { list-style: disc; padding-left: 1.25rem; }
+.prose-body ol { list-style: decimal; padding-left: 1.25rem; }
+.prose-body li { margin: 0.2rem 0; }
+.prose-body strong { font-weight: 600; }
+.prose-body em { font-style: italic; }

@@ -1,0 +1,8 @@
+# Keep LF in the working tree on Windows. The skill under .claude/skills/ was ported
+# byte-for-byte from the Claude desktop app; letting core.autocrlf rewrite it to CRLF on
+# checkout would silently break that guarantee.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.pdf binary

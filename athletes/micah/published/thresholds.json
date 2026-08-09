@@ -1,0 +1,49 @@
+{
+ "hr": {
+  "abort_ceiling": 166,
+  "cooldown_elevated_threshold": 140,
+  "easy": 137,
+  "long_tiers": [
+   {
+    "ceiling": 137,
+    "through_moving_seconds": 3600
+   },
+   {
+    "ceiling": 140,
+    "through_moving_seconds": 7200
+   },
+   {
+    "ceiling": 143,
+    "through_moving_seconds": null
+   }
+  ],
+  "recovery": 130,
+  "recovery_drop_bpm": 5,
+  "subt_rep_avg": 162,
+  "subt_rep_peak": 166,
+  "tempo": 170,
+  "watch_alarm": 145
+ },
+ "load": {
+  "cooldown_seconds": [
+   900,
+   1200
+  ],
+  "warmup_seconds": [
+   900,
+   1200
+  ]
+ },
+ "updated": "2026-08-05",
+ "vvo2max_calibration": {
+  "effective_vo2max": 55.57,
+  "observed": "2026-08-04 Runalyze Training paces table",
+  "pace_sec_per_mi": 339.9
+ },
+ "wellness": {
+  "resting_hr_baseline_band": [
+   42,
+   47
+  ]
+ }
+}

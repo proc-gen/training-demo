@@ -1,0 +1,203 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "General Prep",
+  "runs": [
+   {
+    "date": "2026-08-03",
+    "id": 196500335,
+    "prescribed": "30 min recovery",
+    "role": "recovery",
+    "surface": "road"
+   },
+   {
+    "date": "2026-08-04",
+    "id": 196811641,
+    "prescribed": "AM: 30 min recovery",
+    "role": "recovery",
+    "surface": "road"
+   },
+   {
+    "date": "2026-08-04",
+    "id": 196988477,
+    "prescribed": "warmup for the 12x600m",
+    "role": "volume_only",
+    "surface": "road"
+   },
+   {
+    "date": "2026-08-04",
+    "id": 196988489,
+    "prescribed": "PM: 12x600m w/ 200m jog at Sub-T",
+    "role": "subt",
+    "surface": "road"
+   },
+   {
+    "date": "2026-08-04",
+    "id": 196988507,
+    "prescribed": "cooldown for the 12x600m",
+    "role": "volume_only",
+    "surface": "road"
+   },
+   {
+    "date": "2026-08-05",
+    "id": 197257197,
+    "prescribed": "60-70 min easy",
+    "role": "easy",
+    "surface": "road"
+   },
+   {
+    "date": "2026-08-06",
+    "id": 197554529,
+    "prescribed": "60-70 min easy",
+    "role": "easy",
+    "surface": "road"
+   },
+   {
+    "date": "2026-08-07",
+    "id": 197692911,
+    "prescribed": "AM: 30 min recovery",
+    "role": "recovery",
+    "surface": "road"
+   },
+   {
+    "date": "2026-08-07",
+    "id": 197809639,
+    "prescribed": "PM: 4x5:00 w/ 1:30 jog at Sub-T",
+    "role": "subt",
+    "surface": "treadmill"
+   },
+   {
+    "date": "2026-08-08",
+    "id": 197946219,
+    "prescribed": "30 min recovery",
+    "role": "recovery",
+    "surface": "road"
+   },
+   {
+    "date": "2026-08-09",
+    "id": 198210495,
+    "prescribed": "90 min easy/long",
+    "role": "long",
+    "surface": "road"
+   }
+  ],
+  "week_start": "2026-08-03",
+  "week_type": "Volume"
+ },
+ "pace_chart": {
+  "bands": {
+   "easy": {
+    "display": "8:17-8:58/mi",
+    "fast_sec_per_mi": 497,
+    "pct": [
+     0.63,
+     0.68
+    ],
+    "slow_sec_per_mi": 538
+   },
+   "long": {
+    "display": "7:50-8:17/mi",
+    "fast_sec_per_mi": 470,
+    "pct": [
+     0.68,
+     0.72
+    ],
+    "slow_sec_per_mi": 497
+   },
+   "recovery": {
+    "display": "8:58-9:43/mi",
+    "fast_sec_per_mi": 538,
+    "pct": [
+     0.58,
+     0.63
+    ],
+    "slow_sec_per_mi": 583
+   },
+   "rep_10min": {
+    "display": "6:52-7:08/mi",
+    "fast_sec_per_mi": 412,
+    "pct": [
+     0.79,
+     0.82
+    ],
+    "slow_sec_per_mi": 428
+   },
+   "rep_15min": {
+    "display": "7:03-7:19/mi",
+    "fast_sec_per_mi": 423,
+    "pct": [
+     0.77,
+     0.8
+    ],
+    "slow_sec_per_mi": 439
+   },
+   "rep_1min": {
+    "display": "6:25-6:38/mi",
+    "fast_sec_per_mi": 385,
+    "pct": [
+     0.85,
+     0.88
+    ],
+    "slow_sec_per_mi": 398
+   },
+   "rep_3min": {
+    "display": "6:33-6:47/mi",
+    "fast_sec_per_mi": 393,
+    "pct": [
+     0.83,
+     0.86
+    ],
+    "slow_sec_per_mi": 407
+   },
+   "rep_6min": {
+    "display": "6:42-6:58/mi",
+    "fast_sec_per_mi": 402,
+    "pct": [
+     0.81,
+     0.84
+    ],
+    "slow_sec_per_mi": 418
+   }
+  },
+  "captured": "2026-08-09",
+  "confirmed_by_athlete": true,
+  "effective_vo2max": 55.9,
+  "race_paces": {
+   "10000m": {
+    "display": "37:34 @ 6:02/mi",
+    "sec_per_mi": 362,
+    "seconds": 2254
+   },
+   "1500m": {
+    "display": "4:52 @ 5:14/mi",
+    "sec_per_mi": 314,
+    "seconds": 292
+   },
+   "3000m": {
+    "display": "10:27 @ 5:36/mi",
+    "sec_per_mi": 336,
+    "seconds": 627
+   },
+   "5000m": {
+    "display": "18:06 @ 5:49/mi",
+    "sec_per_mi": 349,
+    "seconds": 1086
+   },
+   "800m": {
+    "display": "2:28 @ 4:57/mi",
+    "sec_per_mi": 297,
+    "seconds": 148
+   },
+   "tempo": {
+    "basis": "60-80 minute race pace, the Daniels threshold definition.",
+    "display": "6:12-6:27/mi",
+    "fast_sec_per_mi": 372,
+    "slow_sec_per_mi": 387
+   }
+  },
+  "week_ending": "2026-08-09"
+ },
+ "week_end": "2026-08-09",
+ "week_start": "2026-08-03"
+}
