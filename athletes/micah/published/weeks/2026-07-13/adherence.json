@@ -1,5 +1,5 @@
 {
- "csv": "2026-07-13,Race,General Prep,36.9,89,67,88,none",
+ "csv": "2026-07-13,Race,General Prep,36.9,89,100,90,none",
  "facts": {
   "doubles": 0,
   "easy_seconds": 16984,
@@ -108,13 +108,15 @@
     "sets": [
      {
       "band": null,
-      "band_display": null,
+      "band_display": "5:50-6:06/mi",
       "band_how": "interval",
-      "closing_faster": null,
-      "closing_reps": 0,
+      "band_sec_per_mi": [
+       349.95328,
+       366.04672
+      ],
       "detected_reps": 3,
       "mode": "interval",
-      "pct": 67.02127659574468,
+      "pct": 100.0,
       "prescribed_reps": 3,
       "rep_hr": [
        156,
@@ -129,10 +131,9 @@
       "rep_rows": [
        {
         "band": [
-         217.45088682096556,
-         227.45088682096556
+         217,
+         228
         ],
-        "closing": false,
         "dist_km": 1.015,
         "dur": 221,
         "hr_avg": 156,
@@ -140,14 +141,14 @@
         "label": "1000m",
         "ok": true,
         "pace": 350.40889064039413,
-        "reason": ""
+        "reason": "",
+        "work": true
        },
        {
         "band": [
-         217.45088682096556,
-         227.45088682096556
+         217,
+         228
         ],
-        "closing": false,
         "dist_km": 1.004,
         "dur": 220,
         "hr_avg": 169,
@@ -155,22 +156,23 @@
         "label": "1000m",
         "ok": true,
         "pace": 352.6450996015936,
-        "reason": ""
+        "reason": "",
+        "work": true
        },
        {
         "band": [
-         217.45088682096556,
-         227.45088682096556
+         217,
+         228
         ],
-        "closing": false,
         "dist_km": 0.998,
         "dur": 217,
         "hr_avg": 175,
         "hr_max": 183,
         "label": "1000m",
-        "ok": false,
+        "ok": true,
         "pace": 349.92750300601205,
-        "reason": "3:37 faster than 5000m pace 217.451s"
+        "reason": "",
+        "work": true
        }
       ],
       "rep_seconds": [
@@ -184,17 +186,19 @@
     ],
     "slivers": [],
     "suspect_seconds": 0,
+    "treadmill_mph": null,
+    "treadmill_warning": null,
     "unassisted_reps": null,
     "work_seconds": 658
    },
-   "earned": 441,
+   "earned": 658,
    "hr_avg": 165,
    "hr_max": 183,
    "id": 191423361,
    "km": 3.68,
    "miles": 2.286645987433389,
    "pace": 416.33029565217396,
-   "pct": 67.02127659574468,
+   "pct": 100.0,
    "prescribed": "3x1000m @ ~5k",
    "rep_band": "rep_3min",
    "role": "interval",
@@ -462,13 +466,13 @@
    "total": 11845
   },
   "week": {
-   "earned": 11010.0,
-   "pct": 88.05886587219068,
+   "earned": 11227.0,
+   "pct": 89.79444933216028,
    "total": 12503
   },
   "workout": {
-   "earned": 441,
-   "pct": 67.02127659574468,
+   "earned": 658,
+   "pct": 100.0,
    "total": 658
   }
  },

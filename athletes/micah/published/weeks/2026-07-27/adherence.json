@@ -151,6 +151,7 @@
       "band": "rep_3min",
       "band_display": "6:36-6:49/mi",
       "band_how": "named",
+      "band_sec_per_mi": null,
       "detected_reps": 8,
       "mode": "subt",
       "pct": 90.5484818805093,
@@ -372,6 +373,8 @@
     ],
     "slivers": [],
     "suspect_seconds": 0,
+    "treadmill_mph": null,
+    "treadmill_warning": null,
     "unassisted_reps": 8,
     "work_seconds": 1570
    },
@@ -502,6 +505,7 @@
       "band": "rep_1min",
       "band_display": "6:26-6:39/mi",
       "band_how": "named",
+      "band_sec_per_mi": null,
       "detected_reps": 15,
       "mode": "subt",
       "pct": 22.73747195213164,
@@ -912,6 +916,8 @@
     ],
     "slivers": [],
     "suspect_seconds": 0,
+    "treadmill_mph": null,
+    "treadmill_warning": null,
     "unassisted_reps": 15,
     "work_seconds": 910
    },

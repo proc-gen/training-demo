@@ -16,14 +16,22 @@ import { AcRow } from "./AcRow";
  * THIS IS WHERE A PERMANENT CAVEAT LANDS. Those are filtered out of the banner
  * stack -- see WeekBanners -- because a caveat nobody can act on repeated above
  * every number stops being read. The one that exists says a week's Runalyze
- * `calculations` payload was never captured and cannot be, and the ONLY thing
- * that costs on this page is the Runalyze A:C row reading `--`. Saying it there
- * puts the reason next to its consequence.
+ * training state was never captured and cannot be, and the ONLY thing that
+ * costs on this page is the Runalyze A:C row reading `--`. Saying it there puts
+ * the reason next to its consequence.
+ *
+ * A week whose figures were READ OFF RUNALYZE'S FORM CURVE is the other side of
+ * that. The number is here, so there is nothing to explain away -- but a
+ * tooltip reading is not the API's own answer and the row says so, the same way
+ * every run-step figure names its tier.
  */
 export function AcwrTable({ load }: { load: Load }) {
   const unrecoverable =
     load.acwr_run == null &&
     (load.caveats ?? []).some((c) => c.permanent);
+  const offCurve =
+    (load.snapshot as { payload_source?: string } | null | undefined)
+      ?.payload_source === "graph";
   return (
     <>
       <h3>Acute:chronic and load shape</h3>
@@ -38,8 +46,10 @@ export function AcwrTable({ load }: { load: Load }) {
           v={load.acwr_run == null ? "--" : num(load.acwr_run, 2)}
           note={
             unrecoverable
-              ? "no verbatim capture for this week — get_calculations() is current-only, so it cannot be recovered"
-              : "running only — the gap is the point"
+              ? "no capture for this week — get_calculations() is current-only, so it cannot be recovered"
+              : offCurve
+                ? "running only — read off Runalyze's form curve, not captured verbatim"
+                : "running only — the gap is the point"
           }
         />
         <AcRow

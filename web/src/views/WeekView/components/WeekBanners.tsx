@@ -9,13 +9,19 @@ import { Banner } from "@/lib/ux/primitives/Banner";
  * exactly-one-is-null contract the payload holds, surfaced. The load grader's
  * caveats are ordinary banners: they qualify data that IS there.
  *
- * PERMANENT CAVEATS ARE FILTERED OUT HERE. A caveat that nobody can ever act on
- * -- a week whose Runalyze `calculations` payload was never captured, which
- * `get_calculations()` being current-only makes unrecoverable -- would sit at
- * the top of that week forever. It is still true and still worth saying, so it
- * moves to the row it explains: AcwrTable renders it beside the `--` that is
- * its only visible consequence. A banner repeated on every visit stops being
- * read, and it drowns the ones that mean go and fix something.
+ * A CAVEAT WITH A HOME OF ITS OWN IS NOT A BANNER, and there are two kinds.
+ *
+ * `permanent` is one nobody can ever act on -- a week whose Runalyze training
+ * state was never captured, which `get_calculations()` being current-only makes
+ * unrecoverable. AcwrTable renders it beside the `--` that is its only visible
+ * consequence.
+ *
+ * `flag` is a footnote to one flag rather than a headline about the week --
+ * `strain-spike` firing against a threshold `model.json` itself calls an
+ * uncalibrated placeholder. FlagsCard renders it under that flag's row.
+ *
+ * Both are still true and still worth saying. A banner repeated on every visit
+ * stops being read, and it drowns the ones that mean go and fix something.
  */
 export function WeekBanners({
   week,
@@ -44,7 +50,7 @@ export function WeekBanners({
         </Banner>
       ) : null}
       {(week.load?.caveats ?? [])
-        .filter((c) => !c.permanent)
+        .filter((c) => !c.permanent && !c.flag)
         .map((c, i) => (
           <Banner key={i}>{c.text}</Banner>
         ))}

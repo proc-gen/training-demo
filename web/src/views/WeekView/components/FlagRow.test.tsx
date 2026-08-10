@@ -61,4 +61,26 @@ describe("FlagRow", () => {
     const { container } = wrap(<FlagRow flag={flag("clear", { why: "" })} />);
     expect(container.querySelector(".why")).toBeTruthy();
   });
+
+  it("prints a caveat UNDER the flag it qualifies", () => {
+    /* A footnote to one flag belongs with that flag, not as a full-width
+     * banner above every number in the week. Seventeen banners across three
+     * weeks trained the eye to skip all of them. */
+    const { container } = wrap(
+      <FlagRow
+        flag={flag("fired", { token: "strain-spike" })}
+        caveat="fired against an UNCALIBRATED PLACEHOLDER"
+      />,
+    );
+    const why = container.querySelector(".why")!;
+    expect(why.textContent).toContain("8 sec/mi");
+    expect(why.querySelector(".muted")!.textContent).toContain(
+      "UNCALIBRATED PLACEHOLDER",
+    );
+  });
+
+  it("renders a flag with no caveat exactly as before", () => {
+    const { container } = wrap(<FlagRow flag={flag("clear")} />);
+    expect(container.querySelector(".why .muted")).toBeNull();
+  });
 });

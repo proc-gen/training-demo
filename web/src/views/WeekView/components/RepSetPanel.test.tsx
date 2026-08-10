@@ -140,6 +140,82 @@ describe("RepSetPanel", () => {
     expect(container.querySelectorAll(".legend-item")).toHaveLength(2);
   });
 
+  it("omits the three HR columns on a PACE-SCORED set", () => {
+    /* Heart rate lags alactic and near-maximal work entirely, so it is not the
+     * measurement here and does not enter the score. `score_repetition` does
+     * not even record `hr_min`, so that column could only ever be blank --
+     * three dead columns crowding out the two that are the verdict. */
+    const s = set({ mode: "repetition", band: null, band_display: "5:08-5:49/mi" });
+    const { container } = wrap(<RepSetPanel set={s} chart={CHART} />);
+    const headers = [...container.querySelectorAll("thead th")].map(
+      (h) => h.textContent,
+    );
+    expect(headers).toEqual(["#", "Kind", "Time", "Pace", ""]);
+    expect(bodyRows(container)[0].querySelectorAll("td")).toHaveLength(5);
+  });
+
+  it("keeps them on a heart-rate-scored set", () => {
+    const { container } = wrap(<RepSetPanel set={set({})} chart={CHART} />);
+    const headers = [...container.querySelectorAll("thead th")].map(
+      (h) => h.textContent,
+    );
+    expect(headers).toEqual([
+      "#", "Kind", "Time", "Pace", "HR avg", "HR max", "HR min", "",
+    ]);
+  });
+
+  it("labels a pace-scored set's rows `rep`, not `recovery`", () => {
+    /* THE REGRESSION. `score_repetition` scores reps only and its rows carried
+     * no `work` key at all, so `!!x.work` was false on every one and every
+     * repetition and interval session ever rendered read `recovery` down the
+     * whole table. */
+    const s = set({
+      mode: "interval",
+      band: null,
+      rep_rows: [
+        { work: true, pace: 350, dur: 221, ok: true },
+        { work: true, pace: 352, dur: 220, ok: true },
+        { work: true, pace: 349, dur: 217, ok: true },
+      ],
+    } as Partial<RepSet>);
+    const { container } = wrap(<RepSetPanel set={s} chart={CHART} />);
+    const kinds = bodyRows(container).map(
+      (r) => [...r.querySelectorAll("td")][1].textContent,
+    );
+    expect(kinds).toEqual(["rep", "rep", "rep"]);
+  });
+
+  it("draws a pace-scored set's band from `band_sec_per_mi`", () => {
+    /* A race-pace band has no NAME in the chart to look up, so the grader emits
+     * the pair. Exactly one of the two routes is ever non-null per set, which
+     * is what stops them disagreeing. */
+    const s = set({
+      mode: "repetition",
+      band: null,
+      band_display: "5:00-5:57/mi",
+      band_sec_per_mi: [300, 357],
+      rep_rows: [
+        { work: true, pace: 310, dur: 77, ok: true },
+        { work: true, pace: 400, dur: 33, ok: false },
+      ],
+    } as Partial<RepSet>);
+    const { container } = wrap(<RepSetPanel set={s} chart={CHART} />);
+    expect(fills(container)).toEqual(["var(--series-1)", "var(--critical)"]);
+    expect(container.querySelector(".note")).toBeNull();
+  });
+
+  it("says so when a pace-scored set has NO band either way", () => {
+    const s = set({
+      mode: "repetition",
+      band: null,
+      band_sec_per_mi: null,
+    } as Partial<RepSet>);
+    const { container } = wrap(<RepSetPanel set={s} chart={null} />);
+    expect(container.querySelector(".note")!.textContent).toContain(
+      "could not be drawn",
+    );
+  });
+
   has(found)("resolves a real set's band to numbers via the pace chart", () => {
     const [, w] = found!;
     const s = w

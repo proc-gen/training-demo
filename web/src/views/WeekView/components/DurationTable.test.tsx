@@ -79,6 +79,26 @@ describe("DurationTable", () => {
     expect(rows(container)[0].textContent).toContain("45:00");
   });
 
+  it("COLLAPSES a range whose two ends are the same", () => {
+    /* A prescription is always a PAIR internally and most of them are a pair of
+     * one number: `30 min recovery` is [1800, 1800]. Printing `30:00–30:00`
+     * invites the reader to look for a range that was never prescribed.
+     * Mirrors `fmt_prescribed` on the Python side. */
+    const { container } = wrap(
+      <DurationTable runs={[run({ prescribed: [1800, 1800] })]} />,
+    );
+    const cell = [...rows(container)[0].querySelectorAll("td")][3];
+    expect(cell.textContent).toBe("30:00");
+  });
+
+  it("still prints a genuine range as a range", () => {
+    const { container } = wrap(
+      <DurationTable runs={[run({ prescribed: [3600, 4200] })]} />,
+    );
+    const cell = [...rows(container)[0].querySelectorAll("td")][3];
+    expect(cell.textContent).toBe("1:00:00–1:10:00");
+  });
+
   it("renders a row per run", () => {
     const { container } = wrap(
       <DurationTable runs={[run({ pct: 0 }), run({ pct: 5, factor: 0.9 })]} />,

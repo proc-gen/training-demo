@@ -29,7 +29,7 @@ export function FlagsCard({ week }: { week: Week }) {
         <div key={b.title}>
           <h3>{b.title}</h3>
           {b.flags.map((f, i) => (
-            <FlagRow key={i} flag={f} />
+            <FlagRow key={i} flag={f} caveat={b.caveats?.[f.token ?? ""]} />
           ))}
         </div>
       ))}

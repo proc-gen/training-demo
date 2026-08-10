@@ -71,10 +71,16 @@ export const RepRow = z.looseObject({
  * `band` is the band's NAME. `band_display` is the human string
  * ("6:36-6:49/mi"). The NUMBERS live only in the week's pace chart, which is
  * why `paceChartBand()` below takes the chart rather than the set.
+ *
+ * `band_sec_per_mi` is the exception, and the two never overlap: a PACE-SCORED
+ * set is judged against race paces, which have no band name in the chart, so
+ * the grader emits the pair directly. `band` is null on exactly those sets and
+ * `band_sec_per_mi` is null on every other, so there is one source per set.
  */
 export const RepSet = z.looseObject({
   band: str,
   band_display: str,
+  band_sec_per_mi: z.array(z.number()).nullable().optional(),
   band_how: str,
   mode: str,
   pct: num,
@@ -246,18 +252,29 @@ export const Readiness = z.looseObject({
 
 /** A qualification on numbers that ARE present, from the load grader.
  *
- * `permanent` means nobody can ever act on it -- a week whose `calculations`
- * payload was never captured, which `get_calculations()` being current-only
+ * THREE ORTHOGONAL FIELDS. `mark` is severity (`??` / `!!`).
+ *
+ * `permanent` means nobody can ever act on it -- a week whose training state
+ * was never captured at all, which `get_calculations()` being current-only
  * makes unrecoverable rather than merely absent. Those render beside the `--`
  * they explain instead of as a banner above the week; see WeekBanners.
  *
- * Defaulted rather than required, so records published before the flag existed
- * still parse.
+ * `flag` names the flag TOKEN this caveat qualifies. A footnote to one flag is
+ * not a headline about the week, so those render under that flag's row in the
+ * Flags card instead of as a banner. The token arrives structured rather than
+ * matched out of the text.
+ *
+ * Both exist for the same reason: a banner repeated above every number stops
+ * being read, and takes the actionable ones down with it.
+ *
+ * Defaulted / optional rather than required, so records published before either
+ * field existed still parse.
  */
 export const Caveat = z.looseObject({
   mark: z.string(),
   text: z.string(),
   permanent: z.boolean().default(false),
+  flag: str,
 });
 
 export const Load = z.looseObject({

@@ -1,5 +1,5 @@
 {
- "csv": "2026-07-06,Volume,General Prep,42.2,38,8,38,novel-loading",
+ "csv": "2026-07-06,Volume,General Prep,42.2,38,68,39,novel-loading",
  "facts": {
   "doubles": 0,
   "easy_seconds": 20798,
@@ -79,7 +79,7 @@
    "total": null
   },
   {
-   "ceiling": "date pace + 162/166",
+   "ceiling": "800m-3000m pace + 162/166",
    "compromised": true,
    "date": "2026-07-07",
    "detail": {
@@ -120,13 +120,15 @@
     "sets": [
      {
       "band": null,
-      "band_display": null,
+      "band_display": "5:00-5:57/mi",
       "band_how": "repetition",
-      "closing_faster": true,
-      "closing_reps": 1,
+      "band_sec_per_mi": [
+       299.95328,
+       357.04672
+      ],
       "detected_reps": 4,
       "mode": "repetition",
-      "pct": 11.0,
+      "pct": 89.0,
       "prescribed_reps": 4,
       "rep_hr": [
        145,
@@ -143,63 +145,63 @@
       "rep_rows": [
        {
         "band": [
-         84.74341843633182,
-         88.74341843633182
+         74,
+         89
         ],
-        "closing": false,
         "dist_km": 0.394,
         "dur": 77,
         "hr_avg": 145,
         "hr_max": 168,
         "label": "400m",
-        "ok": false,
+        "ok": true,
         "pace": 314.51646700507615,
-        "reason": "1:17 faster than 3000m pace 84.7434s"
+        "reason": "",
+        "work": true
        },
        {
         "band": [
-         127.11512765449774,
-         133.11512765449774
+         111,
+         134
         ],
-        "closing": false,
         "dist_km": 0.592,
         "dur": 115,
         "hr_avg": 164,
         "hr_max": 179,
         "label": "600m",
-        "ok": false,
+        "ok": true,
         "pace": 312.62594594594594,
-        "reason": "1:55 faster than 3000m pace 127.115s"
+        "reason": "",
+        "work": true
        },
        {
         "band": [
-         84.74341843633182,
-         88.74341843633182
+         74,
+         89
         ],
-        "closing": false,
         "dist_km": 0.398,
         "dur": 75,
         "hr_avg": 158,
         "hr_max": 178,
         "label": "400m",
-        "ok": false,
+        "ok": true,
         "pace": 303.2683417085427,
-        "reason": "1:15 faster than 3000m pace 84.7434s"
+        "reason": "",
+        "work": true
        },
        {
         "band": [
-         42.37170921816591,
-         44.37170921816591
+         37,
+         45
         ],
-        "closing": true,
         "dist_km": 0.198,
         "dur": 33,
         "hr_avg": 141,
         "hr_max": 171,
         "label": "200m",
-        "ok": true,
+        "ok": false,
         "pace": 268.224,
-        "reason": ""
+        "reason": "0:33 faster than 800m pace 0:37.0",
+        "work": true
        }
       ],
       "rep_seconds": [
@@ -215,6 +217,7 @@
       "band": "rep_6min",
       "band_display": "6:59-7:14/mi",
       "band_how": "named",
+      "band_sec_per_mi": null,
       "detected_reps": 1,
       "mode": "subt",
       "pct": 0.0,
@@ -245,23 +248,14 @@
       "work_seconds": 91
      }
     ],
-    "slivers": [
-     {
-      "dist_km": 0.048,
-      "dur": 183,
-      "index": 1
-     },
-     {
-      "dist_km": 0.032,
-      "dur": 172,
-      "index": 9
-     }
-    ],
+    "slivers": [],
     "suspect_seconds": 0,
+    "treadmill_mph": null,
+    "treadmill_warning": null,
     "unassisted_reps": 4,
     "work_seconds": 391
    },
-   "earned": 33,
+   "earned": 267,
    "hr_avg": 142,
    "hr_max": 179,
    "id": 189636509,
@@ -270,19 +264,28 @@
    "novel_reason": "Four repetition reps of four different distances, then a sub-T mile, then 5x300m in spikes -- three modes in one session, and more total volume at speed than any session in the library",
    "off_library": true,
    "pace": 916.298839148936,
-   "pct": 8.439897698209718,
+   "pct": 68.28644501278772,
    "prescribed": "400m, 600m, 400m, 200m at Repetition, 1 mile Sub-T, 5x300m in spikes",
    "role": "mixed",
    "seconds": 1338,
    "sets": [
     {
+     "float_distance_m": 200,
      "mode": "repetition",
-     "reps": 4,
-     "target_pace": "3000m"
+     "rep_distance_m": [
+      400,
+      600,
+      400,
+      200
+     ],
+     "rep_pace": "3000m",
+     "reps": 4
     },
     {
+     "float_distance_m": 200,
      "mode": "subt",
      "rep_band": "rep_6min",
+     "rep_distance_m": 1609,
      "reps": 1
     }
    ],
@@ -481,13 +484,13 @@
    "total": 13578
   },
   "week": {
-   "earned": 5245.67,
-   "pct": 37.55222277901067,
+   "earned": 5479.67,
+   "pct": 39.22736058415062,
    "total": 13969
   },
   "workout": {
-   "earned": 33,
-   "pct": 8.439897698209718,
+   "earned": 267,
+   "pct": 68.28644501278772,
    "total": 391
   }
  },
@@ -506,20 +509,8 @@
   {
    "date": "2026-07-07",
    "id": 189636509,
-   "kind": "sliver",
-   "text": "2026-07-07 189636509: split #2 is 48 m / 3:03 — a lap fired early. Reps are graded as recorded; merge it into rep 1 in Runalyze."
-  },
-  {
-   "date": "2026-07-07",
-   "id": 189636509,
-   "kind": "sliver",
-   "text": "2026-07-07 189636509: split #10 is 32 m / 2:52 — a lap fired early. Reps are graded as recorded; merge it into rep 9 in Runalyze."
-  },
-  {
-   "date": "2026-07-07",
-   "id": 189636509,
    "kind": "laps-recovered",
-   "text": "2026-07-07 189636509: the laps as recorded read as 4 rep(s); the prescribed 5 were recovered from pace. The score is right; the Runalyze file still needs correcting."
+   "text": "2026-07-07 189636509: the laps as recorded read as 4 rep(s); the prescribed 5 were recovered from pace. The score is right — mark the recoveries INACTIVE in Runalyze and the file will declare the session instead of it being inferred."
   }
  ],
  "week_start": "2026-07-06",

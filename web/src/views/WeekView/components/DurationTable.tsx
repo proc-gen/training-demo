@@ -30,8 +30,14 @@ export function DurationTable({ runs }: { runs: RunResult[] }) {
       >
         {runs.map((r, i) => {
           const d = r.duration!;
+          // A prescription is always a PAIR internally, and most of them are a
+          // pair of the same number: `30 min recovery` is [1800, 1800]. Printing
+          // that as `30:00–30:00` invites the reader to look for a range that
+          // was never prescribed. Mirrors `fmt_prescribed` on the Python side.
           const p = Array.isArray(d.prescribed)
-            ? `${clock(d.prescribed[0])}–${clock(d.prescribed[1])}`
+            ? d.prescribed[0] === d.prescribed[1]
+              ? clock(d.prescribed[0])
+              : `${clock(d.prescribed[0])}–${clock(d.prescribed[1])}`
             : clock(d.prescribed as number);
           const full = (d.factor ?? 0) >= 1;
           return (

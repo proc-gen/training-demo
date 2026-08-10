@@ -8,7 +8,28 @@
 
 import type { Flag, Week } from "@/lib/data/payload";
 
-export type FlagBlock = { title: string; flags: Flag[] };
+/** `caveats` maps a flag TOKEN to the footnote that qualifies it.
+ *
+ * Populated on the Load block only, because only the load grader emits caveats
+ * and a token means something different in each vocabulary -- which is the same
+ * reason the blocks are never merged.
+ */
+export type FlagBlock = {
+  title: string;
+  flags: Flag[];
+  caveats?: Record<string, string>;
+};
+
+/** Load caveats that name a flag, keyed by that flag's token.
+ *
+ * These are filtered out of the banner stack (see WeekBanners): a footnote to
+ * one flag belongs under that flag, not above the whole week.
+ */
+export function flagCaveats(week: Week): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const c of week.load?.caveats ?? []) if (c.flag) out[c.flag] = c.text;
+  return out;
+}
 
 /** Fired first. A flag that fired is the reason to read the card.
  *
@@ -33,6 +54,10 @@ export function flagBlocks(week: Week): FlagBlock[] {
   if (week.adherence?.flags?.length)
     blocks.push({ title: "Adherence", flags: firedFirst(week.adherence.flags) });
   if (week.load?.flags?.length)
-    blocks.push({ title: "Load", flags: firedFirst(week.load.flags) });
+    blocks.push({
+      title: "Load",
+      flags: firedFirst(week.load.flags),
+      caveats: flagCaveats(week),
+    });
   return blocks;
 }

@@ -100,6 +100,36 @@ describe("WeekBanners", () => {
     expect(banners(container)[0].textContent).toBe("go fix this");
   });
 
+  it("does NOT banner a caveat that names a FLAG", () => {
+    /* A footnote to one flag is not a headline about the week. `strain-spike`
+     * fires against a threshold model.json itself calls an uncalibrated
+     * placeholder, and nobody can act on that until there is a distribution --
+     * so it renders under the flag's own row in the Flags card instead. */
+    const w = week({
+      load: {
+        caveats: [
+          { mark: "??", text: "provisional", flag: "strain-spike" },
+        ],
+      } as unknown as Week["load"],
+    });
+    const { container } = wrap(<WeekBanners week={w} banners={[]} />);
+    expect(banners(container)).toHaveLength(0);
+  });
+
+  it("keeps a caveat that names neither a flag nor permanence", () => {
+    const w = week({
+      load: {
+        caveats: [
+          { mark: "??", text: "provisional", flag: "strain-spike" },
+          { mark: "??", text: "go fix this" },
+        ],
+      } as unknown as Week["load"],
+    });
+    const { container } = wrap(<WeekBanners week={w} banners={[]} />);
+    expect(banners(container)).toHaveLength(1);
+    expect(banners(container)[0].textContent).toBe("go fix this");
+  });
+
   it("puts the failures above the caveats", () => {
     const w = week({
       adherence_error: "boom",

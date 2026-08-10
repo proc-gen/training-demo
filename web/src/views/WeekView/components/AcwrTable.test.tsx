@@ -106,4 +106,51 @@ describe("AcwrTable", () => {
       expect(row).not.toContain("current-only");
     });
   });
+
+  describe("a figure read off Runalyze's curve says so", () => {
+    /* get_calculations() takes no parameters, so a PAST week has no verbatim
+     * payload and never will. Reading CTL and ATL off the form curve gives the
+     * number back -- but a tooltip reading is a measurement of a plotted line,
+     * not the API's answer, and every place it prints has to say which. Same
+     * rule as `run_step_source` and the ceiling tiers. */
+    const graph = { payload_source: "graph" } as unknown as NonNullable<
+      Parameters<typeof load>[0]
+    >["snapshot"];
+
+    it("labels the row", () => {
+      const { container } = wrap(
+        <AcwrTable load={load({ acwr_run: 1.38, snapshot: graph })} />,
+      );
+      const row = rowFor(container, "Runalyze A:C").textContent ?? "";
+      expect(row).toContain("1.38");
+      expect(row).toContain("read off Runalyze's form curve");
+    });
+
+    it("leaves a verbatim capture's row alone", () => {
+      const api = { payload_source: "api" } as unknown as NonNullable<
+        Parameters<typeof load>[0]
+      >["snapshot"];
+      const { container } = wrap(
+        <AcwrTable load={load({ acwr_run: 1.15, snapshot: api })} />,
+      );
+      const row = rowFor(container, "Runalyze A:C").textContent ?? "";
+      expect(row).toContain("the gap is the point");
+      expect(row).not.toContain("form curve");
+    });
+
+    it("an unrecoverable week still says unrecoverable", () => {
+      // The two cannot both apply, and "no capture at all" is the stronger
+      // statement -- there is no number to qualify.
+      const { container } = wrap(
+        <AcwrTable
+          load={load({
+            acwr_run: null,
+            caveats: [{ mark: "??", text: "never captured", permanent: true }],
+          })}
+        />,
+      );
+      const row = rowFor(container, "Runalyze A:C").textContent ?? "";
+      expect(row).toContain("current-only");
+    });
+  });
 });

@@ -8,12 +8,23 @@ import { Note } from "@/lib/ux/primitives/Note";
 import { Table } from "@/lib/ux/primitives/Table";
 import { Verdict } from "@/lib/ux/primitives/Verdict";
 
+/** Modes graded on PACE against a race pace, not on heart rate.
+ *
+ * Heart rate lags alactic and near-maximal work entirely, so it is not the
+ * measurement here and does not enter the score. It is not shown either: three
+ * columns of a number nobody may act on, one of which (`hr_min`) the pace
+ * scorer does not even record, crowd out the two that are the verdict.
+ */
+const PACE_SCORED = new Set(["repetition", "goal_pace", "interval"]);
+
 /** One prescribed block: its laps, and its reps against the band.
  *
- * `st.band` is the band's NAME ("rep_3min"); the NUMBERS live only in the
- * week's pace chart, which is why the chart is threaded down here and resolved
- * with `paceChartBand`. Indexing the name as a pair yields "r" and paints every
- * rep out of band.
+ * TWO ROUTES TO THE BAND'S NUMBERS, for disjoint sets of modes. `st.band` is a
+ * band NAME ("rep_3min") and the numbers for it live only in the week's pace
+ * chart, which is why the chart is threaded down here — indexing the name as a
+ * pair yields "r" and paints every rep out of band. A pace-scored set has no
+ * name to look up, because its band is built from race paces, so the grader
+ * emits `band_sec_per_mi` directly. Exactly one is ever non-null per set.
  */
 export function RepSetPanel({
   set,
@@ -25,7 +36,13 @@ export function RepSetPanel({
   const rows = set.rep_rows ?? [];
   if (!rows.length) return null;
 
-  const range = paceChartBand(chart, set.band);
+  const pair = set.band_sec_per_mi;
+  const range =
+    paceChartBand(chart, set.band) ??
+    (pair && pair.length === 2
+      ? ([Math.min(...pair), Math.max(...pair)] as [number, number])
+      : null);
+  const showHr = !PACE_SCORED.has(set.mode ?? "");
   const reps = rows.filter((x) => x.work && x.pace);
 
   // Row index -> rep number. Only WORK laps are numbered, so the recoveries
@@ -52,9 +69,13 @@ export function RepSetPanel({
           { label: "Kind" },
           { label: "Time", num: true },
           { label: "Pace", num: true },
-          { label: "HR avg", num: true },
-          { label: "HR max", num: true },
-          { label: "HR min", num: true },
+          ...(showHr
+            ? [
+                { label: "HR avg", num: true },
+                { label: "HR max", num: true },
+                { label: "HR min", num: true },
+              ]
+            : []),
           { label: "" },
         ]}
       >
@@ -68,18 +89,22 @@ export function RepSetPanel({
               <td>{isRep ? "rep" : x.suspect ? "suspect" : "recovery"}</td>
               <td className="num">{clock(x.dur)}</td>
               <td className="num">{x.pace ? pace(x.pace) : "--"}</td>
-              <td className="num">{x.hr_avg ?? "--"}</td>
-              <td className="num">{x.hr_max ?? "--"}</td>
-              {/* HR min on RECOVERIES only. Inside a rep it is the lowest
-                  sample in the split, which on the opening rep is the tail
-                  of the warmup -- rep 1 of 2026-07-28 reads 83 against a
-                  143 average. It is the recovery criterion, so it is shown
-                  where it is the criterion. */}
-              <td className="num">
-                {isRep || x.hr_min === null || x.hr_min === undefined
-                  ? ""
-                  : x.hr_min}
-              </td>
+              {showHr ? (
+                <>
+                  <td className="num">{x.hr_avg ?? "--"}</td>
+                  <td className="num">{x.hr_max ?? "--"}</td>
+                  {/* HR min on RECOVERIES only. Inside a rep it is the lowest
+                      sample in the split, which on the opening rep is the tail
+                      of the warmup -- rep 1 of 2026-07-28 reads 83 against a
+                      143 average. It is the recovery criterion, so it is shown
+                      where it is the criterion. */}
+                  <td className="num">
+                    {isRep || x.hr_min === null || x.hr_min === undefined
+                      ? ""
+                      : x.hr_min}
+                  </td>
+                </>
+              ) : null}
               <td>
                 <Verdict v={x.ok} pass="✓" fail="✗" none="–" />{" "}
                 <span className="sec">{x.reason || ""}</span>
@@ -101,10 +126,11 @@ export function RepSetPanel({
             ]}
           />
           <RepPaceChart reps={reps} band={range} bandDisplay={set.band_display} />
-          {!range && set.band ? (
+          {!range && (set.band || PACE_SCORED.has(set.mode ?? "")) ? (
             <Note>
-              No pace chart for this week, so the band {set.band} could not be
-              drawn — every rep is shown unjudged.
+              No pace chart for this week, so the band{" "}
+              {set.band ? set.band + " " : ""}could not be drawn — every rep is
+              shown unjudged.
             </Note>
           ) : null}
         </>
