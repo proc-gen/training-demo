@@ -1,4 +1,4 @@
-import { cleanup } from "@testing-library/react";
+import { cleanup, fireEvent } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { wrap } from "@/test/render";
@@ -65,5 +65,57 @@ describe("Meter", () => {
   it("appends a suffix to the value only", () => {
     const { q } = wrap(<Meter label="l" value={44} suffix=" bpm" />);
     expect(q.getByText("44 bpm")).toBeTruthy();
+  });
+
+  describe("as a disclosure", () => {
+    it("is a plain div with no button semantics when it does not disclose", () => {
+      const { container } = wrap(<Meter label="l" value={50} />);
+      expect(container.querySelector("button")).toBeNull();
+      expect(container.querySelector(".meter-row")).toBeTruthy();
+    });
+
+    it("is a real button, not a div with a click handler", () => {
+      // The precedent in this app -- RunRow's clickable <tr> -- is reachable by
+      // mouse only. A keyboard user must be able to open these.
+      const { container } = wrap(
+        <Meter label="l" value={50} onClick={() => {}} panelId="p" />,
+      );
+      const b = container.querySelector("button.meter-row") as HTMLButtonElement;
+      expect(b).toBeTruthy();
+      expect(b.type).toBe("button");
+      expect(b.getAttribute("aria-controls")).toBe("p");
+    });
+
+    it("reports its open state through aria-expanded", () => {
+      const shut = wrap(<Meter label="l" value={50} onClick={() => {}} />);
+      expect(
+        shut.container.querySelector("button")!.getAttribute("aria-expanded"),
+      ).toBe("false");
+      cleanup();
+      const open = wrap(<Meter label="l" value={50} onClick={() => {}} selected />);
+      const b = open.container.querySelector("button")!;
+      expect(b.getAttribute("aria-expanded")).toBe("true");
+      expect(b.className).toContain("is-open");
+    });
+
+    it("calls back on click", () => {
+      let hits = 0;
+      const { container } = wrap(
+        <Meter label="l" value={50} onClick={() => (hits += 1)} />,
+      );
+      // fireEvent, not `.click()`: React listens through its synthetic
+      // event system, so a raw DOM click is not the same path.
+      fireEvent.click(container.querySelector("button")!);
+      expect(hits).toBe(1);
+    });
+
+    it("keeps the fill and the value in the interactive form", () => {
+      const { container, q } = wrap(
+        <Meter label="Structure" value={75} onClick={() => {}} />,
+      );
+      expect(fill(container).style.width).toBe("75%");
+      expect(q.getByText("75")).toBeTruthy();
+      expect(q.getByText("Structure")).toBeTruthy();
+    });
   });
 });

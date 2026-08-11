@@ -56,10 +56,31 @@
   --critical: #d03b3b;
   --success-text: #006300;
 
-  /* The meter track is NEUTRAL, not a step of the blue ramp. The fill carries
-   * severity and changes hue with the score, so a saturated blue track under a
-   * yellow fill read as a second series rather than as the unfilled remainder. */
+  /* THE NEUTRAL RESTING FILL — "the unfilled remainder", wherever that idea
+   * appears. Two consumers: a meter's unfilled track, and a control that is not
+   * selected. One token rather than two holding the same hex, because a second
+   * name for #e8e7e1 is a transcription of a measurement.
+   *
+   * It is NEUTRAL, not a step of the blue ramp. A meter's fill carries severity
+   * and changes hue with the score, so a saturated blue track under a yellow
+   * fill read as a second series rather than as the remainder. */
   --track: #e8e7e1;
+
+  /* THE SELECTED-CONTROL ACCENT. Step 500 of the palette's own blue ramp — one
+   * step deeper than --series-1, which is step 450, so a selected control does
+   * not read as a slot-1 mark sitting above charts that use slot 1.
+   *
+   * MODE-INVARIANT, and deliberately absent from both dark blocks below — like
+   * the four status colours above it. It was measured against every surface it
+   * lands on rather than assumed: white text on it is 5.39:1 in both modes, and
+   * the pill stands off its background 5.12:1 on the light page, 5.26:1 on the
+   * light card, 3.60:1 on the dark page and 3.23:1 on the dark card. A second
+   * step would be a value with nothing left to fix.
+   *
+   * --series-1 ITSELF WAS TRIED AND FAILS: white on #2a78d6 is 4.42:1 and on
+   * #3987e5 is 3.64:1, both under AA for text this size. */
+  --accent: #256abf;
+  --accent-ink: #ffffff;
 
   --radius: 10px;
   --gap: 2px;
@@ -166,24 +187,50 @@ h1 { font-size: 1.4rem; margin: 0; letter-spacing: -0.01em; }
   min-width: 15rem;
 }
 
-.tabs { display: flex; gap: 0.25rem; margin-left: auto; }
+/* A TAB STRIP IS A ROW OF CONTROLS AND HAS TO LOOK LIKE ONE.
+ *
+ * Until 2026-08-10 it did not, in either direction. The selected tab filled
+ * with --surface-1 while the strip sat on --page: those are the palette's two
+ * neutral planes and they differ by **1.03:1**, so "selected" was very nearly
+ * the background behind it. Inside a card the same rule inverted to --page on
+ * --surface-1, which is the identical failure at 1.12:1. And an unselected tab
+ * was `transparent` on `transparent` with a hover that moved only the text —
+ * bare words, with nothing saying a control was there at all.
+ *
+ * Three states, three distinct fills, and the numbers are in the token comments
+ * above. `wrap` because four in-card pills carrying real fills have to be able
+ * to drop under a long week title. */
+.tabs { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-left: auto; }
 .tab {
   font: inherit;
   font-size: 0.9rem;
   padding: 0.4rem 0.9rem;
   border-radius: 999px;
-  border: 1px solid transparent;
-  background: transparent;
+  border: 1px solid var(--border);
+  background: var(--track);
   color: var(--text-secondary);
   cursor: pointer;
 }
-.tab:hover { color: var(--text-primary); }
-.tab[aria-selected="true"] {
-  background: var(--surface-1);
-  border-color: var(--border);
-  color: var(--text-primary);
+/* --axis is the hover fill because it moves TOWARD prominence in BOTH modes —
+   darker than --track on light, lighter than it on dark. --grid would go the
+   wrong way in the dark. */
+.tab:hover { background: var(--axis); color: var(--text-primary); }
+/* There was no focus style at all, so the strips were invisible to the
+   keyboard. Same rule as `button.meter-row`, so the page has one focus idea. */
+.tab:focus-visible { outline: 2px solid var(--series-1); outline-offset: 1px; }
+/* LAST, AND WITH ITS OWN :hover. `.tab:hover` and `.tab[aria-selected="true"]`
+   have EQUAL specificity (0,2,0), so source order alone decides — a hover rule
+   below this one would repaint the selected pill grey under the cursor. */
+.tab[aria-selected="true"],
+.tab[aria-selected="true"]:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
   font-weight: 600;
 }
+/* In-card pills share a header row with the week's title, so they take a
+   slightly tighter scale — the same step down `.card > h2` takes from `h1`. */
+.tabs.in-card .tab { font-size: 0.82rem; padding: 0.3rem 0.75rem; }
 
 main {
   max-width: 1180px;
@@ -211,6 +258,30 @@ main {
   font-weight: 600;
 }
 .card > h3 { font-size: 1rem; margin: 1.4rem 0 0.6rem; }
+/* The score card opens on an h3 rather than the uppercase h2 every other card
+   uses -- the week's own title is the one heading on the page that should read
+   large. Without this it also inherited the 1.4rem meant for a MID-card
+   subheading, so that card alone sat with a gap above its title. */
+.card > h3:first-child { margin-top: 0; }
+
+/* The week card's header: its title, and the strip that swaps its content.
+   `baseline` rather than `center` so the title and the pills sit on one line of
+   text; it wraps on a narrow screen and the strip drops beneath the title,
+   which is why the title carries the bottom margin and the strip does not. */
+.card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  margin-bottom: 1rem;
+}
+.card-head > h3 { margin: 0; }
+/* NO PER-SURFACE TAB OVERRIDE LIVES HERE, and that is the point of --accent.
+   This block briefly swapped the selected pill's fill to --page inside a card,
+   because the fill was a SURFACE colour and therefore meant something different
+   depending on what it sat on. An accent is visible on every surface, so both
+   strips take one rule. */
 .note {
   color: var(--text-secondary);
   font-size: 0.86rem;
@@ -248,6 +319,29 @@ main {
   align-items: center;
   gap: 0.75rem;
   font-size: 0.9rem;
+}
+/* A meter that discloses a panel is a real <button>, so its own chrome has to be
+   unset before the grid above applies. */
+button.meter-row {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  padding: 0.25rem 0.4rem;
+  margin: -0.25rem -0.4rem;
+  border-radius: var(--radius);
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+/* `--page` for the hover and open states, matching `tr.clickable` above -- one
+   idea, one colour. `--series-1` for the ring: it is the only accent declared in
+   both modes, and a focus ring is not a status. */
+button.meter-row:hover { background: var(--page); }
+button.meter-row.is-open { background: var(--page); }
+button.meter-row:focus-visible {
+  outline: 2px solid var(--series-1);
+  outline-offset: 1px;
 }
 .meter-row > .label { color: var(--text-secondary); }
 .meter-row > .value {
@@ -334,6 +428,62 @@ tr.is-open td { background: var(--page); }
 .flag:last-child { border-bottom: none; }
 .flag .token { font-weight: 600; }
 .flag .why { color: var(--text-secondary); }
+
+/* --------------------------------------------------------- score detail */
+
+/* The panel a score bar opens. Set in from the meters by a rule down its left
+   edge, so it reads as belonging to the bar above it rather than as the next
+   section of the card. */
+.score-detail {
+  margin-top: 1rem;
+  padding: 0.15rem 0 0.25rem 0.9rem;
+  border-left: 2px solid var(--grid);
+}
+.score-detail > h3 { font-size: 0.95rem; margin: 0 0 0.35rem; }
+.score-detail > h4 {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+  margin: 1.1rem 0 0.2rem;
+  font-weight: 600;
+}
+.losses { margin-top: 0.8rem; }
+.loss {
+  display: grid;
+  grid-template-columns: 1fr 9rem 4.5rem;
+  gap: 0.4rem 0.75rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--grid);
+  font-size: 0.87rem;
+  align-items: baseline;
+}
+.loss:last-child { border-bottom: none; }
+.loss.is-nested > .what { padding-left: 1.25rem; }
+/* The summation row: ruled off from the ledger above it, and no rule below, so
+   it reads as a total rather than as one more contributor. */
+.loss.is-total {
+  border-top: 1px solid var(--axis);
+  border-bottom: none;
+  font-weight: 600;
+}
+.loss.is-total .muted { font-weight: 400; }
+.loss > .cost,
+.loss > .verdict {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.loss .muted { margin-top: 0.15rem; }
+
+.unmapped { margin-top: 1.25rem; }
+.unmapped > h4 {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--critical);
+  margin: 0 0 0.2rem;
+  font-weight: 600;
+}
 
 .banner {
   border-left: 3px solid var(--warning);
@@ -473,6 +623,8 @@ details.prose > summary {
   .meter-row { grid-template-columns: 8rem 1fr 3rem; }
   .flag { grid-template-columns: auto 1fr; }
   .flag .why { grid-column: 1 / -1; }
+  .loss { grid-template-columns: 1fr 4.5rem; }
+  .loss > .cost { grid-column: 1 / -1; text-align: left; }
   .cal-row { grid-template-columns: 3.6rem repeat(7, 1fr); }
 }
 

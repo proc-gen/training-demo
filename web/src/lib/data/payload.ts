@@ -115,7 +115,8 @@ export const RunResult = z.looseObject({
   id: z.union([z.number(), z.string()]).nullable().optional(),
   date: str,
   role: str,
-  surface: str,
+  /** `surface` was here until 2026-08-10 and is gone from the graders. Nothing
+   *  declares it, so a stale record carrying one is simply ignored. */
   prescribed: str,
   /** A RANGE as often as a scalar -- "50-60 min" is how the plan states most
    *  easy runs, and treating that as unscorable is what the 2026-08-04
@@ -160,14 +161,25 @@ export const Structure = z.looseObject({
   /** `null` means the check DOES NOT APPLY and leaves the denominator --
    *  it is not a failure and must never be rendered as one. */
   checks: z.record(z.string(), z.boolean().nullable()),
+  /** The NUMBERS behind each verdict, one sentence per check, keyed the same as
+   *  `checks`. A boolean says a check failed; it does not say a session ran 20
+   *  minutes of work against a 25-35 window, and a reader who cannot see the
+   *  input cannot check the verdict.
+   *
+   *  Optional, so a record published before 2026-08-10 still parses. */
+  why: z.record(z.string(), z.string()).nullable().optional(),
 });
 
-export const Warning = z.looseObject({
-  kind: str,
-  text: z.string(),
-  date: str,
-  id: z.union([z.number(), z.string()]).nullable().optional(),
-});
+/* THERE IS NO `warnings` HERE, AND THAT IS DELIBERATE. The adherence grader
+ * published a list of `!!` notices -- unmerged auto-laps, slivers, a treadmill
+ * speed count that did not match -- and the runs card printed them at its foot.
+ * That block was the field's only consumer, and the athlete's reading is that
+ * every warning so far has come from a gap in the data or a session type the
+ * skill has not been built for yet: something to raise while grading, not to
+ * leave on a page read weeks later. So the field left `jsonable()` on
+ * 2026-08-10 rather than sitting unread in every tracked `week.json`, and the
+ * schema follows. `data_warnings()` still exists and `grade_week.py` still
+ * prints every one. Re-adding it here means finding a reader first. */
 
 export const Adherence = z.looseObject({
   week_start: str,
@@ -181,7 +193,6 @@ export const Adherence = z.looseObject({
   structure: Structure.nullable().optional(),
   results: z.array(RunResult).default([]),
   flags: z.array(Flag).default([]),
-  warnings: z.array(Warning).default([]),
   facts: z.looseObject({}).nullable().optional(),
   csv: str,
 });

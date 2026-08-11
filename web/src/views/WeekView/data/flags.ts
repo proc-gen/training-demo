@@ -1,29 +1,62 @@
-/* The flag blocks and their order.
+/* The flags, and which score each one belongs under.
  *
- * Both skills produce flags and they are shown together but never merged: a
+ * There is no Flags card any more. It sat at the bottom of the page, a long way
+ * from the number each flag qualifies, and the athlete's reading was that the
+ * score bars explained nothing while their footnotes lived somewhere else. A
+ * flag now renders inside the detail panel of the score it is about.
+ *
+ * Both skills produce flags and the two vocabularies are still never merged: a
  * token means something different depending on which model raised it, and
- * `monotony` in particular exists in both vocabularies with different
- * definitions.
+ * `monotony` exists in both with different definitions. The mapping below is
+ * what keeps them apart -- adherence tokens reach only adherence components and
+ * load tokens only load ones.
  */
 
 import type { Flag, Week } from "@/lib/data/payload";
 
-/** `caveats` maps a flag TOKEN to the footnote that qualifies it.
+/** Flag token -> the score component it qualifies.
  *
- * Populated on the Load block only, because only the load grader emits caveats
- * and a token means something different in each vocabulary -- which is the same
- * reason the blocks are never merged.
+ * TOTAL over both graders' vocabularies, and `unmappedFlags` below is what
+ * proves it stays that way. Placement is a reading decision, not a scoring one:
+ * nothing here changes a number, it decides which bar you have to click to find
+ * the footnote.
+ *
+ * `unilateral-complaint` goes to Readiness. It is the odd one -- an
+ * injury-precursor read out of the week's notes rather than a load or an
+ * execution measure -- and Readiness is the only component that asks whether
+ * the athlete was fit to train, which is the same question sleep, HRV and
+ * resting heart rate ask.
+ *
+ * There is no orphaning risk in the split: every adherence token lands on one of
+ * the three bars that render whenever `adherence` exists, and every load token
+ * on one of the two that render whenever `load` does.
  */
-export type FlagBlock = {
-  title: string;
-  flags: Flag[];
-  caveats?: Record<string, string>;
+export const FLAG_COMPONENT: Record<string, string> = {
+  // adherence. FOUR MORE WERE HERE UNTIL 2026-08-10 -- `pace-creep` under easy,
+  // `novel-loading` under workout, `no-rest-day` and `quality-share-drift` under
+  // structure. All four were deleted from the grader for reading numbers
+  // somebody had typed, so Easy discipline and Structure now carry no flag at
+  // all and say so.
+  "consecutive-compromised": "workout",
+  // load
+  "steps-data-incomplete": "integrity",
+  "recovery-day-not-recovering": "integrity",
+  "background-load-spike": "integrity",
+  "hidden-load": "integrity",
+  "load-monotony": "integrity",
+  "strain-spike": "integrity",
+  "resting-hr-rise": "readiness",
+  "hrv-suppressed": "readiness",
+  "sleep-debt": "readiness",
+  "form-suppressed": "readiness",
+  "unilateral-complaint": "readiness",
 };
 
 /** Load caveats that name a flag, keyed by that flag's token.
  *
- * These are filtered out of the banner stack (see WeekBanners): a footnote to
- * one flag belongs under that flag, not above the whole week.
+ * Populated from the load grader only, because only it emits caveats. These are
+ * filtered out of the banner stack (see WeekBanners): a footnote to one flag
+ * belongs under that flag, not above the whole week.
  */
 export function flagCaveats(week: Week): Record<string, string> {
   const out: Record<string, string> = {};
@@ -31,7 +64,7 @@ export function flagCaveats(week: Week): Record<string, string> {
   return out;
 }
 
-/** Fired first. A flag that fired is the reason to read the card.
+/** Fired first. A flag that fired is the reason to read the panel.
  *
  * Stable within each group, so two fired flags keep the order the grader
  * emitted them in.
@@ -43,21 +76,29 @@ export function firedFirst(flags: Flag[]): Flag[] {
   ];
 }
 
-/** The blocks with flags in them, adherence before load.
+/** Every flag either grader raised, in one list. */
+export function allFlags(week: Week): Flag[] {
+  return [...(week.adherence?.flags ?? []), ...(week.load?.flags ?? [])];
+}
+
+/** The flags belonging to one score component, fired first. */
+export function flagsFor(week: Week, component: string): Flag[] {
+  return firedFirst(
+    allFlags(week).filter((f) => FLAG_COMPONENT[f.token] === component),
+  );
+}
+
+/** Flags no component claims.
  *
- * A half that produced NO flags contributes no block at all -- the card's own
- * empty state then says nothing was evaluated, which is a different statement
- * from "nothing fired".
+ * A token the map does not know MUST NOT VANISH. Every flag used to have a card
+ * of its own; now placement decides visibility, so a grader adding a token would
+ * otherwise drop it off the page silently -- and a flag nobody sees is worse
+ * than no flag, because the page reads as though it was checked.
+ *
+ * `ScoreCard` renders these plainly under the meters, and a test asserts the
+ * list is empty for every week in the committed `published/` tree, so the map
+ * going stale fails the suite rather than the page.
  */
-export function flagBlocks(week: Week): FlagBlock[] {
-  const blocks: FlagBlock[] = [];
-  if (week.adherence?.flags?.length)
-    blocks.push({ title: "Adherence", flags: firedFirst(week.adherence.flags) });
-  if (week.load?.flags?.length)
-    blocks.push({
-      title: "Load",
-      flags: firedFirst(week.load.flags),
-      caveats: flagCaveats(week),
-    });
-  return blocks;
+export function unmappedFlags(week: Week): Flag[] {
+  return firedFirst(allFlags(week).filter((f) => !FLAG_COMPONENT[f.token]));
 }

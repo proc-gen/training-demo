@@ -1,8 +1,8 @@
 {
- "csv": "2026-07-06,Volume,General Prep,42.2,38,68,39,novel-loading",
+ "csv": "2026-07-06,Volume,General Prep,42.2,38,68,39,none",
  "facts": {
   "doubles": 0,
-  "easy_seconds": 20798,
+  "easy_seconds": 20626,
   "long_run_miles": 12.004891434025293,
   "long_run_share": 0.2846618535435391,
   "miles": 42.17246281714786,
@@ -12,19 +12,11 @@
    19500.0
   ],
   "quality_days": 1,
-  "quality_seconds": 1167,
-  "quality_share": 0.05312997951286137,
+  "quality_seconds": 1339,
+  "quality_share": 0.06096061916685636,
   "rest_days": 1,
   "running_days": 6,
   "seconds": 21965,
-  "surface_miles": {
-   "road": 39.25823192555476,
-   "track": 2.914230891593096
-  },
-  "surface_share": {
-   "road": 0.9308973036687784,
-   "track": 0.06910269633122144
-  },
   "volume_vs_plan": 1.1264102564102565
  },
  "flags": [
@@ -37,26 +29,6 @@
    "status": "not-evaluable",
    "token": "consecutive-compromised",
    "why": "1 quality session(s) this week; the flag needs two to find two in a row"
-  },
-  {
-   "status": "fired",
-   "token": "novel-loading",
-   "why": "Four repetition reps of four different distances, then a sub-T mile, then 5x300m in spikes -- three modes in one session, and more total volume at speed than any session in the library in a Volume week at the block's volume peak"
-  },
-  {
-   "status": "clear",
-   "token": "pace-creep",
-   "why": "Evaluable now that prior weeks are taken at face value from Runalyze, and the answer is no creep -- because there is no repeated session type to creep. The block's quality sessions were 2026-07-02 4x500m at 6:01-6:26/mi (HR 174 avg), 2026-07-14 3x1000m at 5:50-5:53/mi (HR 165), 2026-07-19 5K race, then 2026-07-28 8x800m at 6:31-6:39/mi (HR 155) and 2026-07-30 15x1:00 at 6:14-6:34/mi (HR 160). The first two ran well above the 162 sub-T ceiling and are interval work, not sub-threshold. 07-28 is the block's FIRST genuine sub-T session. Two sub-T sessions of different rep lengths one week apart is not a progression series. Note the direction of change: the block switched loading type from fast interval work to sub-threshold, which is the 'abrupt change in loading type' shape from the injury history -- though toward easier work."
-  },
-  {
-   "status": "clear",
-   "token": "no-rest-day",
-   "why": "1 consecutive weeks without a rest day, 13 consecutive running days (fires at 3 weeks or 21 days); this week had 1"
-  },
-  {
-   "status": "clear",
-   "token": "quality-share-drift",
-   "why": "5.3% this week against a 4-week mean of 8.5% — 38% below it (fires past 50%). 3 of the 4 window weeks are measured from Runalyze splits rather than authored manifests â€” weaker evidence than a graded week."
   }
  ],
  "phase": "General Prep",
@@ -74,8 +46,8 @@
    "pct": null,
    "prescribed": "warmup for the repetition set",
    "role": "volume_only",
+   "score_bucket": null,
    "seconds": 1036,
-   "surface": "road",
    "total": null
   },
   {
@@ -90,7 +62,7 @@
      "threshold": 140,
      "total": 171
     },
-    "core_seconds": 1167,
+    "core_seconds": 1339,
     "data_quality": [
      "reps [4] dip >12 bpm below their neighbours — check strap"
     ],
@@ -261,12 +233,11 @@
    "id": 189636509,
    "km": 2.35,
    "miles": 1.460222301757735,
-   "novel_reason": "Four repetition reps of four different distances, then a sub-T mile, then 5x300m in spikes -- three modes in one session, and more total volume at speed than any session in the library",
-   "off_library": true,
    "pace": 916.298839148936,
    "pct": 68.28644501278772,
    "prescribed": "400m, 600m, 400m, 200m at Repetition, 1 mile Sub-T, 5x300m in spikes",
    "role": "mixed",
+   "score_bucket": "workout",
    "seconds": 1338,
    "sets": [
     {
@@ -289,7 +260,6 @@
      "reps": 1
     }
    ],
-   "surface": "track",
    "total": 391
   },
   {
@@ -305,8 +275,8 @@
    "pct": null,
    "prescribed": "part of the abandoned sub-T mile, then cooldown",
    "role": "volume_only",
+   "score_bucket": null,
    "seconds": 758,
-   "surface": "track",
    "total": null
   },
   {
@@ -322,8 +292,8 @@
    "pct": null,
    "prescribed": "cooldown",
    "role": "volume_only",
+   "score_bucket": null,
    "seconds": 827,
-   "surface": "road",
    "total": null
   },
   {
@@ -353,8 +323,8 @@
    "prescribed": "50 min easy",
    "prescribed_seconds": 3000,
    "role": "easy",
+   "score_bucket": "easy",
    "seconds": 3211,
-   "surface": "road",
    "total": 3192
   },
   {
@@ -384,8 +354,8 @@
    "prescribed": "60 min easy",
    "prescribed_seconds": 3600,
    "role": "easy",
+   "score_bucket": "easy",
    "seconds": 3580,
-   "surface": "road",
    "total": 3580
   },
   {
@@ -402,8 +372,8 @@
    "pct": null,
    "prescribed": "11x~.22 mile hill repeats",
    "role": "neuromuscular",
+   "score_bucket": null,
    "seconds": 3431,
-   "surface": "road",
    "total": null
   },
   {
@@ -419,8 +389,8 @@
    "pct": null,
    "prescribed": "first half of the 30 min easy",
    "role": "volume_only",
+   "score_bucket": null,
    "seconds": 978,
-   "surface": "road",
    "total": null
   },
   {
@@ -440,8 +410,8 @@
    "pct": 22.613065326633166,
    "prescribed": "30 min easy",
    "role": "easy",
+   "score_bucket": "easy",
    "seconds": 1194,
-   "surface": "road",
    "total": 1194
   },
   {
@@ -472,8 +442,8 @@
    "prescribed": "90 min easy/long",
    "prescribed_seconds": 5400,
    "role": "long",
+   "score_bucket": "easy",
    "seconds": 5612,
-   "surface": "road",
    "total": 5612
   }
  ],
@@ -497,22 +467,18 @@
  "structure": {
   "checks": {
    "long_run_share": false,
-   "outdoor_run": true,
    "quality_days_met": false,
    "rest_days_met": null,
-   "session_work_volume": false,
    "volume_vs_plan": false
   },
-  "pct": 20.0
- },
- "warnings": [
-  {
-   "date": "2026-07-07",
-   "id": 189636509,
-   "kind": "laps-recovered",
-   "text": "2026-07-07 189636509: the laps as recorded read as 4 rep(s); the prescribed 5 were recovered from pace. The score is right — mark the recoveries INACTIVE in Runalyze and the file will declare the session instead of it being inferred."
+  "pct": 0.0,
+  "why": {
+   "long_run_share": "the long run was 28.5% of the week's running distance, against a 25% ceiling",
+   "quality_days_met": "1 quality day(s) against the 2 a Volume week asks for",
+   "rest_days_met": "Volume weeks state no rest-day requirement, so this check does not apply and left the denominator",
+   "volume_vs_plan": "6:06:05 run against a plan of 5:25:00, tolerance 5%"
   }
- ],
+ },
  "week_start": "2026-07-06",
  "week_type": "Volume"
 }

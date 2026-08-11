@@ -8,71 +8,61 @@
     "date": "2026-07-27",
     "id": 194639587,
     "prescribed": "30 min recovery",
-    "role": "recovery",
-    "surface": "road"
+    "role": "recovery"
    },
    {
     "date": "2026-07-28",
     "id": 195056921,
     "prescribed": "warmup for the 8x800m",
-    "role": "volume_only",
-    "surface": "road"
+    "role": "volume_only"
    },
    {
     "date": "2026-07-28",
     "id": 195056957,
     "prescribed": "8x800m w/ 200m jog at Sub-T",
-    "role": "subt",
-    "surface": "road"
+    "role": "subt"
    },
    {
     "date": "2026-07-28",
     "id": 195056965,
     "prescribed": "cooldown for the 8x800m",
-    "role": "volume_only",
-    "surface": "road"
+    "role": "volume_only"
    },
    {
     "date": "2026-07-29",
     "id": 195302655,
     "prescribed": "60-70 min easy",
-    "role": "easy",
-    "surface": "road"
+    "role": "easy"
    },
    {
     "date": "2026-07-30",
     "id": 195547303,
     "prescribed": "15x1:00 w/ 30s jog recovery at Sub-T",
-    "role": "subt",
-    "surface": "road"
+    "role": "subt"
    },
    {
     "date": "2026-07-31",
     "id": 195677421,
     "prescribed": "AM: 30 min recovery",
-    "role": "recovery",
-    "surface": "road"
+    "role": "recovery"
    },
    {
     "date": "2026-07-31",
     "id": 195826711,
     "prescribed": "PM: 30 min easy run with club people",
-    "role": "easy",
-    "surface": "road"
+    "role": "easy"
    },
    {
     "date": "2026-08-01",
     "id": 196033869,
     "prescribed": "30 min recovery",
-    "role": "recovery",
-    "surface": "treadmill"
+    "role": "recovery"
    },
    {
     "date": "2026-08-02",
     "id": 196253663,
     "prescribed": "90 min easy/long",
-    "role": "long",
-    "surface": "road"
+    "role": "long"
    }
   ],
   "week_start": "2026-07-27",

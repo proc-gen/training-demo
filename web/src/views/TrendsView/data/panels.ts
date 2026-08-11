@@ -93,10 +93,17 @@ export function trendPanels(payload: Payload): Panel[] {
       format: (v) => Math.round(v) + "%",
     });
 
+    /* NO REFERENCE LINE. It plotted `history.quality_share_window`, a frozen
+     * hand-typed 0.0854 that was the `quality-share-drift` flag's baseline --
+     * and that flag was deleted on 2026-08-10 for exactly that: a block of easy
+     * running gives a low mean, so the first workout of any length departs from
+     * it far enough to fire. Drawing the line without the verdict would keep
+     * asserting a target nothing measured. The per-week series stays; it is
+     * computed from each graded week. */
     panels.push({
       key: "quality",
       title: "Quality share of weekly time",
-      sub: "Fires a flag past 50% above the four-week mean",
+      sub: "First rep to the end of the last recovery, plus a race whole",
       points: graded.map((k) => ({
         label: shortDate(k),
         value:
@@ -106,9 +113,7 @@ export function trendPanels(payload: Payload): Panel[] {
       seriesTitle: "quality",
       places: 1,
       zero: true,
-      reference: history.quality_share_window
-        ? history.quality_share_window * 100
-        : null,
+      reference: null,
       format: (v) => num(v, 1) + "%",
     });
   }

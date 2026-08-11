@@ -7,7 +7,7 @@ import { prescriptionById, runsWithDuration, sortedRuns } from "./runs";
 const run = (over: Partial<RunResult>): RunResult => over as RunResult;
 
 const adherence = (results: Partial<RunResult>[]): Adherence =>
-  ({ results, flags: [], warnings: [] }) as unknown as Adherence;
+  ({ results, flags: [] }) as unknown as Adherence;
 
 describe("sortedRuns", () => {
   it("orders by date", () => {

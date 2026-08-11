@@ -3,7 +3,6 @@
 import { dayName, num, pct, shortDate } from "@/lib/data/format";
 import type { Week } from "@/lib/data/payload";
 import { ColumnChart } from "@/lib/ux/charts/ColumnChart";
-import { Card } from "@/lib/ux/primitives/Card";
 import { Legend } from "@/lib/ux/primitives/Legend";
 import { TipRow } from "@/lib/ux/tooltip/TipRow";
 import { AcwrTable } from "./AcwrTable";
@@ -16,13 +15,16 @@ import { ReadinessTable } from "./ReadinessTable";
  * ALWAYS THE RUN/BACKGROUND SPLIT, never one total. A day over its ceiling
  * because the session ran long and a day over because of a hike produce the
  * same number and call for opposite responses.
+ *
+ * One tab of the week card since 2026-08-10, so it no longer carries a `Card`
+ * or a title of its own -- the tab's label is the heading.
  */
-export function LoadCard({ week }: { week: Week }) {
+export function LoadPanel({ week }: { week: Week }) {
   const l = week.load!;
   const days = l.days ?? [];
 
   return (
-    <Card title="Total load">
+    <>
       <Legend
         items={[
           { color: "var(--series-1)", label: "run SE" },
@@ -61,6 +63,6 @@ export function LoadCard({ week }: { week: Week }) {
       <LoadDayTable days={days} />
       <ReadinessTable readiness={l.readiness} />
       <AcwrTable load={l} />
-    </Card>
+    </>
   );
 }

@@ -17,10 +17,22 @@ import type { ReactNode } from "react";
 
 import { TooltipProvider } from "@/lib/ux/tooltip/TooltipProvider";
 
-/** Render inside a tooltip provider, with `q` scoped to this tree. */
+/** Render inside a tooltip provider, with `q` scoped to this tree.
+ *
+ * `rewrap` is how you re-render with new props and KEEP THE COMPONENT MOUNTED.
+ * Testing Library's own `rerender` replaces the root, which here is the
+ * provider -- handed a bare component it swaps the root element type, React
+ * unmounts everything and every piece of `useState` resets. A test about state
+ * surviving a prop change would then pass or fail for the wrong reason, and
+ * `WeekCard`'s tab surviving a change of week is exactly such a test.
+ */
 export function wrap(ui: ReactNode) {
   const r = render(<TooltipProvider>{ui}</TooltipProvider>);
-  return { ...r, q: within(r.container) };
+  return {
+    ...r,
+    q: within(r.container),
+    rewrap: (next: ReactNode) => r.rerender(<TooltipProvider>{next}</TooltipProvider>),
+  };
 }
 
 /** Render a fragment of SVG inside a real `<svg>` element.

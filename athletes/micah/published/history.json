@@ -1,7 +1,4 @@
 {
- "consecutive_no_rest_weeks": 1,
- "consecutive_running_days": 13,
- "is_block_volume_peak": true,
  "long_run_trend": [
   {
    "date": "2026-07-12",
@@ -19,9 +16,6 @@
    "miles": 10.55
   }
  ],
- "longest_running_day_streak_in_window": 13,
- "pace_creep": false,
- "pace_creep_note": "Evaluable now that prior weeks are taken at face value from Runalyze, and the answer is no creep -- because there is no repeated session type to creep. The block's quality sessions were 2026-07-02 4x500m at 6:01-6:26/mi (HR 174 avg), 2026-07-14 3x1000m at 5:50-5:53/mi (HR 165), 2026-07-19 5K race, then 2026-07-28 8x800m at 6:31-6:39/mi (HR 155) and 2026-07-30 15x1:00 at 6:14-6:34/mi (HR 160). The first two ran well above the 162 sub-T ceiling and are interval work, not sub-threshold. 07-28 is the block's FIRST genuine sub-T session. Two sub-T sessions of different rep lengths one week apart is not a progression series. Note the direction of change: the block switched loading type from fast interval work to sub-threshold, which is the 'abrupt change in loading type' shape from the injury history -- though toward easier work.",
  "quality_sessions": [
   {
    "date": "2026-07-02",
@@ -73,7 +67,6 @@
  "quality_share_measured_from_manifest": [
   "2026-07-20"
  ],
- "quality_share_note": "3 of the 4 window weeks are measured from Runalyze splits rather than authored manifests — weaker evidence than a graded week.",
  "quality_share_provenance": {
   "caveat": "MEASURED FROM RUNALYZE SPLITS, NOT FROM AUTHORED MANIFESTS -- weaker evidence than a graded week and it must not be mistaken for manifest-grade data. None of these four weeks has a manifest, so each session's rep count was read off its splits rather than from a prescription, and the sessions were identified by rep structure rather than by what the plan asked for. Backfilled 2026-08-05 so quality-share-drift is live on its first graded week; recompute from manifests as they are authored.",
   "definition": "First rep to last rep of each quality session, plus a race's whole duration, over the week's total moving seconds. Computed by the same grade_week.core_seconds() that grades a live week, so the baseline and the weeks measured against it are the same measurement.",
@@ -91,7 +84,6 @@
   "2026-07-13": 0.1068,
   "2026-07-20": 0.0674
  },
- "quality_share_window": 0.0854,
  "resting_hr_note": "Falling, not rising: 47.0 -> 43.0 bpm across the block (-4.0). rubric.md calls a sustained rise the signal that outweighs everything else in the document; this is the opposite and is the strongest available reassurance against the flags below.",
  "resting_hr_weekly_mean": {
   "2026-06-22": 47.0,

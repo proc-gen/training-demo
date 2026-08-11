@@ -17,12 +17,6 @@
   "rest_days": 1,
   "running_days": 6,
   "seconds": 24451,
-  "surface_miles": {
-   "road": 46.3107949574485
-  },
-  "surface_share": {
-   "road": 1.0
-  },
   "volume_vs_plan": 1.0062139917695474
  },
  "flags": [
@@ -35,26 +29,6 @@
    "status": "not-evaluable",
    "token": "consecutive-compromised",
    "why": "0 quality session(s) this week; the flag needs two to find two in a row"
-  },
-  {
-   "status": "not-evaluable",
-   "token": "novel-loading",
-   "why": "no run in this manifest carries any of ('novel', 'off_library', 'novel_surface'); novelty is authored, never detected, so an un-annotated week has nothing to report"
-  },
-  {
-   "status": "clear",
-   "token": "pace-creep",
-   "why": "Evaluable now that prior weeks are taken at face value from Runalyze, and the answer is no creep -- because there is no repeated session type to creep. The block's quality sessions were 2026-07-02 4x500m at 6:01-6:26/mi (HR 174 avg), 2026-07-14 3x1000m at 5:50-5:53/mi (HR 165), 2026-07-19 5K race, then 2026-07-28 8x800m at 6:31-6:39/mi (HR 155) and 2026-07-30 15x1:00 at 6:14-6:34/mi (HR 160). The first two ran well above the 162 sub-T ceiling and are interval work, not sub-threshold. 07-28 is the block's FIRST genuine sub-T session. Two sub-T sessions of different rep lengths one week apart is not a progression series. Note the direction of change: the block switched loading type from fast interval work to sub-threshold, which is the 'abrupt change in loading type' shape from the injury history -- though toward easier work."
-  },
-  {
-   "status": "clear",
-   "token": "no-rest-day",
-   "why": "1 consecutive weeks without a rest day, 13 consecutive running days (fires at 3 weeks or 21 days); this week had 1"
-  },
-  {
-   "status": "clear",
-   "token": "quality-share-drift",
-   "why": "6.7% this week against a 4-week mean of 8.5% — 21% below it (fires past 50%). 3 of the 4 window weeks are measured from Runalyze splits rather than authored manifests â€” weaker evidence than a graded week."
   }
  ],
  "phase": "General Prep",
@@ -89,8 +63,8 @@
     4200
    ],
    "role": "easy",
+   "score_bucket": "easy",
    "seconds": 4171,
-   "surface": "road",
    "total": 4170
   },
   {
@@ -123,8 +97,8 @@
     4200
    ],
    "role": "easy",
+   "score_bucket": "easy",
    "seconds": 4275,
-   "surface": "road",
    "total": 4275
   },
   {
@@ -157,8 +131,8 @@
     4200
    ],
    "role": "easy",
+   "score_bucket": "easy",
    "seconds": 4037,
-   "surface": "road",
    "total": 4037
   },
   {
@@ -188,8 +162,8 @@
    "prescribed": "AM: 30 min recovery",
    "prescribed_seconds": 1800,
    "role": "recovery",
+   "score_bucket": "easy",
    "seconds": 1801,
-   "surface": "road",
    "total": 1800
   },
   {
@@ -219,8 +193,8 @@
    "prescribed": "PM: 40 min recovery",
    "prescribed_seconds": 2400,
    "role": "recovery",
+   "score_bucket": "easy",
    "seconds": 2374,
-   "surface": "road",
    "total": 2373
   },
   {
@@ -250,8 +224,8 @@
    "prescribed": "45 min easy",
    "prescribed_seconds": 2700,
    "role": "easy",
+   "score_bucket": "easy",
    "seconds": 2711,
-   "surface": "road",
    "total": 2711
   },
   {
@@ -371,8 +345,8 @@
     6
    ],
    "role": "progression",
+   "score_bucket": "easy",
    "seconds": 5082,
-   "surface": "road",
    "total": 1214
   }
  ],
@@ -396,15 +370,18 @@
  "structure": {
   "checks": {
    "long_run_share": true,
-   "outdoor_run": true,
    "quality_days_met": false,
    "rest_days_met": true,
-   "session_work_volume": true,
    "volume_vs_plan": true
   },
-  "pct": 83.33333333333333
+  "pct": 75.0,
+  "why": {
+   "long_run_share": "the long run was 23.2% of the week's running distance, against a 25% ceiling",
+   "quality_days_met": "0 quality day(s) against the 2 a Recovery week asks for",
+   "rest_days_met": "1 rest day(s) against the 1 a Recovery week asks for",
+   "volume_vs_plan": "6:47:31 run against a plan of 6:45:00, tolerance 5%"
+  }
  },
- "warnings": [],
  "week_start": "2026-07-20",
  "week_type": "Recovery"
 }

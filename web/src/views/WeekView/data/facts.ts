@@ -27,8 +27,9 @@ export type WeekFacts = {
   rest_days?: number;
   doubles?: number;
   quality_days?: number;
-  surface_miles?: Record<string, number>;
-  surface_share?: Record<string, number>;
+  /* `surface_miles` and `surface_share` were here until 2026-08-10. The graders
+   * no longer emit them and no component reads them; see grade_week.py's
+   * `monotony` tombstone for why the whole of `surface` went. */
 };
 
 /** The facts block, or null when the grader produced none.

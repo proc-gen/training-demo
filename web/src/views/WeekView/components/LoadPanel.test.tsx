@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import type { LoadDay, Week } from "@/lib/data/payload";
 import { PUBLISHED, has, weekWithLoad } from "@/test/payload";
 import { wrap } from "@/test/render";
-import { LoadCard } from "./LoadCard";
+import { LoadPanel } from "./LoadPanel";
 
 afterEach(cleanup);
 
@@ -30,20 +30,20 @@ const day = (over: Partial<LoadDay>): LoadDay =>
 const week = (over: Record<string, unknown>): Week =>
   ({ load: { days: [day({})], ...over } }) as unknown as Week;
 
-describe("LoadCard", () => {
+describe("LoadPanel", () => {
   it("names its three colours", () => {
-    const { container } = wrap(<LoadCard week={week({})} />);
+    const { container } = wrap(<LoadPanel week={week({})} />);
     expect(container.querySelectorAll(".legend-item")).toHaveLength(3);
   });
 
   it("draws one chart group per day", () => {
     const w = week({ days: [day({}), day({ date: "2026-07-28" })] });
-    const { container } = wrap(<LoadCard week={w} />);
+    const { container } = wrap(<LoadPanel week={w} />);
     expect(container.querySelectorAll("svg [role='listitem']")).toHaveLength(2);
   });
 
   it("carries the full breakdown in a day's tooltip", () => {
-    const { container } = wrap(<LoadCard week={week({})} />);
+    const { container } = wrap(<LoadPanel week={week({})} />);
     fireEvent.mouseEnter(container.querySelector("svg [role='listitem']")!, {
       clientX: 1,
       clientY: 1,
@@ -57,7 +57,7 @@ describe("LoadCard", () => {
 
   it("says UNPRICED in the tooltip for a day the plan did not price", () => {
     const w = week({ days: [day({ ceiling_source: null, ceiling: null })] });
-    const { container } = wrap(<LoadCard week={w} />);
+    const { container } = wrap(<LoadPanel week={w} />);
     fireEvent.mouseEnter(container.querySelector("svg [role='listitem']")!, {
       clientX: 1,
       clientY: 1,
@@ -78,7 +78,7 @@ describe("LoadCard", () => {
       readiness: { passed: 6, available: 7, per_day: [] },
       acwr_mech: 1.2,
     });
-    const { container } = wrap(<LoadCard week={w} />);
+    const { container } = wrap(<LoadPanel week={w} />);
     const text = container.textContent!;
     expect(text).toContain("prescribed run minutes");
     expect(text).toContain("Readiness");
@@ -87,14 +87,14 @@ describe("LoadCard", () => {
   });
 
   it("renders without a chart group when the grader returned no days", () => {
-    const { container } = wrap(<LoadCard week={week({ days: [] })} />);
+    const { container } = wrap(<LoadPanel week={week({ days: [] })} />);
     expect(container.querySelectorAll("svg [role='listitem']")).toHaveLength(0);
     expect(container.querySelector("svg.chart")).toBeTruthy();
   });
 
   has(found)("renders a per-day load row for every day the grader returned", () => {
     const [, w] = found!;
-    const { container } = wrap(<LoadCard week={w} />);
+    const { container } = wrap(<LoadPanel week={w} />);
     const groups = container.querySelectorAll("svg [role='listitem']");
     expect(groups.length).toBe(w.load!.days.length);
   });
@@ -102,7 +102,7 @@ describe("LoadCard", () => {
   has(found)("keeps every mark inside the plot", () => {
     // A ceiling above the top tick once drew a red rule across the legend.
     const [, w] = found!;
-    const { container } = wrap(<LoadCard week={w} />);
+    const { container } = wrap(<LoadPanel week={w} />);
     const svg = container.querySelector("svg.chart")!;
     const h = Number(svg.getAttribute("viewBox")!.split(" ")[3]);
     for (const el of svg.querySelectorAll("rect, line")) {

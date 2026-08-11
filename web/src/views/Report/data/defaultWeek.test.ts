@@ -27,7 +27,7 @@ function payload(weeks: Record<string, Partial<Week>>): Payload {
 }
 
 // Minimal stand-ins -- only truthiness is read.
-const A = { results: [], flags: [], warnings: [] } as unknown as Week["adherence"];
+const A = { results: [], flags: [] } as unknown as Week["adherence"];
 const L = { days: [], flags: [], caveats: [] } as unknown as Week["load"];
 
 describe("defaultWeekKey", () => {

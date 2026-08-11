@@ -2,7 +2,7 @@
  "csv": "2026-07-13,Race,General Prep,36.9,89,100,90,none",
  "facts": {
   "doubles": 0,
-  "easy_seconds": 16984,
+  "easy_seconds": 16911,
   "long_run_miles": 0.0,
   "long_run_share": 0.0,
   "miles": 36.940517378509504,
@@ -12,19 +12,11 @@
    20700.0
   ],
   "quality_days": 2,
-  "quality_seconds": 2031,
-  "quality_share": 0.10681041283197476,
+  "quality_seconds": 2104,
+  "quality_share": 0.11064948724691033,
   "rest_days": 1,
   "running_days": 6,
   "seconds": 19015,
-  "surface_miles": {
-   "road": 31.565656565656564,
-   "track": 5.374860812852939
-  },
-  "surface_share": {
-   "road": 0.8544995794785534,
-   "track": 0.1455004205214466
-  },
   "volume_vs_plan": 0.9185990338164252
  },
  "flags": [
@@ -37,26 +29,6 @@
    "status": "not-evaluable",
    "token": "consecutive-compromised",
    "why": "1 quality session(s) this week; the flag needs two to find two in a row"
-  },
-  {
-   "status": "not-evaluable",
-   "token": "novel-loading",
-   "why": "no run in this manifest carries any of ('novel', 'off_library', 'novel_surface'); novelty is authored, never detected, so an un-annotated week has nothing to report"
-  },
-  {
-   "status": "clear",
-   "token": "pace-creep",
-   "why": "Evaluable now that prior weeks are taken at face value from Runalyze, and the answer is no creep -- because there is no repeated session type to creep. The block's quality sessions were 2026-07-02 4x500m at 6:01-6:26/mi (HR 174 avg), 2026-07-14 3x1000m at 5:50-5:53/mi (HR 165), 2026-07-19 5K race, then 2026-07-28 8x800m at 6:31-6:39/mi (HR 155) and 2026-07-30 15x1:00 at 6:14-6:34/mi (HR 160). The first two ran well above the 162 sub-T ceiling and are interval work, not sub-threshold. 07-28 is the block's FIRST genuine sub-T session. Two sub-T sessions of different rep lengths one week apart is not a progression series. Note the direction of change: the block switched loading type from fast interval work to sub-threshold, which is the 'abrupt change in loading type' shape from the injury history -- though toward easier work."
-  },
-  {
-   "status": "clear",
-   "token": "no-rest-day",
-   "why": "1 consecutive weeks without a rest day, 13 consecutive running days (fires at 3 weeks or 21 days); this week had 1"
-  },
-  {
-   "status": "clear",
-   "token": "quality-share-drift",
-   "why": "10.7% this week against a 4-week mean of 8.5% — 25% above it (fires past 50%). 3 of the 4 window weeks are measured from Runalyze splits rather than authored manifests â€” weaker evidence than a graded week."
   }
  ],
  "phase": "General Prep",
@@ -74,8 +46,8 @@
    "pct": null,
    "prescribed": "warmup for the 3x1000m",
    "role": "volume_only",
+   "score_bucket": null,
    "seconds": 959,
-   "surface": "road",
    "total": null
   },
   {
@@ -84,7 +56,7 @@
    "detail": {
     "autolaps": [],
     "cooldown": null,
-    "core_seconds": 879,
+    "core_seconds": 952,
     "data_quality": [],
     "detected_reps": 3,
     "laps_recovered": false,
@@ -202,8 +174,8 @@
    "prescribed": "3x1000m @ ~5k",
    "rep_band": "rep_3min",
    "role": "interval",
+   "score_bucket": "workout",
    "seconds": 952,
-   "surface": "track",
    "total": 658
   },
   {
@@ -219,8 +191,8 @@
    "pct": null,
    "prescribed": "jog between the reps and the cooldown",
    "role": "volume_only",
+   "score_bucket": null,
    "seconds": 917,
-   "surface": "road",
    "total": null
   },
   {
@@ -236,8 +208,8 @@
    "pct": null,
    "prescribed": "cooldown for the 3x1000m",
    "role": "volume_only",
+   "score_bucket": null,
    "seconds": 1008,
-   "surface": "road",
    "total": null
   },
   {
@@ -267,8 +239,8 @@
    "prescribed": "60 min easy",
    "prescribed_seconds": 3600,
    "role": "easy",
+   "score_bucket": "easy",
    "seconds": 3637,
-   "surface": "road",
    "total": 3637
   },
   {
@@ -298,8 +270,8 @@
    "prescribed": "60 min easy",
    "prescribed_seconds": 3600,
    "role": "easy",
+   "score_bucket": "easy",
    "seconds": 3479,
-   "surface": "road",
    "total": 3478
   },
   {
@@ -329,8 +301,8 @@
    "prescribed": "40 min easy, w/ 4x 15s strides",
    "prescribed_seconds": 2400,
    "role": "easy",
+   "score_bucket": "easy",
    "seconds": 2359,
-   "surface": "road",
    "total": 2359
   },
   {
@@ -360,8 +332,8 @@
    "prescribed": "40 min easy",
    "prescribed_seconds": 2400,
    "role": "easy",
+   "score_bucket": "easy",
    "seconds": 2370,
-   "surface": "road",
    "total": 2371
   },
   {
@@ -377,8 +349,8 @@
    "pct": null,
    "prescribed": "race warmup",
    "role": "volume_only",
+   "score_bucket": null,
    "seconds": 974,
-   "surface": "road",
    "total": null
   },
   {
@@ -437,8 +409,8 @@
    "pct": null,
    "prescribed": "Track 5k",
    "role": "race",
+   "score_bucket": null,
    "seconds": 1152,
-   "surface": "track",
    "total": null
   },
   {
@@ -454,8 +426,8 @@
    "pct": null,
    "prescribed": "race cooldown",
    "role": "volume_only",
+   "score_bucket": null,
    "seconds": 1208,
-   "surface": "road",
    "total": null
   }
  ],
@@ -479,15 +451,18 @@
  "structure": {
   "checks": {
    "long_run_share": true,
-   "outdoor_run": true,
    "quality_days_met": true,
    "rest_days_met": false,
-   "session_work_volume": false,
    "volume_vs_plan": false
   },
-  "pct": 50.0
+  "pct": 50.0,
+  "why": {
+   "long_run_share": "the long run was 0.0% of the week's running distance, against a 25% ceiling",
+   "quality_days_met": "2 quality day(s) against the 2 a Race week asks for",
+   "rest_days_met": "1 rest day(s) against the 2 a Race week asks for",
+   "volume_vs_plan": "5:16:55 run against a plan of 5:45:00, tolerance 5%"
+  }
  },
- "warnings": [],
  "week_start": "2026-07-13",
  "week_type": "Race"
 }
