@@ -6,6 +6,7 @@ import {
   inBand,
   lineDomain,
   niceTicks,
+  repHrDomain,
   repPaceDomain,
   type Column,
 } from "./scales";
@@ -214,5 +215,82 @@ describe("niceTicks", () => {
 
   it("is deterministic", () => {
     expect(niceTicks(34000)).toEqual(niceTicks(34000));
+  });
+});
+
+describe("repHrDomain", () => {
+  it("contains every value", () => {
+    const { lo, hi } = repHrDomain([140, 152, 148]);
+    expect(lo).toBeLessThanOrEqual(140);
+    expect(hi).toBeGreaterThanOrEqual(152);
+  });
+
+  it("CONTAINS EVERY CEILING, not just the data", () => {
+    // The escaped-bar bug in another hat: a rule outside the domain lands at a
+    // negative y and draws across whatever sits above the chart -- and the case
+    // that triggers it is a session run WELL UNDER its ceiling, i.e. the best
+    // week rather than the worst.
+    const { lo, hi } = repHrDomain([120, 124], [162, 166]);
+    expect(lo).toBeLessThanOrEqual(120);
+    expect(hi).toBeGreaterThanOrEqual(166);
+  });
+
+  it("contains a ceiling BELOW every value too", () => {
+    const { lo, hi } = repHrDomain([170, 174], [137]);
+    expect(lo).toBeLessThanOrEqual(137);
+    expect(hi).toBeGreaterThanOrEqual(174);
+  });
+
+  it("contains all three tiers of a long-run ceiling", () => {
+    const { lo, hi } = repHrDomain([139, 141], [137, 140, 143]);
+    expect(lo).toBeLessThanOrEqual(137);
+    expect(hi).toBeGreaterThanOrEqual(143);
+  });
+
+  it("pads by at least 4 bpm so a metronomic set is not scatter", () => {
+    const { lo, hi, pad } = repHrDomain([150, 151]);
+    expect(pad).toBeGreaterThanOrEqual(4);
+    expect(hi - lo).toBeGreaterThanOrEqual(9);
+  });
+
+  it("does not divide by zero on a flat series", () => {
+    const { lo, hi } = repHrDomain([150, 150, 150]);
+    expect(hi).toBeGreaterThan(lo);
+    expect(Number.isFinite(lo)).toBe(true);
+    expect(Number.isFinite(hi)).toBe(true);
+  });
+
+  it("a single value still yields a usable domain", () => {
+    const { lo, hi } = repHrDomain([150]);
+    expect(hi).toBeGreaterThan(lo);
+  });
+
+  it("survives no values and no ceilings", () => {
+    const { lo, hi } = repHrDomain([], []);
+    expect(Number.isFinite(lo)).toBe(true);
+    expect(hi).toBeGreaterThan(lo);
+  });
+
+  it("survives ceilings with no values", () => {
+    const { lo, hi } = repHrDomain([], [162, 166]);
+    expect(lo).toBeLessThanOrEqual(162);
+    expect(hi).toBeGreaterThanOrEqual(166);
+  });
+
+  it("ignores non-finite entries rather than producing NaN", () => {
+    const { lo, hi } = repHrDomain([140, NaN, 152], [Infinity]);
+    expect(Number.isFinite(lo)).toBe(true);
+    expect(Number.isFinite(hi)).toBe(true);
+    expect(hi).toBeGreaterThanOrEqual(152);
+  });
+
+  it("is deterministic", () => {
+    expect(repHrDomain([140, 152], [162])).toEqual(
+      repHrDomain([140, 152], [162]),
+    );
+  });
+
+  it("defaults ceilings to none", () => {
+    expect(repHrDomain([140, 152])).toEqual(repHrDomain([140, 152], []));
   });
 });

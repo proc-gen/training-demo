@@ -23,11 +23,13 @@ const rowFor = (c: HTMLElement, k: string) =>
 
 describe("AcwrTable", () => {
   it("shows both A:C figures, because THE GAP IS THE POINT", () => {
-    // Runalyze is blind to load between activities; the mechanical figure is
-    // what closes that gap.
+    // A run log is blind to load between activities; the mechanical figure is
+    // what closes that gap. Both are ours now -- the running-only side stopped
+    // being a Runalyze reading on 2026-08-11 -- and the comparison is unchanged
+    // because it was never "us versus them".
     const { container } = wrap(<AcwrTable load={load({})} />);
     expect(rowFor(container, "Mechanical A:C").textContent).toContain("1.21");
-    expect(rowFor(container, "Runalyze A:C").textContent).toContain("0.94");
+    expect(rowFor(container, "Running A:C").textContent).toContain("0.94");
   });
 
   it("gives A:C two decimals, where a hundredth matters", () => {
@@ -35,19 +37,29 @@ describe("AcwrTable", () => {
     expect(rowFor(container, "Mechanical A:C").textContent).toContain("1.30");
   });
 
-  it("labels monotony as NOT comparable to Runalyze's", () => {
+  it("names monotony's own definition rather than a comparison", () => {
+    // The not-comparable label existed because Runalyze's monotonyValue is a
+    // percent of an undisclosed maximum and sat in the next column. That column
+    // is gone, so the note states what THIS number is.
     const { container } = wrap(<AcwrTable load={load({})} />);
-    expect(rowFor(container, "Monotony").textContent).toContain("NOT comparable");
+    expect(rowFor(container, "Monotony").textContent).toContain("Foster");
   });
 
-  it("labels strain as trend-only, since Runalyze's is in TRIMP", () => {
+  it("names strain's own definition", () => {
     const { container } = wrap(<AcwrTable load={load({})} />);
-    expect(rowFor(container, "Strain").textContent).toContain("trend only");
+    expect(rowFor(container, "Strain").textContent).toContain("monotony");
+  });
+
+  it("mentions Runalyze nowhere", () => {
+    // Never let a label claim a source it did not read. Every figure in this
+    // table is computed here.
+    const { container } = wrap(<AcwrTable load={load({})} />);
+    expect(container.textContent).not.toContain("Runalyze");
   });
 
   it.each([
     ["acwr_mech", "Mechanical A:C"],
-    ["acwr_run", "Runalyze A:C"],
+    ["acwr_run", "Running A:C"],
     ["monotony_mech", "Monotony"],
     ["strain_mech", "Strain"],
   ])("shows -- when %s is null", (key, label) => {
@@ -70,87 +82,65 @@ describe("AcwrTable", () => {
     expect(container.querySelectorAll("tbody tr")).toHaveLength(4);
   });
 
-  describe("a permanent caveat lands on the row it explains", () => {
-    /* Permanent caveats are filtered out of the banner stack, so this row is
-     * the only place the reader ever learns WHY Runalyze A:C is blank on the
-     * weeks whose `calculations` payload was never captured. */
-    const perm = [{ mark: "??", text: "never captured", permanent: true }];
+  describe("the running A:C dash explains itself", () => {
+    /* THE REASON CHANGED ON 2026-08-11. It used to be "this week's Runalyze
+     * training state was never captured and cannot be" -- read out of a
+     * permanent caveat, because the row had no other way to know. The figure is
+     * ours now and exists for every date, so the row goes blank for exactly one
+     * reason and reads it DIRECTLY off `ctl_converged`: the 42-day average has
+     * not yet forgotten its zero seed. That is a fact about our own series, and
+     * inferring it from a caveat would be the indirection the old code needed
+     * and this one does not. */
 
-    it("explains the dash when the capture is unrecoverable", () => {
-      const { container } = wrap(
-        <AcwrTable load={load({ acwr_run: null, caveats: perm })} />,
-      );
-      const row = rowFor(container, "Runalyze A:C").textContent ?? "";
-      expect(row).toContain("--");
-      expect(row).toContain("current-only");
-    });
-
-    it("keeps the ordinary note when the value is present", () => {
-      // A permanent caveat about something else must not relabel a real number.
-      const { container } = wrap(
-        <AcwrTable load={load({ acwr_run: 1.16, caveats: perm })} />,
-      );
-      const row = rowFor(container, "Runalyze A:C").textContent ?? "";
-      expect(row).toContain("the gap is the point");
-      expect(row).not.toContain("current-only");
-    });
-
-    it("keeps the ordinary note when the dash is merely short history", () => {
-      // Null with no permanent caveat means too little history -- recoverable,
-      // and it must not claim the capture is gone.
-      const { container } = wrap(
-        <AcwrTable load={load({ acwr_run: null, caveats: [] })} />,
-      );
-      const row = rowFor(container, "Runalyze A:C").textContent ?? "";
-      expect(row).toContain("the gap is the point");
-      expect(row).not.toContain("current-only");
-    });
-  });
-
-  describe("a figure read off Runalyze's curve says so", () => {
-    /* get_calculations() takes no parameters, so a PAST week has no verbatim
-     * payload and never will. Reading CTL and ATL off the form curve gives the
-     * number back -- but a tooltip reading is a measurement of a plotted line,
-     * not the API's answer, and every place it prints has to say which. Same
-     * rule as `run_step_source` and the ceiling tiers. */
-    const graph = { payload_source: "graph" } as unknown as NonNullable<
-      Parameters<typeof load>[0]
-    >["snapshot"];
-
-    it("labels the row", () => {
-      const { container } = wrap(
-        <AcwrTable load={load({ acwr_run: 1.38, snapshot: graph })} />,
-      );
-      const row = rowFor(container, "Runalyze A:C").textContent ?? "";
-      expect(row).toContain("1.38");
-      expect(row).toContain("read off Runalyze's form curve");
-    });
-
-    it("leaves a verbatim capture's row alone", () => {
-      const api = { payload_source: "api" } as unknown as NonNullable<
-        Parameters<typeof load>[0]
-      >["snapshot"];
-      const { container } = wrap(
-        <AcwrTable load={load({ acwr_run: 1.15, snapshot: api })} />,
-      );
-      const row = rowFor(container, "Runalyze A:C").textContent ?? "";
-      expect(row).toContain("the gap is the point");
-      expect(row).not.toContain("form curve");
-    });
-
-    it("an unrecoverable week still says unrecoverable", () => {
-      // The two cannot both apply, and "no capture at all" is the stronger
-      // statement -- there is no number to qualify.
+    it("says so when the 42-day average has not converged", () => {
       const { container } = wrap(
         <AcwrTable
           load={load({
             acwr_run: null,
-            caveats: [{ mark: "??", text: "never captured", permanent: true }],
+            fitness: { ctl_converged: false },
+          } as unknown as Partial<Load>)}
+        />,
+      );
+      const row = rowFor(container, "Running A:C").textContent ?? "";
+      expect(row).toContain("--");
+      expect(row).toContain("forgets its seed");
+    });
+
+    it("keeps the ordinary note once it has converged", () => {
+      const { container } = wrap(
+        <AcwrTable
+          load={load({
+            acwr_run: 1.16,
+            fitness: { ctl_converged: true },
+          } as unknown as Partial<Load>)}
+        />,
+      );
+      const row = rowFor(container, "Running A:C").textContent ?? "";
+      expect(row).toContain("the gap is the point");
+      expect(row).not.toContain("forgets its seed");
+    });
+
+    it("does not read a permanent caveat to decide", () => {
+      // The old branch keyed on `caveats.some(c => c.permanent)`, so a permanent
+      // caveat about something else would relabel this row.
+      const { container } = wrap(
+        <AcwrTable
+          load={load({
+            acwr_run: 1.16,
+            caveats: [{ mark: "??", text: "unrelated", permanent: true }],
           })}
         />,
       );
-      const row = rowFor(container, "Runalyze A:C").textContent ?? "";
-      expect(row).toContain("current-only");
+      expect(rowFor(container, "Running A:C").textContent).toContain(
+        "the gap is the point",
+      );
+    });
+
+    it("does not claim a warm-up when there is no fitness block at all", () => {
+      const { container } = wrap(<AcwrTable load={load({ acwr_run: null })} />);
+      const row = rowFor(container, "Running A:C").textContent ?? "";
+      expect(row).toContain("--");
+      expect(row).not.toContain("forgets its seed");
     });
   });
 });

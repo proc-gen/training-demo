@@ -109,6 +109,66 @@ describe("the published records", () => {
   });
 });
 
+describe("the fitness block", () => {
+  /* Added 2026-08-11, when CTL/ATL/TSB stopped being read out of a Runalyze
+   * capture. Every field is nullable-optional, so a record published BEFORE the
+   * change still parses -- which is what lets the tree be rebuilt in any order.
+   */
+  it.skipIf(!publishedPayload())("parses on every published week", () => {
+    const raw = publishedPayload() as { weeks: Record<string, { load?: unknown }> };
+    const result = Payload.safeParse(raw);
+    expect(result.success).toBe(true);
+  });
+
+  it("a load record with NO fitness block still parses", () => {
+    // The pre-2026-08-11 shape. If this fails, republishing becomes ordered.
+    const result = Payload.safeParse({
+      schema: 1,
+      athlete: { slug: 'micah', display_name: 'Micah' },
+      weeks: {
+        "2026-07-27": {
+          week_start: "2026-07-27",
+          week_end: "2026-08-02",
+          notes: { adherence: null, load: null },
+          load: {
+            week_start: "2026-07-27",
+            week_type: "Volume",
+            phase: "General Prep",
+            csv: "",
+          },
+        },
+      },
+    });
+    expect(result.success ? null : JSON.stringify(result.error.issues)).toBeNull();
+  });
+
+  it("a day with no curve still parses, and the fields stay absent", () => {
+    const result = Payload.safeParse({
+      schema: 1,
+      athlete: { slug: 'micah', display_name: 'Micah' },
+      weeks: {
+        "2026-07-27": {
+          week_start: "2026-07-27",
+          week_end: "2026-08-02",
+          notes: { adherence: null, load: null },
+          load: {
+            week_start: "2026-07-27",
+            week_type: "Volume",
+            phase: "General Prep",
+            csv: "",
+            days: [{ date: "2026-07-27", role: "easy" }],
+          },
+        },
+      },
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      const d = result.data.weeks["2026-07-27"].load!.days[0];
+      expect(d.ctl ?? null).toBeNull();
+    }
+  });
+});
+
 describe("paceChartBand", () => {
   /* THE trap this module exists for, on synthetic charts as well as real ones:
    * `set.band` is a name like "rep_3min", and indexing it as a pair yields "r".

@@ -5,7 +5,7 @@ import type { Flag } from "@/lib/data/payload";
 const GLYPH: Record<string, string> = { fired: "▲", clear: "✓" };
 const CLASS: Record<string, string> = { fired: "bad", clear: "ok" };
 
-/** One flag: its state, its token, why, and any footnote qualifying it.
+/** One flag: its state, its token, and why.
  *
  * THREE states, not two. A flag with no data behind it is `not-evaluable` and
  * must never read as `clear` -- "nobody looked" and "we looked and it was fine"
@@ -14,13 +14,13 @@ const CLASS: Record<string, string> = { fired: "bad", clear: "ok" };
  * The token is shown as-is because flags are logged as string tokens and that
  * string is what appears in the notes and the CSVs.
  *
- * `caveat` is a load caveat that named this token -- today, `strain-spike`
- * firing against a threshold `model.json` itself calls an uncalibrated
- * placeholder. It renders HERE rather than as a banner above the week: a
- * footnote to one flag repeated above every number stops being read and takes
- * the actionable banners down with it.
+ * IT TOOK A `caveat` PROP UNTIL 2026-08-14 -- a load caveat that named this
+ * token, `strain-spike`'s footnote about an uncalibrated threshold. That
+ * placement was the argument for keeping caveats on the page at all, and the
+ * athlete's reading is that they do not belong on it in any position. See
+ * `flags.ts` for the whole story.
  */
-export function FlagRow({ flag, caveat }: { flag: Flag; caveat?: string }) {
+export function FlagRow({ flag }: { flag: Flag }) {
   return (
     <div className="flag">
       <span className={CLASS[flag.status] ?? "muted"}>
@@ -30,10 +30,7 @@ export function FlagRow({ flag, caveat }: { flag: Flag; caveat?: string }) {
         <span className="mono">{flag.token}</span>
         <div className="muted">{flag.status}</div>
       </span>
-      <span className="why">
-        {flag.why}
-        {caveat ? <div className="muted">{caveat}</div> : null}
-      </span>
+      <span className="why">{flag.why}</span>
     </div>
   );
 }

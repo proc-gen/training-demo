@@ -3,25 +3,31 @@
 import type { Week } from "@/lib/data/payload";
 import { Banner } from "@/lib/ux/primitives/Banner";
 
-/** Everything ACTIONABLE that qualifies the week, above the numbers it qualifies.
+/** WHAT FAILED TO BUILD, above the space where it would have been.
  *
- * A grader that FAILED gets a stop banner naming its reason -- the same
- * exactly-one-is-null contract the payload holds, surfaced. The load grader's
- * caveats are ordinary banners: they qualify data that IS there.
+ * Two kinds, and both are about a thing that is ABSENT rather than about a
+ * number that is present:
  *
- * A CAVEAT WITH A HOME OF ITS OWN IS NOT A BANNER, and there are two kinds.
+ *   `banners`                    a SKILL is not installed, so half the report
+ *                                does not exist on this checkout
+ *   `adherence_error`/`load_error`  a grader CRASHED, so this week's half of the
+ *                                page is a blank card
  *
- * `permanent` is one nobody can ever act on -- a week whose Runalyze training
- * state was never captured, which `get_calculations()` being current-only makes
- * unrecoverable. AcwrTable renders it beside the `--` that is its only visible
- * consequence.
+ * `published/`'s contract is that absence is the signal and the reason sits
+ * beside it. This is where the reason surfaces; without it a reader sees an
+ * empty section and nothing saying why.
  *
- * `flag` is a footnote to one flag rather than a headline about the week --
- * `strain-spike` firing against a threshold `model.json` itself calls an
- * uncalibrated placeholder. FlagsCard renders it under that flag's row.
- *
- * Both are still true and still worth saying. A banner repeated on every visit
- * stops being read, and it drowns the ones that mean go and fix something.
+ * **IT NO LONGER RENDERS CAVEATS, AND MUST NOT LEARN HOW AGAIN.** The load
+ * grader's caveats qualify data that IS there -- a carried-forward baseline, a
+ * week that has not started, a derived cadence -- and every one of them is
+ * either an expected state or something to go and fix. The athlete, 2026-08-14,
+ * reading three of them above a week: *"all of the warnings at the top of the
+ * page are expected... we already worked to remove these in a previous update
+ * with instructions for you to bring up things like that with me in
+ * conversation and not display them on the page."* That is the same instruction
+ * that took the adherence grader's `warnings` off the page on 2026-08-10, and
+ * caveats should have gone with them. `grade_load.py` still prints every one to
+ * stderr; that is the channel now, and `caveats` has left the payload.
  */
 export function WeekBanners({
   week,
@@ -49,11 +55,6 @@ export function WeekBanners({
           {week.load_error}
         </Banner>
       ) : null}
-      {(week.load?.caveats ?? [])
-        .filter((c) => !c.permanent && !c.flag)
-        .map((c, i) => (
-          <Banner key={i}>{c.text}</Banner>
-        ))}
     </>
   );
 }

@@ -6,61 +6,61 @@
   "runs": [
    {
     "date": "2026-07-27",
-    "id": 194639587,
+    "key": "2026-07-27",
     "prescribed": "30 min recovery",
     "role": "recovery"
    },
    {
     "date": "2026-07-28",
-    "id": 195056921,
+    "key": "2026-07-28-wu",
     "prescribed": "warmup for the 8x800m",
     "role": "volume_only"
    },
    {
     "date": "2026-07-28",
-    "id": 195056957,
+    "key": "2026-07-28",
     "prescribed": "8x800m w/ 200m jog at Sub-T",
     "role": "subt"
    },
    {
     "date": "2026-07-28",
-    "id": 195056965,
+    "key": "2026-07-28-cd",
     "prescribed": "cooldown for the 8x800m",
     "role": "volume_only"
    },
    {
     "date": "2026-07-29",
-    "id": 195302655,
+    "key": "2026-07-29",
     "prescribed": "60-70 min easy",
     "role": "easy"
    },
    {
     "date": "2026-07-30",
-    "id": 195547303,
+    "key": "2026-07-30",
     "prescribed": "15x1:00 w/ 30s jog recovery at Sub-T",
     "role": "subt"
    },
    {
     "date": "2026-07-31",
-    "id": 195677421,
+    "key": "2026-07-31-am",
     "prescribed": "AM: 30 min recovery",
     "role": "recovery"
    },
    {
     "date": "2026-07-31",
-    "id": 195826711,
+    "key": "2026-07-31-pm",
     "prescribed": "PM: 30 min easy run with club people",
     "role": "easy"
    },
    {
     "date": "2026-08-01",
-    "id": 196033869,
+    "key": "2026-08-01",
     "prescribed": "30 min recovery",
     "role": "recovery"
    },
    {
     "date": "2026-08-02",
-    "id": 196253663,
+    "key": "2026-08-02",
     "prescribed": "90 min easy/long",
     "role": "long"
    }
@@ -71,188 +71,102 @@
  "pace_chart": {
   "bands": {
    "easy": {
-    "derived_check": {
-     "fast": "8:20",
-     "residual_sec": [
-      1.1,
-      -0.5
-     ],
-     "slow": "9:00"
-    },
-    "display": "8:21-8:59/mi",
-    "fast_sec_per_mi": 501,
-    "pct": [
-     0.63,
-     0.68
-    ],
-    "slow_sec_per_mi": 539
+    "display": "8:27-9:07/mi",
+    "fast_sec_per_mi": 506.9,
+    "slow_sec_per_mi": 547.1
    },
    "long": {
-    "derived_check": {
-     "fast": "7:52",
-     "residual_sec": [
-      -0.1,
-      1.1
-     ],
-     "slow": "8:20"
-    },
-    "display": "7:52-8:21/mi",
-    "fast_sec_per_mi": 472,
-    "pct": [
-     0.68,
-     0.72
-    ],
-    "slow_sec_per_mi": 501
+    "display": "7:59-8:27/mi",
+    "fast_sec_per_mi": 478.7,
+    "slow_sec_per_mi": 506.9
    },
    "recovery": {
-    "derived_check": {
-     "fast": "9:00",
-     "residual_sec": [
-      -0.5,
-      -0.0
-     ],
-     "slow": "9:46"
-    },
-    "display": "8:59-9:46/mi",
-    "fast_sec_per_mi": 539,
-    "pct": [
-     0.58,
-     0.63
-    ],
-    "slow_sec_per_mi": 586
+    "display": "9:07-9:54/mi",
+    "fast_sec_per_mi": 547.1,
+    "slow_sec_per_mi": 594.3
    },
    "rep_10min": {
-    "derived_check": {
-     "fast": "6:55",
-     "residual_sec": [
-      0.5,
-      -0.3
-     ],
-     "slow": "7:10"
-    },
-    "display": "6:55-7:10/mi",
-    "fast_sec_per_mi": 415,
-    "pct": [
-     0.79,
-     0.82
-    ],
-    "slow_sec_per_mi": 430
+    "display": "7:00-7:16/mi",
+    "fast_sec_per_mi": 420.3,
+    "slow_sec_per_mi": 436.3
    },
    "rep_15min": {
-    "derived_check": {
-     "fast": "7:05",
-     "residual_sec": [
-      0.1,
-      -0.4
-     ],
-     "slow": "7:21"
-    },
-    "display": "7:05-7:21/mi",
-    "fast_sec_per_mi": 425,
-    "pct": [
-     0.77,
-     0.8
-    ],
-    "slow_sec_per_mi": 441
+    "display": "7:11-7:28/mi",
+    "fast_sec_per_mi": 430.8,
+    "slow_sec_per_mi": 447.6
    },
    "rep_1min": {
-    "derived_check": {
-     "fast": "6:26",
-     "residual_sec": [
-      -0.2,
-      -0.9
-     ],
-     "slow": "6:40"
-    },
-    "display": "6:26-6:39/mi",
-    "fast_sec_per_mi": 386,
-    "pct": [
-     0.85,
-     0.88
-    ],
-    "slow_sec_per_mi": 399
+    "display": "6:32-6:46/mi",
+    "fast_sec_per_mi": 391.7,
+    "slow_sec_per_mi": 405.5
    },
    "rep_3min": {
-    "derived_check": {
-     "fast": "6:35",
-     "residual_sec": [
-      0.8,
-      -0.5
-     ],
-     "slow": "6:50"
-    },
-    "display": "6:36-6:49/mi",
-    "fast_sec_per_mi": 396,
-    "pct": [
-     0.83,
-     0.86
-    ],
-    "slow_sec_per_mi": 409
+    "display": "6:41-6:55/mi",
+    "fast_sec_per_mi": 400.8,
+    "slow_sec_per_mi": 415.3
    },
    "rep_6min": {
-    "derived_check": {
-     "fast": "6:45",
-     "residual_sec": [
-      -0.6,
-      0.4
-     ],
-     "slow": "7:00"
-    },
-    "display": "6:44-7:00/mi",
-    "fast_sec_per_mi": 404,
-    "pct": [
-     0.81,
-     0.84
-    ],
-    "slow_sec_per_mi": 420
+    "display": "6:50-7:06/mi",
+    "fast_sec_per_mi": 410.3,
+    "slow_sec_per_mi": 425.5
    }
   },
-  "captured": "2026-08-04",
   "confirmed_by_athlete": true,
+  "confirmed_on": "2026-08-05",
+  "effective_vo2max": 54.8,
   "gap_zone": {
-   "derivation": "fast end of long -> slow end of rep_15min",
-   "display": "7:52-7:21/mi",
-   "fast_sec_per_mi": 472,
-   "slow_sec_per_mi": 441
+   "display": "7:28-7:59/mi",
+   "fast_sec_per_mi": 478.7,
+   "slow_sec_per_mi": 447.6
   },
-  "max_derivation_residual_sec": 1.1,
-  "provenance": "Runalyze Training paces table, supplied by the athlete and confirmed. Observed values are authoritative; derived_check shows what pct x vVO2max reproduces, for validation only.",
   "race_paces": {
+   "10000m": {
+    "display": "38:12 @ 6:08/mi",
+    "sec_per_mi": 368,
+    "seconds": 2292
+   },
    "1500m": {
-    "display": "4:54 @ 5:15/mi",
-    "sec_per_mi": 315,
-    "seconds": 294
+    "display": "4:58 @ 5:20/mi",
+    "sec_per_mi": 320,
+    "seconds": 298
+   },
+   "21097m": {
+    "display": "1:24:32 @ 6:26/mi",
+    "sec_per_mi": 386,
+    "seconds": 5072
    },
    "3000m": {
-    "display": "10:31 @ 5:38/mi",
-    "sec_per_mi": 338,
-    "seconds": 631
+    "display": "10:38 @ 5:42/mi",
+    "sec_per_mi": 342,
+    "seconds": 638
+   },
+   "42195m": {
+    "display": "2:56:27 @ 6:43/mi",
+    "sec_per_mi": 403,
+    "seconds": 10587
+   },
+   "5000m": {
+    "display": "18:25 @ 5:55/mi",
+    "sec_per_mi": 355,
+    "seconds": 1105
    },
    "800m": {
-    "display": "2:28 @ 4:59/mi",
-    "sec_per_mi": 299,
-    "seconds": 148
+    "display": "2:30 @ 5:03/mi",
+    "sec_per_mi": 303,
+    "seconds": 150
    },
    "tempo": {
-    "basis": "60-80 minute race pace, the Daniels threshold definition: 9.6 mi in 1:00:00, 12.3 mi in 1:20:00.",
-    "display": "6:14-6:30/mi",
-    "fast_sec_per_mi": 374,
-    "slow_sec_per_mi": 390
+    "basis": "60-80 minute race pace, the Daniels threshold definition. From the 2026-08-15 calculator run: 9.5 mi in 1:00:00 at 6:18/mi, 12.5 mi in 1:20:00 at 6:25/mi.",
+    "display": "6:18-6:25/mi",
+    "fast_sec_per_mi": 378,
+    "slow_sec_per_mi": 385
    }
   },
-  "source": {
-   "effective_vo2max": 55.57,
-   "prognosis_seconds": {
-    "10km": 2265,
-    "3km": 631,
-    "5km": 1092,
-    "half": 5183,
-    "marathon": 13575
-   },
-   "vvo2max_pace_sec_per_mi": 339.9
-  },
-  "week_ending": "2026-08-02"
+  "source": "Effective VO2max read from the Runalyze 'Running performance status' graph at 07/26/2026 (correction factor 1.01), supplied by the athlete 2026-08-05. The API has no per-date endpoint for this - get_calculations is current-only and the per-activity effective_vo2max is a single-run estimate, not the smoothed curve.",
+  "vvo2max_pace_sec_per_mi": 344.7,
+  "week_ending": "2026-07-26"
  },
+ "pace_chart_is_carried_forward": false,
  "week_end": "2026-08-02",
  "week_start": "2026-07-27"
 }

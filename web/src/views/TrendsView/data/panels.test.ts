@@ -64,6 +64,71 @@ describe("trendPanels", () => {
     expect(trendPanels(p).find((x) => x.key === "acwr")!.reference).toBe(1.3);
   });
 
+  describe("the fitness curve", () => {
+    /* Fitness, fatigue and form got their first chart on 2026-08-11. Until then
+     * they were five hand-read weekly points off Runalyze's form curve; they are
+     * a daily series computed from heart rate now. */
+    const day = (date: string, over: Record<string, unknown> = {}) => ({
+      date,
+      trimp: 90,
+      ctl: 80,
+      atl: 95,
+      tsb: -15,
+      ...over,
+    });
+    const withDays = (days: Record<string, unknown>[]) =>
+      payload({ weeks: { "2026-07-27": week({ load: L({ days }) }) } });
+
+    it("adds fitness, form and fatigue when a curve is published", () => {
+      const got = keys(withDays([day("2026-07-27")]));
+      expect(got).toContain("ctl");
+      expect(got).toContain("tsb");
+      expect(got).toContain("atl");
+    });
+
+    it("omits all three when no week carries a curve", () => {
+      const got = keys(payload({ weeks: { w: week({ load: L({ days: [{ date: "2026-07-27" }] }) }) } }));
+      expect(got).not.toContain("ctl");
+      expect(got).not.toContain("atl");
+    });
+
+    it("gives form a zero reference, since it is a difference", () => {
+      const p = trendPanels(withDays([day("2026-07-27")]));
+      expect(p.find((x) => x.key === "tsb")!.reference).toBe(0);
+    });
+
+    it("gives fitness no reference line, because there is no danger level", () => {
+      const p = trendPanels(withDays([day("2026-07-27")]));
+      expect(p.find((x) => x.key === "ctl")!.reference ?? null).toBeNull();
+    });
+
+    it("colours all three as LOAD, following the domain", () => {
+      const p = trendPanels(withDays([day("2026-07-27")]));
+      for (const k of ["ctl", "atl", "tsb"]) {
+        expect(p.find((x) => x.key === k)!.color).toBe("var(--series-2)");
+      }
+    });
+
+    it("STATES its own omission when a day's fitness was withheld", () => {
+      // A ledger that lists only what it has reads as a complete account.
+      const p = trendPanels(
+        withDays([day("2026-07-27", { ctl: null, tsb: null }), day("2026-07-28")]),
+      );
+      expect(p.find((x) => x.key === "ctl")!.sub).toContain("1 day(s) omitted");
+    });
+
+    it("says nothing about omissions when every day converged", () => {
+      const p = trendPanels(withDays([day("2026-07-27")]));
+      expect(p.find((x) => x.key === "ctl")!.sub).not.toContain("omitted");
+    });
+
+    it("still plots fatigue when every fitness figure was withheld", () => {
+      const got = keys(withDays([day("2026-07-27", { ctl: null, tsb: null })]));
+      expect(got).toContain("atl");
+      expect(got).not.toContain("ctl");
+    });
+  });
+
   describe("the partly-covered week", () => {
     const incomplete = L({
       integrity: { total: 40000 },

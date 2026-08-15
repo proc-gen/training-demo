@@ -38,6 +38,52 @@ export function pace(secPerMi: number | null | undefined): string {
   return m + ":" + String(s).padStart(2, "0");
 }
 
+/** A distance: metres under a kilometre, miles at or above.
+ *
+ * ATHLETE-FACING OUTPUT IS IMPERIAL, with the carve-out this function is on the
+ * wrong side of and deliberately so. Volume converts to miles; a short segment
+ * does not, because a 400 m rep printed as "0.25 mi" makes a reader do
+ * arithmetic to recognise the thing the plan asked for. Under a kilometre the
+ * metric reading IS the prescription's own unit.
+ *
+ * The threshold is a KILOMETRE rather than a mile so the two ends never
+ * disagree about a 1200: 1.2 km reads as 0.75 mi, which is a distance, where
+ * "1200m" is a rep. Anything at or over a kilometre is long enough that miles
+ * are what a reader wants.
+ */
+export function dist(km: number | null | undefined): string {
+  return distIn(km, distUnit([km]));
+}
+
+/** The unit ONE TABLE should use for a whole column of distances.
+ *
+ * A COLUMN MUST NOT SWITCH UNITS PART WAY DOWN. Choosing per value made an easy
+ * run's laps read `1.00 mi, 1.00 mi, 1.00 mi, 398m` -- the last lap looking like
+ * a different kind of measurement rather than a shorter one, and no longer
+ * comparable to the rows above it at a glance. The unit is a property of the
+ * table, not of the cell.
+ *
+ * Miles win as soon as ANY lap reaches a kilometre, because that is the scale
+ * the run is being read at. A table entirely under a kilometre -- a rep set of
+ * 600s and 200m jogs -- stays in metres, which is the unit the prescription
+ * itself uses.
+ */
+export function distUnit(kms: (number | null | undefined)[]): "m" | "mi" {
+  return kms.some((k) => k !== null && k !== undefined && isFinite(k) && k >= 1)
+    ? "mi"
+    : "m";
+}
+
+/** One distance in an already-chosen unit. */
+export function distIn(
+  km: number | null | undefined,
+  unit: "m" | "mi",
+): string {
+  if (km === null || km === undefined || !isFinite(km)) return "--";
+  if (unit === "m") return Math.round(km * 1000) + "m";
+  return (km * 0.621371).toFixed(2) + " mi";
+}
+
 /** A number with thousands separators, or `--`. */
 export function num(
   v: number | string | null | undefined,

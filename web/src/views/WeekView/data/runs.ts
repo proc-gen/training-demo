@@ -6,44 +6,75 @@
 
 import type { Adherence, RunResult, Week } from "@/lib/data/payload";
 
-/** The week's runs, by date and then by activity id.
+/** The week's runs -- COMPLETED AND PLANNED TOGETHER -- by date, then ordinal.
  *
- * Id second because a double is two files on one date, and the order they were
- * recorded in is the order they were run in.
+ * The grader keeps them in two lists so a planned run cannot reach a
+ * measurement: `week_facts`, `structure_score` and `evaluate_flags` read only
+ * `results`. That separation is a scoring concern, not a reading one -- the
+ * athlete plans a week and then runs it, so the table shows one week in order
+ * and says which rows are still ahead.
+ *
+ * ORDINAL, NOT THE RUNALYZE ID. This sorted on `Number(x.id)` until 2026-08-12,
+ * which worked because Runalyze ids rise with time -- an accident of the source,
+ * and one a planned run cannot take part in at all: it has no id, so every
+ * planned row would have sorted as `NaN`. `ordinal` is the run's position within
+ * its date, stamped by the grader from manifest order, which is the one
+ * statement about sequence the plan actually makes.
  */
 export function sortedRuns(adherence: Adherence): RunResult[] {
-  return [...adherence.results].sort((x, y) =>
+  return [...adherence.results, ...adherence.planned].sort((x, y) =>
     x.date === y.date
-      ? Number(x.id) - Number(y.id)
+      ? (x.ordinal ?? 0) - (y.ordinal ?? 0)
       : (x.date ?? "") < (y.date ?? "")
         ? -1
         : 1,
   );
 }
 
-/** The runs that were scored against a prescribed duration.
+/** True on the first run of each date, false on the rest of that date's runs.
  *
- * 0.0 IS A REAL VALUE -- it means the run landed exactly inside its
- * prescription, which is the best possible outcome. The original filter was a
- * truthiness check on `pct`, so those runs were dropped and the section listed
- * only misses. Found on the first week ever authored with `prescribed_seconds`:
- * three of five runs showed, and the two missing were the two that were bang on.
+ * A day with four activities printed `Tue 8/4` four times, which reads as four
+ * separate days until the eye catches the repetition. Showing it once makes the
+ * doubles and the warmup/cooldown files visibly belong to one day.
+ *
+ * IT DEPENDS ON THE ORDER, so it lives beside `sortedRuns`, which decides that
+ * order. Run it over anything else and it marks a break every time the date
+ * changes, which on unsorted input is most rows.
  */
-export function runsWithDuration(adherence: Adherence): RunResult[] {
-  return adherence.results.filter(
-    (r) => r.duration && r.duration.pct !== null && r.duration.pct !== undefined,
-  );
+export function dayBreaks(runs: RunResult[]): boolean[] {
+  let prev: string | null = null;
+  return runs.map((r) => {
+    const d = r.date ?? "";
+    const first = d !== prev;
+    prev = d;
+    return first;
+  });
 }
 
-/** Activity id -> the manifest's prescription string for it.
+/* `runsWithDuration()` was here until 2026-08-11 and is gone with the
+ * `Duration against prescription` table it fed. Its lesson moved WITH it, into
+ * `runWhy.ts` where the same guard now lives: 0.0 IS A REAL VALUE -- it means
+ * the run landed exactly inside its prescription, which is the best possible
+ * outcome -- and the original filter here was a truthiness check on `pct`, so
+ * the two runs that were bang on were the two that did not show. Every guard in
+ * `runWhy` is an explicit null test for that reason. */
+
+/** Run key -> the manifest's prescription string for it.
  *
  * The manifest is the source for what was ASKED FOR; the grader's own
  * `prescribed` is the fallback.
+ *
+ * KEYED ON OUR `key`, not on the Runalyze id, which is what made this work for
+ * a planned run at all: the row exists in the manifest before any activity does,
+ * so an id-keyed lookup would find nothing for exactly the rows whose only
+ * content IS the prescription.
  */
-export function prescriptionById(week: Week): Map<unknown, string> {
-  const byId = new Map<unknown, string>();
-  const runs = (week.manifest as { runs?: { id: unknown; prescribed?: string }[] })
+export function prescriptionByKey(week: Week): Map<string, string> {
+  const byKey = new Map<string, string>();
+  const runs = (week.manifest as { runs?: { key?: string; prescribed?: string }[] })
     ?.runs;
-  for (const r of runs ?? []) byId.set(r.id, r.prescribed ?? "");
-  return byId;
+  for (const r of runs ?? []) {
+    if (r.key) byKey.set(r.key, r.prescribed ?? "");
+  }
+  return byKey;
 }

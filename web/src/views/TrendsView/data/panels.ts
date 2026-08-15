@@ -15,6 +15,7 @@ import { shortDate } from "@/lib/data/format";
 import { weekKeys } from "@/lib/data/weeks";
 import type { Point } from "@/lib/ux/charts/LineChart";
 import { isIncomplete } from "./coverage";
+import { fitnessSeries } from "./fitnessSeries";
 
 export type Panel = {
   key: string;
@@ -160,6 +161,51 @@ export function trendPanels(payload: Payload): Panel[] {
       color: "var(--series-2)",
       format: (v) => num(v, 2),
     });
+  }
+
+  // Fitness, fatigue and form. THE FIRST TIME THESE HAVE BEEN PLOTTED -- they
+  // were five hand-read weekly points until 2026-08-11 and are a daily series
+  // now. One series per panel and one axis, so form gets its own rather than
+  // riding on fitness's scale: it is a difference and crosses zero.
+  const fit = fitnessSeries(payload);
+  if (fit.days.length) {
+    const omitted = fit.unconverged
+      ? `; ${fit.unconverged} day(s) omitted — the 42-day average had not yet forgotten its seed`
+      : "";
+    const covered = fit.days.filter((d) => d.ctl !== null);
+    if (covered.length) {
+      panels.push({
+        key: "ctl",
+        title: "Fitness (CTL)",
+        sub: `${covered.length} days, 42-day average of daily TRIMP${omitted}`,
+        points: covered.map((d) => ({ label: shortDate(d.date), value: d.ctl })),
+        seriesTitle: "CTL",
+        color: "var(--series-2)",
+        format: (v) => num(v),
+      });
+      panels.push({
+        key: "tsb",
+        title: "Form (TSB)",
+        sub: `fitness − fatigue; above zero is fresh${omitted}`,
+        points: covered.map((d) => ({ label: shortDate(d.date), value: d.tsb })),
+        seriesTitle: "TSB",
+        color: "var(--series-2)",
+        reference: 0,
+        format: (v) => num(v),
+      });
+    }
+    const fatigue = fit.days.filter((d) => d.atl !== null);
+    if (fatigue.length) {
+      panels.push({
+        key: "atl",
+        title: "Fatigue (ATL)",
+        sub: `${fatigue.length} days, 7-day average of daily TRIMP`,
+        points: fatigue.map((d) => ({ label: shortDate(d.date), value: d.atl })),
+        seriesTitle: "ATL",
+        color: "var(--series-2)",
+        format: (v) => num(v),
+      });
+    }
   }
 
   const sleep = (payload.days ?? []).filter((d) => n(d.sleep_hours) !== null);

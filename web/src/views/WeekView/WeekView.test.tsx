@@ -126,17 +126,20 @@ describe("WeekView", () => {
     expect(tabs(container)).not.toContain("Structure");
   });
 
-  has(found)("renders NO grader-warning banner on any tab", () => {
-    /* The runs card printed the grader's `!!` notices at its foot; the payload
-     * no longer carries them and nothing renders them. The only banners left
-     * are the week-level ones above the card. */
+  has(found)("renders NO banner at all on a week that graded", () => {
+    /* A FLAT ZERO SINCE 2026-08-14. It counted against the week's own caveat
+     * total until then, which passed on any number of them; the athlete read
+     * three above a week and asked for the same thing that took the adherence
+     * grader's `warnings` off the page. What is left in `WeekBanners` fires
+     * only when something FAILED TO BUILD -- a missing skill or a crashed
+     * grader -- and this week graded both halves. */
     const [, w] = found!;
+    expect(w.adherence_error ?? null).toBeNull();
+    expect(w.load_error ?? null).toBeNull();
     const { container } = wrap(<WeekView week={w} banners={[]} />);
     for (const t of tabs(container)) {
       click(container, t!);
-      expect(container.querySelectorAll(".banner")).toHaveLength(
-        (w.load?.caveats ?? []).filter((c) => !c.permanent && !c.flag).length,
-      );
+      expect(container.querySelectorAll(".banner")).toHaveLength(0);
     }
   });
 });

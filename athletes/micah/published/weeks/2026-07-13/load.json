@@ -1,28 +1,22 @@
 {
- "acwr_mech": 0.9218051630321524,
- "acwr_run": 1.1285714285714286,
- "caveats": [
-  {
-   "flag": null,
-   "mark": "??",
-   "permanent": true,
-   "text": "Runalyze figures for this week were READ OFF THE FORM CURVE, not returned by get_calculations, which takes no date argument (athletes\\micah\\snapshots\\runalyze\\2026-07-19.json). CTL and ATL are the readings; TSB and the A:C ratio are derived from them. Rest days, monotony and strain are not plotted over time and are unavailable"
-  }
- ],
+ "acwr_mech": 0.924428653901332,
+ "acwr_run": 1.134969524660913,
  "ceiling_inputs": {
   "background_source": "baseline",
-  "background_steps": 2485.0,
+  "background_steps": 2801.0,
   "cadence_source": "measured",
   "cadence_spm": 172.0,
   "margin": 1.05,
   "run_step_weight": 2.5
  },
- "csv": "2026-07-13,Race,General Prep,152448,136892,15556,98,86,92,0.92,1.13,2.37,361601,70,79,-9,none",
+ "csv": "2026-07-13,Race,General Prep,152807,137490,15317,98,86,92,0.92,1.13,2.37,361614,471,70,79,-9,none",
  "days": [
   {
-   "ceiling": 2609.25,
+   "atl": 73.3525496219174,
+   "ceiling": 2941.05,
    "ceiling_source": "prescribed",
    "completeness": "full",
+   "ctl": 67.22152634556167,
    "date": "2026-07-13",
    "nonrun_se": 1237.0,
    "nonrun_steps": 1237,
@@ -35,30 +29,38 @@
    "run_steps": 0,
    "scored": true,
    "se": 1237.0,
-   "total_steps": 1237
+   "total_steps": 1237,
+   "trimp": 0.0,
+   "tsb": -6.131023276355734
   },
   {
-   "ceiling": 33771.958743438314,
+   "atl": 83.48191221643805,
+   "ceiling": 34187.08182414698,
    "ceiling_source": "session-default",
    "completeness": "full",
+   "ctl": 69.39122279460531,
    "date": "2026-07-14",
-   "nonrun_se": 1342.0,
-   "nonrun_steps": 1342,
+   "nonrun_se": 1334.0,
+   "nonrun_steps": 1334,
    "pct": 100.0,
-   "prescribed_run_seconds": 4141.223753280839,
-   "prescribed_run_steps": 11871.508092738406,
+   "prescribed_run_seconds": 4152.296587926509,
+   "prescribed_run_steps": 11903.25021872266,
    "role": "interval",
-   "run_se": 27492.5,
-   "run_step_source": "cadence-estimate",
-   "run_steps": 10997,
+   "run_se": 27512.5,
+   "run_step_source": "cadence-stream",
+   "run_steps": 11005,
    "scored": true,
-   "se": 28834.5,
-   "total_steps": 12339
+   "se": 28846.5,
+   "total_steps": 12339,
+   "trimp": 113.87,
+   "tsb": -14.090689421832735
   },
   {
-   "ceiling": 29699.25,
+   "atl": 80.19143416232853,
+   "ceiling": 30031.050000000003,
    "ceiling_source": "prescribed",
    "completeness": "full",
+   "ctl": 69.43442173439111,
    "date": "2026-07-15",
    "nonrun_se": 1818.0,
    "nonrun_steps": 1818,
@@ -71,12 +73,16 @@
    "run_steps": 10393,
    "scored": true,
    "se": 27800.5,
-   "total_steps": 12211
+   "total_steps": 12211,
+   "trimp": 70.32,
+   "tsb": -10.757012427937426
   },
   {
-   "ceiling": 29699.25,
+   "atl": 76.84857562174639,
+   "ceiling": 30031.050000000003,
    "ceiling_source": "prescribed",
    "completeness": "full",
+   "ctl": 69.3128207234892,
    "date": "2026-07-16",
    "nonrun_se": 728.0,
    "nonrun_steps": 728,
@@ -89,12 +95,16 @@
    "run_steps": 10021,
    "scored": true,
    "se": 25780.5,
-   "total_steps": 10749
+   "total_steps": 10749,
+   "trimp": 66.82,
+   "tsb": -7.535754898257196
   },
   {
-   "ceiling": 20669.25,
+   "atl": 69.41393171630979,
+   "ceiling": 21001.05,
    "ceiling_source": "prescribed",
    "completeness": "full",
+   "ctl": 68.28013138751295,
    "date": "2026-07-17",
    "nonrun_se": 2335.0,
    "nonrun_steps": 2335,
@@ -107,12 +117,16 @@
    "run_steps": 6900,
    "scored": true,
    "se": 19585.0,
-   "total_steps": 9235
+   "total_steps": 9235,
+   "trimp": 47.11,
+   "tsb": -1.1338003287968377
   },
   {
-   "ceiling": 20669.25,
+   "atl": 63.38544878723235,
+   "ceiling": 21001.05,
    "ceiling_source": "prescribed",
    "completeness": "full",
+   "ctl": 67.21128806716351,
    "date": "2026-07-18",
    "nonrun_se": 2624.0,
    "nonrun_steps": 2624,
@@ -125,27 +139,54 @@
    "run_steps": 6889,
    "scored": true,
    "se": 19846.5,
-   "total_steps": 9513
+   "total_steps": 9513,
+   "trimp": 45.3,
+   "tsb": 3.8258392799311594
   },
   {
-   "ceiling": 26794.600000000002,
+   "atl": 79.47908659042426,
+   "ceiling": 27209.175000000003,
    "ceiling_source": "session-default",
    "completeness": "full",
+   "ctl": 70.02750722683032,
    "date": "2026-07-19",
-   "nonrun_se": 5472.0,
-   "nonrun_steps": 5472,
-   "pct": 91.24827597949906,
-   "prescribed_run_seconds": 3214.0,
-   "prescribed_run_steps": 9213.466666666667,
+   "nonrun_se": 5241.0,
+   "nonrun_steps": 5241,
+   "pct": 91.5794655178217,
+   "prescribed_run_seconds": 3225.0,
+   "prescribed_run_steps": 9245.0,
    "role": "race",
-   "run_se": 23892.5,
-   "run_step_source": "cadence-estimate",
-   "run_steps": 9557,
+   "run_se": 24470.0,
+   "run_step_source": "cadence-stream",
+   "run_steps": 9788,
    "scored": true,
-   "se": 29364.5,
-   "total_steps": 15029
+   "se": 29711.0,
+   "total_steps": 15029,
+   "trimp": 127.76,
+   "tsb": -9.451579363593936
   }
  ],
+ "fitness": {
+  "activities": 11,
+  "acwr_run": 1.134969524660913,
+  "atl": 79.47908659042426,
+  "atl_converged": true,
+  "ctl": 70.02750722683032,
+  "ctl_converged": true,
+  "ctl_max_in_series": 83.82298839458575,
+  "ctl_warmup_days": 126,
+  "days_covered": 7,
+  "earliest_activity": "2026-02-09",
+  "history_days": 161,
+  "on_date": "2026-07-19",
+  "seed_date": "2026-02-09",
+  "series_span_days": 188,
+  "stream_share": 1.0,
+  "trimp": 471.18,
+  "trimp_source": "stream",
+  "tsb": -9.451579363593936,
+  "unpriced": 0
+ },
  "flags": [
   {
    "status": "clear",
@@ -160,12 +201,12 @@
   {
    "status": "clear",
    "token": "background-load-spike",
-   "why": "15,556 SE background against a 24,800 SE baseline = 0.63x (fires above 1.3x)"
+   "why": "15,317 SE background against a 24,935 SE baseline = 0.61x (fires above 1.3x)"
   },
   {
    "status": "clear",
    "token": "hidden-load",
-   "why": "mechanical A:C 0.92 against Runalyze running-only 1.13 (optimum 0.8-1.3)"
+   "why": "mechanical A:C 0.92 against running-only 1.13 from our TRIMP (optimum 0.8-1.3)"
   },
   {
    "status": "clear",
@@ -175,7 +216,7 @@
   {
    "status": "clear",
    "token": "resting-hr-rise",
-   "why": "trailing resting-HR mean -0.8 bpm (fires at +5)"
+   "why": "trailing resting-HR mean -0.4 bpm (fires at +5)"
   },
   {
    "status": "clear",
@@ -190,23 +231,23 @@
   {
    "status": "clear",
    "token": "strain-spike",
-   "why": "strain 361,601 SE against a 350,921 SE baseline = 1.03x (fires above 1.5x)"
+   "why": "strain 361,614 SE against a 350,683 SE baseline = 1.03x (fires above 1.5x)"
   },
   {
    "status": "not-evaluable",
    "token": "form-suppressed",
-   "why": "tsb_floor is null in the load model — TSB -9 is reported, not scored, until a floor is calibrated"
+   "why": "tsb_floor is null in the load model — TSB -9 is reported, not scored, until a floor is calibrated. It is calibratable now: TSB is a series we hold for every date rather than five hand-read points"
   }
  ],
  "integrity": {
-  "earned": 149878.6,
+  "earned": 150305.175,
   "excluded": [],
-  "pct": 98.314250386196,
+  "pct": 98.36275497850228,
   "scored_days": 7,
-  "total": 152448.5
+  "total": 152807.0
  },
- "monotony_mech": 2.37195693071764,
- "overall": 92.01426805024084,
+ "monotony_mech": 2.3664756888928156,
+ "overall": 92.038520346394,
  "phase": "General Prep",
  "readiness": {
   "available": 21,
@@ -274,25 +315,7 @@
   ],
   "resting_hr_ceiling": 47
  },
- "snapshot": {
-  "acwr_run": 1.1285714285714286,
-  "atl": 79,
-  "atl_max": 186,
-  "capture_lag_days": 21,
-  "captured": "2026-08-09",
-  "ctl": 70,
-  "ctl_max": 145,
-  "easy_trimp": null,
-  "has_payload": true,
-  "monotony_run_pct": null,
-  "payload_source": "graph",
-  "rest_days": null,
-  "strain_run": null,
-  "tsb": -9,
-  "week_complete": true,
-  "week_ending": "2026-07-19"
- },
- "strain_mech": 361601.2761525081,
+ "strain_mech": 361614.0505926445,
  "week_start": "2026-07-13",
  "week_type": "Race"
 }

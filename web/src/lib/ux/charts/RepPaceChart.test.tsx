@@ -119,6 +119,62 @@ describe("RepPaceChart", () => {
     expect(Math.abs(a - b)).toBeLessThan(40);
   });
 
+  it("SHADES PER REP when the reps do not share a band", () => {
+    /* Each rep length rounds its own target and its own tolerance to whole
+     * seconds, so a set of 400s, 600s and 200s has three regions up to 4 s/mi
+     * apart. One rectangle drawn across them puts marks on the wrong side of
+     * the band they were actually judged against -- which is the disagreement
+     * the athlete found by reading the chart. */
+    const mixed: RepPoint[] = [
+      { pace: 309, band: [302, 358] },
+      { pace: 308, band: [300, 357] },
+      { pace: 265, band: [298, 354] },
+    ];
+    const { container } = wrap(<RepPaceChart reps={mixed} band={null} />);
+    expect(container.querySelectorAll("rect")).toHaveLength(3);
+  });
+
+  it("judges each mark against the region drawn beneath IT", () => {
+    const mixed: RepPoint[] = [
+      { pace: 309, band: [302, 358] },   // inside its own
+      { pace: 265, band: [298, 354] },   // outside its own, inside the first
+    ];
+    const { container } = wrap(<RepPaceChart reps={mixed} band={null} />);
+    expect(fills(container)).toEqual(["var(--series-1)", "var(--critical)"]);
+  });
+
+  it("a point's own band OUTRANKS the set-wide one", () => {
+    const { container } = wrap(
+      <RepPaceChart reps={[{ pace: 398, band: [300, 350] }]} band={BAND} />,
+    );
+    expect(fills(container)).toEqual(["var(--critical)"]);
+  });
+
+  it("keeps EVERY per-rep band inside the plot", () => {
+    /* The same rule the set-wide band has, and for the same reason: a region
+     * drawn outside the domain renders at a y beyond the plot and takes the
+     * mark it explains with it. */
+    const { container } = wrap(
+      <RepPaceChart
+        reps={[{ pace: 400, band: [396, 409] }, { pace: 401, band: [250, 260] }]}
+        band={null}
+      />,
+    );
+    const svg = container.querySelector("svg")!;
+    const h = Number(svg.getAttribute("viewBox")!.split(" ")[3]);
+    for (const r of svg.querySelectorAll("rect")) {
+      const y = parseFloat(r.getAttribute("y")!);
+      expect(y).toBeGreaterThanOrEqual(-0.001);
+      expect(y + parseFloat(r.getAttribute("height")!)).toBeLessThanOrEqual(h);
+    }
+  });
+
+  it("still draws ONE region when every rep shares a band", () => {
+    const same = REPS.map((r) => ({ ...r, band: BAND }));
+    const { container } = wrap(<RepPaceChart reps={same} band={null} />);
+    expect(container.querySelectorAll("rect")).toHaveLength(1);
+  });
+
   it("carries an accessible name", () => {
     const { container } = wrap(<RepPaceChart reps={REPS} band={BAND} />);
     const svg = container.querySelector("svg")!;

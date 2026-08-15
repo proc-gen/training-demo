@@ -5,10 +5,10 @@
  "hrv": "71",
  "nonrun_steps": "0",
  "resting_hr": "43",
- "run_step_source": "cadence-estimate-capped",
+ "run_step_source": "cadence-stream-capped",
  "run_steps": "10740",
  "sleep_hours": "7.53",
- "sleep_score": "9",
+ "sleep_score": "91",
  "source": "garmin",
  "total_steps": "10740"
 }

@@ -9,7 +9,6 @@ import {
   FLAG_COMPONENT,
   allFlags,
   firedFirst,
-  flagCaveats,
   flagsFor,
   unmappedFlags,
 } from "./flags";
@@ -57,30 +56,10 @@ describe("firedFirst", () => {
   });
 });
 
-describe("flagCaveats", () => {
-  const L = (caveats: unknown[]) => ({ caveats }) as unknown as Week["load"];
-
-  it("keys a flag-named caveat by its token", () => {
-    const w = week({
-      load: L([{ mark: "??", text: "provisional", flag: "strain-spike" }]),
-    });
-    expect(flagCaveats(w)).toEqual({ "strain-spike": "provisional" });
-  });
-
-  it("ignores caveats that name no flag", () => {
-    const w = week({
-      load: L([
-        { mark: "??", text: "no baseline" },
-        { mark: "??", text: "never captured", permanent: true },
-      ]),
-    });
-    expect(flagCaveats(w)).toEqual({});
-  });
-
-  it("is empty when the load half did not grade", () => {
-    expect(flagCaveats(week({}))).toEqual({});
-  });
-});
+/* THERE IS NO `flagCaveats` SUITE ANY MORE. It covered keying a load caveat by
+ * the flag token it named, so `strain-spike`'s footnote could render under its
+ * own row. The function went on 2026-08-14 with every other caveat renderer,
+ * and `caveats` left the payload with it -- see the tombstone in flags.ts. */
 
 describe("allFlags", () => {
   const A = (flags: Flag[]) => ({ flags }) as unknown as Week["adherence"];

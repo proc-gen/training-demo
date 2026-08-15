@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   clock,
   dayName,
+  dist,
   n,
   num,
   pace,
@@ -212,6 +213,52 @@ describe("severity", () => {
   it.each([null, undefined])("%s is muted, not critical", (v) => {
     // An unscored day must not read as a failed one.
     expect(severity(v)).toBe("var(--text-muted)");
+  });
+});
+
+describe("dist", () => {
+  it.each([
+    [0.4, "400m"],
+    [0.2, "200m"],
+    [0.6, "600m"],
+    [0.999, "999m"],
+    [0.0005, "1m"],
+  ])("%f km under a kilometre reads in metres (%s)", (km, want) => {
+    // A 400 m rep printed as "0.25 mi" makes a reader do arithmetic to
+    // recognise the thing the plan asked for.
+    expect(dist(km)).toBe(want);
+  });
+
+  it.each([
+    [1, "0.62 mi"],
+    [1.609, "1.00 mi"],
+    [1.6093, "1.00 mi"],
+    [10, "6.21 mi"],
+    [16.09, "10.00 mi"],
+  ])("%f km at or above a kilometre reads in miles (%s)", (km, want) => {
+    expect(dist(km)).toBe(want);
+  });
+
+  it("switches exactly at one kilometre, not near it", () => {
+    expect(dist(0.9999)).toBe("1000m");
+    expect(dist(1)).toBe("0.62 mi");
+  });
+
+  it("zero is a real distance, not an absence", () => {
+    expect(dist(0)).toBe("0m");
+  });
+
+  it.each([null, undefined, NaN, Infinity])("%s is --", (v) => {
+    expect(dist(v as number)).toBe("--");
+  });
+
+  it("always shows two decimals in miles so a column aligns", () => {
+    expect(dist(1.609)).toBe("1.00 mi");
+    expect(dist(3.218)).toBe("2.00 mi");
+  });
+
+  it("is deterministic", () => {
+    expect(dist(1.609)).toBe(dist(1.609));
   });
 });
 

@@ -1,0 +1,293 @@
+{
+ "acwr_mech": null,
+ "acwr_run": 0.9997299267888662,
+ "ceiling_inputs": {
+  "background_source": "baseline",
+  "background_steps": 1440.0,
+  "cadence_source": "measured",
+  "cadence_spm": 175.0,
+  "margin": 1.05,
+  "run_step_weight": 2.5
+ },
+ "csv": "2026-08-10,Volume,General Prep,158474,149130,9344,100,94,97,,1.00,,,485,81,81,0,steps-data-incomplete",
+ "days": [
+  {
+   "atl": 78.52828590697648,
+   "ceiling": 15293.25,
+   "ceiling_source": "prescribed",
+   "completeness": "full",
+   "ctl": 79.30150426253253,
+   "date": "2026-08-10",
+   "nonrun_se": 1350.0,
+   "nonrun_steps": 1350,
+   "pct": 100.0,
+   "prescribed_run_seconds": 1800.0,
+   "prescribed_run_steps": 5250.0,
+   "role": "recovery",
+   "run_se": 12447.5,
+   "run_step_source": "step-stream-window",
+   "run_steps": 4979,
+   "scored": true,
+   "se": 13797.5,
+   "total_steps": 6329,
+   "trimp": 30.59,
+   "tsb": 0.7732183555560539
+  },
+  {
+   "atl": 91.30871443023236,
+   "ceiling": 41459.86058791657,
+   "ceiling_source": "session-default",
+   "completeness": "full",
+   "ctl": 81.64329476194962,
+   "date": "2026-08-11",
+   "nonrun_se": 3278.0,
+   "nonrun_steps": 3278,
+   "pct": 100.0,
+   "prescribed_run_seconds": 5217.6797502584905,
+   "prescribed_run_steps": 15218.232604920597,
+   "role": "repetition",
+   "run_se": 37817.5,
+   "run_step_source": "step-stream-window",
+   "run_steps": 15127,
+   "scored": true,
+   "se": 41095.5,
+   "total_steps": 18405,
+   "trimp": 129.65,
+   "tsb": -9.665419668282738
+  },
+  {
+   "atl": 87.44653582267426,
+   "ceiling": 31371.375,
+   "ceiling_source": "prescribed",
+   "completeness": "full",
+   "ctl": 81.37430430790545,
+   "date": "2026-08-12",
+   "nonrun_se": 1486.0,
+   "nonrun_steps": 1486,
+   "pct": 100.0,
+   "prescribed_run_seconds": 3900.0,
+   "prescribed_run_steps": 11375.0,
+   "role": "easy",
+   "run_se": 29540.0,
+   "run_step_source": "step-stream-window",
+   "run_steps": 11816,
+   "scored": true,
+   "se": 31026.0,
+   "total_steps": 13302,
+   "trimp": 75.86,
+   "tsb": -6.072231514768816
+  },
+  {
+   "atl": 87.7274018670057,
+   "ceiling": 31371.375,
+   "ceiling_source": "prescribed",
+   "completeness": "full",
+   "ctl": 81.70898782846798,
+   "date": "2026-08-13",
+   "nonrun_se": 1222.0,
+   "nonrun_steps": 1222,
+   "pct": 100.0,
+   "prescribed_run_seconds": 3900.0,
+   "prescribed_run_steps": 11375.0,
+   "role": "easy",
+   "run_se": 29330.0,
+   "run_step_source": "step-stream-window",
+   "run_steps": 11732,
+   "scored": true,
+   "se": 30552.0,
+   "total_steps": 12954,
+   "trimp": 88.57,
+   "tsb": -6.018414038537713
+  },
+  {
+   "atl": 97.58555140025427,
+   "ceiling": 42580.125,
+   "ceiling_source": "session-default",
+   "completeness": "full",
+   "ctl": 83.82298839458575,
+   "date": "2026-08-14",
+   "nonrun_se": 2008.0,
+   "nonrun_steps": 2008,
+   "pct": 100.0,
+   "prescribed_run_seconds": 5364.0,
+   "prescribed_run_steps": 15645.0,
+   "role": "subt",
+   "run_se": 39995.0,
+   "run_step_source": "step-stream-window",
+   "run_steps": 15998,
+   "scored": true,
+   "se": 42003.0,
+   "total_steps": 18006,
+   "trimp": 127.16,
+   "tsb": -13.762563005668525
+  },
+  {
+   "atl": 81.4366635501907,
+   "ceiling": 15293.25,
+   "ceiling_source": "prescribed",
+   "completeness": "in-progress",
+   "ctl": 81.45866335297711,
+   "date": "2026-08-15",
+   "nonrun_se": null,
+   "nonrun_steps": null,
+   "pct": null,
+   "prescribed_run_seconds": 1800.0,
+   "prescribed_run_steps": 5250.0,
+   "role": "recovery",
+   "run_se": null,
+   "run_step_source": "",
+   "run_steps": null,
+   "scored": false,
+   "se": null,
+   "total_steps": null,
+   "trimp": 32.99,
+   "tsb": 0.021999802786410783
+  }
+ ],
+ "fitness": {
+  "activities": 13,
+  "acwr_run": 0.9997299267888662,
+  "atl": 81.4366635501907,
+  "atl_converged": true,
+  "ctl": 81.45866335297711,
+  "ctl_converged": true,
+  "ctl_max_in_series": 83.82298839458575,
+  "ctl_warmup_days": 126,
+  "days_covered": 6,
+  "earliest_activity": "2026-02-09",
+  "history_days": 188,
+  "on_date": "2026-08-15",
+  "seed_date": "2026-02-09",
+  "series_span_days": 188,
+  "stream_share": 1.0,
+  "trimp": 484.82,
+  "trimp_source": "stream",
+  "tsb": 0.021999802786410783,
+  "unpriced": 0
+ },
+ "flags": [
+  {
+   "status": "fired",
+   "token": "steps-data-incomplete",
+   "why": "2026-08-15 in-progress — excluded from scoring, not counted as zero"
+  },
+  {
+   "status": "clear",
+   "token": "recovery-day-not-recovering",
+   "why": "1 rest/recovery day(s) within ceiling x1.15"
+  },
+  {
+   "status": "clear",
+   "token": "background-load-spike",
+   "why": "9,344 SE background against a 18,169 SE baseline = 0.51x (fires above 1.3x)"
+  },
+  {
+   "status": "not-evaluable",
+   "token": "hidden-load",
+   "why": "mechanical A:C --, running-only 1.00 — needs both"
+  },
+  {
+   "status": "not-evaluable",
+   "token": "load-monotony",
+   "why": "needs every day of the week covered; 5 of 6 have a measurement. A short week's spread is not the week's spread"
+  },
+  {
+   "status": "clear",
+   "token": "resting-hr-rise",
+   "why": "trailing resting-HR mean +0.1 bpm (fires at +5)"
+  },
+  {
+   "status": "clear",
+   "token": "hrv-suppressed",
+   "why": "longest run of 0 day(s) below 61.2 (90% of a 68.0 baseline); fires at 3"
+  },
+  {
+   "status": "clear",
+   "token": "sleep-debt",
+   "why": "mean 7.5 h over 6 night(s) (fires below 6.5)"
+  },
+  {
+   "status": "not-evaluable",
+   "token": "strain-spike",
+   "why": "mechanical strain --, 4-week baseline 557,769 — needs both"
+  },
+  {
+   "status": "not-evaluable",
+   "token": "form-suppressed",
+   "why": "tsb_floor is null in the load model — TSB +0 is reported, not scored, until a floor is calibrated. It is calibratable now: TSB is a series we hold for every date rather than five hand-read points"
+  }
+ ],
+ "integrity": {
+  "earned": 158474.0,
+  "excluded": [
+   "2026-08-15"
+  ],
+  "pct": 100.0,
+  "scored_days": 5,
+  "total": 158474.0
+ },
+ "monotony_mech": null,
+ "overall": 97.22222222222223,
+ "phase": "General Prep",
+ "readiness": {
+  "available": 18,
+  "hrv_baseline": 68,
+  "hrv_baseline_source": "snapshot",
+  "passed": 17,
+  "pct": 94.44444444444444,
+  "per_day": [
+   {
+    "checks": {
+     "hrv": true,
+     "resting_hr": true,
+     "sleep": true
+    },
+    "date": "2026-08-10"
+   },
+   {
+    "checks": {
+     "hrv": true,
+     "resting_hr": true,
+     "sleep": false
+    },
+    "date": "2026-08-11"
+   },
+   {
+    "checks": {
+     "hrv": true,
+     "resting_hr": true,
+     "sleep": true
+    },
+    "date": "2026-08-12"
+   },
+   {
+    "checks": {
+     "hrv": true,
+     "resting_hr": true,
+     "sleep": true
+    },
+    "date": "2026-08-13"
+   },
+   {
+    "checks": {
+     "hrv": true,
+     "resting_hr": true,
+     "sleep": true
+    },
+    "date": "2026-08-14"
+   },
+   {
+    "checks": {
+     "hrv": true,
+     "resting_hr": true,
+     "sleep": true
+    },
+    "date": "2026-08-15"
+   }
+  ],
+  "resting_hr_ceiling": 47
+ },
+ "strain_mech": null,
+ "week_start": "2026-08-10",
+ "week_type": "Volume"
+}

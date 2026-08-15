@@ -43,6 +43,19 @@ export function WeekCard({ week }: { week: Week }) {
    * actually reaches it, so the schema does not restate the shape. Named here
    * rather than read through, which is what keeps these two `unknown`. */
   const m = (week.manifest ?? {}) as { week_type?: string; phase?: string };
+  /* The cutoff, but ONLY while it is short of the week's end -- which is the
+   * grader's own way of saying this week is still being lived. Both fields come
+   * from the adherence record; a week whose adherence did not grade shows
+   * nothing, which is right, because then there is no partial score to qualify. */
+  const a = week.adherence;
+  /* THREE STATES, not two. `graded_through` is null on a live week whose first
+   * session has not landed -- nothing in it has come due -- and that is a week
+   * that must say so LOUDEST, not one that says nothing. Falling through to
+   * `null` here would have printed it exactly like a settled week. */
+  const live =
+    a?.week_end && (!a.graded_through || a.graded_through < a.week_end)
+      ? (a.graded_through ?? "nothing yet")
+      : null;
 
   return (
     <Card>
@@ -51,6 +64,16 @@ export function WeekCard({ week }: { week: Week }) {
           {"Week of " + week.week_start}
           {m.week_type ? " — " + m.week_type : ""}
           {m.phase ? ", " + m.phase : ""}
+          {/* A LIVE WEEK MUST SAY SO. It is judged only through
+              `min(today, week_end)`, so while it is in progress every score on
+              this card covers PART of the week -- and a partial score printed
+              like a whole-week one is the defect that produced `Structure 33`
+              off two days of running. Absent on a finished week, where
+              `graded_through` IS the week's end and there is nothing to
+              qualify. */}
+          {live ? (
+            <span className="sec"> · evaluated through {live}</span>
+          ) : null}
         </h3>
 
         {/* One tab is not a choice, and a lone pill reads as a filter somebody

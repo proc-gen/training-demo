@@ -17,20 +17,50 @@ import { sharePct, type WeekFacts } from "../data/facts";
  * and `Surface` reported author-typed strings as though they were measured --
  * the whole of `surface` was deleted from the pipeline on the same day.
  */
-export function RunTotals({ facts }: { facts: WeekFacts }) {
+export function RunTotals({
+  facts,
+  judged,
+}: {
+  facts: WeekFacts;
+  /** The same block over the window Structure SCORED -- see `judgedFacts`.
+   *  The plan comparison comes from here and the measurements from `facts`,
+   *  and the two are kept on SEPARATE ROWS rather than folded into one
+   *  sentence: while a week is live they cover different dates, and
+   *  `21.64 mi · 3:06:04 (96% of plan)` invites the reader to divide the two
+   *  numbers printed beside each other and get a third answer. */
+  judged: WeekFacts;
+}) {
+  const partial =
+    judged.prescribed_dates_due !== undefined &&
+    judged.prescribed_dates !== undefined &&
+    judged.prescribed_dates_due < judged.prescribed_dates;
   return (
     <Table headers={[{ label: "" }, { label: "" }]}>
-      <Row2
-        k="Volume"
-        v={
-          num(facts.miles, 2) +
-          " mi · " +
-          clock(facts.seconds) +
-          (facts.planned_seconds
-            ? `  (${pct(sharePct(facts.volume_vs_plan), 1)} of plan)`
-            : "")
-        }
-      />
+      <Row2 k="Volume" v={num(facts.miles, 2) + " mi · " + clock(facts.seconds)} />
+      {judged.planned_seconds ? (
+        <Row2
+          k="Against plan"
+          v={
+            // THE PROJECTION, which is what the check compares. It was
+            // `judged.seconds` against a target the grader had SCALED DOWN by a
+            // date count, and the two did not add up: on 2026-08-10 the scaled
+            // target read 5:21:26 while the plan's own remaining days stated
+            // 2:00:00, against a week authored at 7:30:00. What is run plus what
+            // is ahead is the budget, and the row now shows all three so a
+            // reader can check that themselves.
+            `${clock(judged.projected_seconds ?? judged.seconds)} of ${clock(
+              (judged.planned_seconds as number[])[0],
+            )} planned = ${pct(sharePct(judged.volume_vs_plan), 1)}` +
+            // NAME THE WINDOW WHENEVER IT IS SHORT OF THE WEEK. A target that
+            // does not announce what it covers is indistinguishable from a
+            // wrong one, and a reader who cannot see the split cannot check it.
+            (partial
+              ? ` — ${clock(judged.seconds)} run through ${judged.graded_through} plus ` +
+                `${clock(judged.remaining_planned_seconds ?? 0)} still prescribed`
+              : "")
+          }
+        />
+      ) : null}
       <Row2
         k="Long run"
         v={`${num(facts.long_run_miles, 2)} mi = ${pct(sharePct(facts.long_run_share), 1)} of volume`}

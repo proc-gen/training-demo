@@ -52,17 +52,15 @@ export const FLAG_COMPONENT: Record<string, string> = {
   "unilateral-complaint": "readiness",
 };
 
-/** Load caveats that name a flag, keyed by that flag's token.
- *
- * Populated from the load grader only, because only it emits caveats. These are
- * filtered out of the banner stack (see WeekBanners): a footnote to one flag
- * belongs under that flag, not above the whole week.
- */
-export function flagCaveats(week: Week): Record<string, string> {
-  const out: Record<string, string> = {};
-  for (const c of week.load?.caveats ?? []) if (c.flag) out[c.flag] = c.text;
-  return out;
-}
+/* THERE IS NO `flagCaveats` HERE ANY MORE. It keyed the load grader's caveats
+ * by the flag token each named, so `strain-spike`'s could render under its own
+ * row rather than as a banner above the week. That placement was the argument
+ * for keeping caveats on the page at all, and the athlete's reading on
+ * 2026-08-14 is that they should not be on it in any position -- the same
+ * instruction that took the adherence grader's `warnings` off on 2026-08-10.
+ * `caveats` has left the payload with it; `grade_load.py` still prints every
+ * one to stderr and puts the token back in front there, because a terminal has
+ * no flag row to sit under. Re-adding this means finding a reader first. */
 
 /** Fired first. A flag that fired is the reason to read the panel.
  *

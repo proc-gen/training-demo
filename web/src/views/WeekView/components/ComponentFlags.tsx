@@ -2,7 +2,7 @@
 
 import type { Week } from "@/lib/data/payload";
 import { EmptyState } from "@/lib/ux/primitives/EmptyState";
-import { flagCaveats, flagsFor } from "../data/flags";
+import { flagsFor } from "../data/flags";
 import { FlagRow } from "./FlagRow";
 
 /** The flags belonging to one score, inside that score's panel.
@@ -25,14 +25,11 @@ export function ComponentFlags({
   component: string;
 }) {
   const flags = flagsFor(week, component);
-  const caveats = flagCaveats(week);
   return (
     <>
       <h4>Flags</h4>
       {flags.length ? (
-        flags.map((f, i) => (
-          <FlagRow key={i} flag={f} caveat={caveats[f.token ?? ""]} />
-        ))
+        flags.map((f, i) => <FlagRow key={i} flag={f} />)
       ) : (
         <EmptyState>No flag is evaluated against this score.</EmptyState>
       )}

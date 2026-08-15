@@ -7,6 +7,7 @@ import { Legend } from "@/lib/ux/primitives/Legend";
 import { TipRow } from "@/lib/ux/tooltip/TipRow";
 import { AcwrTable } from "./AcwrTable";
 import { CeilingFormula } from "./CeilingFormula";
+import { FitnessTable } from "./FitnessTable";
 import { LoadDayTable } from "./LoadDayTable";
 import { ReadinessTable } from "./ReadinessTable";
 
@@ -63,6 +64,7 @@ export function LoadPanel({ week }: { week: Week }) {
       <LoadDayTable days={days} />
       <ReadinessTable readiness={l.readiness} />
       <AcwrTable load={l} />
+      <FitnessTable load={l} />
     </>
   );
 }

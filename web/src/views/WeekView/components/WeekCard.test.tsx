@@ -18,7 +18,14 @@ const FULL = week({
   adherence: {
     scores: { week: { pct: 81 }, easy: { pct: 78 }, workout: { pct: 93 } },
     structure: { pct: 100, checks: {} },
-    results: [{ id: 1, date: "2026-07-27", role: "easy" }],
+    results: [
+      { key: "2026-07-27", runalyze_id: 1, ordinal: 0, status: "completed",
+        date: "2026-07-27", role: "easy" },
+    ],
+    // `.default([])` in the schema, so a real payload always carries them; this
+    // fixture is cast past zod.
+    planned: [],
+    unclaimed: [],
     flags: [],
   } as unknown as Week["adherence"],
   load: {
@@ -72,6 +79,47 @@ describe("WeekCard: the title", () => {
   it("is ONE card, not a card per section", () => {
     const { container } = wrap(<WeekCard week={FULL} />);
     expect(container.querySelectorAll("section.card")).toHaveLength(1);
+  });
+});
+
+describe("WeekCard: a week still being lived", () => {
+  /* A partial score printed like a whole-week one is the defect this whole
+   * pass is about, so the card has to say which window it covers. */
+
+  const live = (graded: string | null, end = "2026-08-02") =>
+    week({
+      adherence: {
+        ...(FULL.adherence as object),
+        graded_through: graded,
+        week_end: end,
+      } as unknown as Week["adherence"],
+    });
+
+  it("names the date it was evaluated through", () => {
+    const { container } = wrap(<WeekCard week={live("2026-07-29")}  />);
+    expect(container.textContent).toContain("evaluated through 2026-07-29");
+  });
+
+  it("SAYS SO when nothing has come due yet", () => {
+    /* `graded_through` is null on a Monday whose session has not landed. That
+     * is the week that must say so loudest, not the one that says nothing --
+     * falling through to null here printed it exactly like a settled week. */
+    const { container } = wrap(<WeekCard week={live(null)}  />);
+    expect(container.textContent).toContain("evaluated through nothing yet");
+  });
+
+  it("says nothing on a finished week", () => {
+    const { container } = wrap(
+      <WeekCard week={live("2026-08-02")}  />,
+    );
+    expect(container.textContent).not.toContain("evaluated through");
+  });
+
+  it("says nothing when the adherence grader did not run", () => {
+    /* Then there is no partial score to qualify. */
+    const w = week({ load: FULL.load, notes: FULL.notes });
+    const { container } = wrap(<WeekCard week={w}  />);
+    expect(container.textContent).not.toContain("evaluated through");
   });
 });
 
@@ -208,11 +256,17 @@ describe("WeekCard: the panel wiring", () => {
   });
 });
 
-describe("WeekCard: a selection that outlives its week", () => {
-  /* `Report` renders `WeekView` with no key, so the tab survives a change of
-   * week -- which is what you want when comparing Training week to week, and
-   * which means the chosen panel may not exist on the week now showing.
-   * Re-rendering with a different `week` prop is exactly what that does. */
+describe("WeekCard: a selection this week cannot honour", () => {
+  /* IN ISOLATION. `Report` keys `WeekView` by the selected week since
+   * 2026-08-12, so in the real app a week change is a fresh instance and the tab
+   * starts at Overall -- these cases no longer describe what happens when the
+   * reader picks a different week.
+   *
+   * They are kept because they are `WeekCard`'s OWN contract: handed a different
+   * `week` prop, it must render something sensible rather than an empty card
+   * under a strip with no selected tab. `activeKey` is what holds that, and it
+   * holds it without knowing what key `Report` chose. Re-rendering with a
+   * different `week` is how that contract is exercised. */
 
   it("falls back to Overall rather than to an empty card", () => {
     const { container, rewrap } = wrap(<WeekCard week={FULL} />);

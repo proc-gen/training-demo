@@ -6,67 +6,67 @@
   "runs": [
    {
     "date": "2026-07-14",
-    "id": 191423347,
+    "key": "2026-07-14-wu",
     "prescribed": "warmup for the 3x1000m",
     "role": "volume_only"
    },
    {
     "date": "2026-07-14",
-    "id": 191423361,
+    "key": "2026-07-14",
     "prescribed": "3x1000m @ ~5k",
     "role": "interval"
    },
    {
     "date": "2026-07-14",
-    "id": 191423377,
+    "key": "2026-07-14-cd",
     "prescribed": "jog between the reps and the cooldown",
     "role": "volume_only"
    },
    {
     "date": "2026-07-14",
-    "id": 191423383,
+    "key": "2026-07-14-cd2",
     "prescribed": "cooldown for the 3x1000m",
     "role": "volume_only"
    },
    {
     "date": "2026-07-15",
-    "id": 191657477,
+    "key": "2026-07-15",
     "prescribed": "60 min easy",
     "role": "easy"
    },
    {
     "date": "2026-07-16",
-    "id": 191923849,
+    "key": "2026-07-16",
     "prescribed": "60 min easy",
     "role": "easy"
    },
    {
     "date": "2026-07-17",
-    "id": 192052553,
+    "key": "2026-07-17",
     "prescribed": "40 min easy, w/ 4x 15s strides",
     "role": "easy"
    },
    {
     "date": "2026-07-18",
-    "id": 192402483,
+    "key": "2026-07-18",
     "prescribed": "40 min easy",
     "role": "easy"
    },
    {
     "date": "2026-07-19",
-    "id": 192658261,
+    "key": "2026-07-19-wu",
     "prescribed": "race warmup",
     "role": "volume_only"
    },
    {
     "date": "2026-07-19",
-    "id": 192663285,
+    "key": "2026-07-19",
     "prescribed": "Track 5k",
     "role": "race"
    },
    {
     "date": "2026-07-19",
-    "id": 192667871,
+    "key": "2026-07-19-cd",
     "prescribed": "race cooldown",
     "role": "volume_only"
    }
@@ -77,116 +77,127 @@
  "pace_chart": {
   "bands": {
    "easy": {
-    "display": "8:32-9:12/mi",
-    "fast_sec_per_mi": 511.5,
+    "display": "8:37-9:18/mi",
+    "fast_sec_per_mi": 517.3,
     "pct": [
      0.63,
      0.68
     ],
-    "slow_sec_per_mi": 552.1
+    "slow_sec_per_mi": 558.3
    },
    "long": {
-    "display": "8:03-8:32/mi",
-    "fast_sec_per_mi": 483.1,
+    "display": "8:09-8:37/mi",
+    "fast_sec_per_mi": 488.5,
     "pct": [
      0.68,
      0.72
     ],
-    "slow_sec_per_mi": 511.5
+    "slow_sec_per_mi": 517.3
    },
    "recovery": {
-    "display": "9:12-10:00/mi",
-    "fast_sec_per_mi": 552.1,
+    "display": "9:18-10:06/mi",
+    "fast_sec_per_mi": 558.3,
     "pct": [
      0.58,
      0.63
     ],
-    "slow_sec_per_mi": 599.7
+    "slow_sec_per_mi": 606.4
    },
    "rep_10min": {
-    "display": "7:04-7:20/mi",
-    "fast_sec_per_mi": 424.2,
+    "display": "7:09-7:25/mi",
+    "fast_sec_per_mi": 428.9,
     "pct": [
      0.79,
      0.82
     ],
-    "slow_sec_per_mi": 440.3
+    "slow_sec_per_mi": 445.2
    },
    "rep_15min": {
-    "display": "7:15-7:32/mi",
-    "fast_sec_per_mi": 434.8,
+    "display": "7:20-7:37/mi",
+    "fast_sec_per_mi": 439.7,
     "pct": [
      0.77,
      0.8
     ],
-    "slow_sec_per_mi": 451.8
+    "slow_sec_per_mi": 456.8
    },
    "rep_1min": {
-    "display": "6:35-6:49/mi",
-    "fast_sec_per_mi": 395.3,
+    "display": "6:40-6:54/mi",
+    "fast_sec_per_mi": 399.7,
     "pct": [
      0.85,
      0.88
     ],
-    "slow_sec_per_mi": 409.2
+    "slow_sec_per_mi": 413.8
    },
    "rep_3min": {
-    "display": "6:44-6:59/mi",
-    "fast_sec_per_mi": 404.5,
+    "display": "6:49-7:04/mi",
+    "fast_sec_per_mi": 409.0,
     "pct": [
      0.83,
      0.86
     ],
-    "slow_sec_per_mi": 419.1
+    "slow_sec_per_mi": 423.8
    },
    "rep_6min": {
-    "display": "6:54-7:09/mi",
-    "fast_sec_per_mi": 414.1,
+    "display": "6:59-7:14/mi",
+    "fast_sec_per_mi": 418.7,
     "pct": [
      0.81,
      0.84
     ],
-    "slow_sec_per_mi": 429.4
+    "slow_sec_per_mi": 434.2
    }
   },
   "captured": "2026-08-09",
   "confirmed_by_athlete": true,
-  "effective_vo2max": 54.3,
+  "effective_vo2max": 53.7,
   "race_paces": {
    "10000m": {
-    "display": "38:30 @ 6:11/mi",
-    "sec_per_mi": 371,
-    "seconds": 2310
+    "display": "38:52 @ 6:15/mi",
+    "sec_per_mi": 375,
+    "seconds": 2332
    },
    "1500m": {
-    "display": "5:00 @ 5:22/mi",
-    "sec_per_mi": 322,
-    "seconds": 300
+    "display": "5:03 @ 5:25/mi",
+    "sec_per_mi": 325,
+    "seconds": 303
+   },
+   "21097m": {
+    "display": "1:26:02 @ 6:33/mi",
+    "sec_per_mi": 393,
+    "seconds": 5162
    },
    "3000m": {
-    "display": "10:44 @ 5:45/mi",
-    "sec_per_mi": 345,
-    "seconds": 644
+    "display": "10:50 @ 5:49/mi",
+    "sec_per_mi": 349,
+    "seconds": 650
+   },
+   "42195m": {
+    "display": "2:59:30 @ 6:50/mi",
+    "sec_per_mi": 410,
+    "seconds": 10770
    },
    "5000m": {
-    "display": "18:34 @ 5:58/mi",
-    "sec_per_mi": 358,
-    "seconds": 1114
+    "display": "18:45 @ 6:02/mi",
+    "sec_per_mi": 362,
+    "seconds": 1125
    },
    "800m": {
-    "display": "2:31 @ 5:05/mi",
-    "sec_per_mi": 305,
-    "seconds": 151
+    "display": "2:33 @ 5:08/mi",
+    "sec_per_mi": 308,
+    "seconds": 153
    },
    "tempo": {
-    "basis": "60-80 minute race pace, the Daniels threshold definition.",
-    "display": "6:21-6:35/mi",
-    "fast_sec_per_mi": 381,
-    "slow_sec_per_mi": 395
+    "basis": "60-80 minute race pace, the Daniels threshold definition. From the 2026-08-15 calculator run: 1:00:00 -> 9.4 mi at 6:24/mi, 1:20:00 -> 12.2 mi at 6:31/mi.",
+    "display": "6:24-6:31/mi",
+    "fast_sec_per_mi": 384,
+    "slow_sec_per_mi": 391
    }
   },
-  "week_ending": "2026-07-19"
+  "week_ending": "2026-07-12"
  },
+ "pace_chart_is_carried_forward": false,
  "week_end": "2026-07-19",
  "week_start": "2026-07-13"
 }

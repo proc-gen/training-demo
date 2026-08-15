@@ -46,7 +46,33 @@ export function Report({ payload }: { payload: Payload }) {
       <main>
         {view === "week" ? (
           week ? (
-            <WeekView week={week} banners={payload.banners ?? []} />
+            /* KEYED BY THE WEEK, SO A WEEK CHANGE RESETS THE WHOLE CARD.
+             *
+             * A different key is a different component instance, so every
+             * `useState` beneath this line re-initialises: the card's tab, which
+             * runs are expanded, the totals row, each chart's Pace/HR toggle and
+             * whichever score bar was open. Five stateful components, one line.
+             *
+             * IT USED TO HAVE NO KEY, deliberately -- the argument was that a
+             * sticky tab is what you want when comparing Training week to week.
+             * The athlete read the live page and it is wrong: switching weeks
+             * left the previous week's rows expanded BY POSITION, so row three
+             * of the new week opened showing a different run's laps. A reader
+             * who changes week is starting again, and lands on Overall.
+             *
+             * The alternatives are worse. A `useEffect` reset needs all five
+             * components to participate; lifting the state into this shell puts
+             * five unrelated concerns in the one component that is meant to hold
+             * only which view is showing. */
+            <WeekView
+              key={selected}
+              week={week}
+              banners={payload.banners ?? []}
+              /* The CHART, not the payload. `WeekView` needs one record and
+                 handing it the whole payload would give it reach into every
+                 other week, which is what the shell is for. */
+              paceChartCurrent={payload.pace_chart_current}
+            />
           ) : (
             <p className="empty-state">No week selected.</p>
           )

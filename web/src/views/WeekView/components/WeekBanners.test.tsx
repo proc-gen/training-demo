@@ -48,95 +48,45 @@ describe("WeekBanners", () => {
     expect(banners(container)[0].className).toContain("stop");
   });
 
-  it("shows a caveat as an ordinary banner, not a stop", () => {
-    // A caveat qualifies data that IS there.
-    const w = week({
-      load: {
-        caveats: [{ mark: "!", text: "no baseline file" }],
-      } as unknown as Week["load"],
-    });
-    const { container } = wrap(<WeekBanners week={w} banners={[]} />);
-    expect(banners(container)[0].className).toBe("banner");
-    expect(banners(container)[0].textContent).toBe("no baseline file");
-  });
-
-  it("shows every ACTIONABLE caveat the load grader raised", () => {
-    const w = week({
-      load: {
-        caveats: [
-          { mark: "!", text: "a" },
-          { mark: "!", text: "b" },
-        ],
-      } as unknown as Week["load"],
-    });
-    const { container } = wrap(<WeekBanners week={w} banners={[]} />);
-    expect(banners(container)).toHaveLength(2);
-  });
-
-  it("does NOT banner a permanent caveat", () => {
-    // Nobody can act on it, so a banner would sit above that week forever and
-    // train the reader to skip the ones that mean go and fix something. It is
-    // still published, and AcwrTable renders it beside the `--` it explains.
-    const w = week({
-      load: {
-        caveats: [{ mark: "??", text: "never captured", permanent: true }],
-      } as unknown as Week["load"],
-    });
-    const { container } = wrap(<WeekBanners week={w} banners={[]} />);
-    expect(banners(container)).toHaveLength(0);
-  });
-
-  it("keeps the actionable ones when a permanent one is mixed in", () => {
+  it("RENDERS NO CAVEAT, HOWEVER MANY THE WEEK CARRIES", () => {
+    /* Caveats qualify data that IS there -- a carried-forward baseline, a
+     * derived cadence, a week that has not started. They bannered above the
+     * week until 2026-08-14, with `permanent` and `flag` as escape hatches
+     * deciding where each one landed instead. The athlete, on three of them:
+     * *"all of the warnings at the top of the page are expected... we already
+     * worked to remove these in a previous update with instructions for you to
+     * bring up things like that with me in conversation and not display them
+     * on the page."*
+     *
+     * The field has left the payload; this is belt and braces against a record
+     * published before it did, which `looseObject` would still carry through. */
     const w = week({
       load: {
         caveats: [
-          { mark: "??", text: "never captured", permanent: true },
-          { mark: "??", text: "go fix this", permanent: false },
+          { mark: "!", text: "no baseline file" },
+          { mark: "??", text: "cadence is a population default" },
+          { mark: "??", text: "a footnote", flag: "strain-spike" },
+          { mark: "??", text: "unrecoverable", permanent: true },
         ],
+      } as unknown as Week["load"],
+    });
+    expect(banners(wrap(<WeekBanners week={w} banners={[]} />).container))
+      .toHaveLength(0);
+  });
+
+  it("still stops for a grader that failed on a week full of caveats", () => {
+    /* THE LINE THIS DRAWS. A caveat is about a number that is present; these
+     * two say a whole half of the page is ABSENT, and `published/`'s contract
+     * is that absence is the signal and the reason sits beside it. Deleting
+     * them would leave a blank card saying nothing. */
+    const w = week({
+      load_error: "grade_load.py exited 1",
+      load: {
+        caveats: [{ mark: "??", text: "expected" }],
       } as unknown as Week["load"],
     });
     const { container } = wrap(<WeekBanners week={w} banners={[]} />);
     expect(banners(container)).toHaveLength(1);
-    expect(banners(container)[0].textContent).toBe("go fix this");
-  });
-
-  it("does NOT banner a caveat that names a FLAG", () => {
-    /* A footnote to one flag is not a headline about the week. `strain-spike`
-     * fires against a threshold model.json itself calls an uncalibrated
-     * placeholder, and nobody can act on that until there is a distribution --
-     * so it renders under the flag's own row in the Flags card instead. */
-    const w = week({
-      load: {
-        caveats: [
-          { mark: "??", text: "provisional", flag: "strain-spike" },
-        ],
-      } as unknown as Week["load"],
-    });
-    const { container } = wrap(<WeekBanners week={w} banners={[]} />);
-    expect(banners(container)).toHaveLength(0);
-  });
-
-  it("keeps a caveat that names neither a flag nor permanence", () => {
-    const w = week({
-      load: {
-        caveats: [
-          { mark: "??", text: "provisional", flag: "strain-spike" },
-          { mark: "??", text: "go fix this" },
-        ],
-      } as unknown as Week["load"],
-    });
-    const { container } = wrap(<WeekBanners week={w} banners={[]} />);
-    expect(banners(container)).toHaveLength(1);
-    expect(banners(container)[0].textContent).toBe("go fix this");
-  });
-
-  it("puts the failures above the caveats", () => {
-    const w = week({
-      adherence_error: "boom",
-      load: { caveats: [{ mark: "!", text: "caveat" }] } as unknown as Week["load"],
-    });
-    const { container } = wrap(<WeekBanners week={w} banners={[]} />);
-    expect(banners(container)[0].textContent).toContain("Adherence not graded.");
-    expect(banners(container)[1].textContent).toBe("caveat");
+    expect(banners(container)[0].className).toContain("stop");
   });
 });

@@ -15,23 +15,19 @@ import { AcRow } from "./AcRow";
  *
  * THIS IS WHERE A PERMANENT CAVEAT LANDS. Those are filtered out of the banner
  * stack -- see WeekBanners -- because a caveat nobody can act on repeated above
- * every number stops being read. The one that exists says a week's Runalyze
- * training state was never captured and cannot be, and the ONLY thing that
- * costs on this page is the Runalyze A:C row reading `--`. Saying it there puts
+ * every number stops being read, and saying it beside the `--` it explains puts
  * the reason next to its consequence.
  *
- * A week whose figures were READ OFF RUNALYZE'S FORM CURVE is the other side of
- * that. The number is here, so there is nothing to explain away -- but a
- * tooltip reading is not the API's own answer and the row says so, the same way
- * every run-step figure names its tier.
+ * WHAT THAT CAVEAT SAYS CHANGED ON 2026-08-11. It used to be "this week's
+ * Runalyze training state was never captured and cannot be" -- which stopped
+ * being true twice over: the figures are ours now, and they exist for every
+ * date. The running A:C row goes `--` for one reason only, and it is about our
+ * own series rather than somebody else's: the 42-day average has not yet
+ * forgotten its zero seed. `ctl_converged` is read DIRECTLY rather than
+ * inferred from a caveat, because that is the fact the row is about.
  */
 export function AcwrTable({ load }: { load: Load }) {
-  const unrecoverable =
-    load.acwr_run == null &&
-    (load.caveats ?? []).some((c) => c.permanent);
-  const offCurve =
-    (load.snapshot as { payload_source?: string } | null | undefined)
-      ?.payload_source === "graph";
+  const unconverged = load.fitness?.ctl_converged === false;
   return (
     <>
       <h3>Acute:chronic and load shape</h3>
@@ -42,25 +38,23 @@ export function AcwrTable({ load }: { load: Load }) {
           note="step-equivalents"
         />
         <AcRow
-          k="Runalyze A:C"
+          k="Running A:C (TRIMP)"
           v={load.acwr_run == null ? "--" : num(load.acwr_run, 2)}
           note={
-            unrecoverable
-              ? "no capture for this week — get_calculations() is current-only, so it cannot be recovered"
-              : offCurve
-                ? "running only — read off Runalyze's form curve, not captured verbatim"
-                : "running only — the gap is the point"
+            unconverged
+              ? "running only — withheld until the 42-day average forgets its seed"
+              : "running only — the gap is the point"
           }
         />
         <AcRow
           k="Monotony (mechanical)"
           v={load.monotony_mech == null ? "--" : num(load.monotony_mech, 2)}
-          note="Foster's, on SE — NOT comparable to Runalyze's"
+          note="Foster's, on SE"
         />
         <AcRow
           k="Strain (mechanical)"
           v={load.strain_mech == null ? "--" : num(load.strain_mech)}
-          note="SE — trend only, Runalyze's is TRIMP"
+          note="SE — week load × monotony"
         />
       </Table>
     </>

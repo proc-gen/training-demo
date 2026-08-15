@@ -42,17 +42,25 @@ describe("ComponentFlags", () => {
     expect(container.textContent).toContain("not-evaluable");
   });
 
-  it("hangs a load caveat under the flag it names", () => {
+  it("HANGS NOTHING UNDER A FLAG -- caveats left the page entirely", () => {
+    /* It rendered `strain-spike`'s footnote under its own row, and that
+     * placement was the argument for keeping caveats on the page at all. The
+     * athlete's reading on 2026-08-14 is that they do not belong on it in any
+     * position, so `flagCaveats` went and `caveats` left the payload. */
     const w = week({
       load: {
         flags: [flag("strain-spike", "fired")],
-        caveats: [{ mark: "??", text: "uncalibrated placeholder", flag: "strain-spike" }],
+        caveats: [
+          { mark: "??", text: "uncalibrated placeholder", flag: "strain-spike" },
+        ],
       },
     });
     const { container } = wrap(<ComponentFlags week={w} component="integrity" />);
-    expect(container.querySelector(".flag .why")!.textContent).toContain(
+    expect(container.querySelector(".flag .why")!.textContent).not.toContain(
       "uncalibrated placeholder",
     );
+    // The flag itself still renders -- only its footnote is gone.
+    expect(container.textContent).toContain("strain-spike");
   });
 
   it("says so when no flag is evaluated against this score", () => {

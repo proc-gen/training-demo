@@ -62,12 +62,20 @@ export function panelsFor(week: Week): WeekPanel[] {
 
 /** The key actually to render, given what the reader last picked.
  *
- * THE SELECTION OUTLIVES THE WEEK. `Report` renders `WeekView` with no key, so
- * the tab survives a change of week -- which is what you want when comparing
- * Training week to week, and which means the chosen panel may not exist on the
- * week now showing. Week N has a load note and week N+1 does not; the reader
- * would otherwise land on an empty card with a tab strip that has no selected
- * tab, and nothing on screen saying why.
+ * THE SELECTION NO LONGER CROSSES WEEKS, and this docstring said the opposite
+ * until 2026-08-12. `Report` keys `WeekView` by the selected week, so changing
+ * week is a fresh instance and the tab starts at Overall every time. The old
+ * reasoning -- that a sticky tab is what you want when comparing Training week
+ * to week -- was a guess about how the page would be read, and the athlete read
+ * the live page and found the opposite: the previous week's rows stayed
+ * expanded BY POSITION, so a row opened onto a different run's laps.
+ *
+ * THIS FUNCTION STAYS ANYWAY, because it is `WeekCard`'s guard and not
+ * `Report`'s. `WeekCard` has to render sensibly for any `week` prop it is
+ * handed, including a re-render with a different one; deleting this would make
+ * that correctness depend on a `key` chosen in another file, which is the
+ * implicit cross-file coupling this tree is arranged to avoid. It is a total
+ * function costing one line, not a flag reporting a verdict nobody measured.
  *
  * Falling back to Overall rather than to the first available panel is the same
  * decision `WEEK_PANELS` records: it is the one panel every week has.

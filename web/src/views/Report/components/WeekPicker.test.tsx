@@ -1,4 +1,5 @@
 import { cleanup, fireEvent } from "@testing-library/react";
+import { renderToString } from "react-dom/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import type { Payload } from "@/lib/data/payload";
@@ -91,5 +92,47 @@ describe("WeekPicker", () => {
       <WeekPicker payload={payload({})} keys={[]} selected={null} onSelect={() => {}} />,
     );
     expect(options(container)).toHaveLength(0);
+  });
+});
+
+describe("the browser must not restore a week the reader did not pick", () => {
+  /* THE ONE ATTRIBUTE THAT MAKES THE FIRST PAINT TRUSTWORTHY. Chrome and
+   * Firefox put a form control's previous value back after a reload, which
+   * overrides the `selected` attribute React rendered -- and React does not
+   * correct it, because on hydration it trusts the server markup and only
+   * assigns `.value` when the prop changes. The select then shows one week
+   * while the card below renders another. */
+
+  it("turns form-state restoration OFF", () => {
+    const { container } = wrap(
+      <WeekPicker
+        payload={{ weeks: { "2026-08-10": {} } } as unknown as Payload}
+        keys={["2026-08-10"]}
+        selected="2026-08-10"
+        onSelect={() => {}}
+      />,
+    );
+    expect(
+      container.querySelector("select")!.getAttribute("autocomplete"),
+    ).toBe("off");
+  });
+
+  it("keeps it through a server render, which is where it matters", () => {
+    const html = renderToString(
+      <WeekPicker
+        payload={{ weeks: { "2026-08-10": {} } } as unknown as Payload}
+        keys={["2026-08-10"]}
+        selected="2026-08-10"
+        onSelect={() => {}}
+      />,
+    );
+    /* CASE-INSENSITIVE, and the reason is worth knowing. React lowercases the
+       props it recognises per element, and `autoComplete` is not in its list
+       for `<select>` -- so the server string carries the prop name verbatim
+       while the client DOM lowercases it. HTML attribute names are
+       case-insensitive, so the browser honours both; asserting the exact
+       casing would pin a React implementation detail rather than the
+       behaviour. */
+    expect(html).toMatch(/autocomplete="off"/i);
   });
 });

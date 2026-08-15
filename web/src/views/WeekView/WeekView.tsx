@@ -1,6 +1,7 @@
 "use client";
 
-import type { Week } from "@/lib/data/payload";
+import type { PaceChart, Week } from "@/lib/data/payload";
+import { PaceRail } from "./components/PaceRail";
 import { WeekBanners } from "./components/WeekBanners";
 import { WeekCard } from "./components/WeekCard";
 
@@ -25,11 +26,28 @@ import { WeekCard } from "./components/WeekCard";
  * panel with a summation row saying how many left the denominator. The ledger is
  * the better of the two and it is where the score is.
  */
-export function WeekView({ week, banners }: { week: Week; banners: string[] }) {
+export function WeekView({
+  week,
+  banners,
+  paceChartCurrent,
+}: {
+  week: Week;
+  banners: string[];
+  paceChartCurrent?: PaceChart | null;
+}) {
   return (
     <>
       <WeekBanners week={week} banners={banners} />
-      <WeekCard week={week} />
+      {/* THE RAIL SITS BESIDE THE CARD, not inside it. It qualifies the whole
+          week rather than one of its four tabs -- the targets it lists are read
+          from Training and checked against Overall -- and a tab would hide it
+          from three quarters of the page. Below the breakpoint the grid
+          collapses and it follows the card, which is the right order: the card
+          is what the reader came for. */}
+      <div className="week-layout">
+        <WeekCard week={week} />
+        <PaceRail week={week} current={paceChartCurrent} />
+      </div>
     </>
   );
 }

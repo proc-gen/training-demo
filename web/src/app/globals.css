@@ -37,6 +37,13 @@
 :root {
   color-scheme: light;
 
+  /* THE SHELL WIDTH, ONE COPY AND THREE READERS -- `.topbar`, `.filters` and
+     `main`. It was 1180px written out three times, and the Week view now hangs
+     a paces rail off the side of its card: widening two of the three would
+     misalign the header with the content under it, which is a defect a reader
+     sees before they see the rail. */
+  --shell-max: 1440px;
+
   --surface-1: #fcfcfb;
   --page: #f9f9f7;
   --text-primary: #0b0b0b;
@@ -141,7 +148,7 @@ body {
   justify-content: space-between;
   gap: 1rem;
   padding: 1.5rem clamp(1rem, 4vw, 2.5rem) 0.5rem;
-  max-width: 1180px;
+  max-width: var(--shell-max);
   margin: 0 auto;
 }
 
@@ -166,7 +173,7 @@ h1 { font-size: 1.4rem; margin: 0; letter-spacing: -0.01em; }
   align-items: end;
   gap: 1rem;
   padding: 0.5rem clamp(1rem, 4vw, 2.5rem) 1rem;
-  max-width: 1180px;
+  max-width: var(--shell-max);
   margin: 0 auto;
 }
 
@@ -233,11 +240,70 @@ h1 { font-size: 1.4rem; margin: 0; letter-spacing: -0.01em; }
 .tabs.in-card .tab { font-size: 0.82rem; padding: 0.3rem 0.75rem; }
 
 main {
-  max-width: 1180px;
+  max-width: var(--shell-max);
   margin: 0 auto;
   padding: 0 clamp(1rem, 4vw, 2.5rem);
   display: grid;
   gap: 1rem;
+}
+
+/* THE WEEK LAYOUT: the card, and the paces rail beside it.
+   `minmax(0, 1fr)` and not `1fr` -- a grid track sizes to its content by
+   default, so the runs table's own width would push the rail off the page
+   rather than scrolling inside its container. */
+/* `auto` + `width: max-content` on the rail, NOT a fixed track. A guessed width
+   was wrong the first time -- 19rem wrapped eight rows of eight -- and guessing
+   again only moves the number at which it breaks. The rail asks for exactly the
+   width its widest unwrapped row needs; `max-width` is the guard that keeps a
+   pathological chart from eating the card. */
+.week-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: start;
+}
+
+/* Sticky, because the rail is a reference read WHILE scrolling the card -- a
+   target checked against a session two screens down. `top` clears nothing
+   above it; the shell does not have a fixed header. */
+.rail {
+  position: sticky;
+  top: 1rem;
+  width: max-content;
+  /* A GUARD, NOT A TARGET. `max-content` means the rail asks for exactly what
+     its widest unwrapped row needs -- about 24rem once `3:46:15 @ 8:38/mi` is
+     in it -- so this only ever binds on a chart nobody has authored yet, and
+     the 4rem of headroom is deliberate. The tables stay `raw`: wrapping them
+     in `.scroll-x` inside a `max-content` box makes the rail's own width
+     depend on a scroll container's intrinsic size, and a collapsed rail is a
+     worse failure than a few pixels of spill on a chart that does not exist. */
+  max-width: 28rem;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem 1.1rem;
+}
+.rail > h2 {
+  font-size: 0.95rem;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+.rail table { margin: 0.7rem 0 0.9rem; }
+/* NOWRAP IS THE FIX. `th` already had it, which is why the headings held and
+   every data row broke -- `6:25-6:38/mi` across two lines, on all eight of
+   them. A pace is one token and reads as one. */
+.rail th, .rail td {
+  font-size: 0.78rem;
+  padding: 0.35rem 0.5rem;
+  white-space: nowrap;
+}
+
+/* ONE COLUMN BELOW THE BREAKPOINT, with the rail UNDER the card. At 19rem the
+   rail is most of a narrow viewport, and the card is what the reader came for.
+   Sticky goes with it -- a full-width sticky block would cover the page. */
+@media (max-width: 1024px) {
+  .week-layout { grid-template-columns: minmax(0, 1fr); }
+  .rail { position: static; }
 }
 
 /* ------------------------------------------------------------------- cards */
@@ -399,6 +465,61 @@ tbody tr:last-child td { border-bottom: none; }
 tr.clickable { cursor: pointer; }
 tr.clickable:hover td { background: var(--page); }
 tr.is-open td { background: var(--page); }
+
+/* THE RUNS TABLE'S SUMMATION ROW. Ruled off in --axis against the --grid
+   borders every other row carries -- the same distinction `.loss.is-total`
+   draws below, so the page has ONE idea of "this line is a total".
+
+   2px rather than 1: a table row's rule spans the full width, and 1px of --axis
+   beside 1px of --grid reads as a slightly darker row border rather than as a
+   division. The two neutrals are close by design; the weight is what separates
+   them here.
+
+   NOT a surface colour. --surface-1 and --page are 1.03:1 apart, so filling
+   this row with either would be very nearly the plane behind it -- the exact
+   defect the tab strips shipped twice. */
+tr.total-row > td {
+  border-top: 2px solid var(--axis);
+  border-bottom: none;
+  font-weight: 600;
+}
+
+/* A table cell's expander is a real <button>, so its chrome is unset before the
+   cell's own type applies. Same focus rule as `.tab` and `button.meter-row`, so
+   the page has one focus idea. */
+button.row-expander {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+button.row-expander:focus-visible {
+  outline: 2px solid var(--series-1);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+/* The caret ROTATES rather than changing glyph, so the button's accessible name
+   never depends on its state. --text-muted keeps it subordinate to the day
+   beside it; it is an affordance, not a datum. */
+/* 0.7em read as a BULLET POINT rather than as a control -- the athlete's first
+   reading of it. Big enough to be a glyph with a direction, and --text-secondary
+   rather than --text-muted so it is clearly foreground. */
+.row-expander-caret {
+  color: var(--text-secondary);
+  font-size: 0.95em;
+  line-height: 1;
+  transition: transform 0.12s ease;
+}
+button.row-expander.is-open .row-expander-caret { transform: rotate(90deg); }
+button.row-expander:hover .row-expander-caret { color: var(--text-primary); }
+
 .scroll-x { overflow-x: auto; }
 
 .muted { color: var(--text-muted); }
@@ -449,6 +570,21 @@ tr.is-open td { background: var(--page); }
   font-weight: 600;
 }
 .losses { margin-top: 0.8rem; }
+
+/* One run's expansion: its explanation, then its laps or reps, then its chart.
+   The rule down the left is `.score-detail`'s, for the same reason -- it marks
+   the block as subordinate to the row that opened it, inside a table cell that
+   otherwise has no indentation to say so. */
+.run-detail {
+  padding: 0.35rem 0 0.6rem 0.9rem;
+  border-left: 2px solid var(--grid);
+}
+.run-detail > .run-why { margin-bottom: 0.9rem; }
+.run-detail > .run-why .losses { margin-top: 0; }
+/* The chart sits under whichever table it explains, with room to breathe but
+   not so much that they read as unrelated blocks. */
+.rep-chart { margin-top: 0.9rem; }
+.rep-chart > .tabs { margin-bottom: 0.5rem; }
 .loss {
   display: grid;
   grid-template-columns: 1fr 9rem 4.5rem;
@@ -535,6 +671,16 @@ details.prose > summary {
 .chart text { font-family: var(--sans); }
 .axis-label { fill: var(--text-muted); font-size: 11px; }
 .gridline { stroke: var(--grid); stroke-width: 1; }
+/* The axis NAME (bpm, min/mi, rep) as opposed to a tick's value. Smaller and
+   muted, so it labels the scale without competing with the numbers on it. */
+.axis-title {
+  font-size: 0.62rem;
+  fill: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+/* A tick that IS the criterion, so it reads as the line it labels. */
+.axis-label.is-ceiling { fill: var(--critical); font-weight: 600; }
 .baseline { stroke: var(--axis); stroke-width: 1; }
 /* Solid, never dashed -- a dashed rule reads as "projection" when it is a
  * measured ceiling. Weight and colour carry the distinction instead. */

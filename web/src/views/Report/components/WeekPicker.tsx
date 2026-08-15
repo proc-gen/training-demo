@@ -11,6 +11,20 @@ import type { Payload } from "@/lib/data/payload";
  * `hidden` keeps the control's SPACE rather than removing it: the filter row is
  * above the tabs, and letting it collapse on the calendar and trends tabs moves
  * the whole page up on every tab change.
+ *
+ * **`autoComplete="off"` IS LOAD-BEARING AND IS NOT ABOUT AUTOCOMPLETE.**
+ * Browsers RESTORE a form control's value across a reload -- press F5 on a page
+ * where you had picked a week and Chrome and Firefox put that week back into
+ * the select after parsing, overriding the `selected` attribute React rendered.
+ * React does not correct it: on hydration it trusts the server markup and only
+ * assigns `.value` when the prop CHANGES, which on a first paint it has not.
+ *
+ * So the select showed one week while the card below it rendered another --
+ * the athlete's report on 2026-08-14, on the day the default moved from the
+ * newest week to the newest week that had been RUN. The state was right and
+ * the control was lying about it. `Report.test.tsx` renders the shell through
+ * `renderToString` to assert the attribute lands on the right option, which is
+ * the half a client render can never check.
  */
 export function WeekPicker({
   payload,
@@ -28,7 +42,11 @@ export function WeekPicker({
   return (
     <label className="field" style={{ visibility: hidden ? "hidden" : "visible" }}>
       <span>Week</span>
-      <select value={selected ?? ""} onChange={(e) => onSelect(e.target.value)}>
+      <select
+        value={selected ?? ""}
+        autoComplete="off"
+        onChange={(e) => onSelect(e.target.value)}
+      >
         {[...keys].reverse().map((k) => {
           const wt = (payload.weeks[k]?.manifest as { week_type?: string })
             ?.week_type;

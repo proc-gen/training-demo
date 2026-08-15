@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { Payload, Week } from "@/lib/data/payload";
+import { PUBLISHED } from "@/test/payload";
 import { defaultWeekKey } from "./defaultWeek";
 
 function week(over: Partial<Week>): Week {
@@ -74,5 +75,46 @@ describe("defaultWeekKey", () => {
       "2026-08-03": { adherence: A, load_error: "no steps" },
     });
     expect(defaultWeekKey(p)).toBe("2026-07-20");
+  });
+});
+
+describe("a week the plan reaches but nobody has run", () => {
+  /* THE PLAN REACHES TWO MONDAYS AHEAD SINCE 2026-08-14, and such a week grades
+   * both halves perfectly well -- every run `pending`, every score null. The
+   * old rule opened on it, so the reader landed on an empty card two weeks in
+   * the future. */
+  const w = (results: unknown[]) =>
+    ({
+      adherence: { results },
+      load: {},
+    }) as unknown as Payload["weeks"][string];
+
+  it("is not opened on when an earlier week has measured runs", () => {
+    const payload = {
+      weeks: {
+        "2026-08-10": w([{ key: "a" }]),
+        "2026-08-17": w([]),
+        "2026-08-24": w([]),
+      },
+    } as unknown as Payload;
+    expect(defaultWeekKey(payload)).toBe("2026-08-10");
+  });
+
+  it("is opened on when NOTHING has been run, rather than nothing at all", () => {
+    const payload = {
+      weeks: { "2026-08-17": w([]), "2026-08-24": w([]) },
+    } as unknown as Payload;
+    expect(defaultWeekKey(payload)).toBe("2026-08-24");
+  });
+});
+
+describe("over the committed tree", () => {
+  it("opens on a week that has runs in it", () => {
+    if (!PUBLISHED) return;
+    const key = defaultWeekKey(PUBLISHED)!;
+    expect(key).toBeTruthy();
+    expect(
+      (PUBLISHED.weeks[key]?.adherence?.results ?? []).length,
+    ).toBeGreaterThan(0);
   });
 });

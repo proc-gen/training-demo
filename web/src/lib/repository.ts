@@ -169,10 +169,22 @@ export function readWeek(slug: string, start: string): unknown {
     week_end: week.week_end,
     manifest: week.manifest,
     pace_chart: week.pace_chart,
+    // IT IS A PORT OF `unpublish()` AND HAS TO CARRY WHAT THAT CARRIES. This
+    // key was written by `publish.py` and read by nothing for a day, so every
+    // week arrived with it `undefined` -- which the paces rail reads as "this
+    // week has a chart of its own", the exact opposite of the truth for a week
+    // authored two Mondays ahead. It cost no test failure either: the two cases
+    // over the committed tree key on the field, so both silently SKIPPED.
+    pace_chart_is_carried_forward: week.pace_chart_is_carried_forward,
     adherence: readOptional(slug, `${d}/adherence.json`) ?? null,
     adherence_error: week.adherence_error,
     load: readOptional(slug, `${d}/load.json`) ?? null,
     load_error: week.load_error,
+    // `readJson`, not `readOptional`, mirroring the unconditional write on the
+    // Python side. Absence is not a signal for this record -- an empty array
+    // means the TRIMP series does not reach this week -- so a missing file is a
+    // broken tree and should throw rather than read as "no activities".
+    trimp: readJson(slug, `${d}/trimp.json`),
     notes: {
       adherence: readOptionalText(slug, `${d}/notes-adherence.html`),
       load: readOptionalText(slug, `${d}/notes-load.html`),
@@ -215,6 +227,10 @@ export function assemble(explicit?: string): Assembled {
         days: index.days.map((date) => readDay(slug, date)),
         history: readJson(slug, "history.json"),
         thresholds: readJson(slug, "thresholds.json"),
+        // The athlete's paces as of today, whatever week is on screen. One
+        // record rather than a copy inside each week -- see `current_pace_chart`
+        // in publish.py.
+        pace_chart_current: readJson(slug, "pace-chart-current.json"),
         adherence_csv: readJson(slug, "series/adherence.json"),
         load_csv: readJson(slug, "series/load.json"),
       },

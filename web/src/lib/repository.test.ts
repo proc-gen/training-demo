@@ -156,3 +156,41 @@ describe("resolving an athlete", () => {
     }
   });
 });
+
+describe("readWeek is a PORT of unpublish(), so it must carry what it carries", () => {
+  /* IT DROPPED A KEY FOR A DAY AND NO TEST NOTICED. `publish.py` started
+   * writing `pace_chart_is_carried_forward` on 2026-08-14 and `readWeek` never
+   * copied it, so every week arrived with it `undefined` -- which the paces
+   * rail reads as "this week has a chart of its own", the exact opposite of the
+   * truth for a week authored two Mondays ahead. It cost no failure either: the
+   * two cases over the committed tree key on that field, so both SKIPPED.
+   *
+   * The Python round trip is asserted leaf for leaf; this is the TypeScript
+   * half of the same contract, and it is the half that had no check at all. */
+  const slugs = athleteSlugs();
+
+  it("copies every key the record on disk states", () => {
+    if (!slugs.length) return;
+    const slug = slugs[0];
+    const index = JSON.parse(
+      fs.readFileSync(path.join(publishedDir(slug), "index.json"), "utf-8"),
+    ) as { weeks: string[] };
+    expect(index.weeks.length).toBeGreaterThan(0);
+    for (const start of index.weeks) {
+      const raw = JSON.parse(
+        fs.readFileSync(
+          path.join(publishedDir(slug), "weeks", start, "week.json"),
+          "utf-8",
+        ),
+      ) as Record<string, unknown>;
+      const got = assemble();
+      if (!got.ok) throw new Error(got.error);
+      const week = (got.payload as { weeks: Record<string, unknown> }).weeks[
+        start
+      ] as Record<string, unknown>;
+      for (const k of Object.keys(raw)) {
+        expect(Object.keys(week), `${start}/week.json key \`${k}\``).toContain(k);
+      }
+    }
+  });
+});
