@@ -5,8 +5,8 @@ import { PUBLISHED } from "@/test/payload";
 import type { WeekFacts } from "./facts";
 import { weekFacts } from "./facts";
 import { runTotals } from "./runTotals";
-import { sortedRuns } from "./runs";
-import { trimpByActivity } from "./trimp";
+import { sortedRuns } from "@/lib/run/data/runs";
+import { trimpByActivity } from "@/lib/run/data/trimp";
 
 const run = (over: Partial<RunResult>): RunResult => over as RunResult;
 

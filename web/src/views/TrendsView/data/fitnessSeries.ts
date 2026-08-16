@@ -8,10 +8,12 @@
  * fails a module under `lib/data/` with fewer than two importers. Same
  * placement `coverage.ts` and `calendarRows` got, for the same reason.
  *
- * THE OMISSION IS RETURNED, NOT SWALLOWED. A day whose CTL was withheld -- the
- * 42-day average had not yet forgotten its zero seed -- is dropped from the
- * series and COUNTED, so the panel can say how many days it is not showing. A
- * ledger that lists only what it has reads as a complete account.
+ * IT COUNTED ITS OWN OMISSION UNTIL 2026-08-15 -- `unconverged`, the days whose
+ * CTL was withheld because the 42-day average had not yet forgotten its zero
+ * seed -- so the panel could say how many days it was not showing. The athlete
+ * asked for the line that stated it to be removed, which left the counter with
+ * no reader, and a field that decides nothing is half a deletion waiting to be
+ * found. **The days are still dropped; only the sentence is gone.**
  */
 
 import { n } from "@/lib/data/format";
@@ -21,20 +23,18 @@ import { weekKeys } from "@/lib/data/weeks";
 export type FitnessDay = {
   date: string;
   trimp: number | null;
+  /** The walking-and-standing estimate. NEVER merged into `trimp`: one is
+   *  integrated from measured heart rate and the other is priced off step counts
+   *  with two uncalibrated constants, and a single number would make them
+   *  indistinguishable. */
+  bgTrimp: number | null;
   ctl: number | null;
   atl: number | null;
   tsb: number | null;
 };
 
-export type FitnessSeries = {
-  days: FitnessDay[];
-  /** Days the series covers whose CTL was withheld for want of history. */
-  unconverged: number;
-};
-
-export function fitnessSeries(payload: Payload): FitnessSeries {
+export function fitnessSeries(payload: Payload): FitnessDay[] {
   const seen = new Map<string, FitnessDay>();
-  let unconverged = 0;
 
   for (const key of weekKeys(payload)) {
     for (const d of payload.weeks[key]?.load?.days ?? []) {
@@ -44,15 +44,20 @@ export function fitnessSeries(payload: Payload): FitnessSeries {
       // A day the TRIMP series never reached carries none of these, and is not
       // a day of zero training -- it is a day nobody priced.
       if (trimp === null && ctl === null && atl === null) continue;
-      if (ctl === null) unconverged += 1;
       // Weeks can overlap at a boundary; first writer wins, and both carry the
       // same number because both read one series.
       if (!seen.has(d.date)) {
-        seen.set(d.date, { date: d.date, trimp, ctl, atl, tsb: n(d.tsb) });
+        seen.set(d.date, {
+          date: d.date,
+          trimp,
+          bgTrimp: n(d.bg_trimp),
+          ctl,
+          atl,
+          tsb: n(d.tsb),
+        });
       }
     }
   }
 
-  const days = [...seen.values()].sort((a, b) => a.date.localeCompare(b.date));
-  return { days, unconverged };
+  return [...seen.values()].sort((a, b) => a.date.localeCompare(b.date));
 }

@@ -9,6 +9,13 @@ import { TipRow } from "../tooltip/TipRow";
 
 export type Point = { label: string; value: number | null };
 
+/** The space around the plot, in viewBox units. */
+export type Margin = { t: number; r: number; b: number; l: number };
+
+/** The small-multiple margins, and the default for every caller that had no
+ *  reason to think about them. */
+const DEFAULT_MARGIN: Margin = { t: 12, r: 42, b: 22, l: 40 };
+
 /** A single series with an area wash and a labelled end point.
  *
  * One series, so no legend box -- the small multiple's own title names it.
@@ -17,6 +24,7 @@ export function LineChart({
   points,
   width = 340,
   height = 130,
+  margin,
   color = "var(--series-1)",
   places = 0,
   zero,
@@ -28,6 +36,11 @@ export function LineChart({
   points: Point[];
   width?: number;
   height?: number;
+  /** Room for the labels. A y label is drawn right-aligned ending 6 units left
+   *  of the plot, so a caller whose values are wide -- `213,368 SE` -- needs a
+   *  bigger `l` than a small multiple does, or the label is drawn at a negative
+   *  x and spills out of whatever contains the chart. */
+  margin?: Margin;
   color?: string;
   places?: number;
   zero?: boolean;
@@ -36,7 +49,7 @@ export function LineChart({
   format?: (v: number) => string;
   label?: string;
 }) {
-  const m = { t: 12, r: 42, b: 22, l: 40 };
+  const m = margin ?? DEFAULT_MARGIN;
   const iw = width - m.l - m.r;
   const ih = height - m.t - m.b;
   const pts = points.filter((p): p is { label: string; value: number } => p.value !== null);

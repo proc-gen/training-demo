@@ -4,6 +4,12 @@
  * TRAINING-LOAD output, joined by the publisher because the adherence grader may
  * not read it. This turns that row list into a lookup and nothing else: no
  * summing, no re-pricing, no filling in a missing row.
+ *
+ * IT LIVES IN `lib/run/` BECAUSE TWO VIEWS RENDER A RUN NOW. The Week tab's
+ * runs table and the Calendar's day card show the same rows through the same
+ * `RunRow`, and a view may not import a sibling view -- so the proximity rule
+ * sent this whole subtree up to the shared container. Its content is unchanged
+ * by the move.
  */
 
 import { n } from "@/lib/data/format";

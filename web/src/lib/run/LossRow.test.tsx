@@ -2,8 +2,7 @@ import { cleanup } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { wrap } from "@/test/render";
-import type { Loss } from "../data/losses";
-import { LossRow } from "./LossRow";
+import { LossRow, type Loss } from "./LossRow";
 
 afterEach(cleanup);
 

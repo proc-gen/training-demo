@@ -15,42 +15,7 @@
 
 import type { LoadDay, RepSet, RunResult, Week } from "@/lib/data/payload";
 import { clock, dayName, num, pct, shortDate } from "@/lib/data/format";
-
-export type Loss = {
-  /** Stable react key. */
-  key: string;
-  /** What it is -- a run, a day, a check. */
-  label: string;
-  /** Why it cost what it cost, out of published numbers only. */
-  why: string;
-  /** What it cost, already formatted, or null where the notion does not apply. */
-  cost: string | null;
-  /** This contributor's own score, 0-100, or null when it has none.
-   *  0 IS A REAL VALUE and must render; only null means "no score". */
-  pct: number | null;
-  /** Pass / fail / not-applicable, where the contributor is a check. */
-  verdict?: boolean | null;
-  /** 1 for a row nested under the one above it (a set inside its run). */
-  depth?: number;
-  /** The summation row at the foot of the ledger, ruled off from the rest. */
-  total?: boolean;
-};
-
-export type Ledger = {
-  rows: Loss[];
-  /** The arithmetic behind the bar, as the LAST row.
-   *
-   * It was a headline above the rows until 2026-08-10, which is not what it is:
-   * `4:21:07 earned of 5:34:37 judged` is the sum of the seven lines under it.
-   * At the foot it lands where a reader arrives after the detail, and the
-   * component's own score sits in the same column as every contributor's.
-   */
-  total: Loss | null;
-  /** What was left out of `rows` and why -- never a silent truncation.
-   *  Rendered BELOW `total`, because it qualifies the denominator that row
-   *  just stated. */
-  note: string | null;
-};
+import type { Ledger, Loss } from "@/lib/run/LossRow";
 
 const EMPTY: Ledger = { rows: [], total: null, note: null };
 

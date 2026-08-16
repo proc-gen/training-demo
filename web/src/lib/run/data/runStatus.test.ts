@@ -103,12 +103,19 @@ describe("against the committed payload", () => {
   });
 
   it("a LIVE week's planned runs are missed or pending, never completed", () => {
+    /* A NULL `graded_through` IS THE WHOLLY-FUTURE WEEK, AND IT IS LIVE.
+     * `grade()` publishes null when nothing in the week has settled yet, so the
+     * guard here used to read `if (!a?.graded_through) continue` and dropped
+     * exactly the weeks whose records move most -- the same falsy-null defect
+     * `live_weeks()` carried in publish.py until 2026-08-13. It went unnoticed
+     * while the newest manifest was a half-run week; once 2026-08-10 finished,
+     * no week satisfied the old condition and `seen` fell to 0. */
     if (!PUBLISHED) return;
     let seen = 0;
     for (const w of Object.values(PUBLISHED.weeks)) {
       const a = w.adherence;
-      if (!a?.graded_through || !a?.week_end) continue;
-      if (a.graded_through >= a.week_end) continue;
+      if (!a?.week_end) continue;
+      if (a.graded_through && a.graded_through >= a.week_end) continue;
       for (const r of a.planned) {
         seen += 1;
         expect(["missed", "pending"]).toContain(runStatus(r));

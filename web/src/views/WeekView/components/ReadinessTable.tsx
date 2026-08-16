@@ -12,14 +12,18 @@ const CHECKS = ["resting_hr", "hrv", "sleep"] as const;
  * A check with no measurement behind it reads "no data" -- never a pass and
  * never a fail. The score is `passed of available`, so a night that was not
  * recorded leaves the denominator instead of counting against the athlete.
+ *
+ * IT CARRIED ITS OWN `<h3>` UNTIL 2026-08-15, reading `Readiness -- 17 of 18
+ * checks`. The count moved into the tab that now discloses this table, because
+ * a heading immediately under a tab of the same name is the duplication the
+ * week card's own tabs were built to remove. The COUNT itself is not lost --
+ * that would have been the trade -- it is in the tab label, where it is legible
+ * without opening the panel at all.
  */
 export function ReadinessTable({ readiness }: { readiness: Readiness | null | undefined }) {
   const r = readiness;
   return (
     <>
-      <h3>
-        Readiness — {r?.passed ?? "--"} of {r?.available ?? "--"} checks
-      </h3>
       <Table
         headers={[
           { label: "Day" },

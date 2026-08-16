@@ -98,6 +98,27 @@ export function num(
   });
 }
 
+/** A number with an EXPLICIT sign, or `--`.
+ *
+ * For form (TSB), which is a balance and is read by its direction before its
+ * magnitude: `+3` and `-3` are opposite states and `3` says neither. The
+ * grader's own terminal printer has rendered it `{tsb:+.0f}` all along, so this
+ * is that convention reaching the page rather than a new one.
+ *
+ * ZERO PRINTS `+0`, not `0`. It is a real balance -- fitness exactly equal to
+ * fatigue -- and dropping the sign there would make the one value on the scale
+ * that is neither positive nor negative look like a different kind of number.
+ */
+export function signed(
+  v: number | string | null | undefined,
+  places?: number,
+): string {
+  if (v === null || v === undefined || v === "") return "--";
+  const n = Number(v);
+  if (!isFinite(n)) return "--";
+  return (n < 0 ? "-" : "+") + num(Math.abs(n), places);
+}
+
 /** A percentage. NOTE 0 is a real value here and must print, not blank. */
 export function pct(
   v: number | string | null | undefined,

@@ -1,13 +1,16 @@
 "use client";
 
+import { useState } from "react";
+
 import { dayName, num, pct, shortDate } from "@/lib/data/format";
 import type { Week } from "@/lib/data/payload";
 import { ColumnChart } from "@/lib/ux/charts/ColumnChart";
 import { Legend } from "@/lib/ux/primitives/Legend";
+import { Tabs } from "@/lib/ux/primitives/Tabs";
 import { TipRow } from "@/lib/ux/tooltip/TipRow";
 import { AcwrTable } from "./AcwrTable";
 import { CeilingFormula } from "./CeilingFormula";
-import { FitnessTable } from "./FitnessTable";
+import { FitnessNote } from "./FitnessNote";
 import { LoadDayTable } from "./LoadDayTable";
 import { ReadinessTable } from "./ReadinessTable";
 
@@ -19,10 +22,30 @@ import { ReadinessTable } from "./ReadinessTable";
  *
  * One tab of the week card since 2026-08-10, so it no longer carries a `Card`
  * or a title of its own -- the tab's label is the heading.
+ *
+ * TWO TABLES BEHIND ONE TOGGLE since 2026-08-15. They answer different
+ * questions about the same seven days -- what the body was asked to do, and
+ * what it reported back overnight -- and stacking them meant reaching the
+ * second by scrolling past the first. The strip is `lib/ux/primitives/Tabs`,
+ * the same one `WeekCard` and `ViewTabs` use: `views/WeekView` may not import
+ * `views/Report`, so the alternative was a second copy of the same
+ * role/aria-selected/aria-controls wiring, and the accessibility half is the
+ * one nobody re-checks after copying.
+ *
+ * THE SELECTION RESETS ON A WEEK CHANGE FOR FREE, because `Report` renders
+ * `<WeekView key={selected}>` -- a different key is a different instance.
  */
 export function LoadPanel({ week }: { week: Week }) {
   const l = week.load!;
   const days = l.days ?? [];
+  const [tab, setTab] = useState("steps");
+  const panelId = "load-day-panel";
+
+  const r = l.readiness;
+  const readinessLabel =
+    r?.available == null
+      ? "Readiness"
+      : `Readiness ${r.passed ?? "--"}/${r.available}`;
 
   return (
     <>
@@ -42,6 +65,13 @@ export function LoadPanel({ week }: { week: Week }) {
             { value: d.run_se || 0, color: "var(--series-1)" },
             { value: d.nonrun_se || 0, color: "var(--series-2)" },
           ],
+          /* THE PROVENANCE LIVES HERE NOW. Role, ceiling-from, run-steps-from
+             and data left the day table on 2026-08-15 -- within one week those
+             strings barely vary, so they were four columns saying little while
+             the training state sat two tables below. A per-day fact that
+             QUALIFIES a number rather than measuring one belongs beside it on
+             demand, which is what a tooltip is. `data` joined the other three
+             the same day for exactly that reason. */
           tip: () => (
             <>
               <b>
@@ -54,17 +84,37 @@ export function LoadPanel({ week }: { week: Week }) {
               <TipRow k="ceiling from" v={d.ceiling_source || "unpriced"} />
               <TipRow k="score" v={pct(d.pct)} />
               <TipRow k="steps" v={num(d.total_steps)} />
-              <TipRow k="source" v={d.run_step_source || "--"} />
+              <TipRow k="run steps from" v={d.run_step_source || "--"} />
+              <TipRow k="data" v={d.completeness || "--"} />
             </>
           ),
         }))}
       />
 
-      <CeilingFormula week={week} />
-      <LoadDayTable days={days} />
-      <ReadinessTable readiness={l.readiness} />
+      <Tabs
+        items={[
+          { key: "steps", label: "Steps" },
+          { key: "readiness", label: readinessLabel },
+        ]}
+        active={tab}
+        onSelect={setTab}
+        label="Load tables"
+        panelId={panelId}
+        className="in-card table-toggle"
+      />
+      <div id={panelId} role="tabpanel">
+        {tab === "readiness" ? (
+          <ReadinessTable readiness={r} />
+        ) : (
+          <>
+            <LoadDayTable days={days} />
+            <CeilingFormula week={week} />
+            <FitnessNote load={l} />
+          </>
+        )}
+      </div>
+
       <AcwrTable load={l} />
-      <FitnessTable load={l} />
     </>
   );
 }

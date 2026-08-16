@@ -2,7 +2,7 @@
 
 import type { RunResult } from "@/lib/data/payload";
 import { Note } from "@/lib/ux/primitives/Note";
-import { runWhy } from "../data/runWhy";
+import { runWhy } from "./data/runWhy";
 import { LossRow } from "./LossRow";
 
 /** Why this run scored what it scored -- or why it is reported, not scored.

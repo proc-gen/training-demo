@@ -66,6 +66,26 @@ export function columnScale(columns: Column[], count = 4) {
   return { max, ticks, top };
 }
 
+/** How many columns to skip between x labels, so they stop overlapping.
+ *
+ * A column chart of one week labels all seven and should. The Trends view plots
+ * a column per DAY over a window the reader chooses, and thirty-one labels in
+ * the space of seven is an unreadable smear — so a label is drawn every `stride`
+ * columns once the band is narrower than a label needs.
+ *
+ * IT COUNTS BACK FROM THE LAST COLUMN, which is why the caller tests
+ * `(count - 1 - i) % stride`. The newest day is the one a reader anchors on and
+ * it must always carry its date; strides measured forward from column zero drop
+ * it whenever the count is not a multiple of the stride.
+ *
+ * Returns 1 whenever there is room, so a chart that fits — every existing caller
+ * — is drawn exactly as it was.
+ */
+export function labelStride(count: number, band: number, minWidth = 34): number {
+  if (count <= 1 || band <= 0 || band >= minWidth) return 1;
+  return Math.ceil(minWidth / band);
+}
+
 /** The [lo, hi] a line chart plots over, padded by 15% each way.
  *
  * A flat series would otherwise divide by zero: every point equal makes

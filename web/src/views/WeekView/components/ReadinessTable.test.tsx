@@ -24,13 +24,14 @@ const readiness = (over: Partial<Readiness>): Readiness =>
 const rows = (c: HTMLElement) => [...c.querySelectorAll("tbody tr")];
 
 describe("ReadinessTable", () => {
-  it("scores passed OF AVAILABLE, not out of seven", () => {
-    // A night that was not recorded leaves the denominator instead of counting
-    // against the athlete.
+  it("carries NO heading of its own", () => {
+    /* It had one reading `Readiness -- 8 of 10 checks` until 2026-08-15. The
+     * table now sits behind a tab of the same name, and a heading immediately
+     * under a tab that says the same word is the duplication the week card's
+     * own tabs were built to remove. The COUNT is not lost with it -- it moved
+     * into the tab label, where `LoadPanel.test.tsx` pins it. */
     const { container } = wrap(<ReadinessTable readiness={readiness({})} />);
-    expect(container.querySelector("h3")!.textContent).toBe(
-      "Readiness — 8 of 10 checks",
-    );
+    expect(container.querySelector("h3")).toBeNull();
   });
 
   it("shows the three outcomes distinctly", () => {
@@ -59,12 +60,8 @@ describe("ReadinessTable", () => {
     expect(rows(container)[0].textContent).toContain("Mon 7/27");
   });
 
-  it("shows dashes rather than zeros when readiness did not grade", () => {
-    // Zero passed of zero available is not the same as "not evaluated".
+  it("renders no rows rather than crashing when readiness did not grade", () => {
     const { container } = wrap(<ReadinessTable readiness={null} />);
-    expect(container.querySelector("h3")!.textContent).toBe(
-      "Readiness — -- of -- checks",
-    );
     expect(rows(container)).toHaveLength(0);
   });
 

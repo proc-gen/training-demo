@@ -8,6 +8,8 @@ import {
   isOverCeiling,
   loadByDate,
   maxSteps,
+  runsByDate,
+  weekFor,
 } from "./days";
 
 const day = (over: Partial<Record<string, string>>): Day =>
@@ -143,5 +145,105 @@ describe("isOverCeiling", () => {
 
   it("is false for a date the graders never saw", () => {
     expect(isOverCeiling(undefined)).toBe(false);
+  });
+});
+
+describe("runsByDate", () => {
+  const week = (
+    results: Record<string, unknown>[],
+    planned: Record<string, unknown>[] = [],
+  ) => ({ adherence: { results, planned } });
+
+  it("collects a date's runs across every week", () => {
+    const p = payload({
+      weeks: {
+        "2026-07-20": week([{ date: "2026-07-21", ordinal: 0, key: "a" }]),
+        "2026-07-27": week([{ date: "2026-07-28", ordinal: 0, key: "b" }]),
+      } as unknown as Payload["weeks"],
+    });
+    const m = runsByDate(p);
+    expect(m.get("2026-07-21")!.map((r) => r.key)).toEqual(["a"]);
+    expect(m.get("2026-07-28")!.map((r) => r.key)).toEqual(["b"]);
+  });
+
+  it("CARRIES THE PLANNED LIST TOO", () => {
+    /* A week authored two Mondays out has nine planned runs and no results at
+     * all, and those are exactly the days this view could not previously
+     * reach. */
+    const p = payload({
+      weeks: {
+        "2026-08-24": week([], [{ date: "2026-08-24", ordinal: 0, key: "p" }]),
+      } as unknown as Payload["weeks"],
+    });
+    expect(runsByDate(p).get("2026-08-24")!.map((r) => r.key)).toEqual(["p"]);
+  });
+
+  it("puts a day's runs in report order, by ordinal", () => {
+    // `sortedRuns`, the same function the week's table uses -- so the calendar
+    // and the runs table cannot disagree about the order a day happened in.
+    const p = payload({
+      weeks: {
+        "2026-08-03": week(
+          [{ date: "2026-08-04", ordinal: 1, key: "pm" }],
+          [{ date: "2026-08-04", ordinal: 0, key: "am" }],
+        ),
+      } as unknown as Payload["weeks"],
+    });
+    expect(runsByDate(p).get("2026-08-04")!.map((r) => r.key)).toEqual([
+      "am", "pm",
+    ]);
+  });
+
+  it("drops a run with no date rather than keying it on undefined", () => {
+    const p = payload({
+      weeks: {
+        "2026-08-03": week([{ ordinal: 0, key: "x" }]),
+      } as unknown as Payload["weeks"],
+    });
+    expect(runsByDate(p).size).toBe(0);
+  });
+
+  it("survives a week whose adherence grader failed", () => {
+    const p = payload({
+      weeks: { "2026-07-20": { adherence_error: "boom" } } as unknown as Payload["weeks"],
+    });
+    expect(runsByDate(p).size).toBe(0);
+  });
+
+  it("finds every published run in the real payload", () => {
+    if (!PUBLISHED) return;
+    const m = runsByDate(PUBLISHED);
+    const total = Object.values(PUBLISHED.weeks).reduce(
+      (n, w) =>
+        n + (w.adherence?.results ?? []).length + (w.adherence?.planned ?? []).length,
+      0,
+    );
+    expect([...m.values()].reduce((n, l) => n + l.length, 0)).toBe(total);
+  });
+});
+
+describe("weekFor", () => {
+  it("finds the week record covering a date", () => {
+    const p = payload({
+      weeks: { "2026-08-03": { week_start: "2026-08-03" } } as unknown as Payload["weeks"],
+    });
+    // Every day of that week resolves to it, Sunday included.
+    for (const d of ["2026-08-03", "2026-08-06", "2026-08-09"]) {
+      expect(weekFor(p, d)?.week_start).toBe("2026-08-03");
+    }
+  });
+
+  it("is undefined for a date no week covers", () => {
+    const p = payload({
+      weeks: { "2026-08-03": {} } as unknown as Payload["weeks"],
+    });
+    expect(weekFor(p, "2026-09-01")).toBeUndefined();
+  });
+
+  it("resolves every published date to a real week", () => {
+    if (!PUBLISHED) return;
+    for (const key of Object.keys(PUBLISHED.weeks)) {
+      expect(weekFor(PUBLISHED, key)).toBe(PUBLISHED.weeks[key]);
+    }
   });
 });

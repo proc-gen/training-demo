@@ -150,6 +150,7 @@
    },
    "duration_factor": 1.0,
    "earned": 1236.0,
+   "emphasis": [],
    "hr_avg": 126,
    "hr_max": 137,
    "hr_pct": 67.76315789473684,
@@ -271,6 +272,7 @@
    },
    "duration_factor": 1.0,
    "earned": 1442.0,
+   "emphasis": [],
    "hr_avg": 125,
    "hr_max": 136,
    "hr_pct": 79.62451684152401,
@@ -353,6 +355,7 @@
     ]
    },
    "earned": null,
+   "emphasis": [],
    "hr_avg": 125,
    "hr_max": 140,
    "key": "2026-08-04-pm-wu",
@@ -811,6 +814,9 @@
     "work_seconds": 1846
    },
    "earned": 2610,
+   "emphasis": [
+    "quality"
+   ],
    "hr_avg": 152,
    "hr_max": 163,
    "key": "2026-08-04-pm",
@@ -928,6 +934,7 @@
     ]
    },
    "earned": null,
+   "emphasis": [],
    "hr_avg": 138,
    "hr_max": 144,
    "key": "2026-08-04-pm-cd",
@@ -1072,6 +1079,7 @@
    },
    "duration_factor": 1.0,
    "earned": 3273.0,
+   "emphasis": [],
    "hr_avg": 130,
    "hr_max": 145,
    "hr_pct": 93.03581580443434,
@@ -1232,6 +1240,7 @@
    },
    "duration_factor": 1.0,
    "earned": 3347.0,
+   "emphasis": [],
    "hr_avg": 131,
    "hr_max": 145,
    "hr_pct": 86.59767141009056,
@@ -1359,6 +1368,7 @@
    },
    "duration_factor": 1.0,
    "earned": 1250.0,
+   "emphasis": [],
    "hr_avg": 126,
    "hr_max": 139,
    "hr_pct": 69.17542888765911,
@@ -1593,6 +1603,9 @@
    },
    "distance_source": "treadmill-declared",
    "earned": 1171,
+   "emphasis": [
+    "quality"
+   ],
    "hr_avg": 143,
    "hr_max": 166,
    "key": "2026-08-07-pm",
@@ -1746,6 +1759,7 @@
    },
    "duration_factor": 1.0,
    "earned": 1773.0,
+   "emphasis": [],
    "hr_avg": 122,
    "hr_max": 131,
    "hr_pct": 98.99497487437186,
@@ -1952,6 +1966,9 @@
    },
    "duration_factor": 1.0,
    "earned": 3346.0,
+   "emphasis": [
+    "long"
+   ],
    "hr_avg": 137,
    "hr_max": 154,
    "hr_pct": 61.270829518403225,

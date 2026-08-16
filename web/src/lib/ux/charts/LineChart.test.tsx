@@ -128,3 +128,58 @@ describe("LineChart", () => {
     expect(markers(container)[0].getAttribute("fill")).toBe("var(--series-3)");
   });
 });
+
+describe("the margins", () => {
+  /* A y label is drawn right-aligned ending 6 units left of the plot, so a
+   * caller whose values are wide -- `213,368 SE` -- needs a bigger `l` than a
+   * small multiple does, or the label lands at a negative x and spills out of
+   * whatever contains the chart. */
+
+  const firstMarkX = (c: HTMLElement) =>
+    parseFloat(markers(c)[0].getAttribute("cx")!);
+
+  it("defaults to the small-multiple margins", () => {
+    // Pinned, because every existing caller relies on them by saying nothing.
+    const { container } = wrap(<LineChart points={pts(1, 2)} />);
+    expect(firstMarkX(container)).toBeCloseTo(40, 5);
+  });
+
+  it("moves the plot when it is given one", () => {
+    const { container } = wrap(
+      <LineChart points={pts(1, 2)} margin={{ t: 16, r: 70, b: 30, l: 76 }} />,
+    );
+    expect(firstMarkX(container)).toBeCloseTo(76, 5);
+  });
+
+  it("moves the gridline labels with it", () => {
+    const { container } = wrap(
+      <LineChart points={pts(1, 2)} margin={{ t: 16, r: 70, b: 30, l: 76 }} />,
+    );
+    const axis = [...container.querySelectorAll("text.axis-label")].map((t) =>
+      parseFloat(t.getAttribute("x")!),
+    );
+    // The two y labels end at l - 6, and none of them is drawn off the left
+    // edge of the viewBox.
+    expect(axis).toContain(70);
+    expect(Math.min(...axis)).toBeGreaterThanOrEqual(0);
+  });
+
+  it("keeps the plot inside the box the margins leave", () => {
+    const { container } = wrap(
+      <LineChart
+        points={pts(1, 5, 3)}
+        width={1000}
+        height={320}
+        margin={{ t: 16, r: 70, b: 30, l: 76 }}
+      />,
+    );
+    for (const m of markers(container)) {
+      const cx = parseFloat(m.getAttribute("cx")!);
+      const cy = parseFloat(m.getAttribute("cy")!);
+      expect(cx).toBeGreaterThanOrEqual(76);
+      expect(cx).toBeLessThanOrEqual(1000 - 70);
+      expect(cy).toBeGreaterThanOrEqual(16);
+      expect(cy).toBeLessThanOrEqual(320 - 30);
+    }
+  });
+});

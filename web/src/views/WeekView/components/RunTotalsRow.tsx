@@ -5,7 +5,7 @@ import { useId, useState } from "react";
 import { Dot } from "@/lib/ux/primitives/Dot";
 import { Note } from "@/lib/ux/primitives/Note";
 import { RowExpander } from "@/lib/ux/primitives/RowExpander";
-import { RUN_COLUMNS } from "../data/runColumns";
+import { RUN_COLUMNS } from "@/lib/run/data/runColumns";
 import type { RunTotalsRowData } from "../data/runTotals";
 import type { WeekFacts } from "../data/facts";
 import { RunTotals } from "./RunTotals";

@@ -4,11 +4,11 @@ import type { Week } from "@/lib/data/payload";
 import { Note } from "@/lib/ux/primitives/Note";
 import { Table } from "@/lib/ux/primitives/Table";
 import { judgedFacts, weekFacts } from "../data/facts";
-import { RUN_COLUMNS } from "../data/runColumns";
-import { dayBreaks, prescriptionByKey, sortedRuns } from "../data/runs";
+import { RUN_COLUMNS } from "@/lib/run/data/runColumns";
+import { dayBreaks, prescriptionByKey, sortedRuns } from "@/lib/run/data/runs";
 import { runTotals } from "../data/runTotals";
-import { trimpByActivity } from "../data/trimp";
-import { RunRow } from "./RunRow";
+import { trimpByActivity } from "@/lib/run/data/trimp";
+import { RunRow } from "@/lib/run/RunRow";
 import { RunTotalsRow } from "./RunTotalsRow";
 
 /** Every run in the week, with its prescription beside its execution.

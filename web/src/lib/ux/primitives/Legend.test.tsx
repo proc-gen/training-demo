@@ -36,4 +36,38 @@ describe("Legend", () => {
     expect(container.querySelector(".legend")).toBeTruthy();
     expect(container.querySelectorAll(".legend-item")).toHaveLength(0);
   });
+
+  it("leaves a saturated swatch UNRINGED", () => {
+    // A series colour needs no ring and would only be boxed in by one.
+    const { container } = wrap(<Legend items={ITEMS} />);
+    for (const s of container.querySelectorAll(".swatch")) {
+      expect(s.className).not.toContain("is-outlined");
+    }
+  });
+
+  it("RINGS a swatch that is nearly the surface, per item", () => {
+    /* The calendar's session tints are 22% washes and an 11px chip of one is
+     * barely a colour without an edge. Per item, so one legend can hold both
+     * kinds. */
+    const { container } = wrap(
+      <Legend
+        items={[
+          { color: "var(--series-1)", label: "run steps" },
+          { color: "var(--tint-long)", label: "long run", outlined: true },
+        ]}
+      />,
+    );
+    const swatches = [...container.querySelectorAll(".swatch")];
+    expect(swatches[0].className).not.toContain("is-outlined");
+    expect(swatches[1].className).toContain("is-outlined");
+  });
+
+  it("still paints an outlined swatch its own colour", () => {
+    // The ring is an edge, not a replacement for the fill.
+    const { container } = wrap(
+      <Legend items={[{ color: "var(--tint-quality)", label: "quality work", outlined: true }]} />,
+    );
+    const s = container.querySelector<HTMLElement>(".swatch")!;
+    expect(s.style.background).toContain("--tint-quality");
+  });
 });

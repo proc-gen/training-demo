@@ -150,6 +150,7 @@
    },
    "duration_factor": 1.0,
    "earned": 1811.0,
+   "emphasis": [],
    "hr_avg": 121,
    "hr_max": 130,
    "hr_pct": 100.0,
@@ -243,6 +244,7 @@
     ]
    },
    "earned": null,
+   "emphasis": [],
    "hr_avg": 126,
    "hr_max": 143,
    "key": "2026-07-28-wu",
@@ -577,6 +579,9 @@
     "work_seconds": 1570
    },
    "earned": 1849,
+   "emphasis": [
+    "quality"
+   ],
    "hr_avg": 154,
    "hr_max": 166,
    "key": "2026-07-28",
@@ -694,6 +699,7 @@
     ]
    },
    "earned": null,
+   "emphasis": [],
    "hr_avg": 130,
    "hr_max": 139,
    "key": "2026-07-28-cd",
@@ -860,6 +866,7 @@
    },
    "duration_factor": 1.0,
    "earned": 4002.0,
+   "emphasis": [],
    "hr_avg": 126,
    "hr_max": 141,
    "hr_pct": 96.41050349313419,
@@ -1432,6 +1439,9 @@
     "work_seconds": 910
    },
    "earned": 304,
+   "emphasis": [
+    "quality"
+   ],
    "hr_avg": 142,
    "hr_max": 170,
    "key": "2026-07-30",
@@ -1576,6 +1586,7 @@
    },
    "duration_factor": 1.0,
    "earned": 1796.0,
+   "emphasis": [],
    "hr_avg": 121,
    "hr_max": 131,
    "hr_pct": 99.77777777777777,
@@ -1719,6 +1730,7 @@
    },
    "duration_factor": 0.0,
    "earned": 0.0,
+   "emphasis": [],
    "hr_avg": 141,
    "hr_max": 160,
    "hr_pct": 26.31795716639209,
@@ -1840,6 +1852,7 @@
    },
    "duration_factor": 1.0,
    "earned": 1787.0,
+   "emphasis": [],
    "hr_avg": 120,
    "hr_max": 131,
    "hr_pct": 99.22265408106607,
@@ -2046,6 +2059,9 @@
    },
    "duration_factor": 1.0,
    "earned": 1744.0,
+   "emphasis": [
+    "long"
+   ],
    "hr_avg": 140,
    "hr_max": 163,
    "hr_pct": 33.506243996157544,

@@ -4,7 +4,7 @@ import { Fragment, type ReactNode } from "react";
 
 import { num } from "@/lib/data/format";
 import { ColumnGroup } from "./ColumnGroup";
-import { columnScale, type Column } from "./data/scales";
+import { columnScale, labelStride, type Column } from "./data/scales";
 
 /* Hand-written inline SVG, ported from the standalone page's viewer.
  *
@@ -47,6 +47,10 @@ export function ColumnChart({
 
   const band = iw / Math.max(columns.length, 1);
   const bw = Math.min(24, band * 0.62);
+  /* One label per column is right for a week and unreadable for a month, which
+     is what the Trends view asks of this chart. `labelStride` returns 1 wherever
+     there is room, so a seven-column chart is drawn exactly as it always was. */
+  const stride = labelStride(columns.length, band);
 
   return (
     <svg
@@ -112,9 +116,13 @@ export function ColumnChart({
                 y2={y(c.ceiling)}
               />
             ) : null}
-            <text className="axis-label" x={cx} y={height - 10} textAnchor="middle">
-              {c.label}
-            </text>
+            {/* Counted back from the LAST column, so the newest day always
+                carries its date. */}
+            {(columns.length - 1 - i) % stride === 0 ? (
+              <text className="axis-label" x={cx} y={height - 10} textAnchor="middle">
+                {c.label}
+              </text>
+            ) : null}
             <ColumnGroup tip={c.tip}>{rects}</ColumnGroup>
           </Fragment>
         );

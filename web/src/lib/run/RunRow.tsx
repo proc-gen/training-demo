@@ -6,9 +6,9 @@ import { clock, dayName, num, pace, shortDate } from "@/lib/data/format";
 import type { PaceChart, RunResult } from "@/lib/data/payload";
 import { Dot } from "@/lib/ux/primitives/Dot";
 import { RowExpander } from "@/lib/ux/primitives/RowExpander";
-import { RUN_COLUMNS } from "../data/runColumns";
-import { RUN_STATUS_LABEL, isPlanned, runStatus } from "../data/runStatus";
-import type { TrimpRow } from "../data/trimp";
+import { RUN_COLUMNS } from "./data/runColumns";
+import { RUN_STATUS_LABEL, isPlanned, runStatus } from "./data/runStatus";
+import type { TrimpRow } from "./data/trimp";
 import { RunDetail } from "./RunDetail";
 
 /** One run, expanding to its own explanation, laps or reps, and chart.

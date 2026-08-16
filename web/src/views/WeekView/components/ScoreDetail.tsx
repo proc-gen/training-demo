@@ -5,7 +5,7 @@ import { Note } from "@/lib/ux/primitives/Note";
 import { ledger } from "../data/losses";
 import type { ScoreComponent } from "../data/scoreComponents";
 import { ComponentFlags } from "./ComponentFlags";
-import { LossRow } from "./LossRow";
+import { LossRow } from "@/lib/run/LossRow";
 
 /** Why one score is what it is: the ledger, its total, the flags.
  *

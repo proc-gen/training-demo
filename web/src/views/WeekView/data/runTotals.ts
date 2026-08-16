@@ -8,7 +8,7 @@
 import { clock, num, pace } from "@/lib/data/format";
 import type { RunResult, Week } from "@/lib/data/payload";
 import type { WeekFacts } from "./facts";
-import type { TrimpRow } from "./trimp";
+import type { TrimpRow } from "@/lib/run/data/trimp";
 
 export type RunTotalsRowData = {
   miles: string;

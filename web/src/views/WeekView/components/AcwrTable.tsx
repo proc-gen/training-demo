@@ -28,6 +28,21 @@ import { AcRow } from "./AcRow";
  */
 export function AcwrTable({ load }: { load: Load }) {
   const unconverged = load.fitness?.ctl_converged === false;
+  /* WHAT THE DASH IS WAITING ON, and it is not the same answer for every row.
+   *
+   * Monotony and strain need EVERY day of the week covered -- a short week's
+   * spread is not the week's spread -- so mid-week they are null with nothing
+   * missing at all. Saying "n of m measured" is what lets a reader tell that
+   * from a measurement that went astray. The guard itself does not move: at 2
+   * of 7 days this repo once produced a monotony of 77.9 and fired
+   * `strain-spike` at 4.34x on nothing but absent data. */
+  const covered = load.shape_days_covered;
+  const needed = load.shape_days_needed;
+  const shapeWaiting =
+    covered != null && needed != null && covered < needed
+      ? `needs every day of the week — ${covered} of ${needed} measured so far`
+      : null;
+
   return (
     <>
       <h3>Acute:chronic and load shape</h3>
@@ -35,7 +50,17 @@ export function AcwrTable({ load }: { load: Load }) {
         <AcRow
           k="Mechanical A:C (running + background)"
           v={load.acwr_mech == null ? "--" : num(load.acwr_mech, 2)}
-          note="step-equivalents"
+          /* A:C IS A STATE ON A DATE, like CTL, so the date is part of the
+             figure rather than a footnote to it. Since 2026-08-15 it anchors
+             on the last SETTLED day -- today's step total measures the morning
+             -- which is what stopped this row reading `--` all week. */
+          note={
+            load.acwr_mech == null
+              ? "step-equivalents — needs a settled day and 34 days of step history behind it"
+              : load.acwr_mech_on
+                ? `step-equivalents, as of ${load.acwr_mech_on}`
+                : "step-equivalents"
+          }
         />
         <AcRow
           k="Running A:C (TRIMP)"
@@ -49,12 +74,20 @@ export function AcwrTable({ load }: { load: Load }) {
         <AcRow
           k="Monotony (mechanical)"
           v={load.monotony_mech == null ? "--" : num(load.monotony_mech, 2)}
-          note="Foster's, on SE"
+          note={
+            load.monotony_mech == null && shapeWaiting
+              ? shapeWaiting
+              : "Foster's, on SE"
+          }
         />
         <AcRow
           k="Strain (mechanical)"
           v={load.strain_mech == null ? "--" : num(load.strain_mech)}
-          note="SE — week load × monotony"
+          note={
+            load.strain_mech == null && shapeWaiting
+              ? shapeWaiting
+              : "SE — week load × monotony"
+          }
         />
       </Table>
     </>

@@ -38,8 +38,19 @@ const FULL = week({
   notes: { adherence: "<p>a note</p>", load: "<p>l note</p>" },
 });
 
+/* SCOPED TO THE CARD'S OWN STRIP, by its accessible name.
+ *
+ * It queried every `[role='tab']` in the tree until 2026-08-15, which was safe
+ * only while this was the sole tablist on the page. `LoadPanel` grew a
+ * Steps/Readiness toggle that day, so a bare query picked up six tabs from two
+ * strips and the assertions here started describing a mixture of the two. That
+ * is a real hazard rather than a fixture detail: a nested tablist is legitimate
+ * -- each has its own `aria-label` -- so what these tests must say is WHICH
+ * strip they are about. */
 const tabs = (c: HTMLElement) =>
-  [...c.querySelectorAll("[role='tab']")] as HTMLButtonElement[];
+  [
+    ...c.querySelectorAll("[aria-label='Week section'] [role='tab']"),
+  ] as HTMLButtonElement[];
 const labels = (c: HTMLElement) => tabs(c).map((t) => t.textContent);
 const click = (c: HTMLElement, label: string) =>
   fireEvent.click(tabs(c).find((t) => t.textContent === label)!);

@@ -25,12 +25,20 @@ const day = (over: Partial<LoadDay>): LoadDay =>
     completeness: "full",
     scored: true,
     pct: 100,
+    trimp: 88.6,
+    bg_trimp: 3.9,
+    bg_trimp_hr_rest_source: "measured",
+    ctl: 82,
+    atl: 88,
+    tsb: -6,
     ...over,
   }) as LoadDay;
 
 const rows = (c: HTMLElement) => [...c.querySelectorAll("tbody tr")];
 const cells = (c: HTMLElement, i = 0) =>
   [...rows(c)[i].querySelectorAll("td")].map((t) => t.textContent);
+const headers = (c: HTMLElement) =>
+  [...c.querySelectorAll("thead th")].map((t) => t.textContent);
 
 describe("LoadDayTable", () => {
   it("renders a row per day", () => {
@@ -48,41 +56,11 @@ describe("LoadDayTable", () => {
     expect(cells(container)).toContain("3,000");
   });
 
-  it("says UNSTATED for a date the manifest never mentioned", () => {
-    /* Not blank, which reads as a rendering bug, and not "rest", which is the
-     * assumption the grader stopped making -- an unlived day is not a day off. */
-    const { container } = wrap(<LoadDayTable days={[day({ role: null })]} />);
-    expect(cells(container)).toContain("unstated");
-    const roleCell = [...rows(container)[0].querySelectorAll("td")][1];
-    expect(roleCell.className).toBe("muted");
-  });
-
-  it("NAMES THE TIER that priced the day", () => {
-    // An estimate must never read as a measurement.
-    const { container } = wrap(
-      <LoadDayTable days={[day({ ceiling_source: "structure" })]} />,
-    );
-    expect(cells(container)).toContain("structure");
-  });
-
-  it("says UNPRICED for a day the plan did not state a duration for", () => {
-    // Blank reads as a rendering bug, and says nothing about whether the day
-    // was skipped or the prescription was incomplete.
-    const { container } = wrap(
-      <LoadDayTable days={[day({ ceiling_source: null, ceiling: null })]} />,
-    );
-    expect(cells(container)).toContain("unpriced");
-  });
-
-  it("marks an unpriced day as a warning", () => {
-    const { container } = wrap(<LoadDayTable days={[day({ ceiling_source: null })]} />);
-    const tds = [...rows(container)[0].querySelectorAll("td")];
-    expect(tds[9].className).toBe("warn");
-  });
-
   it("shows what the day was PRESCRIBED to cost, in minutes", () => {
     // The input the ceiling beside it is built from.
-    const { container } = wrap(<LoadDayTable days={[day({ prescribed_run_seconds: 2700 })]} />);
+    const { container } = wrap(
+      <LoadDayTable days={[day({ prescribed_run_seconds: 2700 })]} />,
+    );
     expect(cells(container)).toContain("45m");
   });
 
@@ -102,27 +80,158 @@ describe("LoadDayTable", () => {
     expect(cells(container)).toContain("0m");
   });
 
-  it("names where the run steps came from", () => {
-    const { container } = wrap(<LoadDayTable days={[day({ run_step_source: "duration" })]} />);
-    expect(cells(container)).toContain("duration");
+  describe("the training-state columns", () => {
+    /* They were a four-row table at the foot of the tab until 2026-08-15,
+     * showing ONE of each for the whole week -- while the grader had stamped
+     * all four onto every day record all along. */
+
+    it("carries the day's own TRIMP and curve", () => {
+      const { container } = wrap(<LoadDayTable days={[day({})]} />);
+      expect(headers(container)).toEqual(
+        expect.arrayContaining(["Run TRIMP", "Bg TRIMP", "CTL", "ATL", "TSB"]),
+      );
+      expect(cells(container)).toContain("88.6");
+      expect(cells(container)).toContain("82");
+    });
+
+    it("SIGNS the form column", () => {
+      // TSB is a balance, read by its direction before its magnitude: +3 and
+      // -3 are opposite states and `3` says neither.
+      const { container } = wrap(<LoadDayTable days={[day({ tsb: -6 })]} />);
+      expect(cells(container)).toContain("-6");
+      const plus = wrap(<LoadDayTable days={[day({ tsb: 6 })]} />);
+      expect(cells(plus.container)).toContain("+6");
+    });
+
+    it("signs a zero balance too", () => {
+      // Fitness exactly equal to fatigue is a real state, and dropping the sign
+      // there makes the one neutral value look like a different kind of number.
+      const { container } = wrap(<LoadDayTable days={[day({ tsb: 0 })]} />);
+      expect(cells(container)).toContain("+0");
+    });
+
+    it("shows -- where the TRIMP series does not reach the day", () => {
+      const { container } = wrap(
+        <LoadDayTable
+          days={[
+            day({ trimp: null, ctl: null, atl: null, tsb: null, bg_trimp: null }),
+          ]}
+        />,
+      );
+      const c = cells(container);
+      expect(c.filter((t) => t === "--").length).toBeGreaterThanOrEqual(5);
+    });
+
+    it("shows a background TRIMP of ZERO as a measurement", () => {
+      // 0 is a day nobody moved. `0` is falsy, and collapsing it into `--`
+      // would report a measured day as an unmeasured one.
+      const { container } = wrap(<LoadDayTable days={[day({ bg_trimp: 0 })]} />);
+      expect(cells(container)).toContain("0.0");
+      expect(cells(container)).not.toContain("--");
+    });
+
+    it("keeps background TRIMP in its own column", () => {
+      /* It is an UNCALIBRATED estimate sitting beside a measurement integrated
+       * from heart rate. Folding the two into one number would make them
+       * indistinguishable in the one place a reader compares them. */
+      const { container } = wrap(<LoadDayTable days={[day({})]} />);
+      const h = headers(container);
+      expect(h.indexOf("Bg TRIMP")).toBe(h.indexOf("Run TRIMP") + 1);
+      expect(cells(container)).toContain("3.9");
+      expect(cells(container)).toContain("88.6");
+    });
   });
 
-  it("marks a day that was not scored", () => {
-    const { container } = wrap(
-      <LoadDayTable days={[day({ scored: false, completeness: "partial" })]} />,
+  describe("an unscored day says WHY, in the score cell", () => {
+    /* The `Data` column left the table on 2026-08-15 with the three other
+     * provenance columns. This is the one fact it carried that a tooltip could
+     * not hold: a bare `--` in the score cell reads as a zero. */
+
+    it("names the completeness state", () => {
+      const { container } = wrap(
+        <LoadDayTable
+          days={[day({ scored: false, pct: null, completeness: "in-progress" })]}
+        />,
+      );
+      expect(cells(container)).toContain("in-progress");
+    });
+
+    it("distinguishes an UNPRICED day from an uncovered one", () => {
+      /* Two completely different problems: the export covered this day
+       * perfectly well and the PLAN did not state a duration for every run on
+       * it. Reading `full` there would be true and useless. */
+      const { container } = wrap(
+        <LoadDayTable
+          days={[
+            day({ scored: false, pct: null, ceiling: null, completeness: "full" }),
+          ]}
+        />,
+      );
+      expect(cells(container)).toContain("unpriced");
+      expect(cells(container)).not.toContain("full");
+    });
+
+    it("marks the reason as a warning", () => {
+      const { container } = wrap(
+        <LoadDayTable
+          days={[day({ scored: false, pct: null, completeness: "partial-gap" })]}
+        />,
+      );
+      expect(
+        container.querySelector("tbody tr td span.warn")!.textContent,
+      ).toBe("partial-gap");
+    });
+
+    it("shows the score and a severity dot on a day that WAS scored", () => {
+      const { container } = wrap(<LoadDayTable days={[day({ pct: 83 })]} />);
+      expect(rows(container)[0].textContent).toContain("83%");
+      expect(container.querySelector("tbody .dot")).not.toBeNull();
+      expect(container.querySelector("tbody td span.warn")).toBeNull();
+    });
+
+    it("shows a perfect 0.0 deviation rather than hiding it", () => {
+      // 0 is falsy and pct 0 is a real, terrible score.
+      const { container } = wrap(<LoadDayTable days={[day({ pct: 0 })]} />);
+      expect(rows(container)[0].textContent).toContain("0%");
+    });
+  });
+
+  describe("the four provenance columns are GONE", () => {
+    /* Within one week those strings barely vary, so four of twelve columns
+     * were spent on them. They are not deleted -- `LoadPanel` carries all four
+     * in the chart's tooltip, where a fact that qualifies rather than measures
+     * belongs, and its own test pins that. */
+    it.each(["Role", "Ceiling from", "Run steps from", "Data"])(
+      "no %s column",
+      (label) => {
+        const { container } = wrap(<LoadDayTable days={[day({})]} />);
+        expect(headers(container)).not.toContain(label);
+      },
     );
-    const tds = [...rows(container)[0].querySelectorAll("td")];
-    expect(tds[11].className).toBe("warn");
-    expect(tds[11].textContent).toBe("partial");
+
+    it("does not print the role or the ceiling tier in a cell either", () => {
+      const { container } = wrap(
+        <LoadDayTable days={[day({ role: "recovery", ceiling_source: "structure" })]} />,
+      );
+      expect(cells(container)).not.toContain("recovery");
+      expect(cells(container)).not.toContain("structure");
+    });
   });
 
-  has(found)("names the tier that priced every day of a real week", () => {
+  has(found)("renders every day of a real week", () => {
     const [, w] = found!;
     const { container } = wrap(<LoadDayTable days={w.load!.days} />);
-    const want = w.load!.days.map((d) => d.ceiling_source || "unpriced");
-    const named = want.filter((t) =>
-      rows(container).some((r) => (r.textContent ?? "").includes(t)),
-    );
-    expect(named).toHaveLength(want.length);
+    expect(rows(container)).toHaveLength(w.load!.days.length);
+  });
+
+  has(found)("prices the background of every covered day of a real week", () => {
+    /* The experiment is only interesting if it actually lands on the real
+     * tree: a column of dashes would pass every fixture test above. */
+    const [, w] = found!;
+    const covered = w.load!.days.filter((d) => d.nonrun_se != null);
+    if (!covered.length) return;
+    expect(covered.every((d) => d.bg_trimp != null)).toBe(true);
+    const { container } = wrap(<LoadDayTable days={w.load!.days} />);
+    expect(container.textContent).toContain(covered[0].bg_trimp!.toFixed(1));
   });
 });

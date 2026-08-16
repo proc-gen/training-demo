@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { Payload, Week } from "./payload";
-import { weekKeys } from "./weeks";
+import { hasRuns, weekKeys } from "./weeks";
 
 function week(over: Partial<Week>): Week {
   return {
@@ -43,5 +43,35 @@ describe("weekKeys", () => {
   it("is deterministic", () => {
     const p = payload({ "2026-08-03": {}, "2026-07-20": {} });
     expect(weekKeys(p)).toEqual(weekKeys(p));
+  });
+});
+
+describe("hasRuns", () => {
+  const w = (adherence: unknown) => week({ adherence } as Partial<Week>);
+
+  it("is true when the week carries a measured run", () => {
+    expect(hasRuns(w({ results: [{ id: 1 }] }))).toBe(true);
+  });
+
+  it("IS FALSE FOR A WEEK NOBODY HAS RUN YET", () => {
+    /* The plan reaches two Mondays ahead and those records are not empty --
+     * `facts.miles` is 0.0 and `facts.quality_share` is 0. Good numbers, and
+     * not measurements. */
+    expect(hasRuns(w({ results: [], facts: { miles: 0 } }))).toBe(false);
+  });
+
+  it("reads `results`, not a score", () => {
+    // A week that WAS run can score null -- nothing scoreable has come due.
+    expect(hasRuns(w({ results: [{ id: 1 }], scores: { week: { pct: null } } }))).toBe(
+      true,
+    );
+  });
+
+  it("is false with no adherence half at all", () => {
+    expect(hasRuns(week({}))).toBe(false);
+  });
+
+  it("is false for a week that is not there", () => {
+    expect(hasRuns(undefined)).toBe(false);
   });
 });

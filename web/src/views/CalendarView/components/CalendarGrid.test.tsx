@@ -1,8 +1,9 @@
-import { cleanup } from "@testing-library/react";
-import { afterEach, describe, expect, it } from "vitest";
+import { cleanup, fireEvent } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
-import type { Day, LoadDay } from "@/lib/data/payload";
+import type { Day, LoadDay, RunResult } from "@/lib/data/payload";
 import { wrap } from "@/test/render";
+import { weekRowsEnding } from "../data/window";
 import { CalendarGrid } from "./CalendarGrid";
 
 afterEach(cleanup);
@@ -10,16 +11,24 @@ afterEach(cleanup);
 const day = (date: string): Day =>
   ({ date, total_steps: "10000", run_steps: "5000", nonrun_steps: "5000" }) as Day;
 
-const dates = ["2026-07-29", "2026-07-30", "2026-08-03"];
-const byDate = new Map<string, Day>(dates.map((d) => [d, day(d)]));
-const rows = [
-  { start: "2026-07-27", days: [null, null, "2026-07-29", "2026-07-30", null, null, null] },
-  { start: "2026-08-03", days: ["2026-08-03", null, null, null, null, null, null] },
-];
+const rows = weekRowsEnding("2026-08-09", 2);
+const byDate = new Map<string, Day>(
+  ["2026-07-29", "2026-07-30", "2026-08-03"].map((d) => [d, day(d)]),
+);
 
-const grid = (meta = new Map<string, LoadDay>()) =>
+const grid = (over: Partial<Parameters<typeof CalendarGrid>[0]> = {}) =>
   wrap(
-    <CalendarGrid rows={rows} byDate={byDate} meta={meta} maxSteps={10000} />,
+    <CalendarGrid
+      rows={rows}
+      byDate={byDate}
+      meta={new Map<string, LoadDay>()}
+      runs={new Map<string, RunResult[]>()}
+      prescriptions={new Map<string, string[]>()}
+      maxSteps={10000}
+      selected={null}
+      onSelect={() => {}}
+      {...over}
+    />,
   );
 
 describe("CalendarGrid", () => {
@@ -36,45 +45,57 @@ describe("CalendarGrid", () => {
     expect(labels).toEqual(["7/27", "8/3"]);
   });
 
-  it("renders a cell for every date present", () => {
+  it("RENDERS A REAL CELL FOR EVERY DATE IN THE WINDOW", () => {
+    /* It used to draw an empty one wherever a date had no measurement, which
+     * was right while the grid was built out of the dates that HAD one. The
+     * window states its own dates now, and a day with no steps may still carry
+     * a prescription. */
     const { container } = grid();
-    expect(container.querySelectorAll(".cal-cell:not(.empty)")).toHaveLength(3);
+    expect(container.querySelectorAll(".cal-cell")).toHaveLength(14);
   });
 
-  it("keeps a gap as an EMPTY CELL so the columns stay aligned", () => {
+  it("keeps seven cells in every row, so the columns stay aligned", () => {
     // A calendar whose Wednesdays are not all in one column is not a calendar.
     const { container } = grid();
-    const first = container.querySelectorAll(".cal-row")[1];
-    const cells = [...first.querySelectorAll(".cal-cell")];
-    expect(cells).toHaveLength(7);
-    expect(cells[0].className).toContain("empty");
-    expect(cells[2].className).not.toContain("empty");
-  });
-
-  it("leaves a slot empty when the date is in the row but not in the data", () => {
-    const { container } = wrap(
-      <CalendarGrid
-        rows={[{ start: "2026-07-27", days: ["2026-07-27", null, null, null, null, null, null] }]}
-        byDate={new Map()}
-        meta={new Map()}
-        maxSteps={1}
-      />,
-    );
-    expect(container.querySelectorAll(".cal-cell:not(.empty)")).toHaveLength(0);
+    for (const row of [...container.querySelectorAll(".cal-row")].slice(1)) {
+      expect(row.querySelectorAll(".cal-cell")).toHaveLength(7);
+    }
   });
 
   it("passes the grader's record through, so a breach is outlined", () => {
     const meta = new Map<string, LoadDay>([
       ["2026-07-29", { date: "2026-07-29", se: 20000, ceiling: 8000 } as LoadDay],
     ]);
-    const { container } = grid(meta);
-    expect(container.querySelectorAll(".cal-cell.over")).toHaveLength(1);
+    expect(grid({ meta }).container.querySelectorAll(".cal-cell.over")).toHaveLength(1);
+  });
+
+  it("passes a date's runs and prescriptions to its own cell", () => {
+    const { container } = grid({
+      runs: new Map([["2026-07-29", [{ emphasis: ["quality"] } as RunResult]]]),
+      prescriptions: new Map([["2026-07-29", ["12x600m w/ 200m jog"]]]),
+    });
+    const tinted = container.querySelectorAll(".cal-cell.emph-quality");
+    expect(tinted).toHaveLength(1);
+    expect(tinted[0].textContent).toContain("12x600m");
+  });
+
+  it("marks exactly the selected cell", () => {
+    const { container } = grid({ selected: "2026-08-03" });
+    const pressed = [...container.querySelectorAll(".cal-cell")].filter(
+      (c) => c.getAttribute("aria-pressed") === "true",
+    );
+    expect(pressed).toHaveLength(1);
+    expect(pressed[0].textContent).toContain("8/3");
+  });
+
+  it("reports WHICH date was clicked", () => {
+    const onSelect = vi.fn();
+    const { container } = grid({ onSelect });
+    fireEvent.click(container.querySelectorAll(".cal-cell")[0]);
+    expect(onSelect).toHaveBeenCalledWith("2026-07-27");
   });
 
   it("renders just the header row for no weeks", () => {
-    const { container } = wrap(
-      <CalendarGrid rows={[]} byDate={new Map()} meta={new Map()} maxSteps={1} />,
-    );
-    expect(container.querySelectorAll(".cal-row")).toHaveLength(1);
+    expect(grid({ rows: [] }).container.querySelectorAll(".cal-row")).toHaveLength(1);
   });
 });

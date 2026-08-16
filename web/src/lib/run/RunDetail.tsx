@@ -4,7 +4,7 @@ import { useId, useState } from "react";
 
 import { paceChartBand, type PaceChart, type RunResult } from "@/lib/data/payload";
 import { Tabs } from "@/lib/ux/primitives/Tabs";
-import { isPlanned } from "../data/runStatus";
+import { isPlanned } from "./data/runStatus";
 import { LapTable } from "./LapTable";
 import { PlannedReadout } from "./PlannedReadout";
 import { RepChartPanel } from "./RepChartPanel";

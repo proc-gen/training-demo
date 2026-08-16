@@ -1,4 +1,4 @@
-import { weekKeys } from "@/lib/data/weeks";
+import { hasRuns, weekKeys } from "@/lib/data/weeks";
 import type { Payload } from "@/lib/data/payload";
 
 /** The week the app should open on.
@@ -20,13 +20,13 @@ import type { Payload } from "@/lib/data/payload";
  * Lived, then both, then either, then whatever exists.
  *
  * Report's rule, so it lives with Report: nothing else in the app chooses a
- * week.
+ * week. THE PREDICATE is shared, though — `hasRuns` moved to `lib/data/weeks`
+ * on 2026-08-15 when the trend panels needed the same question answered, and two
+ * copies of "has this week been run" is how they come to disagree.
  */
 export function defaultWeekKey(payload: Payload): string | null {
   const keys = weekKeys(payload);
-  const lived = keys.filter(
-    (k) => (payload.weeks[k]?.adherence?.results ?? []).length > 0,
-  );
+  const lived = keys.filter((k) => hasRuns(payload.weeks[k]));
   const both = keys.filter(
     (k) => payload.weeks[k]?.adherence && payload.weeks[k]?.load,
   );

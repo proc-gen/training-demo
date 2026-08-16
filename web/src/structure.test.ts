@@ -277,7 +277,17 @@ describe("proximity follows reuse", () => {
     /* A module under lib/data or lib/hooks with a single consumer is not
      * shared -- it belongs inside that consumer, where its documented decision
      * sits beside the code that makes it. This is what sent `defaultWeekKey`
-     * to views/Report/data and `calendarRows` to views/CalendarView/data. */
+     * to views/Report/data and `calendarRows` to views/CalendarView/data.
+     *
+     * SCOPED TO lib/data AND lib/hooks, AND lib/ux AND lib/run ARE OUT ON
+     * PURPOSE. Those two are component libraries, and internal composition is
+     * what a component library IS: `Marker` is only drawn by `LineChart`,
+     * `RepSetPanel` only by `SessionDetail`. Applying the rule there would
+     * demand every part of a library be used twice, which would push it back
+     * into the one-file-holding-twenty-components shape this whole module
+     * exists to prevent. What keeps them honest instead is the rule above --
+     * no view may import a sibling view -- which is what sent the run subtree
+     * up to lib/run when the Calendar's day card needed it. */
     const lonely = SOURCES.filter(
       (f) =>
         /^lib\/(data|hooks)\//.test(f.rel) &&

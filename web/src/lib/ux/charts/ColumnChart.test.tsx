@@ -84,6 +84,41 @@ describe("ColumnChart", () => {
     for (const c of WEEK) expect(text).toContain(c.label);
   });
 
+  describe("a window's worth of columns", () => {
+    /* The Trends view plots a column per DAY over a range the reader chooses.
+     * One label per column is right for a week and an unreadable smear for a
+     * month. */
+    const month = Array.from({ length: 31 }, (_, i) => col(`8/${i + 1}`, [50, 5]));
+
+    it("THINS the labels rather than overlapping them", () => {
+      const { container } = wrap(<ColumnChart columns={month} />);
+      const labels = [...container.querySelectorAll("text")]
+        .map((t) => t.textContent!)
+        .filter((t) => t.startsWith("8/"));
+      expect(labels.length).toBeGreaterThan(0);
+      expect(labels.length).toBeLessThan(month.length);
+    });
+
+    it("always labels the NEWEST column", () => {
+      // It is the one a reader anchors on.
+      const { container } = wrap(<ColumnChart columns={month} />);
+      const text = [...container.querySelectorAll("text")].map((t) => t.textContent);
+      expect(text).toContain("8/31");
+    });
+
+    it("still draws every column", () => {
+      // Thinning is about labels, never about marks.
+      const { container } = wrap(<ColumnChart columns={month} />);
+      expect(container.querySelectorAll("[role='listitem']")).toHaveLength(31);
+    });
+
+    it("leaves a week-sized chart labelled in full", () => {
+      const { container } = wrap(<ColumnChart columns={WEEK} />);
+      const text = [...container.querySelectorAll("text")].map((t) => t.textContent);
+      for (const c of WEEK) expect(text).toContain(c.label);
+    });
+  });
+
   it("formats axis ticks through the supplied formatter", () => {
     const { container } = wrap(
       <ColumnChart columns={WEEK} tick={(t) => `${t} SE`} />,

@@ -89,6 +89,71 @@
   --accent: #256abf;
   --accent-ink: #ffffff;
 
+  /* WHAT KIND OF SESSION A CALENDAR DAY IS -- categorical slots 7, 4 and 6 of
+   * the same reference palette the three series above come from. Validated as a
+   * set, ALL PAIRS, in both modes: worst normal-vision dE 30.3 light / 23.3 dark
+   * against a floor of 15.
+   *
+   * WHY NOT SLOTS 1-3. Those are already spoken for and two of them are spoken
+   * for INSIDE THIS CELL: --series-1 is run steps and --series-2 is background
+   * steps, drawn as the bar across its foot. --series-3 is wellness. One meaning
+   * per colour across the page beats one rule per view.
+   *
+   * RED IS NOT AVAILABLE. --critical outlines a day that went over its ceiling,
+   * on this very grid, so a red-family fill under a red border would be two
+   * different things wearing one colour.
+   *
+   * QUALITY WAS MAGENTA (#e87ba4 / #d55181) UNTIL 2026-08-16 AND IT WAS WRONG
+   * TWICE OVER. The athlete read the shipped page: *"the pink and purple for
+   * quality and long runs are a little too close, and the pink reads as red when
+   * used as a tint. maybe a green would work better."* Both halves measure out.
+   * As washes the worst pair was dE 3.5 light / 3.6 dark, and in DARK the binding
+   * pair was violet-vs-magenta specifically. Green takes the set to 6.1 / 5.1 at
+   * the 22% below -- and the red-reading half was the worse of the two, because
+   * of the --critical border above.
+   *
+   * SO GREEN MEANS TWO THINGS ON THIS PAGE, and that is a real exception rather
+   * than an oversight: --good is the score dot at 90%+, which a tinted quality
+   * day will often carry. They are a saturated 11px dot against a wash and they
+   * separate, and the alternatives were measured before this was accepted --
+   * aqua is wellness and scores worse (4.0 / 3.6), magenta is what was just
+   * rejected. Taken on the athlete's own instruction, recorded here because the
+   * instruction is the reason and the choice alone would read as a mistake.
+   *
+   * ONE CVD NOTE, since the validator raises it: at FULL STRENGTH the dark
+   * green-vs-yellow pair is protan dE 6.9, the 6-8 warn band, legal only with
+   * secondary encoding. The stronger statement is below and applies to every
+   * candidate set: as TINTS, none of them is CVD-separable at any strength a
+   * wash can have. */
+  --emph-long: #4a3aa7;
+  --emph-race: #eda100;
+  --emph-quality: #008300;
+
+  /* THE WASH, mixed here so there is ONE hex per colour per mode rather than a
+   * second, paler transcription of a validated measurement. Declared once: a
+   * custom property substitutes at USE time, so a cell inside the dark scope
+   * resolves both operands to their dark values and this needs no second copy.
+   *
+   *   light   long #d0d1eb   race #fae9d1   quality #cce2c9
+   *   dark    long #313041   race #3c301f   quality #1f2f1c
+   *
+   * 22% IS AS FAR AS "A SLIGHT TINT" GOES. It was 18% for half a day and moved
+   * because the LEGEND SHOWS THE TINT NOW -- an 11px chip of an 18% wash is
+   * barely a colour. Measured at 22%: worst pair dE 6.1 light / 5.1 dark, text
+   * contrast 12.8-16.5:1 on every tint, and dE 30+ from --critical so the
+   * over-ceiling border still reads on top of one.
+   *
+   * IT STILL DOES NOT CLEAR 8, THE FIGURE A CATEGORICAL SET IS HELD TO, AND NO
+   * PERCENTAGE WOULD -- a wash that cleared 8 would not be a wash. THE COLOUR IS
+   * THEREFORE NEVER THE ONLY CHANNEL: every tinted cell carries the plan's own
+   * words for the session, and the cell's accessible name and the day card's
+   * title both name the tint. That relief used to cite the legend's
+   * full-strength swatches; it cannot any more, and the per-cell text is the
+   * better half of the argument anyway -- it is beside the thing it explains. */
+  --tint-long: color-mix(in oklab, var(--emph-long) 22%, var(--surface-1));
+  --tint-race: color-mix(in oklab, var(--emph-race) 22%, var(--surface-1));
+  --tint-quality: color-mix(in oklab, var(--emph-quality) 22%, var(--surface-1));
+
   --radius: 10px;
   --gap: 2px;
   --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -110,6 +175,13 @@
     --series-3: #199e70;
     --success-text: #0ca30c;
     --track: #34332f;
+    /* The same three hues stepped for the dark surface, not a separate palette.
+       Slot 6 green is #008300 in BOTH columns of the reference palette -- that
+       is the palette's own step, not a copy-paste. `--tint-*` needs no dark
+       copy: it mixes these with `--surface-1` at use. */
+    --emph-long: #9085e9;
+    --emph-race: #c98500;
+    --emph-quality: #008300;
   }
 }
 
@@ -128,6 +200,9 @@
   --series-3: #199e70;
   --success-text: #0ca30c;
   --track: #34332f;
+  --emph-long: #9085e9;
+  --emph-race: #c98500;
+  --emph-quality: #008300;
 }
 
 * { box-sizing: border-box; }
@@ -193,6 +268,19 @@ h1 { font-size: 1.4rem; margin: 0; letter-spacing: -0.01em; }
   color: var(--text-primary);
   min-width: 15rem;
 }
+/* A date box takes the select's chrome and NOT its width — `min-width: 15rem`
+   on a control holding ten characters is a third of the row spent on air. Its
+   own rule rather than a shared selector, so the select keeps the width it was
+   given. */
+.field input[type="date"] {
+  font: inherit;
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface-1);
+  color: var(--text-primary);
+}
+.field input[type="date"]:disabled { opacity: 0.5; }
 
 /* A TAB STRIP IS A ROW OF CONTROLS AND HAS TO LOOK LIKE ONE.
  *
@@ -227,9 +315,17 @@ h1 { font-size: 1.4rem; margin: 0; letter-spacing: -0.01em; }
 .tab:focus-visible { outline: 2px solid var(--series-1); outline-offset: 1px; }
 /* LAST, AND WITH ITS OWN :hover. `.tab:hover` and `.tab[aria-selected="true"]`
    have EQUAL specificity (0,2,0), so source order alone decides — a hover rule
-   below this one would repaint the selected pill grey under the cursor. */
+   below this one would repaint the selected pill grey under the cursor.
+
+   `aria-pressed` rides along because the Trends range strip is a row of TOGGLES
+   rather than tabs — it filters the chart that is already showing rather than
+   disclosing a panel, so `role="tab"` would announce something untrue. One rule
+   for both, or the page would grow a second definition of a selected pill free
+   to drift from this one. */
 .tab[aria-selected="true"],
-.tab[aria-selected="true"]:hover {
+.tab[aria-selected="true"]:hover,
+.tab[aria-pressed="true"],
+.tab[aria-pressed="true"]:hover {
   background: var(--accent);
   border-color: var(--accent);
   color: var(--accent-ink);
@@ -238,6 +334,13 @@ h1 { font-size: 1.4rem; margin: 0; letter-spacing: -0.01em; }
 /* In-card pills share a header row with the week's title, so they take a
    slightly tighter scale — the same step down `.card > h2` takes from `h1`. */
 .tabs.in-card .tab { font-size: 0.82rem; padding: 0.3rem 0.75rem; }
+/* A strip that is NOT in a header row. `.tabs` carries `margin-left: auto`
+   because every strip until 2026-08-15 sat beside a title and had to be pushed
+   to the far end of it; the Load tab's Steps/Readiness toggle stands on its own
+   line above the table it discloses, where `auto` would shove it to the right
+   margin with nothing on its left. Its own class rather than a change to
+   `.tabs`, so the three header strips keep the behaviour they were given. */
+.tabs.table-toggle { margin: 1.1rem 0 0.6rem; }
 
 main {
   max-width: var(--shell-max);
@@ -353,6 +456,28 @@ main {
   font-size: 0.86rem;
   margin: 0.6rem 0 0;
 }
+
+/* How every day ceiling above was built, and WHY each of its four constants is
+ * the number it is. It was one muted line until 2026-08-15, which said what the
+ * formula was and nothing about where 175 spm or 1,440 background came from —
+ * and those two are the measurements in it, the other two being method.
+ *
+ * The formula keeps a monospace-ish tabular feel by sitting on its own line
+ * above the list; the bullets are prose and read as prose. */
+.ceiling-note {
+  margin: 0.9rem 0 0;
+  color: var(--text-secondary);
+  font-size: 0.86rem;
+}
+.ceiling-note > p { margin: 0 0 0.5rem; }
+.ceiling-note > ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.35rem;
+}
+.ceiling-note li { color: var(--text-muted); }
+.ceiling-note b { color: var(--text-secondary); }
 
 .grid2 {
   display: grid;
@@ -696,23 +821,63 @@ details.prose > summary {
   font-size: 0.82rem;
   color: var(--text-secondary);
 }
+/* TWO ROWS WHERE A KEY HAS TWO KINDS OF THING IN IT. The calendar's key is one
+   line of bar colours and one of cell tints; stacking two `<Legend>` elements is
+   what splits it, and this closes the gap the first one's own margin leaves.
+   It fires only where two are adjacent, which today is only there. */
+.legend + .legend { margin-top: -0.35rem; }
+
 .legend-item { display: inline-flex; align-items: center; gap: 0.4rem; }
 .swatch {
   width: 11px; height: 11px; border-radius: 3px;
   display: inline-block; flex: none;
 }
+/* A SWATCH THAT IS NEARLY THE SURFACE NEEDS AN EDGE. The session tints are 22%
+   washes; at 11px one is barely a colour unless it is ringed, and the ring is
+   the SAME `--border` a `.cal-cell` wears, which makes the chip a miniature of
+   the cell rather than a swatch that happens to have a box. A modifier rather
+   than a change to `.swatch`, which every legend on the page uses. */
+.swatch.is-outlined { border: 1px solid var(--border); }
 
-.small-multiples {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.1rem;
+/* THE TRENDS CONTROLS: which graph, and over what window.
+   `align-items: end` so the labelled fields and the pill strip sit on one
+   baseline — the labels are above their controls, so aligning on `center` would
+   float the pills into the middle of the field. `.small-multiples` was here
+   until 2026-08-15 and went with the grid it laid out; half a deletion is a
+   failure mode this repo has paid for twice. */
+.trend-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 1rem;
+  margin-bottom: 1.1rem;
 }
+/* Pushed to the far end of the row: the two dates are what the window IS, and
+   these are shortcuts for filling them in. */
+.range-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-left: auto;
+}
+
 .sm-title {
-  font-size: 0.82rem;
+  font-size: 0.95rem;
   font-weight: 600;
   margin: 0 0 0.1rem;
 }
-.sm-sub { font-size: 0.76rem; color: var(--text-muted); margin: 0 0 0.35rem; }
+/* `.sm-sub` was here until 2026-08-15 and went with the line it styled — the
+   dimmed description under the title. Half a deletion is a failure mode this
+   repo has paid for twice. */
+/* What the chart below actually covers, and how much of the series that is.
+   `n of N` and not a bare count: a filtered view stating only what it holds
+   reads as a complete account of the series. */
+.sm-range {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  margin: 0 0 0.5rem;
+}
 
 /* --------------------------------------------------------------- calendar */
 
@@ -725,22 +890,76 @@ details.prose > summary {
 }
 .cal-head { color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; }
 .cal-label { color: var(--text-muted); font-size: 0.76rem; align-self: center; font-variant-numeric: tabular-nums; }
+
+/* A CELL IS A BUTTON, so everything a button brings has to be undone: the
+   agent stylesheet's font, its centred text and its own border. `text-align`
+   and `font: inherit` are the two that are invisible until they are not --
+   without them every date renders centred in a system font. */
 .cal-cell {
+  appearance: none;
+  font: inherit;
+  text-align: left;
+  color: inherit;
   border: 1px solid var(--border);
   border-radius: 6px;
-  min-height: 3.1rem;
-  padding: 0.25rem 0.35rem;
+  min-height: 5.4rem;
+  padding: 0.3rem 0.4rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 0.15rem;
   background: var(--surface-1);
-  cursor: default;
+  cursor: pointer;
+  overflow: hidden;
 }
-.cal-cell.empty { border-style: none; background: transparent; }
+/* `.cal-cell.empty` was here until 2026-08-16 and went with the markup: the
+   grid drew a blank slot wherever a date had no measurement, and a windowed
+   calendar states its own dates. Half a deletion is a failure mode this repo
+   has paid for twice. */
+.cal-cell:hover { border-color: var(--axis); }
+/* THE SELECTED DAY, and the ring has to read on FOUR different fills -- the
+   plain surface and the three tints. `--accent` is the one colour on the page
+   that is mode-invariant and was measured against every surface it lands on;
+   `--axis` (the hover) reverses too little against a tint to carry a state. */
+.cal-cell.is-selected {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
 .cal-cell .d { font-size: 0.7rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
 .cal-cell .v { font-size: 0.78rem; font-variant-numeric: tabular-nums; font-weight: 600; }
+
+/* WHAT THE DAY IS FOR. One line per run, each clipped to the cell -- a
+   prescription is a whole sentence (`3x(200m, 200m, 400m w/ 200m jog)`) and
+   wrapping it would push the numbers under it out of the box. The full text is
+   in the tooltip and on the day card. */
+.cal-plan { display: flex; flex-direction: column; min-width: 0; }
+.cal-plan > i {
+  font-style: normal;
+  font-size: 0.7rem;
+  line-height: 1.25;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* The measurements, pinned to the foot so the bar sits under them whatever the
+   plan above is doing. */
+.cal-foot { margin-top: auto; display: flex; align-items: baseline; justify-content: space-between; gap: 0.3rem; }
+.cal-scores {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.1rem 0.4rem;
+  font-size: 0.7rem;
+  font-variant-numeric: tabular-nums;
+  min-width: 0;
+  text-align: right;
+}
+.cal-scores .muted { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
 .cal-bar { display: flex; height: 5px; gap: var(--gap); margin-top: 0.2rem; }
 .cal-bar > i { display: block; height: 100%; border-radius: 2px; }
+/* A BREACH IS A BORDER, so it survives every tint underneath it. */
 .cal-cell.over { border-color: var(--critical); }
 
 .tooltip {

@@ -1,18 +1,24 @@
 {
  "acwr_mech": 1.1770427393836043,
+ "acwr_mech_on": "2026-08-02",
  "acwr_run": 1.1847886267656347,
+ "bg_trimp": 87.38184521637119,
  "ceiling_inputs": {
   "background_source": "baseline",
   "background_steps": 2480.0,
+  "background_window_days": 28,
   "cadence_source": "measured",
   "cadence_spm": 174.0,
+  "default_cadence_spm": 172,
   "margin": 1.05,
   "run_step_weight": 2.5
  },
- "csv": "2026-07-27,Volume,General Prep,208497,180280,28217,92,86,89,1.18,1.18,4.35,906598,591,78,92,-14,recovery-day-not-recovering;background-load-spike;strain-spike",
+ "csv": "2026-07-27,Volume,General Prep,208497,180280,28217,92,86,89,1.18,1.18,4.35,906598,591,87,78,92,-14,recovery-day-not-recovering;background-load-spike;strain-spike",
  "days": [
   {
    "atl": 81.38583445922505,
+   "bg_trimp": 6.778539281054561,
+   "bg_trimp_hr_rest_source": "measured",
    "ceiling": 16306.5,
    "ceiling_source": "prescribed",
    "completeness": "full",
@@ -35,6 +41,8 @@
   },
   {
    "atl": 89.9493758444188,
+   "bg_trimp": 11.343344315474324,
+   "bg_trimp_hr_rest_source": "measured",
    "ceiling": 35441.072446910046,
    "ceiling_source": "session-default",
    "completeness": "full",
@@ -57,6 +65,8 @@
   },
   {
    "atl": 86.5570318833141,
+   "bg_trimp": 3.6710753395231497,
+   "bg_trimp_hr_rest_source": "measured",
    "ceiling": 32292.75,
    "ceiling_source": "prescribed",
    "completeness": "full",
@@ -79,6 +89,8 @@
   },
   {
    "atl": 91.63027391248556,
+   "bg_trimp": 3.1533187153761166,
+   "bg_trimp_hr_rest_source": "measured",
    "ceiling": 28867.125,
    "ceiling_source": "session-default",
    "completeness": "full",
@@ -101,6 +113,8 @@
   },
   {
    "atl": 92.94270543436417,
+   "bg_trimp": 3.734245952225909,
+   "bg_trimp_hr_rest_source": "measured",
    "ceiling": 30009.0,
    "ceiling_source": "prescribed",
    "completeness": "full",
@@ -123,6 +137,8 @@
   },
   {
    "atl": 76.71952907577314,
+   "bg_trimp": 52.821497018187515,
+   "bg_trimp_hr_rest_source": "measured",
    "ceiling": 16306.5,
    "ceiling_source": "prescribed",
    "completeness": "full",
@@ -145,6 +161,8 @@
   },
   {
    "atl": 91.86214680682986,
+   "bg_trimp": 5.879824594529608,
+   "bg_trimp_hr_rest_source": "measured",
    "ceiling": 43711.5,
    "ceiling_source": "prescribed",
    "completeness": "full",
@@ -180,7 +198,7 @@
   "history_days": 175,
   "on_date": "2026-08-02",
   "seed_date": "2026-02-09",
-  "series_span_days": 188,
+  "series_span_days": 189,
   "stream_share": 1.0,
   "trimp": 591.18,
   "trimp_source": "stream",
@@ -315,6 +333,8 @@
   ],
   "resting_hr_ceiling": 47
  },
+ "shape_days_covered": 7,
+ "shape_days_needed": 7,
  "strain_mech": 906597.9481511015,
  "week_start": "2026-07-27",
  "week_type": "Volume"

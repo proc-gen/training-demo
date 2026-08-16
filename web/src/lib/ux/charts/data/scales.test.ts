@@ -4,6 +4,7 @@ import {
   columnMax,
   columnScale,
   inBand,
+  labelStride,
   lineDomain,
   niceTicks,
   repHrDomain,
@@ -18,6 +19,70 @@ const col = (
   label: "d",
   parts: parts.map((v) => ({ value: v, color: "x" })),
   ceiling,
+});
+
+describe("labelStride", () => {
+  /* A week of columns labels all seven and should. The Trends view plots a
+   * column per DAY over a window the reader chooses, and thirty-one labels in
+   * the space of seven is a smear. */
+
+  it("is 1 whenever there is room, so an existing chart is unchanged", () => {
+    // The Load tab: seven columns across ~620 usable px.
+    expect(labelStride(7, 88)).toBe(1);
+    expect(labelStride(31, 34)).toBe(1); // exactly the minimum still fits
+  });
+
+  it("thins as the band narrows", () => {
+    expect(labelStride(31, 17)).toBe(2);
+    expect(labelStride(91, 6.8)).toBe(5);
+  });
+
+  it("labels the LAST column at every stride", () => {
+    /* The newest day is what a reader anchors on. A stride measured forward
+     * from column zero drops it whenever the count is not a multiple -- 31
+     * columns at a stride of 2 would label 0, 2 ... 30 forwards (fine) but 91 at
+     * a stride of 5 would label 0, 5 ... 90 and 31 at 3 would label 30 only by
+     * luck. Counting back is what makes it unconditional. */
+    const labelled = (count: number, band: number) => {
+      const stride = labelStride(count, band);
+      const out: number[] = [];
+      for (let i = 0; i < count; i += 1) {
+        if ((count - 1 - i) % stride === 0) out.push(i);
+      }
+      return out;
+    };
+
+    for (const [count, band] of [
+      [31, 17],
+      [91, 6.8],
+      [7, 88],
+      [365, 1.7],
+      [32, 16],
+    ] as const) {
+      const got = labelled(count, band);
+      expect(got[got.length - 1]).toBe(count - 1);
+      expect(got.length).toBe(Math.ceil(count / labelStride(count, band)));
+    }
+  });
+
+  it("labels every column when the stride is 1", () => {
+    // The counter above must not thin a chart that fits.
+    expect(labelStride(7, 88)).toBe(1);
+  });
+
+  it("does not divide by a zero band", () => {
+    expect(labelStride(31, 0)).toBe(1);
+  });
+
+  it("is 1 for a single column", () => {
+    expect(labelStride(1, 0.5)).toBe(1);
+    expect(labelStride(0, 0)).toBe(1);
+  });
+
+  it("takes the minimum label width as an argument", () => {
+    expect(labelStride(31, 20, 20)).toBe(1);
+    expect(labelStride(31, 20, 60)).toBe(3);
+  });
 });
 
 describe("columnMax", () => {

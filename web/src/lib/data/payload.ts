@@ -341,6 +341,20 @@ export const RunResult = z.looseObject({
   prescribed_denominator_source: str,
   date: str,
   role: str,
+  /** WHAT KIND OF SESSION THE PLAN ASKED FOR -- a subset of
+   *  `["long", "race", "quality"]`, in that fixed order. The Calendar tints a
+   *  day from the union of its runs'.
+   *
+   *  A LIST, because a long run carrying a prescribed block is genuinely two
+   *  things and collapsing it to one would make the reader choose which half to
+   *  believe. `[]` is a real answer: an easy or recovery run.
+   *
+   *  NOT `score_bucket`, which says which DENOMINATOR a run fed -- null on a
+   *  race and on hill repeats, and absent entirely on a `pending` planned run,
+   *  because `roll_up()` only stamps the rows it summed. This one is stamped in
+   *  `run_identity()`, so a session two Mondays out carries it too, which is
+   *  the whole reason it exists. */
+  emphasis: z.array(z.string()).nullable().optional(),
   /** `surface` was here until 2026-08-10 and is gone from the graders. Nothing
    *  declares it, so a stale record carrying one is simply ignored. */
   prescribed: str,
@@ -526,6 +540,20 @@ export const LoadDay = z.looseObject({
   ctl: num,
   atl: num,
   tsb: num,
+  /** The day's NON-RUN steps priced as an impulse. AN UNCALIBRATED EXPERIMENT,
+   *  added 2026-08-15, and it must never be displayed as a peer of `trimp`
+   *  without saying so: that one is integrated from measured heart rate, this
+   *  one runs a nominal walking cadence and a nominal fraction of hr_max
+   *  through the same formula. It is scored by nothing and deliberately does
+   *  NOT feed `ctl`/`atl`/`tsb` -- see `scripts/training-load/model.json` ->
+   *  `trimp.background`.
+   *
+   *  `null` is a day the export did not cover. `0` is a day nobody moved, which
+   *  is a measurement -- and `0` is falsy, so never test truthiness here. */
+  bg_trimp: num,
+  /** `measured` / `default` / `none` -- which resting heart rate denominated
+   *  it, the same label every row of `derived/trimp.csv` carries. */
+  bg_trimp_hr_rest_source: str,
 });
 
 /** How every ceiling in the week was built. Carried so a reader can check the
@@ -540,6 +568,13 @@ export const CeilingInputs = z.looseObject({
   cadence_source: str,
   margin: num,
   run_step_weight: num,
+  /** The two a reader needs to CHECK the derivation, neither derivable from
+   *  the five above. `default_cadence_spm` is what a missing baseline would
+   *  have substituted, so a measured 175 can be read against the 172 it
+   *  displaced; `background_window_days` is the span the median was taken
+   *  over, without which "median daily non-run steps" names no window. */
+  default_cadence_spm: num,
+  background_window_days: num,
 });
 
 export const Readiness = z.looseObject({
@@ -626,9 +661,24 @@ export const Load = z.looseObject({
    * data. `null` is the guard working, not a missing value to paper over. */
   overall: num,
   acwr_mech: num,
+  /** WHICH DATE the mechanical ratio is as of. A:C is a state ON A DATE, like
+   *  CTL, and since 2026-08-15 it anchors on the last SETTLED day of the week
+   *  rather than on today -- whose step total measures the morning. Null when
+   *  a baseline supplied the figure (somebody else's anchor) or when no day of
+   *  the week has finished. */
+  acwr_mech_on: str,
   acwr_run: num,
   monotony_mech: num,
   strain_mech: num,
+  /** How much of the week the two *_mech shape figures are still waiting on.
+   *  They need EVERY day covered -- a short week's spread is not the week's
+   *  spread -- so on a week in progress they are null with nothing missing.
+   *  These say that, where a bare `--` cannot. */
+  shape_days_covered: num,
+  shape_days_needed: num,
+  /** The week's background impulse, summed over the days that priced one.
+   *  Beside `fitness.trimp`, never inside it. See `LoadDay.bg_trimp`. */
+  bg_trimp: num,
   /** OUR training state since 2026-08-11, computed from the heart-rate streams
    *  rather than read out of a Runalyze capture. `null` when the athlete states
    *  no `trimp` denominators or the series does not reach this week. */

@@ -10,6 +10,7 @@ import {
   pct,
   severity,
   shortDate,
+  signed,
 } from "./format";
 
 describe("clock", () => {
@@ -108,6 +109,52 @@ describe("num", () => {
   it("a non-numeric string is absent, not NaN", () => {
     expect(num("n/a")).toBe("--");
     expect(num(Infinity)).toBe("--");
+  });
+});
+
+describe("signed", () => {
+  /* For form (TSB), which is a BALANCE and is read by its direction before its
+   * magnitude: +3 and -3 are opposite states and `3` says neither. The load
+   * grader's terminal printer has rendered it `{tsb:+.0f}` all along, so this
+   * is that convention reaching the page rather than a new one. */
+
+  it("marks a positive balance", () => {
+    expect(signed(6)).toBe("+6");
+  });
+
+  it("marks a negative one", () => {
+    expect(signed(-6)).toBe("-6");
+  });
+
+  it("SIGNS A ZERO, which is a real balance", () => {
+    // Fitness exactly equal to fatigue. Dropping the sign there makes the one
+    // neutral value on the scale look like a different kind of number.
+    expect(signed(0)).toBe("+0");
+    expect(signed(-0)).toBe("+0");
+  });
+
+  it("groups thousands and honours a decimal count, like num", () => {
+    expect(signed(-12345)).toBe("-12,345");
+    expect(signed(1.239, 2)).toBe("+1.24");
+  });
+
+  it("rounds toward the same place num does", () => {
+    expect(signed(-0.4)).toBe("-0");
+    expect(signed(0.4)).toBe("+0");
+  });
+
+  it.each([null, undefined, ""])("%s is absent, not +0", (v) => {
+    expect(signed(v)).toBe("--");
+  });
+
+  it("accepts the CSVs' strings", () => {
+    expect(signed("-27")).toBe("-27");
+  });
+
+  it("a non-numeric value is absent, not NaN", () => {
+    expect(signed("n/a")).toBe("--");
+    expect(signed(Infinity)).toBe("--");
+    expect(signed(-Infinity)).toBe("--");
   });
 });
 

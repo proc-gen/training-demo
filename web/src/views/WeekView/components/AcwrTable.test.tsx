@@ -143,4 +143,95 @@ describe("AcwrTable", () => {
       expect(row).not.toContain("forgets its seed");
     });
   });
+
+  describe("the mechanical A:C names its DATE", () => {
+    /* It is a state ON A DATE, exactly like CTL, and since 2026-08-15 it
+     * anchors on the last SETTLED day of the week rather than on today --
+     * whose step total measures the morning. Before that it read `--` from
+     * Monday to Sunday and only appeared the day after the week ended. */
+
+    it("says as of which day", () => {
+      const { container } = wrap(
+        <AcwrTable load={load({ acwr_mech_on: "2026-08-14" })} />,
+      );
+      expect(rowFor(container, "Mechanical A:C").textContent).toContain(
+        "as of 2026-08-14",
+      );
+    });
+
+    it("claims no date when the grader stated none", () => {
+      // A baseline-supplied figure is somebody else's anchor.
+      const { container } = wrap(
+        <AcwrTable load={load({ acwr_mech_on: null })} />,
+      );
+      const row = rowFor(container, "Mechanical A:C").textContent ?? "";
+      expect(row).toContain("step-equivalents");
+      expect(row).not.toContain("as of");
+    });
+
+    it("says what a null ratio is waiting on", () => {
+      const { container } = wrap(<AcwrTable load={load({ acwr_mech: null })} />);
+      const row = rowFor(container, "Mechanical A:C").textContent ?? "";
+      expect(row).toContain("--");
+      expect(row).toContain("settled day");
+    });
+  });
+
+  describe("monotony and strain say how short the week is", () => {
+    /* The guard does NOT move: they need every day of the week covered,
+     * because a short week's spread is not the week's spread. What changed is
+     * the dash -- on a week in progress nothing is missing at all, and a bare
+     * `--` cannot say that. */
+
+    const live = load({
+      monotony_mech: null,
+      strain_mech: null,
+      shape_days_covered: 5,
+      shape_days_needed: 7,
+    });
+
+    it.each(["Monotony", "Strain"])("%s names the coverage", (label) => {
+      const { container } = wrap(<AcwrTable load={live} />);
+      const row = rowFor(container, label).textContent ?? "";
+      expect(row).toContain("--");
+      expect(row).toContain("5 of 7 measured");
+    });
+
+    it("keeps the definition once the week is complete", () => {
+      const { container } = wrap(
+        <AcwrTable
+          load={load({ shape_days_covered: 7, shape_days_needed: 7 })}
+        />,
+      );
+      expect(rowFor(container, "Monotony").textContent).toContain("Foster");
+      expect(rowFor(container, "Strain").textContent).toContain("monotony");
+    });
+
+    it("does not invent a coverage note when the grader stated none", () => {
+      // Older records carry no counters, and a missing count must not render
+      // as `undefined of undefined`.
+      const { container } = wrap(
+        <AcwrTable load={load({ monotony_mech: null })} />,
+      );
+      const row = rowFor(container, "Monotony").textContent ?? "";
+      expect(row).not.toContain("undefined");
+      expect(row).toContain("Foster");
+    });
+
+    it("does not claim a shortfall on a week that IS complete", () => {
+      /* `covered < needed` is the condition, so a complete week with a
+       * legitimately null monotony -- seven identical days, where 1/CV is
+       * undefined -- keeps its definition rather than blaming coverage. */
+      const { container } = wrap(
+        <AcwrTable
+          load={load({
+            monotony_mech: null,
+            shape_days_covered: 7,
+            shape_days_needed: 7,
+          })}
+        />,
+      );
+      expect(rowFor(container, "Monotony").textContent).toContain("Foster");
+    });
+  });
 });

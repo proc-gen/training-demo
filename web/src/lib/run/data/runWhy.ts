@@ -16,11 +16,17 @@
  * landed exactly inside its prescription, which is the best possible outcome and
  * is falsy -- filtering on truthiness is what once hid every run that was bang
  * on, in the table this replaced.
+ *
+ * IT LIVES IN `lib/run/` BECAUSE TWO VIEWS RENDER A RUN NOW. The Week tab's
+ * runs table and the Calendar's day card show the same rows through the same
+ * `RunRow`, and a view may not import a sibling view -- so the proximity rule
+ * sent this whole subtree up to the shared container. Its content is unchanged
+ * by the move.
  */
 
 import { clock, pct } from "@/lib/data/format";
 import type { RepSet, RunResult } from "@/lib/data/payload";
-import type { Ledger, Loss } from "./losses";
+import type { Ledger, Loss } from "../LossRow";
 
 /** A prescription, which is a RANGE as often as a scalar.
  *

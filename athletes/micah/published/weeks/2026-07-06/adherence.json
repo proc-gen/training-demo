@@ -122,6 +122,7 @@
     ]
    },
    "earned": null,
+   "emphasis": [],
    "hr_avg": 121,
    "hr_max": 139,
    "key": "2026-07-07-wu",
@@ -395,6 +396,9 @@
     "work_seconds": 391
    },
    "earned": 267,
+   "emphasis": [
+    "quality"
+   ],
    "hr_avg": 142,
    "hr_max": 179,
    "key": "2026-07-07",
@@ -556,6 +560,7 @@
     ]
    },
    "earned": null,
+   "emphasis": [],
    "hr_avg": 144,
    "hr_max": 152,
    "key": "2026-07-07-cd",
@@ -628,6 +633,7 @@
     ]
    },
    "earned": null,
+   "emphasis": [],
    "hr_avg": 134,
    "hr_max": 141,
    "key": "2026-07-07-cd2",
@@ -772,6 +778,7 @@
    },
    "duration_factor": 0.8983333333333333,
    "earned": 2441.67,
+   "emphasis": [],
    "hr_avg": 132,
    "hr_max": 145,
    "hr_pct": 85.15037593984962,
@@ -926,6 +933,7 @@
    },
    "duration_factor": 1.0,
    "earned": 1989.0,
+   "emphasis": [],
    "hr_avg": 134,
    "hr_max": 151,
    "hr_pct": 55.55865921787709,
@@ -1272,6 +1280,9 @@
     ]
    },
    "earned": null,
+   "emphasis": [
+    "quality"
+   ],
    "hr_avg": 151,
    "hr_max": 180,
    "key": "2026-07-10",
@@ -1344,6 +1355,7 @@
     ]
    },
    "earned": null,
+   "emphasis": [],
    "hr_avg": 125,
    "hr_max": 139,
    "key": "2026-07-11-1",
@@ -1435,6 +1447,7 @@
    "duration": null,
    "duration_factor": 1.0,
    "earned": 270.0,
+   "emphasis": [],
    "hr_avg": 145,
    "hr_max": 165,
    "hr_pct": 22.613065326633166,
@@ -1662,6 +1675,9 @@
    },
    "duration_factor": 1.0,
    "earned": 512.0,
+   "emphasis": [
+    "long"
+   ],
    "hr_avg": 145,
    "hr_max": 157,
    "hr_pct": 9.123307198859587,

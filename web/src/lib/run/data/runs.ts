@@ -2,6 +2,12 @@
  *
  * Extracted from the runs card so the filter below can be tested in the node
  * project. It is one line, and it was wrong for a week.
+ *
+ * IT LIVES IN `lib/run/` BECAUSE TWO VIEWS RENDER A RUN NOW. The Week tab's
+ * runs table and the Calendar's day card show the same rows through the same
+ * `RunRow`, and a view may not import a sibling view -- so the proximity rule
+ * sent this whole subtree up to the shared container. Its content is unchanged
+ * by the move.
  */
 
 import type { Adherence, RunResult, Week } from "@/lib/data/payload";

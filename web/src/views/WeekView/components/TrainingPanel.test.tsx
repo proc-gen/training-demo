@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import type { Week } from "@/lib/data/payload";
 import { PUBLISHED, has, weekWithReps } from "@/test/payload";
 import { wrap } from "@/test/render";
-import { RUN_COLUMNS } from "../data/runColumns";
+import { RUN_COLUMNS } from "@/lib/run/data/runColumns";
 import { TrainingPanel } from "./TrainingPanel";
 
 afterEach(cleanup);
@@ -196,26 +196,49 @@ describe("TrainingPanel", () => {
  * ======================================================================== */
 
 describe("the open week, end to end", () => {
-  /* LIVE means the grader stopped short of the week's end -- `graded_through <
-   * week_end` -- which is the record's own statement that it is still being
-   * lived. Read off the payload rather than compared against today, so this
-   * finds the same week whenever the suite runs. */
-  const OPEN = PUBLISHED
-    ? Object.values(PUBLISHED.weeks).find(
-        (w) =>
-          w.adherence?.graded_through &&
-          w.adherence?.week_end &&
-          w.adherence.graded_through < w.adherence.week_end,
-      )
-    : undefined;
+  /* A WEEK WITH BOTH KINDS OF ROW, which is what every case below is about:
+   * sessions already run rendered beside sessions only planned.
+   *
+   * IT USED TO BE `graded_through < week_end` AND THAT SELECTOR DIED TWICE
+   * OVER on 2026-08-16. A half-run week is a transient state -- 2026-08-10 was
+   * the only one on disk and it finished that day -- and the guard also
+   * dropped `graded_through === null`, which is the WHOLLY-future week and is
+   * the most live record there is (the same falsy-null defect `live_weeks()`
+   * carried in publish.py until 2026-08-13). Between them, all seven cases
+   * here went from asserting to SKIPPING, and a skipped case and a passing one
+   * are identical in the exit code.
+   *
+   * So: prefer a real half-run week, and when none exists compose one from the
+   * newest week that HAS results and the oldest that has planned rows. Both
+   * halves are real grader output -- nothing here is hand-shaped -- and the
+   * fixture cannot go stale on the calendar again. */
+  const weeks = PUBLISHED ? Object.values(PUBLISHED.weeks) : [];
+  const withResults = weeks.filter((w) => (w.adherence?.results.length ?? 0) > 0);
+  const withPlanned = weeks.filter((w) => (w.adherence?.planned.length ?? 0) > 0);
+  const OPEN: Week | undefined =
+    withResults.find((w) => (w.adherence?.planned.length ?? 0) > 0) ??
+    (withResults.length && withPlanned.length
+      ? ({
+          ...withResults[withResults.length - 1],
+          adherence: {
+            ...withResults[withResults.length - 1].adherence!,
+            planned: withPlanned[0].adherence!.planned,
+          },
+        } as Week)
+      : undefined);
 
   has(OPEN)("shows the planned sessions beside the ones already run", () => {
     const { container } = wrap(<TrainingPanel week={OPEN!} />);
     const text = container.textContent!;
-    // Completed: Monday's recovery run, with real measurements.
-    expect(text).toContain("30 min recovery");
-    // Planned: the Friday session the athlete asked about.
-    expect(text).toContain("2x10:00");
+    const a = OPEN!.adherence!;
+    /* ASK THE ROWS, NEVER NAME ONE -- the rule the three cases below already
+     * learned. This named `30 min recovery` and `2x10:00`, which described one
+     * particular week and would have to be re-typed for the next one. */
+    expect(a.results.length).toBeGreaterThan(0);
+    expect(a.planned.length).toBeGreaterThan(0);
+    for (const r of [...a.results, ...a.planned]) {
+      if (r.prescribed) expect(text).toContain(r.prescribed);
+    }
   });
 
   has(OPEN)("MARKS A FUTURE SESSION Not yet completed", () => {

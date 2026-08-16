@@ -4,7 +4,7 @@
   "doubles": 0,
   "easy_seconds": 0,
   "elapsed_days": 0,
-  "graded_through": "2026-08-15",
+  "graded_through": "2026-08-16",
   "long_run_miles": 0.0,
   "long_run_share": 0,
   "miles": 0.0,
@@ -22,7 +22,10 @@
    ]
   ],
   "planned_seconds": null,
-  "planned_seconds_week": null,
+  "planned_seconds_week": [
+   27900.0,
+   27900.0
+  ],
   "prescribed_dates": 7,
   "prescribed_dates_due": 0,
   "projected_seconds": 15870.0,
@@ -54,7 +57,7 @@
   "doubles": 0,
   "easy_seconds": 0,
   "elapsed_days": 0,
-  "graded_through": "2026-08-14",
+  "graded_through": "2026-08-15",
   "long_run_miles": 0.0,
   "long_run_share": 0,
   "miles": 0.0,
@@ -72,7 +75,10 @@
    ]
   ],
   "planned_seconds": null,
-  "planned_seconds_week": null,
+  "planned_seconds_week": [
+   27900.0,
+   27900.0
+  ],
   "prescribed_dates": 7,
   "prescribed_dates_due": 0,
   "projected_seconds": 15870.0,
@@ -94,6 +100,7 @@
    "date": "2026-08-24",
    "detail": null,
    "earned": null,
+   "emphasis": [],
    "hr_avg": null,
    "hr_max": null,
    "key": "2026-08-24",
@@ -104,11 +111,11 @@
    "pct": null,
    "planned": {
     "band": "recovery",
-    "band_display": "8:58-9:43/mi",
+    "band_display": "8:51-9:36/mi",
     "band_is_reference": true,
     "band_sec_per_mi": [
-     538,
-     583
+     531,
+     576
     ],
     "ceiling": "130",
     "ceiling_tiers": [
@@ -119,7 +126,7 @@
     ],
     "chart_confirmed": true,
     "chart_is_carried_forward": true,
-    "chart_week_ending": "2026-08-09",
+    "chart_week_ending": "2026-08-16",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "30 min recovery",
@@ -145,6 +152,7 @@
    "date": "2026-08-25",
    "detail": null,
    "earned": null,
+   "emphasis": [],
    "hr_avg": null,
    "hr_max": null,
    "key": "2026-08-25-am",
@@ -155,11 +163,11 @@
    "pct": null,
    "planned": {
     "band": "recovery",
-    "band_display": "8:58-9:43/mi",
+    "band_display": "8:51-9:36/mi",
     "band_is_reference": true,
     "band_sec_per_mi": [
-     538,
-     583
+     531,
+     576
     ],
     "ceiling": "130",
     "ceiling_tiers": [
@@ -170,7 +178,7 @@
     ],
     "chart_confirmed": true,
     "chart_is_carried_forward": true,
-    "chart_week_ending": "2026-08-09",
+    "chart_week_ending": "2026-08-16",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "AM: 30 min recovery",
@@ -196,6 +204,9 @@
    "date": "2026-08-25",
    "detail": null,
    "earned": null,
+   "emphasis": [
+    "quality"
+   ],
    "hr_avg": null,
    "hr_max": null,
    "key": "2026-08-25-pm",
@@ -206,14 +217,14 @@
    "pct": null,
    "planned": {
     "band": "rep_3min",
-    "band_display": "6:33-6:47/mi",
+    "band_display": "6:28-6:42/mi",
     "band_is_reference": false,
     "band_sec_per_mi": null,
     "ceiling": "162/166",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": true,
-    "chart_week_ending": "2026-08-09",
+    "chart_week_ending": "2026-08-16",
     "criterion": "hr",
     "hr_ceiling": [
      162,
@@ -225,7 +236,7 @@
     "sets": [
      {
       "band": "rep_3min",
-      "band_display": "6:33-6:47/mi",
+      "band_display": "6:28-6:42/mi",
       "band_how": "named",
       "band_sec_per_mi": null,
       "ceiling": "162/166",
@@ -245,27 +256,27 @@
       "reps": 12,
       "reps_per_group": null,
       "scored_on": "hr",
-      "target_display": "2:27-2:32 · 6:33-6:47/mi",
+      "target_display": "2:25-2:30 · 6:28-6:42/mi",
       "target_pace": null,
       "target_sec_per_mi": [
-       393,
-       407
+       388,
+       402
       ],
       "target_seconds": [
-       147,
-       152
+       145,
+       150
       ],
       "target_tolerance_seconds": null
      }
     ],
-    "target_display": "2:27-2:32 · 6:33-6:47/mi",
+    "target_display": "2:25-2:30 · 6:28-6:42/mi",
     "target_sec_per_mi": [
-     393,
-     407
+     388,
+     402
     ],
     "target_seconds": [
-     147,
-     152
+     145,
+     150
     ],
     "target_tolerance_seconds": null
    },
@@ -283,6 +294,7 @@
    "date": "2026-08-26",
    "detail": null,
    "earned": null,
+   "emphasis": [],
    "hr_avg": null,
    "hr_max": null,
    "key": "2026-08-26",
@@ -293,11 +305,11 @@
    "pct": null,
    "planned": {
     "band": "easy",
-    "band_display": "8:17-8:58/mi",
+    "band_display": "8:11-8:51/mi",
     "band_is_reference": true,
     "band_sec_per_mi": [
-     497,
-     538
+     491,
+     531
     ],
     "ceiling": "137",
     "ceiling_tiers": [
@@ -308,7 +320,7 @@
     ],
     "chart_confirmed": true,
     "chart_is_carried_forward": true,
-    "chart_week_ending": "2026-08-09",
+    "chart_week_ending": "2026-08-16",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "60-70 min easy",
@@ -337,6 +349,7 @@
    "date": "2026-08-27",
    "detail": null,
    "earned": null,
+   "emphasis": [],
    "hr_avg": null,
    "hr_max": null,
    "key": "2026-08-27",
@@ -347,11 +360,11 @@
    "pct": null,
    "planned": {
     "band": "easy",
-    "band_display": "8:17-8:58/mi",
+    "band_display": "8:11-8:51/mi",
     "band_is_reference": true,
     "band_sec_per_mi": [
-     497,
-     538
+     491,
+     531
     ],
     "ceiling": "137",
     "ceiling_tiers": [
@@ -362,7 +375,7 @@
     ],
     "chart_confirmed": true,
     "chart_is_carried_forward": true,
-    "chart_week_ending": "2026-08-09",
+    "chart_week_ending": "2026-08-16",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "60-70 min easy",
@@ -391,6 +404,7 @@
    "date": "2026-08-28",
    "detail": null,
    "earned": null,
+   "emphasis": [],
    "hr_avg": null,
    "hr_max": null,
    "key": "2026-08-28-am",
@@ -401,11 +415,11 @@
    "pct": null,
    "planned": {
     "band": "recovery",
-    "band_display": "8:58-9:43/mi",
+    "band_display": "8:51-9:36/mi",
     "band_is_reference": true,
     "band_sec_per_mi": [
-     538,
-     583
+     531,
+     576
     ],
     "ceiling": "130",
     "ceiling_tiers": [
@@ -416,7 +430,7 @@
     ],
     "chart_confirmed": true,
     "chart_is_carried_forward": true,
-    "chart_week_ending": "2026-08-09",
+    "chart_week_ending": "2026-08-16",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "AM: 30 min recovery",
@@ -442,6 +456,9 @@
    "date": "2026-08-28",
    "detail": null,
    "earned": null,
+   "emphasis": [
+    "quality"
+   ],
    "hr_avg": null,
    "hr_max": null,
    "key": "2026-08-28-pm",
@@ -452,14 +469,14 @@
    "pct": null,
    "planned": {
     "band": "rep_6min",
-    "band_display": "6:42-6:58/mi",
+    "band_display": "6:38-6:52/mi",
     "band_is_reference": false,
     "band_sec_per_mi": null,
     "ceiling": "162/166",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": true,
-    "chart_week_ending": "2026-08-09",
+    "chart_week_ending": "2026-08-16",
     "criterion": "hr",
     "hr_ceiling": [
      162,
@@ -471,7 +488,7 @@
     "sets": [
      {
       "band": "rep_6min",
-      "band_display": "6:42-6:58/mi",
+      "band_display": "6:38-6:52/mi",
       "band_how": "named",
       "band_sec_per_mi": null,
       "ceiling": "162/166",
@@ -491,14 +508,14 @@
       "reps": 3,
       "reps_per_group": null,
       "scored_on": "hr",
-      "target_display": "6:42-6:58/mi",
+      "target_display": "6:38-6:52/mi",
       "target_pace": null,
       "target_sec_per_mi": null,
       "target_seconds": null,
       "target_tolerance_seconds": null
      }
     ],
-    "target_display": "6:42-6:58/mi",
+    "target_display": "6:38-6:52/mi",
     "target_sec_per_mi": null,
     "target_seconds": null,
     "target_tolerance_seconds": null
@@ -517,6 +534,7 @@
    "date": "2026-08-29",
    "detail": null,
    "earned": null,
+   "emphasis": [],
    "hr_avg": null,
    "hr_max": null,
    "key": "2026-08-29",
@@ -527,11 +545,11 @@
    "pct": null,
    "planned": {
     "band": "recovery",
-    "band_display": "8:58-9:43/mi",
+    "band_display": "8:51-9:36/mi",
     "band_is_reference": true,
     "band_sec_per_mi": [
-     538,
-     583
+     531,
+     576
     ],
     "ceiling": "130",
     "ceiling_tiers": [
@@ -542,7 +560,7 @@
     ],
     "chart_confirmed": true,
     "chart_is_carried_forward": true,
-    "chart_week_ending": "2026-08-09",
+    "chart_week_ending": "2026-08-16",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "30 min recovery",
@@ -568,6 +586,9 @@
    "date": "2026-08-30",
    "detail": null,
    "earned": null,
+   "emphasis": [
+    "race"
+   ],
    "hr_avg": null,
    "hr_max": null,
    "key": "2026-08-30",
@@ -578,17 +599,17 @@
    "pct": null,
    "planned": {
     "band": "5000m",
-    "band_display": "18:06 @ 5:49/mi",
+    "band_display": "17:53 @ 5:45/mi",
     "band_is_reference": true,
     "band_sec_per_mi": [
-     349,
-     349
+     345,
+     345
     ],
     "ceiling": "none (race)",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": true,
-    "chart_week_ending": "2026-08-09",
+    "chart_week_ending": "2026-08-16",
     "criterion": null,
     "hr_ceiling": null,
     "prescribed": "Local 5k",
@@ -642,10 +663,10 @@
   },
   "pct": null,
   "why": {
-   "long_run_share": "nothing this week prescribes has come due through 2026-08-14, so this check left the denominator",
-   "quality_days_met": "nothing this week prescribes has come due through 2026-08-14, so this check left the denominator",
-   "rest_days_met": "nothing this week prescribes has come due through 2026-08-14, so this check left the denominator",
-   "volume_vs_plan": "nothing this week prescribes has come due through 2026-08-14, so this check left the denominator"
+   "long_run_share": "nothing this week prescribes has come due through 2026-08-15, so this check left the denominator",
+   "quality_days_met": "nothing this week prescribes has come due through 2026-08-15, so this check left the denominator",
+   "rest_days_met": "nothing this week prescribes has come due through 2026-08-15, so this check left the denominator",
+   "volume_vs_plan": "nothing this week prescribes has come due through 2026-08-15, so this check left the denominator"
   }
  },
  "unclaimed": [],
