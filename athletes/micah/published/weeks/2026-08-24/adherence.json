@@ -4,7 +4,7 @@
   "doubles": 0,
   "easy_seconds": 0,
   "elapsed_days": 0,
-  "graded_through": "2026-08-16",
+  "graded_through": "2026-08-23",
   "long_run_miles": 0.0,
   "long_run_share": 0,
   "miles": 0.0,
@@ -57,7 +57,7 @@
   "doubles": 0,
   "easy_seconds": 0,
   "elapsed_days": 0,
-  "graded_through": "2026-08-15",
+  "graded_through": "2026-08-22",
   "long_run_miles": 0.0,
   "long_run_share": 0,
   "miles": 0.0,
@@ -99,6 +99,7 @@
    "cadence": null,
    "date": "2026-08-24",
    "detail": null,
+   "deviation_reason": null,
    "earned": null,
    "emphasis": [],
    "hr_avg": null,
@@ -106,15 +107,16 @@
    "key": "2026-08-24",
    "km": null,
    "miles": null,
+   "miss_forgiven": false,
    "ordinal": 0,
    "pace": null,
    "pct": null,
    "planned": {
     "band": "recovery",
-    "band_display": "8:51-9:36/mi",
+    "band_display": "8:50-9:36/mi",
     "band_is_reference": true,
     "band_sec_per_mi": [
-     531,
+     530,
      576
     ],
     "ceiling": "130",
@@ -124,9 +126,9 @@
       130
      ]
     ],
-    "chart_confirmed": true,
-    "chart_is_carried_forward": true,
-    "chart_week_ending": "2026-08-16",
+    "chart_confirmed": false,
+    "chart_is_carried_forward": false,
+    "chart_week_ending": "2026-08-23",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "30 min recovery",
@@ -144,6 +146,7 @@
    "role": "recovery",
    "runalyze_id": null,
    "seconds": null,
+   "session": null,
    "status": "pending",
    "total": null
   },
@@ -151,6 +154,7 @@
    "cadence": null,
    "date": "2026-08-25",
    "detail": null,
+   "deviation_reason": null,
    "earned": null,
    "emphasis": [],
    "hr_avg": null,
@@ -158,15 +162,16 @@
    "key": "2026-08-25-am",
    "km": null,
    "miles": null,
+   "miss_forgiven": false,
    "ordinal": 0,
    "pace": null,
    "pct": null,
    "planned": {
     "band": "recovery",
-    "band_display": "8:51-9:36/mi",
+    "band_display": "8:50-9:36/mi",
     "band_is_reference": true,
     "band_sec_per_mi": [
-     531,
+     530,
      576
     ],
     "ceiling": "130",
@@ -176,9 +181,9 @@
       130
      ]
     ],
-    "chart_confirmed": true,
-    "chart_is_carried_forward": true,
-    "chart_week_ending": "2026-08-16",
+    "chart_confirmed": false,
+    "chart_is_carried_forward": false,
+    "chart_week_ending": "2026-08-23",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "AM: 30 min recovery",
@@ -196,6 +201,7 @@
    "role": "recovery",
    "runalyze_id": null,
    "seconds": null,
+   "session": null,
    "status": "pending",
    "total": null
   },
@@ -203,6 +209,7 @@
    "cadence": null,
    "date": "2026-08-25",
    "detail": null,
+   "deviation_reason": null,
    "earned": null,
    "emphasis": [
     "quality"
@@ -212,6 +219,7 @@
    "key": "2026-08-25-pm",
    "km": null,
    "miles": null,
+   "miss_forgiven": false,
    "ordinal": 1,
    "pace": null,
    "pct": null,
@@ -222,9 +230,9 @@
     "band_sec_per_mi": null,
     "ceiling": "162/166",
     "ceiling_tiers": null,
-    "chart_confirmed": true,
-    "chart_is_carried_forward": true,
-    "chart_week_ending": "2026-08-16",
+    "chart_confirmed": false,
+    "chart_is_carried_forward": false,
+    "chart_week_ending": "2026-08-23",
     "criterion": "hr",
     "hr_ceiling": [
      162,
@@ -286,6 +294,7 @@
    "role": "subt",
    "runalyze_id": null,
    "seconds": null,
+   "session": null,
    "status": "pending",
    "total": null
   },
@@ -293,6 +302,7 @@
    "cadence": null,
    "date": "2026-08-26",
    "detail": null,
+   "deviation_reason": null,
    "earned": null,
    "emphasis": [],
    "hr_avg": null,
@@ -300,16 +310,17 @@
    "key": "2026-08-26",
    "km": null,
    "miles": null,
+   "miss_forgiven": false,
    "ordinal": 0,
    "pace": null,
    "pct": null,
    "planned": {
     "band": "easy",
-    "band_display": "8:11-8:51/mi",
+    "band_display": "8:11-8:50/mi",
     "band_is_reference": true,
     "band_sec_per_mi": [
      491,
-     531
+     530
     ],
     "ceiling": "137",
     "ceiling_tiers": [
@@ -318,9 +329,9 @@
       137
      ]
     ],
-    "chart_confirmed": true,
-    "chart_is_carried_forward": true,
-    "chart_week_ending": "2026-08-16",
+    "chart_confirmed": false,
+    "chart_is_carried_forward": false,
+    "chart_week_ending": "2026-08-23",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "60-70 min easy",
@@ -341,6 +352,7 @@
    "role": "easy",
    "runalyze_id": null,
    "seconds": null,
+   "session": null,
    "status": "pending",
    "total": null
   },
@@ -348,6 +360,7 @@
    "cadence": null,
    "date": "2026-08-27",
    "detail": null,
+   "deviation_reason": null,
    "earned": null,
    "emphasis": [],
    "hr_avg": null,
@@ -355,16 +368,17 @@
    "key": "2026-08-27",
    "km": null,
    "miles": null,
+   "miss_forgiven": false,
    "ordinal": 0,
    "pace": null,
    "pct": null,
    "planned": {
     "band": "easy",
-    "band_display": "8:11-8:51/mi",
+    "band_display": "8:11-8:50/mi",
     "band_is_reference": true,
     "band_sec_per_mi": [
      491,
-     531
+     530
     ],
     "ceiling": "137",
     "ceiling_tiers": [
@@ -373,9 +387,9 @@
       137
      ]
     ],
-    "chart_confirmed": true,
-    "chart_is_carried_forward": true,
-    "chart_week_ending": "2026-08-16",
+    "chart_confirmed": false,
+    "chart_is_carried_forward": false,
+    "chart_week_ending": "2026-08-23",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "60-70 min easy",
@@ -396,6 +410,7 @@
    "role": "easy",
    "runalyze_id": null,
    "seconds": null,
+   "session": null,
    "status": "pending",
    "total": null
   },
@@ -403,6 +418,7 @@
    "cadence": null,
    "date": "2026-08-28",
    "detail": null,
+   "deviation_reason": null,
    "earned": null,
    "emphasis": [],
    "hr_avg": null,
@@ -410,15 +426,16 @@
    "key": "2026-08-28-am",
    "km": null,
    "miles": null,
+   "miss_forgiven": false,
    "ordinal": 0,
    "pace": null,
    "pct": null,
    "planned": {
     "band": "recovery",
-    "band_display": "8:51-9:36/mi",
+    "band_display": "8:50-9:36/mi",
     "band_is_reference": true,
     "band_sec_per_mi": [
-     531,
+     530,
      576
     ],
     "ceiling": "130",
@@ -428,9 +445,9 @@
       130
      ]
     ],
-    "chart_confirmed": true,
-    "chart_is_carried_forward": true,
-    "chart_week_ending": "2026-08-16",
+    "chart_confirmed": false,
+    "chart_is_carried_forward": false,
+    "chart_week_ending": "2026-08-23",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "AM: 30 min recovery",
@@ -448,6 +465,7 @@
    "role": "recovery",
    "runalyze_id": null,
    "seconds": null,
+   "session": null,
    "status": "pending",
    "total": null
   },
@@ -455,6 +473,7 @@
    "cadence": null,
    "date": "2026-08-28",
    "detail": null,
+   "deviation_reason": null,
    "earned": null,
    "emphasis": [
     "quality"
@@ -464,19 +483,20 @@
    "key": "2026-08-28-pm",
    "km": null,
    "miles": null,
+   "miss_forgiven": false,
    "ordinal": 1,
    "pace": null,
    "pct": null,
    "planned": {
     "band": "rep_6min",
-    "band_display": "6:38-6:52/mi",
+    "band_display": "6:37-6:52/mi",
     "band_is_reference": false,
     "band_sec_per_mi": null,
     "ceiling": "162/166",
     "ceiling_tiers": null,
-    "chart_confirmed": true,
-    "chart_is_carried_forward": true,
-    "chart_week_ending": "2026-08-16",
+    "chart_confirmed": false,
+    "chart_is_carried_forward": false,
+    "chart_week_ending": "2026-08-23",
     "criterion": "hr",
     "hr_ceiling": [
      162,
@@ -488,7 +508,7 @@
     "sets": [
      {
       "band": "rep_6min",
-      "band_display": "6:38-6:52/mi",
+      "band_display": "6:37-6:52/mi",
       "band_how": "named",
       "band_sec_per_mi": null,
       "ceiling": "162/166",
@@ -508,14 +528,14 @@
       "reps": 3,
       "reps_per_group": null,
       "scored_on": "hr",
-      "target_display": "6:38-6:52/mi",
+      "target_display": "6:37-6:52/mi",
       "target_pace": null,
       "target_sec_per_mi": null,
       "target_seconds": null,
       "target_tolerance_seconds": null
      }
     ],
-    "target_display": "6:38-6:52/mi",
+    "target_display": "6:37-6:52/mi",
     "target_sec_per_mi": null,
     "target_seconds": null,
     "target_tolerance_seconds": null
@@ -526,6 +546,7 @@
    "role": "subt",
    "runalyze_id": null,
    "seconds": null,
+   "session": null,
    "status": "pending",
    "total": null
   },
@@ -533,6 +554,7 @@
    "cadence": null,
    "date": "2026-08-29",
    "detail": null,
+   "deviation_reason": null,
    "earned": null,
    "emphasis": [],
    "hr_avg": null,
@@ -540,15 +562,16 @@
    "key": "2026-08-29",
    "km": null,
    "miles": null,
+   "miss_forgiven": false,
    "ordinal": 0,
    "pace": null,
    "pct": null,
    "planned": {
     "band": "recovery",
-    "band_display": "8:51-9:36/mi",
+    "band_display": "8:50-9:36/mi",
     "band_is_reference": true,
     "band_sec_per_mi": [
-     531,
+     530,
      576
     ],
     "ceiling": "130",
@@ -558,9 +581,9 @@
       130
      ]
     ],
-    "chart_confirmed": true,
-    "chart_is_carried_forward": true,
-    "chart_week_ending": "2026-08-16",
+    "chart_confirmed": false,
+    "chart_is_carried_forward": false,
+    "chart_week_ending": "2026-08-23",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "30 min recovery",
@@ -578,6 +601,7 @@
    "role": "recovery",
    "runalyze_id": null,
    "seconds": null,
+   "session": null,
    "status": "pending",
    "total": null
   },
@@ -585,6 +609,7 @@
    "cadence": null,
    "date": "2026-08-30",
    "detail": null,
+   "deviation_reason": null,
    "earned": null,
    "emphasis": [
     "race"
@@ -594,12 +619,13 @@
    "key": "2026-08-30",
    "km": null,
    "miles": null,
+   "miss_forgiven": false,
    "ordinal": 0,
    "pace": null,
    "pct": null,
    "planned": {
     "band": "5000m",
-    "band_display": "17:53 @ 5:45/mi",
+    "band_display": "17:52 @ 5:45/mi",
     "band_is_reference": true,
     "band_sec_per_mi": [
      345,
@@ -607,9 +633,9 @@
     ],
     "ceiling": "none (race)",
     "ceiling_tiers": null,
-    "chart_confirmed": true,
-    "chart_is_carried_forward": true,
-    "chart_week_ending": "2026-08-16",
+    "chart_confirmed": false,
+    "chart_is_carried_forward": false,
+    "chart_week_ending": "2026-08-23",
     "criterion": null,
     "hr_ceiling": null,
     "prescribed": "Local 5k",
@@ -627,6 +653,7 @@
    "role": "race",
    "runalyze_id": null,
    "seconds": null,
+   "session": null,
    "status": "pending",
    "total": null
   }
@@ -663,13 +690,12 @@
   },
   "pct": null,
   "why": {
-   "long_run_share": "nothing this week prescribes has come due through 2026-08-15, so this check left the denominator",
-   "quality_days_met": "nothing this week prescribes has come due through 2026-08-15, so this check left the denominator",
-   "rest_days_met": "nothing this week prescribes has come due through 2026-08-15, so this check left the denominator",
-   "volume_vs_plan": "nothing this week prescribes has come due through 2026-08-15, so this check left the denominator"
+   "long_run_share": "nothing this week prescribes has come due through 2026-08-22, so this check left the denominator",
+   "quality_days_met": "nothing this week prescribes has come due through 2026-08-22, so this check left the denominator",
+   "rest_days_met": "nothing this week prescribes has come due through 2026-08-22, so this check left the denominator",
+   "volume_vs_plan": "nothing this week prescribes has come due through 2026-08-22, so this check left the denominator"
   }
  },
- "unclaimed": [],
  "week_end": "2026-08-30",
  "week_start": "2026-08-24",
  "week_type": "Race"

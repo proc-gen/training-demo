@@ -1,0 +1,46 @@
+[
+ {
+  "activity_id": "175219205",
+  "avg_hr": "128",
+  "date": "2026-04-21",
+  "hr_rest": "44",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "601",
+  "trimp": "11.84",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "175536911",
+  "avg_hr": "131",
+  "date": "2026-04-23",
+  "hr_rest": "47",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "751",
+  "trimp": "15.40",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "175754456",
+  "avg_hr": "117",
+  "date": "2026-04-25",
+  "hr_rest": "48",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "901",
+  "trimp": "12.40",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "175903025",
+  "avg_hr": "125",
+  "date": "2026-04-26",
+  "hr_rest": "49",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "",
+  "seconds": "11940",
+  "trimp": "198.95",
+  "trimp_source": "average-hr"
+ }
+]

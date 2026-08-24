@@ -77,6 +77,27 @@ describe("runTotals", () => {
     expect(t.note).toContain("understates");
   });
 
+  it("counts a stream-disavowed row as an estimate too", () => {
+    /* The tier priced from the file's own summary after its stream was
+     * rejected against it. Every tier except `stream` is an estimate. */
+    const runs = [run({ id: 1 }), run({ id: 2 })];
+    const t = runTotals(
+      week(),
+      facts(),
+      runs,
+      trimp([["1", 40, "stream"], ["2", 34.35, "stream-disavowed"]]),
+    )!;
+    expect(t.note).toContain("understates");
+  });
+
+  it("does not count an unpriced run as an estimate", () => {
+    /* An absent row is `unpriced`, named separately -- keying the estimate
+     * predicate on "not stream" must not sweep it in. */
+    const runs = [run({ id: 1 }), run({ id: 2 })];
+    const t = runTotals(week(), facts(), runs, trimp([["1", 40, "stream"]]))!;
+    expect(t.note).not.toContain("understates");
+  });
+
   it("says -- rather than 0 when nothing was priced", () => {
     const t = runTotals(week(), facts(), [run({ id: 1 })], new Map())!;
     expect(t.trimp).toBe("--");

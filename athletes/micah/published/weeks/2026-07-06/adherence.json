@@ -1,5 +1,5 @@
 {
- "csv": "2026-07-06,Volume,General Prep,42.2,38,68,39,none",
+ "csv": "2026-07-06,Intensity,General Prep,42.2,38,68,39,none",
  "facts": {
   "doubles": 0,
   "easy_seconds": 20626,
@@ -157,6 +157,7 @@
    "runalyze_id": 189636489,
    "score_bucket": null,
    "seconds": 1036,
+   "session": null,
    "status": "completed",
    "total": null,
    "volume_km": 3.24,
@@ -501,6 +502,7 @@
    "runalyze_id": 189636509,
    "score_bucket": "workout",
    "seconds": 1338,
+   "session": null,
    "sets": [
     {
      "float_distance_m": 200,
@@ -595,6 +597,7 @@
    "runalyze_id": 189636521,
    "score_bucket": null,
    "seconds": 758,
+   "session": null,
    "status": "completed",
    "total": null,
    "volume_km": 2.34,
@@ -668,6 +671,7 @@
    "runalyze_id": 189636525,
    "score_bucket": null,
    "seconds": 827,
+   "session": null,
    "status": "completed",
    "total": null,
    "volume_km": 2.63,
@@ -779,8 +783,19 @@
    "duration_factor": 0.8983333333333333,
    "earned": 2441.67,
    "emphasis": [],
+   "excursions": {
+    "above_seconds": 474,
+    "excursions": 17,
+    "longest_above_seconds": 160,
+    "sustained_above_seconds": 160
+   },
    "hr_avg": 132,
    "hr_max": 145,
+   "hr_pace_response": {
+    "block_seconds": 300,
+    "blocks": 11,
+    "r": -0.3591527128364155
+   },
    "hr_pct": 85.15037593984962,
    "key": "2026-07-08",
    "km": 9.69,
@@ -823,6 +838,7 @@
    "runalyze_id": 189910023,
    "score_bucket": "easy",
    "seconds": 3211,
+   "session": null,
    "status": "completed",
    "total": 3192,
    "volume_km": 9.69,
@@ -934,8 +950,19 @@
    "duration_factor": 1.0,
    "earned": 1989.0,
    "emphasis": [],
+   "excursions": {
+    "above_seconds": 1591,
+    "excursions": 10,
+    "longest_above_seconds": 936,
+    "sustained_above_seconds": 1505
+   },
    "hr_avg": 134,
    "hr_max": 151,
+   "hr_pace_response": {
+    "block_seconds": 300,
+    "blocks": 12,
+    "r": -0.6736633821374143
+   },
    "hr_pct": 55.55865921787709,
    "key": "2026-07-09",
    "km": 10.65,
@@ -978,6 +1005,7 @@
    "runalyze_id": 190152831,
    "score_bucket": "easy",
    "seconds": 3580,
+   "session": null,
    "status": "completed",
    "total": 3580,
    "volume_km": 10.65,
@@ -1317,6 +1345,7 @@
    "runalyze_id": 190412463,
    "score_bucket": null,
    "seconds": 3431,
+   "session": null,
    "status": "completed",
    "total": null,
    "volume_km": 10.88,
@@ -1390,6 +1419,7 @@
    "runalyze_id": 190565319,
    "score_bucket": null,
    "seconds": 978,
+   "session": null,
    "status": "completed",
    "total": null,
    "volume_km": 2.83,
@@ -1448,8 +1478,19 @@
    "duration_factor": 1.0,
    "earned": 270.0,
    "emphasis": [],
+   "excursions": {
+    "above_seconds": 924,
+    "excursions": 3,
+    "longest_above_seconds": 908,
+    "sustained_above_seconds": 908
+   },
    "hr_avg": 145,
    "hr_max": 165,
+   "hr_pace_response": {
+    "block_seconds": 180,
+    "blocks": 7,
+    "r": -0.18777318644635008
+   },
    "hr_pct": 22.613065326633166,
    "key": "2026-07-11-2",
    "km": 3.94,
@@ -1491,6 +1532,7 @@
    "runalyze_id": 190565367,
    "score_bucket": "easy",
    "seconds": 1194,
+   "session": null,
    "status": "completed",
    "total": 1194,
    "volume_km": 3.94,
@@ -1678,8 +1720,19 @@
    "emphasis": [
     "long"
    ],
+   "excursions": {
+    "above_seconds": 5100,
+    "excursions": 8,
+    "longest_above_seconds": 1650,
+    "sustained_above_seconds": 5086
+   },
    "hr_avg": 145,
    "hr_max": 157,
+   "hr_pace_response": {
+    "block_seconds": 300,
+    "blocks": 19,
+    "r": -0.2950180990490115
+   },
    "hr_pct": 9.123307198859587,
    "is_long": true,
    "key": "2026-07-12",
@@ -1731,6 +1784,7 @@
    "runalyze_id": 190812757,
    "score_bucket": "easy",
    "seconds": 5612,
+   "session": null,
    "status": "completed",
    "total": 5612,
    "volume_km": 19.32,
@@ -1771,13 +1825,12 @@
   "pct": 33.333333333333336,
   "why": {
    "long_run_share": "the long run was 28.5% of the running distance, against a 25% ceiling",
-   "quality_days_met": "1 quality day(s) against the 1 the plan has asked for so far, which is what a Volume week asks for",
-   "rest_days_met": "Volume weeks state no rest-day requirement, so this check does not apply and left the denominator",
+   "quality_days_met": "1 quality day(s) against the 1 the plan has asked for so far, which is what an Intensity week asks for",
+   "rest_days_met": "Intensity weeks state no rest-day requirement, so this check does not apply and left the denominator",
    "volume_vs_plan": "6:06:05 run against a plan of 5:25:00, tolerance 5%"
   }
  },
- "unclaimed": [],
  "week_end": "2026-07-12",
  "week_start": "2026-07-06",
- "week_type": "Volume"
+ "week_type": "Intensity"
 }

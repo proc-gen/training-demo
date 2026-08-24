@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { Week } from "@/lib/data/payload";
-import { isIncomplete } from "./coverage";
+import { isIncomplete, isLived } from "./coverage";
 
 function week(over: Partial<Week>): Week {
   return {
@@ -44,5 +44,32 @@ describe("isIncomplete", () => {
       } as unknown as Week["load"],
     });
     expect(isIncomplete(w)).toBe(false);
+  });
+});
+
+describe("isLived", () => {
+  const elapsed = (days: number | null | undefined) =>
+    week({
+      adherence: {
+        facts: days === undefined ? {} : { elapsed_days: days },
+      } as unknown as Week["adherence"],
+    });
+
+  it("is true for a week that is over", () => {
+    // 2026-03-16: a full week of the layoff, `facts.miles` a measured 0.0.
+    expect(isLived(elapsed(7))).toBe(true);
+  });
+
+  it("is false for the week in progress", () => {
+    // Five days lived is not a zero-mileage week, it is a Friday.
+    expect(isLived(elapsed(5))).toBe(false);
+    expect(isLived(elapsed(0))).toBe(false);
+  });
+
+  it("is false when nobody said", () => {
+    expect(isLived(elapsed(undefined))).toBe(false);
+    expect(isLived(elapsed(null))).toBe(false);
+    expect(isLived(week({}))).toBe(false);
+    expect(isLived(undefined)).toBe(false);
   });
 });

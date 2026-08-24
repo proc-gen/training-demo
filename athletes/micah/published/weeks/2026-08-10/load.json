@@ -1,8 +1,8 @@
 {
- "acwr_mech": 1.0754263386940488,
- "acwr_mech_on": "2026-08-15",
- "acwr_run": 1.0882832104917088,
- "bg_trimp": 35.694081847054115,
+ "acwr_mech": 1.0630981615068742,
+ "acwr_mech_on": "2026-08-16",
+ "acwr_run": 1.0873892321099965,
+ "bg_trimp": 44.1926552594582,
  "ceiling_inputs": {
   "background_source": "baseline",
   "background_steps": 1440.0,
@@ -13,16 +13,16 @@
   "margin": 1.05,
   "run_step_weight": 2.5
  },
- "csv": "2026-08-10,Volume,General Prep,173194,162135,11059,100,90,95,1.08,1.09,,,602,36,83,90,-7,steps-data-incomplete",
+ "csv": "2026-08-10,Intensity,General Prep,214255,200785,13470,100,90,95,1.06,1.09,2.77,592432,602,44,83,90,-7,none",
  "days": [
   {
-   "atl": 78.52828590697648,
+   "atl": 78.52829321480833,
    "bg_trimp": 4.185770023949537,
    "bg_trimp_hr_rest_source": "measured",
    "ceiling": 15293.25,
    "ceiling_source": "prescribed",
    "completeness": "full",
-   "ctl": 79.30150426253253,
+   "ctl": 79.39246790303483,
    "date": "2026-08-10",
    "nonrun_se": 1350.0,
    "nonrun_steps": 1350,
@@ -37,16 +37,16 @@
    "se": 13797.5,
    "total_steps": 6329,
    "trimp": 30.59,
-   "tsb": 0.7732183555560539
+   "tsb": 0.8641746882264982
   },
   {
-   "atl": 91.30871443023236,
+   "atl": 91.30871991110624,
    "bg_trimp": 11.275673872259691,
    "bg_trimp_hr_rest_source": "measured",
    "ceiling": 41459.86058791657,
    "ceiling_source": "session-default",
    "completeness": "full",
-   "ctl": 81.64329476194962,
+   "ctl": 81.73002753545181,
    "date": "2026-08-11",
    "nonrun_se": 3278.0,
    "nonrun_steps": 3278,
@@ -61,16 +61,16 @@
    "se": 41095.5,
    "total_steps": 18405,
    "trimp": 129.65,
-   "tsb": -9.665419668282738
+   "tsb": -9.578692375654427
   },
   {
-   "atl": 87.44653582267426,
+   "atl": 87.44653993332969,
    "bg_trimp": 4.481970226062162,
    "bg_trimp_hr_rest_source": "measured",
    "ceiling": 31371.375,
    "ceiling_source": "prescribed",
    "completeness": "full",
-   "ctl": 81.37430430790545,
+   "ctl": 81.45700299891917,
    "date": "2026-08-12",
    "nonrun_se": 1486.0,
    "nonrun_steps": 1486,
@@ -85,16 +85,16 @@
    "se": 31026.0,
    "total_steps": 13302,
    "trimp": 75.86,
-   "tsb": -6.072231514768816
+   "tsb": -5.989536934410523
   },
   {
-   "atl": 87.7274018670057,
+   "atl": 87.72740494999726,
    "bg_trimp": 3.8922782527167827,
    "bg_trimp_hr_rest_source": "measured",
    "ceiling": 31371.375,
    "ceiling_source": "prescribed",
    "completeness": "full",
-   "ctl": 81.70898782846798,
+   "ctl": 81.78784006873688,
    "date": "2026-08-13",
    "nonrun_se": 1222.0,
    "nonrun_steps": 1222,
@@ -109,16 +109,16 @@
    "se": 30552.0,
    "total_steps": 12954,
    "trimp": 88.57,
-   "tsb": -6.018414038537713
+   "tsb": -5.939564881260381
   },
   {
-   "atl": 97.58555140025427,
+   "atl": 97.58555371249795,
    "bg_trimp": 4.815977674392614,
    "bg_trimp_hr_rest_source": "measured",
    "ceiling": 42580.125,
    "ceiling_source": "session-default",
    "completeness": "full",
-   "ctl": 83.82298839458575,
+   "ctl": 83.89817308879563,
    "date": "2026-08-14",
    "nonrun_se": 1512.0,
    "nonrun_steps": 1512,
@@ -133,16 +133,16 @@
    "se": 41507.0,
    "total_steps": 17510,
    "trimp": 127.16,
-   "tsb": -13.762563005668525
+   "tsb": -13.687380623702325
   },
   {
-   "atl": 81.4366635501907,
+   "atl": 81.43666528437348,
    "bg_trimp": 7.042411797673327,
    "bg_trimp_hr_rest_source": "measured",
    "ceiling": 15293.25,
    "ceiling_source": "prescribed",
    "completeness": "full",
-   "ctl": 81.45866335297711,
+   "ctl": 81.53035108466561,
    "date": "2026-08-15",
    "nonrun_se": 2211.0,
    "nonrun_steps": 2211,
@@ -157,59 +157,57 @@
    "se": 15216.0,
    "total_steps": 7413,
    "trimp": 32.99,
-   "tsb": 0.021999802786410783
+   "tsb": 0.09368580029213547
   },
   {
-   "atl": 90.47999766264303,
-   "bg_trimp": null,
+   "atl": 90.47999896328011,
+   "bg_trimp": 8.498573412404085,
    "bg_trimp_hr_rest_source": "measured",
    "ceiling": 42855.75,
    "ceiling_source": "prescribed",
-   "completeness": "in-progress",
-   "ctl": 83.14012087144329,
+   "completeness": "full",
+   "ctl": 83.20847429003,
    "date": "2026-08-16",
-   "nonrun_se": null,
-   "nonrun_steps": null,
-   "pct": null,
+   "nonrun_se": 2411.0,
+   "nonrun_steps": 2411,
+   "pct": 100.0,
    "prescribed_run_seconds": 5400.0,
    "prescribed_run_steps": 15750.0,
    "role": "long",
-   "run_se": null,
+   "run_se": 38650.0,
    "run_step_source": "step-stream-window",
-   "run_steps": null,
-   "scored": false,
-   "se": null,
-   "total_steps": null,
+   "run_steps": 15460,
+   "scored": true,
+   "se": 41061.0,
+   "total_steps": 17871,
    "trimp": 117.61,
-   "tsb": -7.3398767911997425
+   "tsb": -7.271524673250113
   }
  ],
  "fitness": {
   "activities": 14,
-  "acwr_run": 1.0882832104917088,
-  "atl": 90.47999766264303,
+  "acwr_run": 1.0873892321099965,
+  "atl": 90.47999896328011,
   "atl_converged": true,
-  "ctl": 83.14012087144329,
+  "ctl": 83.20847429003,
   "ctl_converged": true,
-  "ctl_max_in_series": 83.82298839458575,
   "ctl_warmup_days": 126,
   "days_covered": 7,
-  "earliest_activity": "2026-02-09",
-  "history_days": 189,
+  "earliest_activity": "2024-08-01",
+  "history_days": 746,
   "on_date": "2026-08-16",
-  "seed_date": "2026-02-09",
-  "series_span_days": 189,
+  "seed_date": "2024-08-01",
   "stream_share": 1.0,
   "trimp": 602.43,
   "trimp_source": "stream",
-  "tsb": -7.3398767911997425,
+  "tsb": -7.271524673250113,
   "unpriced": 0
  },
  "flags": [
   {
-   "status": "fired",
+   "status": "clear",
    "token": "steps-data-incomplete",
-   "why": "2026-08-16 in-progress — excluded from scoring, not counted as zero"
+   "why": "all 7 days covered by the export"
   },
   {
    "status": "clear",
@@ -219,17 +217,17 @@
   {
    "status": "clear",
    "token": "background-load-spike",
-   "why": "11,059 SE background against a 18,169 SE baseline = 0.61x (fires above 1.3x)"
+   "why": "13,470 SE background against a 18,169 SE baseline = 0.74x (fires above 1.3x)"
   },
   {
    "status": "clear",
    "token": "hidden-load",
-   "why": "mechanical A:C 1.08 against running-only 1.09 from our TRIMP (optimum 0.8-1.3)"
+   "why": "mechanical A:C 1.06 against running-only 1.09 from our TRIMP (optimum 0.8-1.3)"
   },
   {
-   "status": "not-evaluable",
+   "status": "clear",
    "token": "load-monotony",
-   "why": "needs every day of the week covered; 6 of 7 have a measurement. A short week's spread is not the week's spread"
+   "why": "day-to-day SE coefficient of variation 0.36 (fires below 0.15)"
   },
   {
    "status": "clear",
@@ -247,26 +245,24 @@
    "why": "mean 7.4 h over 7 night(s) (fires below 6.5)"
   },
   {
-   "status": "not-evaluable",
+   "status": "clear",
    "token": "strain-spike",
-   "why": "mechanical strain --, 4-week baseline 557,769 — needs both"
+   "why": "strain 592,432 SE against a 557,769 SE baseline = 1.06x (fires above 1.5x)"
   },
   {
-   "status": "not-evaluable",
+   "status": "clear",
    "token": "form-suppressed",
-   "why": "tsb_floor is null in the load model — TSB -7 is reported, not scored, until a floor is calibrated. It is calibratable now: TSB is a series we hold for every date rather than five hand-read points"
+   "why": "running-only TSB -7 from our TRIMP (fires below -25) with mechanical A:C 1.06 (fires above 1.3)"
   }
  ],
  "integrity": {
-  "earned": 173194.0,
-  "excluded": [
-   "2026-08-16"
-  ],
+  "earned": 214255.0,
+  "excluded": [],
   "pct": 100.0,
-  "scored_days": 6,
-  "total": 173194.0
+  "scored_days": 7,
+  "total": 214255.0
  },
- "monotony_mech": null,
+ "monotony_mech": 2.76508053346663,
  "overall": 95.23809523809524,
  "phase": "General Prep",
  "readiness": {
@@ -335,9 +331,9 @@
   ],
   "resting_hr_ceiling": 47
  },
- "shape_days_covered": 6,
+ "shape_days_covered": 7,
  "shape_days_needed": 7,
- "strain_mech": null,
+ "strain_mech": 592432.3296978929,
  "week_start": "2026-08-10",
- "week_type": "Volume"
+ "week_type": "Intensity"
 }

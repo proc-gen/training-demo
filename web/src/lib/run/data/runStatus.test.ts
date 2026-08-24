@@ -88,18 +88,28 @@ describe("against the committed payload", () => {
     }
   });
 
-  it("a SETTLED week carries no planned runs and every row completed", () => {
+  it("a SETTLED week carries no pending runs and every row completed", () => {
     /* Settled means `graded_through` reached `week_end`. Such a week has been
-     * fully judged, so a leftover planned row would mean a `runalyze_id` never
-     * got pasted on at reconciliation. */
+     * fully judged, so a PENDING planned row would mean a `runalyze_id` never
+     * got pasted on at reconciliation. A MISSED planned row is legitimate and
+     * permanent since the 2025 backfill: the week of 2025-02-10 carries two
+     * sessions lost to illness that no activity will ever record, and their
+     * rows ARE the record of the miss. */
     if (!PUBLISHED) return;
+    let sawSettledMiss = false;
     for (const w of Object.values(PUBLISHED.weeks)) {
       const a = w.adherence;
       if (!a?.graded_through || !a?.week_end) continue;
       if (a.graded_through < a.week_end) continue;
-      expect(a.planned).toEqual([]);
+      for (const r of a.planned ?? []) {
+        expect(runStatus(r)).toBe("missed");
+        sawSettledMiss = true;
+      }
       for (const r of a.results) expect(runStatus(r)).toBe("completed");
     }
+    /* Non-vacuous: the committed tree holds the 2025-02-10 illness week, so
+     * the missed branch must actually run. */
+    expect(sawSettledMiss).toBe(true);
   });
 
   it("a LIVE week's planned runs are missed or pending, never completed", () => {

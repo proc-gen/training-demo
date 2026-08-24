@@ -124,5 +124,26 @@
   "tsb": "-7",
   "week_start": "2026-08-10",
   "week_type": "Volume"
+ },
+ {
+  "acwr_mech": "1.04",
+  "acwr_run": "1.11",
+  "atl": "96",
+  "bg_trimp": "40",
+  "ctl": "86",
+  "flags": "steps-data-incomplete",
+  "load_pct": "100",
+  "monotony_mech": "",
+  "nonrun_se": "12516",
+  "overall_pct": "93",
+  "phase": "General Prep",
+  "readiness_pct": "86",
+  "run_se": "167620",
+  "strain_mech": "",
+  "total_se": "180136",
+  "trimp": "660",
+  "tsb": "-9",
+  "week_start": "2026-08-17",
+  "week_type": "Volume"
  }
 ]

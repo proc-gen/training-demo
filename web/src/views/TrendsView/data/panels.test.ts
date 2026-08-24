@@ -3,7 +3,8 @@ import { describe, expect, it } from "vitest";
 import { shortDate } from "@/lib/data/format";
 import type { Payload, Week } from "@/lib/data/payload";
 import { PUBLISHED } from "@/test/payload";
-import { stackTotal, trendPanels } from "./panels";
+import { dayIndex } from "./dates";
+import { type TrendPoint, drawn, stackTotal, trendPanels } from "./panels";
 
 const week = (over: Partial<Week>): Week => over as Week;
 
@@ -432,22 +433,95 @@ describe("over the committed payload", () => {
     expect(trendPanels(PUBLISHED).length).toBeGreaterThan(0);
   });
 
-  it("PLOTS NO WEEK THAT HAS NOT BEEN RUN", () => {
-    /* Both directions over the real tree: every week-keyed point belongs to a
-     * week with measured runs, and the weeks the plan describes but nobody has
-     * run are genuinely present to be excluded. */
+  it("PLOTS NO WEEK THAT HAS NOT STARTED", () => {
+    /* Both directions over the real tree: no week-keyed point belongs to a week
+     * the plan merely describes, and such weeks are genuinely present to be
+     * excluded -- the plan reaches two Mondays ahead. */
     if (!PUBLISHED) return;
     const D = PUBLISHED;
-    const unrun = Object.keys(D.weeks).filter(
-      (k) => !(D.weeks[k].adherence?.results ?? []).length,
-    );
-    expect(unrun.length).toBeGreaterThan(0); // not a vacuous check
+    const unstarted = Object.keys(D.weeks).filter((k) => {
+      const facts = D.weeks[k].adherence?.facts as { elapsed_days?: number } | null;
+      return (
+        !(D.weeks[k].adherence?.results ?? []).length && facts?.elapsed_days !== 7
+      );
+    });
+    expect(unstarted.length).toBeGreaterThan(0); // not a vacuous check
 
     for (const key of ["volume", "adherence", "quality"]) {
       const p = trendPanels(PUBLISHED).find((x) => x.key === key);
       if (!p) continue;
-      expect(p.points.filter((pt) => unrun.includes(pt.date))).toEqual([]);
+      expect(p.points.filter((pt) => unstarted.includes(pt.date))).toEqual([]);
     }
+  });
+
+  it("PLOTS A LIVED WEEK WITH NO RUNNING IN IT, at its measured zero", () => {
+    /* Seven such weeks are on the tree -- the 2025 walk week, two of the autumn
+     * injury and four of the March-April layoff. Dropped, the volume line ran
+     * straight across a month nobody ran a step; their `0.0` is the
+     * measurement, and `elapsed_days` of 7 is what says so. */
+    if (!PUBLISHED) return;
+    const D = PUBLISHED;
+    const lived = Object.keys(D.weeks).filter((k) => {
+      const facts = D.weeks[k].adherence?.facts as { elapsed_days?: number } | null;
+      return !(D.weeks[k].adherence?.results ?? []).length && facts?.elapsed_days === 7;
+    });
+    expect(lived.length).toBeGreaterThan(4);
+
+    const volume = trendPanels(PUBLISHED).find((x) => x.key === "volume")!;
+    for (const k of lived) {
+      const point = volume.points.find((pt) => pt.date === k);
+      expect(point).toBeDefined();
+      expect(point!.value).toBe(0);
+    }
+  });
+
+  it("leaves that week's SCORE and QUALITY SHARE empty, because 0/0 is not 0", () => {
+    if (!PUBLISHED) return;
+    const D = PUBLISHED;
+    const lived = Object.keys(D.weeks).filter((k) => {
+      const facts = D.weeks[k].adherence?.facts as { elapsed_days?: number } | null;
+      return !(D.weeks[k].adherence?.results ?? []).length && facts?.elapsed_days === 7;
+    });
+    for (const key of ["adherence", "quality"]) {
+      const p = trendPanels(PUBLISHED).find((x) => x.key === key)!;
+      for (const k of lived) {
+        expect(p.points.find((pt) => pt.date === k)!.value).toBeNull();
+      }
+    }
+  });
+
+  it("declares a cadence on every panel, and the right one", () => {
+    /* `densify` walks it to build the x axis; a weekly series stepped daily
+     * gets six empty slots between every pair of points. Asserted both ways
+     * over the real tree, so the list cannot go stale in either direction. */
+    if (!PUBLISHED) return;
+    /* The pace panels are weekly too, and land on the SUNDAY rather than the
+       Monday every other weekly series uses -- a chart is confirmed as its week
+       closes, so that is the date the measurement was made. Same 7-day step,
+       which is all `densify` asks. */
+    const weekly = new Set([
+      "volume",
+      "adherence",
+      "quality",
+      "load",
+      "acwr",
+      "race-times",
+      "target-paces",
+    ]);
+    const seen = new Set<string>();
+    for (const p of trendPanels(PUBLISHED)) {
+      seen.add(p.key);
+      expect(p.cadence).toBe(weekly.has(p.key) ? "week" : "day");
+      /* And the DATA agrees with the declaration: the closest two points in
+         the series sit exactly one cadence apart. The minimum rather than the
+         first pair, because a series may open on a gap. */
+      const idx = p.points.map((pt) => dayIndex(pt.date)!).sort((a, b) => a - b);
+      const closest = idx
+        .slice(1)
+        .reduce((best, v, i) => Math.min(best, v - idx[i]), Infinity);
+      if (idx.length > 1) expect(closest).toBe(p.cadence === "week" ? 7 : 1);
+    }
+    for (const key of weekly) expect(seen.has(key)).toBe(true);
   });
 
   it("plots no zero-day week on the total-load series", () => {
@@ -489,5 +563,71 @@ describe("over the committed payload", () => {
       expect(pt.value).toBe(facts.miles);
     }
     expect(volume.points.length).toBeGreaterThan(2);
+  });
+});
+
+describe("drawn", () => {
+  const pt = (over: Partial<TrendPoint>): TrendPoint =>
+    ({ date: "2026-08-23", label: "8/23", value: null, ...over }) as TrendPoint;
+
+  it("is true for an ordinary measured point", () => {
+    expect(drawn(pt({ value: 42 }))).toBe(true);
+  });
+
+  it("is false for a date nobody measured", () => {
+    expect(drawn(pt({ value: null }))).toBe(false);
+  });
+
+  it("counts 0 as a measurement, because it is one", () => {
+    // The rule the whole repo holds: `0` and `null` are different answers.
+    expect(drawn(pt({ value: 0 }))).toBe(true);
+  });
+
+  it("is true when ANY series of a multi-series point carried a value", () => {
+    expect(drawn(pt({ values: { a: null, b: 130 } }))).toBe(true);
+  });
+
+  it("is true for a BAND, which is an object rather than a number", () => {
+    expect(drawn(pt({ values: { a: { lo: 491, hi: 530 } } }))).toBe(true);
+  });
+
+  it("is false when every series of a multi-series point is empty", () => {
+    expect(drawn(pt({ values: { a: null, b: null } }))).toBe(false);
+    expect(drawn(pt({ values: {} }))).toBe(false);
+  });
+
+  it("IGNORES the scalar `value` once `values` is present", () => {
+    /* A multi-series point has no single scalar to be, and `paceSeries` leaves
+       `value` null on every one. Falling through to it would drop every point
+       both pace panels draw. */
+    expect(drawn(pt({ value: null, values: { a: 130 } }))).toBe(true);
+  });
+
+  it("DOES NOT READ THE ENABLED SET -- it cannot, and that is the point", () => {
+    /* If presence depended on which boxes were ticked, unticking a series would
+       move the shared date window. `values` always carries every series. */
+    const p = pt({ values: { a: 130, b: null } });
+    expect(drawn(p)).toBe(true);
+    expect(Object.keys(p.values!)).toEqual(["a", "b"]);
+  });
+});
+
+describe("the pace panels join the graph list", () => {
+  it("appends both, after everything measured", () => {
+    if (!PUBLISHED) return;
+    const keys = trendPanels(PUBLISHED).map((p) => p.key);
+    expect(keys).toContain("race-times");
+    expect(keys).toContain("target-paces");
+    // Last, because they answer what the athlete is CAPABLE of rather than what
+    // they did -- and because the picker's order is the reading order.
+    expect(keys.slice(-2)).toEqual(["race-times", "target-paces"]);
+  });
+
+  it("gives them series where every other panel has none", () => {
+    if (!PUBLISHED) return;
+    for (const p of trendPanels(PUBLISHED)) {
+      const multi = p.key === "race-times" || p.key === "target-paces";
+      expect(Boolean(p.series), p.key).toBe(multi);
+    }
   });
 });

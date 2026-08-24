@@ -1,0 +1,95 @@
+{
+ "acwr_mech": null,
+ "acwr_mech_on": null,
+ "acwr_run": null,
+ "bg_trimp": null,
+ "ceiling_inputs": {
+  "background_source": "baseline",
+  "background_steps": 1665.0,
+  "background_window_days": 28,
+  "cadence_source": "measured",
+  "cadence_spm": 175.0,
+  "default_cadence_spm": 172,
+  "margin": 1.05,
+  "run_step_weight": 2.5
+ },
+ "csv": "2026-12-07,Race,General Prep,0,0,0,,,,,,,,,,,,,none",
+ "days": [],
+ "fitness": null,
+ "flags": [
+  {
+   "status": "clear",
+   "token": "steps-data-incomplete",
+   "why": "all 0 days covered by the export"
+  },
+  {
+   "status": "not-evaluable",
+   "token": "recovery-day-not-recovering",
+   "why": "no fully-covered rest or recovery day this week"
+  },
+  {
+   "status": "not-evaluable",
+   "token": "background-load-spike",
+   "why": "needs a 4-week non-run baseline in history; this week was 0 SE"
+  },
+  {
+   "status": "not-evaluable",
+   "token": "hidden-load",
+   "why": "mechanical A:C --, running-only -- — needs both"
+  },
+  {
+   "status": "not-evaluable",
+   "token": "load-monotony",
+   "why": "needs every day of the week covered; 0 of 0 have a measurement. A short week's spread is not the week's spread"
+  },
+  {
+   "status": "clear",
+   "token": "resting-hr-rise",
+   "why": "trailing resting-HR mean -0.4 bpm (fires at +5)"
+  },
+  {
+   "status": "clear",
+   "token": "hrv-suppressed",
+   "why": "longest run of 0 day(s) below 63.0 (90% of a 70.0 baseline); fires at 3"
+  },
+  {
+   "status": "not-evaluable",
+   "token": "sleep-debt",
+   "why": "no sleep data for the week"
+  },
+  {
+   "status": "not-evaluable",
+   "token": "strain-spike",
+   "why": "mechanical strain --, 4-week baseline -- — needs both"
+  },
+  {
+   "status": "not-evaluable",
+   "token": "form-suppressed",
+   "why": "running-only TSB --, mechanical A:C -- — needs both"
+  }
+ ],
+ "integrity": {
+  "earned": 0,
+  "excluded": [],
+  "pct": null,
+  "scored_days": 0,
+  "total": 0
+ },
+ "monotony_mech": null,
+ "overall": null,
+ "phase": "General Prep",
+ "readiness": {
+  "available": 0,
+  "hrv_baseline": 70,
+  "hrv_baseline_source": "snapshot",
+  "passed": 0,
+  "pct": null,
+  "per_day": [],
+  "resting_hr_ceiling": 47
+ },
+ "shape_days_covered": 0,
+ "shape_days_needed": 0,
+ "strain_mech": null,
+ "week_start": "2026-12-07",
+ "week_type": "Race"
+}

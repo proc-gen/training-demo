@@ -53,9 +53,16 @@ export function runTotals(
     .map((r) => trimp.get(String(r.id))?.trimp)
     .filter((v): v is number => v !== null && v !== undefined);
   const unpriced = runs.length - priced.length;
-  const estimated = runs.filter(
-    (r) => trimp.get(String(r.id))?.source === "average-hr",
-  ).length;
+  const estimated = runs.filter((r) => {
+    // Every tier except `stream` is an estimate: `average-hr` prices from a
+    // listing's average, `stream-disavowed` from the file's own summary after
+    // its stream was rejected against it. Keying on "not the measurement"
+    // rather than naming each estimate means a future tier defaults to being
+    // MARKED -- an estimate reading as a measurement is the failure mode, and
+    // the reverse is merely cautious.
+    const source = trimp.get(String(r.id))?.source;
+    return source != null && source !== "stream";
+  }).length;
 
   // The running-only caveat is stated on EVERY week rather than only where a
   // walk happens to appear. A reader who never sees it cannot know it applied,

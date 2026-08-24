@@ -1,0 +1,208 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "Maintain Volume",
+  "runs": [
+   {
+    "date": "2025-04-21",
+    "key": "2025-04-21-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-04-21",
+    "key": "2025-04-21-b",
+    "prescribed": "B - Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-04-22",
+    "key": "2025-04-22-wu",
+    "prescribed": "warmup",
+    "role": "volume_only"
+   },
+   {
+    "date": "2025-04-22",
+    "key": "2025-04-22",
+    "prescribed": "5x1600m w/ 400m jog -> substituted: 4x(200m, 200m, 400m) all with equal distance jog recovery",
+    "role": "repetition"
+   },
+   {
+    "date": "2025-04-22",
+    "key": "2025-04-22-cd",
+    "prescribed": "cooldown",
+    "role": "volume_only"
+   },
+   {
+    "date": "2025-04-23",
+    "key": "2025-04-23-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-04-23",
+    "key": "2025-04-23-b",
+    "prescribed": "B - Easy 75 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-04-24",
+    "key": "2025-04-24-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-04-24",
+    "key": "2025-04-24-b",
+    "prescribed": "B - Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-04-25",
+    "key": "2025-04-25",
+    "prescribed": "4x1000m w/ 200m jog, 5x600m w/ 200m jog, 4x200m w/ 200m jog",
+    "role": "mixed"
+   },
+   {
+    "date": "2025-04-26",
+    "key": "2025-04-26",
+    "prescribed": "Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-04-27",
+    "key": "2025-04-27",
+    "prescribed": "Easy 105 min (Local Half Marathon) -> Easy 48 min before getting back to it next week",
+    "role": "easy"
+   }
+  ],
+  "week_start": "2025-04-21",
+  "week_type": "Intensity"
+ },
+ "pace_chart": {
+  "bands": {
+   "easy": {
+    "display": "7:37-8:14/mi",
+    "fast_sec_per_mi": 457,
+    "pct": [
+     0.63,
+     0.68
+    ],
+    "slow_sec_per_mi": 494
+   },
+   "long": {
+    "display": "7:12-7:37/mi",
+    "fast_sec_per_mi": 432,
+    "pct": [
+     0.68,
+     0.72
+    ],
+    "slow_sec_per_mi": 457
+   },
+   "recovery": {
+    "display": "8:14-8:56/mi",
+    "fast_sec_per_mi": 494,
+    "pct": [
+     0.58,
+     0.63
+    ],
+    "slow_sec_per_mi": 536
+   },
+   "rep_10min": {
+    "display": "6:19-6:34/mi",
+    "fast_sec_per_mi": 379,
+    "pct": [
+     0.79,
+     0.82
+    ],
+    "slow_sec_per_mi": 394
+   },
+   "rep_15min": {
+    "display": "6:29-6:44/mi",
+    "fast_sec_per_mi": 389,
+    "pct": [
+     0.77,
+     0.8
+    ],
+    "slow_sec_per_mi": 404
+   },
+   "rep_1min": {
+    "display": "5:53-6:06/mi",
+    "fast_sec_per_mi": 353,
+    "pct": [
+     0.85,
+     0.88
+    ],
+    "slow_sec_per_mi": 366
+   },
+   "rep_3min": {
+    "display": "6:02-6:15/mi",
+    "fast_sec_per_mi": 362,
+    "pct": [
+     0.83,
+     0.86
+    ],
+    "slow_sec_per_mi": 375
+   },
+   "rep_6min": {
+    "display": "6:10-6:24/mi",
+    "fast_sec_per_mi": 370,
+    "pct": [
+     0.81,
+     0.84
+    ],
+    "slow_sec_per_mi": 384
+   }
+  },
+  "confirmed_by_athlete": true,
+  "effective_vo2max": 62.02,
+  "race_paces": {
+   "10000m": {
+    "display": "34:23 @ 5:32/mi",
+    "sec_per_mi": 332,
+    "seconds": 2063
+   },
+   "1500m": {
+    "display": "4:27 @ 4:47/mi",
+    "sec_per_mi": 287,
+    "seconds": 267
+   },
+   "21097m": {
+    "display": "1:15:56 @ 5:48/mi",
+    "sec_per_mi": 348,
+    "seconds": 4556
+   },
+   "3000m": {
+    "display": "9:33 @ 5:07/mi",
+    "sec_per_mi": 307,
+    "seconds": 573
+   },
+   "42195m": {
+    "display": "2:38:50 @ 6:03/mi",
+    "sec_per_mi": 363,
+    "seconds": 9530
+   },
+   "5000m": {
+    "display": "16:34 @ 5:20/mi",
+    "sec_per_mi": 320,
+    "seconds": 994
+   },
+   "800m": {
+    "display": "2:15 @ 4:33/mi",
+    "sec_per_mi": 273,
+    "seconds": 135
+   },
+   "tempo": {
+    "basis": "60-80 minute race pace, the Daniels threshold definition, from the model's duration prognosis.",
+    "display": "5:42-5:49/mi",
+    "fast_sec_per_mi": 342,
+    "slow_sec_per_mi": 349
+   }
+  },
+  "week_ending": "2025-04-20"
+ },
+ "pace_chart_is_carried_forward": false,
+ "week_end": "2025-04-27",
+ "week_start": "2025-04-21"
+}

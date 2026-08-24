@@ -160,6 +160,18 @@ export function shortDate(iso: string): string {
   return Number(p[1]) + "/" + Number(p[2]);
 }
 
+/** "7/27/26" -- `shortDate` with the two-digit year.
+ *
+ * FOR AN AXIS THAT CROSSES A YEAR. A trend read over twelve months ran
+ * `8/25 → 8/17` with nothing saying which of the two was last year, and "8/25"
+ * is shared by every year there has ever been. Used where the SPAN needs it and
+ * not by default: a week of days says the year seven times to no purpose.
+ */
+export function shortDateY(iso: string): string {
+  const p = iso.split("-");
+  return shortDate(iso) + "/" + p[0].slice(2);
+}
+
 /** The CSS variable for a score's severity.
  *
  * Status colours, used only where the colour MEANS a state -- never as a series

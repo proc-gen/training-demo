@@ -19,7 +19,8 @@
  * day-of-month is clamped by a leap-year rule written out below.
  */
 
-import type { TrendPoint } from "./panels";
+import { daysIn, parts } from "./dates";
+import { type TrendPoint, drawn } from "./panels";
 
 /** A window, both ends INCLUSIVE. */
 export type Range = { from: string; to: string };
@@ -42,28 +43,18 @@ export const PRESETS: { key: PresetKey; label: string; months: number | null }[]
   { key: "all", label: "All", months: null },
 ];
 
-const ISO = /^(\d{4})-(\d{2})-(\d{2})$/;
-
-/** Days in a month, 1-indexed. The leap rule in full, not `y % 4`. */
-function daysIn(year: number, month: number): number {
-  if (month === 2) {
-    const leap = (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
-    return leap ? 29 : 28;
-  }
-  return [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month - 1];
-}
-
 /** Whether a string is a real calendar date in `YYYY-MM-DD`.
  *
  * The shape alone is not enough: a date input can be handed `2026-02-31` by a
  * keyboard, and a range bounded by a day that does not exist would silently
  * include or exclude the end of February depending on which side it fell.
+ *
+ * `parts` and `daysIn` come from `dates.ts`, which is the one place the leap
+ * rule is written down -- it grew day arithmetic for the axis grid and this
+ * module's copy went with the move.
  */
 export function isIsoDate(s: string): boolean {
-  const m = ISO.exec(s);
-  if (!m) return false;
-  const [, y, mo, d] = m.map(Number);
-  return mo >= 1 && mo <= 12 && d >= 1 && d <= daysIn(y, mo);
+  return parts(s) !== null;
 }
 
 const pad = (n: number, width: number) => String(n).padStart(width, "0");
@@ -75,13 +66,57 @@ const pad = (n: number, width: number) => String(n).padStart(width, "0");
  * is why `daysIn` carries the real leap rule rather than a modulo.
  */
 export function shiftMonths(iso: string, delta: number): string {
-  const m = ISO.exec(iso);
-  if (!m) return iso;
-  const [, y, mo, d] = m.map(Number);
+  const p = parts(iso);
+  if (!p) return iso;
+  const [y, mo, d] = p;
   const ordinal = y * 12 + (mo - 1) + delta;
   const ty = Math.floor(ordinal / 12);
   const tm = ordinal - ty * 12 + 1;
   return `${pad(ty, 4)}-${pad(tm, 2)}-${pad(Math.min(d, daysIn(ty, tm)), 2)}`;
+}
+
+/** Whether a preset names a window that can be STEPPED.
+ *
+ * The athlete's rule, stated exactly: *"if a custom time period is selected,
+ * whether it's the All selection or a period not set by the buttons like 7
+ * weeks, disable the buttons until a standard increment is selected."*
+ *
+ * Both cases fall out of `months` with no special-casing. `all` carries
+ * `months: null` -- there is no period to step by, because the window IS the
+ * data. `custom` is not in `PRESETS` at all, so the lookup misses and the
+ * `typeof` guard catches it: a window somebody typed has no increment either.
+ */
+export function isShiftable(key: PresetKey): boolean {
+  const months = PRESETS.find((p) => p.key === key)?.months;
+  return typeof months === "number" && months > 0;
+}
+
+/** A window moved by whole preset periods, or null when it cannot be.
+ *
+ * BOTH ENDS MOVE BY THE SAME AMOUNT, so the window keeps its length exactly and
+ * repeated stepping cannot drift -- which it would if the far end were
+ * re-derived from the near one each time.
+ *
+ * IT MOVES THE CURRENT WINDOW, NOT THE PRESET'S IDEAL ONE. `presetRange` clamps
+ * `from` to the data's own start, so on a short record the resolved window is
+ * shorter than the preset names; stepping that window preserves whatever it
+ * actually is rather than silently growing it back.
+ *
+ * The two ends are inclusive, so consecutive windows share a boundary date.
+ * That is inherent to how `presetRange` already defines a window -- a "1 month"
+ * window is a month and a day -- and is not introduced here.
+ */
+export function shiftRange(
+  range: Range,
+  key: PresetKey,
+  steps: number,
+): Range | null {
+  if (!isShiftable(key)) return null;
+  const months = PRESETS.find((p) => p.key === key)!.months!;
+  return {
+    from: shiftMonths(range.from, months * steps),
+    to: shiftMonths(range.to, months * steps),
+  };
 }
 
 /** The oldest and newest date ANY panel plots, or null when none plots one.
@@ -102,7 +137,7 @@ export function spanOf(panels: { points: TrendPoint[] }[]): Range | null {
   let last: string | null = null;
   for (const p of panels) {
     for (const pt of p.points) {
-      if (pt.value === null) continue;
+      if (!drawn(pt)) continue;
       if (first === null || pt.date < first) first = pt.date;
       if (last === null || pt.date > last) last = pt.date;
     }
@@ -154,8 +189,10 @@ export function pointsIn(points: TrendPoint[], range: Range | null): TrendPoint[
 /** How many of these points a chart would actually draw.
  *
  * A null value is a day nobody measured and `LineChart` skips it, so counting
- * the array would promise marks that never appear.
+ * the array would promise marks that never appear. `drawn` is the one definition
+ * of that, and it answers for a multi-series point too -- where "measured" means
+ * ANY of its series carried a value.
  */
 export function plotted(points: TrendPoint[]): number {
-  return points.filter((p) => p.value !== null).length;
+  return points.filter(drawn).length;
 }

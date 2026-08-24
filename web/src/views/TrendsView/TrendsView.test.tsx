@@ -87,10 +87,16 @@ describe("TrendsView", () => {
   has(D)("ENDS ITS DEFAULT WINDOW AT THE NEWEST MEASUREMENT", () => {
     /* The defect that started this round: the plan reaches two Mondays ahead,
      * those week records carry zeros and nulls rather than nothing, and every
-     * preset resolved against 2026-08-24 -- a week nobody had run. */
+     * preset resolved against 2026-08-24 -- a week nobody had run. "Unrun"
+     * here is the view's own predicate PAIR from `panels.ts`: no adherence
+     * results AND no load days -- a live week whose Monday already carries a
+     * measured day (steps, a TRIMP row) legitimately ends the window on that
+     * date even while its runs await reconciliation. */
     const { container } = wrap(<TrendsView payload={D!} />);
     const unrun = Object.keys(D!.weeks).filter(
-      (k) => !(D!.weeks[k].adherence?.results ?? []).length,
+      (k) =>
+        !(D!.weeks[k].adherence?.results ?? []).length &&
+        !(D!.weeks[k].load?.days ?? []).length,
     );
     expect(unrun.length).toBeGreaterThan(0); // not a vacuous check
     for (const k of unrun) expect(range(container)).not.toContain(`→ ${k}`);
@@ -229,5 +235,132 @@ describe("the window", () => {
     fireEvent.click(pill(container, "All"));
     expect(container.querySelector("svg.chart")).toBeTruthy();
     expect(range(container)).toContain("3 of 3 points");
+  });
+});
+
+describe("a year of the real record", () => {
+  /* The window the athlete was reading on 2026-08-21, when the axis carried
+   * four labels between them and the wash hung below the zero rule. */
+  const year = () => {
+    const r = wrap(<TrendsView payload={D!} />);
+    fireEvent.click(pill(r.container, "1 year"));
+    return r.container;
+  };
+  const labels = (c: HTMLElement) =>
+    [...c.querySelectorAll("text.axis-label")].map((t) => t.textContent!);
+
+  has(D)("labels the x axis on month boundaries, with the year", () => {
+    const c = year();
+    const x = labels(c).filter((t) => /^\d{1,2}\/\d{1,2}\/\d{2}$/.test(t));
+    expect(x.length).toBeGreaterThan(8);
+    expect(x).toContain("1/5/26");
+  });
+
+  has(D)("rules the y axis at more than two values", () => {
+    const c = year();
+    const y = labels(c).filter((t) => t.endsWith(" mi"));
+    expect(y.length).toBeGreaterThan(4);
+    expect(y).toContain("0.0 mi");
+  });
+
+  has(D)("closes the wash on the axis", () => {
+    const c = year();
+    const base = parseFloat(
+      c.querySelector("line.baseline")!.getAttribute("y1")!,
+    );
+    const wash = [...c.querySelectorAll("path")].find(
+      (p) => p.getAttribute("fill") && !p.classList.contains("series-line"),
+    )!;
+    const corners = [...wash.getAttribute("d")!.matchAll(/L[\d.-]+ ([\d.-]+)/g)]
+      .map((m) => parseFloat(m[1]))
+      .slice(-2);
+    for (const y of corners) expect(y).toBeCloseTo(base, 5);
+  });
+
+  has(D)("draws the layoff at zero rather than a line across it", () => {
+    /* 2026-03-16 through 04-06 are lived weeks with no running in them. The
+     * chart drew a straight segment over the whole month until 2026-08-21. */
+    const c = year();
+    const floors = [...c.querySelectorAll("circle.marker")].filter(
+      (m) =>
+        Math.abs(
+          parseFloat(m.getAttribute("cy")!) -
+            parseFloat(c.querySelector("line.baseline")!.getAttribute("y1")!),
+        ) < 0.001,
+    );
+    expect(floors.length).toBeGreaterThanOrEqual(4);
+  });
+});
+
+describe("the pace graphs", () => {
+  const pick = (title: string) => {
+    const r = wrap(<TrendsView payload={D!} />);
+    const select = r.container.querySelector("select")!;
+    const key = trendPanels(D!).find((p) => p.title === title)!.key;
+    fireEvent.change(select, { target: { value: key } });
+    return r;
+  };
+
+  has(D)("offers both in the graph picker", () => {
+    const { container } = wrap(<TrendsView payload={D!} />);
+    const options = [...container.querySelectorAll("option")].map((o) => o.textContent);
+    expect(options).toContain("Projected race times");
+    expect(options).toContain("Target paces");
+  });
+
+  has(D)("draws projected race times with every distance ticked", () => {
+    const { container } = pick("Projected race times");
+    const boxes = [...container.querySelectorAll<HTMLInputElement>("input[type=checkbox]")];
+    expect(boxes.length).toBeGreaterThan(4);
+    expect(boxes.every((b) => b.checked)).toBe(true);
+    expect(container.querySelectorAll("path.series-line").length).toBe(boxes.length);
+  });
+
+  has(D)("draws target paces as filled BANDS rather than lines", () => {
+    const { container } = pick("Target paces");
+    const boxes = [...container.querySelectorAll("input[type=checkbox]")];
+    expect(container.querySelectorAll("path[opacity='0.22']").length).toBe(boxes.length);
+  });
+
+  has(D)("offers a unit toggle on race times and none on target paces", () => {
+    expect(pick("Projected race times").container.querySelector(".unit-toggle")).toBeTruthy();
+    cleanup();
+    expect(pick("Target paces").container.querySelector(".unit-toggle")).toBeNull();
+  });
+
+  has(D)("RESETS THE TICKS WHEN THE GRAPH CHANGES, because the series differ", () => {
+    const { container } = pick("Projected race times");
+    const select = container.querySelector("select")!;
+    const first = container.querySelector<HTMLInputElement>("input[type=checkbox]")!;
+    fireEvent.click(first);
+    expect(
+      container.querySelector<HTMLInputElement>("input[type=checkbox]")!.checked,
+    ).toBe(false);
+
+    const bands = trendPanels(D!).find((p) => p.title === "Target paces")!.key;
+    fireEvent.change(select, { target: { value: bands } });
+    const boxes = [...container.querySelectorAll<HTMLInputElement>("input[type=checkbox]")];
+    expect(boxes.every((b) => b.checked)).toBe(true);
+  });
+
+  has(D)("KEEPS THE WINDOW ACROSS THE SWITCH -- it is shared, and deliberately", () => {
+    const { container } = wrap(<TrendsView payload={D!} />);
+    const before = container.querySelector(".sm-range")!.textContent!.split("·")[0];
+    const key = trendPanels(D!).find((p) => p.title === "Target paces")!.key;
+    fireEvent.change(container.querySelector("select")!, { target: { value: key } });
+    expect(container.querySelector(".sm-range")!.textContent!.split("·")[0]).toBe(before);
+  });
+
+  has(D)("does not let the pace panels move the default window", () => {
+    /* They reach back to 2024-12-29, earlier than any other series, and the
+       default preset resolves against the newest date rather than the oldest --
+       so adding them must not have shifted where the page opens. */
+    const range = defaultRange(trendPanels(D!))!;
+    const newest = trendPanels(D!)
+      .flatMap((p) => p.points)
+      .filter((p) => p.value !== null || p.values)
+      .map((p) => p.date)
+      .sort();
+    expect(range.to).toBe(newest[newest.length - 1]);
   });
 });

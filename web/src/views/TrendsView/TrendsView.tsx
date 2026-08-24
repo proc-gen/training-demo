@@ -16,6 +16,7 @@ import {
   defaultRange,
   pointsIn,
   presetRange,
+  shiftRange,
 } from "./data/range";
 
 /** Everything that only makes sense over time.
@@ -72,6 +73,20 @@ export function TrendsView({ payload }: { payload: Payload }) {
     setRange(r);
   };
 
+  /* THE PRESET STAYS PRESSED THROUGH A STEP, and that is deliberate. It names
+     the window's LENGTH, not its position -- so a month-wide window is still
+     `1 month` after it moves, and dropping to `custom` would disable the arrows
+     after a single click, which is the opposite of what they are for. Where the
+     window actually sits is stated twice already: in the From/To fields and in
+     the panel's own `from → to · n of N points` line. Pressing the pill again
+     re-anchors to the newest data, which is unchanged behaviour and doubles as
+     a way back. */
+  const shift = (steps: number) => {
+    if (!range) return;
+    const moved = shiftRange(range, preset, steps);
+    if (moved) setRange(moved);
+  };
+
   return (
     <Card title="Trends">
       <div className="trend-controls">
@@ -81,6 +96,7 @@ export function TrendsView({ payload }: { payload: Payload }) {
           preset={preset}
           onPreset={choose}
           onCustom={custom}
+          onShift={shift}
         />
       </div>
 
@@ -89,7 +105,15 @@ export function TrendsView({ payload }: { payload: Payload }) {
           reader needs; the athlete asked for it on 2026-08-15. Both rules are
           still enforced -- they live in `trendPanels`' header, beside the list
           they govern. */}
+      {/* KEYED ON THE PANEL, so changing graph re-initialises the panel's own
+          state -- which series are ticked, and which unit a mode-carrying panel
+          is showing. The two multi-series panels carry entirely different series,
+          so a checkbox set carried across them would mean nothing. Same one-line
+          reset `Report` gets from `<WeekView key={selected}>`. The WINDOW is
+          deliberately NOT reset: it lives above this and is shared, because
+          comparing two series over the same dates is why a reader switches. */}
       <TrendPanel
+        key={panel.key}
         panel={panel}
         shown={pointsIn(panel.points, range)}
         range={range}

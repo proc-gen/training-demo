@@ -1,0 +1,214 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "Block",
+  "runs": [
+   {
+    "date": "2025-06-23",
+    "key": "2025-06-23-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-06-23",
+    "key": "2025-06-23-b",
+    "prescribed": "B - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-06-24",
+    "key": "2025-06-24-a",
+    "prescribed": "A - 30 min thirds -> 7.2, 8.1, 9.1 mph",
+    "role": "progression"
+   },
+   {
+    "date": "2025-06-24",
+    "key": "2025-06-24-wu",
+    "prescribed": "warmup",
+    "role": "volume_only"
+   },
+   {
+    "date": "2025-06-24",
+    "key": "2025-06-24-b",
+    "prescribed": "B - 5x1k w/ 200m jog, 4x200m w/ 200m walk -> 4x1k, no 200's because it was 99F out",
+    "role": "subt"
+   },
+   {
+    "date": "2025-06-24",
+    "key": "2025-06-24-cd",
+    "prescribed": "cooldown",
+    "role": "volume_only"
+   },
+   {
+    "date": "2025-06-25",
+    "key": "2025-06-25",
+    "prescribed": "Easy 60 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-06-26",
+    "key": "2025-06-26-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-06-26",
+    "key": "2025-06-26-b",
+    "prescribed": "B - Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-06-27",
+    "key": "2025-06-27-a",
+    "prescribed": "A - 30 min thirds -> 7.2, 8.1, 9.1 mph",
+    "role": "progression"
+   },
+   {
+    "date": "2025-06-27",
+    "key": "2025-06-27-b",
+    "prescribed": "B - 8-12x30s w/ 1:00 jog -> Did 12",
+    "role": "neuromuscular"
+   },
+   {
+    "date": "2025-06-28",
+    "key": "2025-06-28",
+    "prescribed": "Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-06-29",
+    "key": "2025-06-29",
+    "prescribed": "Easy 90 min",
+    "role": "long"
+   }
+  ],
+  "week_start": "2025-06-23",
+  "week_type": "Volume"
+ },
+ "pace_chart": {
+  "bands": {
+   "easy": {
+    "display": "7:48-8:25/mi",
+    "fast_sec_per_mi": 468,
+    "pct": [
+     0.63,
+     0.68
+    ],
+    "slow_sec_per_mi": 505
+   },
+   "long": {
+    "display": "7:22-7:48/mi",
+    "fast_sec_per_mi": 442,
+    "pct": [
+     0.68,
+     0.72
+    ],
+    "slow_sec_per_mi": 468
+   },
+   "recovery": {
+    "display": "8:25-9:09/mi",
+    "fast_sec_per_mi": 505,
+    "pct": [
+     0.58,
+     0.63
+    ],
+    "slow_sec_per_mi": 549
+   },
+   "rep_10min": {
+    "display": "6:28-6:43/mi",
+    "fast_sec_per_mi": 388,
+    "pct": [
+     0.79,
+     0.82
+    ],
+    "slow_sec_per_mi": 403
+   },
+   "rep_15min": {
+    "display": "6:38-6:53/mi",
+    "fast_sec_per_mi": 398,
+    "pct": [
+     0.77,
+     0.8
+    ],
+    "slow_sec_per_mi": 413
+   },
+   "rep_1min": {
+    "display": "6:02-6:15/mi",
+    "fast_sec_per_mi": 362,
+    "pct": [
+     0.85,
+     0.88
+    ],
+    "slow_sec_per_mi": 375
+   },
+   "rep_3min": {
+    "display": "6:10-6:24/mi",
+    "fast_sec_per_mi": 370,
+    "pct": [
+     0.83,
+     0.86
+    ],
+    "slow_sec_per_mi": 384
+   },
+   "rep_6min": {
+    "display": "6:19-6:33/mi",
+    "fast_sec_per_mi": 379,
+    "pct": [
+     0.81,
+     0.84
+    ],
+    "slow_sec_per_mi": 393
+   }
+  },
+  "confirmed_by_athlete": true,
+  "effective_vo2max": 60.24,
+  "race_paces": {
+   "10000m": {
+    "display": "35:15 @ 5:40/mi",
+    "sec_per_mi": 340,
+    "seconds": 2115
+   },
+   "1500m": {
+    "display": "4:34 @ 4:54/mi",
+    "sec_per_mi": 294,
+    "seconds": 274
+   },
+   "21097m": {
+    "display": "1:17:52 @ 5:56/mi",
+    "sec_per_mi": 356,
+    "seconds": 4672
+   },
+   "3000m": {
+    "display": "9:48 @ 5:15/mi",
+    "sec_per_mi": 315,
+    "seconds": 588
+   },
+   "42195m": {
+    "display": "2:42:49 @ 6:13/mi",
+    "sec_per_mi": 373,
+    "seconds": 9769
+   },
+   "5000m": {
+    "display": "16:59 @ 5:28/mi",
+    "sec_per_mi": 328,
+    "seconds": 1019
+   },
+   "800m": {
+    "display": "2:19 @ 4:39/mi",
+    "sec_per_mi": 279,
+    "seconds": 139
+   },
+   "tempo": {
+    "basis": "60-80 minute race pace, the Daniels threshold definition, from the model's duration prognosis.",
+    "display": "5:51-5:57/mi",
+    "fast_sec_per_mi": 351,
+    "slow_sec_per_mi": 357
+   }
+  },
+  "week_ending": "2025-06-22"
+ },
+ "pace_chart_is_carried_forward": false,
+ "week_end": "2025-06-29",
+ "week_start": "2025-06-23"
+}

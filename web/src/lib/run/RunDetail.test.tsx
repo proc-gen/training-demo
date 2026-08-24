@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import type { RunResult } from "@/lib/data/payload";
 import { PUBLISHED } from "@/test/payload";
 import { wrap } from "@/test/render";
+import { allRuns, runShapes } from "@/test/runShapes";
 import { RunDetail } from "./RunDetail";
 
 afterEach(cleanup);
@@ -149,20 +150,43 @@ describe("RunDetail", () => {
     expect(container.textContent).toContain("Load tab");
   });
 
-  it("renders every real run's detail without throwing", () => {
+  /* ONE RUN PER SHAPE, not one per run. This rendered all 719 runs in the
+   * published tree and began timing out at vitest's 5s default -- for a reason
+   * that was about how long the athlete has been running, not about this
+   * component. `runShapes` keys on what the subtree actually branches on, so
+   * the same paths are covered by ~38 renders. See `src/test/runShapes.ts`. */
+  it("renders every shape of real run's detail without throwing", () => {
     if (!PUBLISHED) return;
-    let seen = 0;
-    for (const w of Object.values(PUBLISHED.weeks)) {
-      for (const r of w.adherence?.results ?? []) {
-        const { container, unmount } = wrap(
-          <RunDetail run={r} chart={w.pace_chart} />,
-        );
-        expect(container.textContent!.trim().length).toBeGreaterThan(0);
-        seen += 1;
-        unmount();
-      }
+    const shapes = runShapes(PUBLISHED);
+    for (const { run, week, weekKey } of shapes) {
+      const { container, unmount } = wrap(
+        <RunDetail run={run} chart={week.pace_chart} />,
+      );
+      expect(
+        container.textContent!.trim().length,
+        `${weekKey} ${run.key} rendered nothing`,
+      ).toBeGreaterThan(0);
+      unmount();
     }
-    expect(seen).toBeGreaterThan(0);
+    expect(shapes.length).toBeGreaterThan(0);
+  });
+
+  /* NON-VACUOUS IN BOTH DIRECTIONS. If `shapeOf` ever collapsed to a constant
+   * the case above would render one run and still pass, which is exactly the
+   * silent-coverage-loss the dedupe risks. */
+  it("the shape sample is a real reduction and still covers real variety", () => {
+    if (!PUBLISHED) return;
+    const shapes = runShapes(PUBLISHED);
+    const all = allRuns(PUBLISHED);
+    expect(shapes.length).toBeGreaterThan(10);
+    expect(shapes.length).toBeLessThan(all.length);
+    // Every status, role and bucket in the tree survives the dedupe -- the
+    // dimensions a reader would name if asked what "a shape of run" means.
+    for (const key of ["status", "role", "score_bucket"] as const) {
+      const want = new Set(all.map(({ run }) => run[key] ?? null));
+      const have = new Set(shapes.map(({ run }) => run[key] ?? null));
+      expect(have, `${key} lost a value in the dedupe`).toEqual(want);
+    }
   });
 
   describe("Planned | Actual", () => {

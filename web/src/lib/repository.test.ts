@@ -176,6 +176,12 @@ describe("readWeek is a PORT of unpublish(), so it must carry what it carries", 
       fs.readFileSync(path.join(publishedDir(slug), "index.json"), "utf-8"),
     ) as { weeks: string[] };
     expect(index.weeks.length).toBeGreaterThan(0);
+    /* ONE assemble, outside the loop -- it is a pure function of the tree, and
+     * calling it per week made this case O(weeks squared): at nine weeks that
+     * was invisible, at forty (the 2025 backfill) it was a 13-second timeout. */
+    const got = assemble();
+    if (!got.ok) throw new Error(got.error);
+    const weeks = (got.payload as { weeks: Record<string, unknown> }).weeks;
     for (const start of index.weeks) {
       const raw = JSON.parse(
         fs.readFileSync(
@@ -183,11 +189,7 @@ describe("readWeek is a PORT of unpublish(), so it must carry what it carries", 
           "utf-8",
         ),
       ) as Record<string, unknown>;
-      const got = assemble();
-      if (!got.ok) throw new Error(got.error);
-      const week = (got.payload as { weeks: Record<string, unknown> }).weeks[
-        start
-      ] as Record<string, unknown>;
+      const week = weeks[start] as Record<string, unknown>;
       for (const k of Object.keys(raw)) {
         expect(Object.keys(week), `${start}/week.json key \`${k}\``).toContain(k);
       }

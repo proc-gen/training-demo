@@ -62,6 +62,12 @@ export function FitnessNote({ load }: { load: Load }) {
           kept out of the CTL/ATL/TSB columns.
         </>
       )}
+      {/* "Highest fitness N over the M days we hold" was the other branch here
+          until 2026-08-23. It read `ctl_max_in_series` and `series_span_days`,
+          which described the WHOLE series rather than this week -- so it churned
+          all 86 published week records on every added activity, and on a 2024
+          week it stated a peak first reached in 2026. Both fields are gone; a
+          global claim does not belong inside a week card. */}
       {f.ctl_converged === false ? (
         <>
           {" "}
@@ -70,12 +76,6 @@ export function FitnessNote({ load }: { load: Load }) {
             ? `${short} more day(s) of history are needed before the 42-day average forgets its zero seed.`
             : "there is not enough history yet."}{" "}
           Fatigue and TRIMP are unaffected.
-        </>
-      ) : f.ctl_max_in_series != null && f.series_span_days != null ? (
-        <>
-          {" "}
-          Highest fitness <b>{num(f.ctl_max_in_series)}</b> over the{" "}
-          {f.series_span_days} days we hold.
         </>
       ) : null}
     </p>

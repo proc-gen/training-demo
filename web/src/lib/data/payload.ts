@@ -471,20 +471,10 @@ export const Adherence = z.looseObject({
    *  come due, so there is no date to name. */
   graded_through: str,
   week_end: str,
-  /** Activities inside the week that no manifest run names. Normal
-   *  mid-reconciliation -- a workout arrives as several Garmin files and the
-   *  ids get pasted on one at a time -- and worth surfacing because the
-   *  omission does not fail loudly anywhere else. */
-  unclaimed: z
-    .array(
-      z.looseObject({
-        runalyze_id: z.union([z.number(), z.string()]).nullable().optional(),
-        date: str,
-        km: num,
-        seconds: num,
-      }),
-    )
-    .default([]),
+  // `unclaimed` LEFT THE PAYLOAD 2026-08-17, the `warnings` precedent a second
+  // time: a data-gap notice is raised in conversation while grading, never
+  // rendered on the page. The grader still computes and prints it -- its own
+  // output is the channel. Re-adding the field means finding a reader first.
   flags: z.array(Flag).default([]),
   /** Every measurement, through TODAY -- what the week has actually done. */
   facts: z.looseObject({}).nullable().optional(),
@@ -633,11 +623,13 @@ export const Fitness = z.looseObject({
   earliest_activity: str,
   on_date: str,
   days_covered: num,
-  /** Ours, over the span we hold -- NOT an all-time account maximum. A maximum
-   *  over six months is a different quantity and `series_span_days` is what
-   *  stops it reading as one. */
-  ctl_max_in_series: num,
-  series_span_days: num,
+  /* `ctl_max_in_series` and `series_span_days` were here until 2026-08-23. Both
+   * described the WHOLE series rather than this week, so adding one activity
+   * anywhere rewrote the field in all 86 published week records -- and a 2024
+   * week claiming a peak fitness first reached in 2026 is a record carrying its
+   * own future. Their only reader was FitnessNote's "Highest fitness N over the
+   * M days we hold", which went with them. A real global belongs in a top-level
+   * singleton beside `pace_chart_current`, not in eighty-six copies. */
   trimp_source: str,
   stream_share: num,
   activities: num,
@@ -734,13 +726,47 @@ export const PaceChart = z.looseObject({
     .optional(),
   /** Usually the provenance sentence, but 2026-07-27's is an OBJECT: it still
    *  carries the note recording that the hand-transcribed Runalyze block was
-   *  moved out to snapshots/runalyze/. Rendered only when it is a string. */
-  source: z.union([z.string(), z.looseObject({})]).nullable().optional(),
+   *  moved out to snapshots/runalyze/. Rendered only when it is a string.
+   *
+   *  `effective_vo2max` IS DECLARED HERE BECAUSE ONE CHART PUTS IT HERE. The
+   *  2026-08-02 shape carries its anchor nested rather than at the top level,
+   *  and `looseObject({})` types every key `unknown`, so the value was on disk
+   *  and unreachable from TypeScript. `chartVo2max()` in `paceRows.ts` is the
+   *  one reader; it is the port of `pacelib.chart_vo2max()`. Still loose, so
+   *  nothing else in the blob is dropped. */
+  source: z
+    .union([z.string(), z.looseObject({ effective_vo2max: num })])
+    .nullable()
+    .optional(),
   provenance: str,
   captured: str,
   confirmed_by_athlete: z.boolean().nullable().optional(),
   bands: z.record(z.string(), Band).nullable().optional(),
   gap_zone: Band.nullable().optional(),
+});
+
+/** One pace model's race table at the current anchor -- an entry in
+ * `pace_models_current.models`. `label` and `seeded_from` are carried in the
+ * payload so the app maps tokens to words it is GIVEN rather than growing its
+ * own copy of the model vocabulary (the `score_bucket` rule). */
+export const PaceModelTable = z.looseObject({
+  label: str,
+  seeded_from: str,
+  race_paces: z
+    .record(z.string(), z.union([RacePace, z.string()]))
+    .nullable()
+    .optional(),
+});
+
+/** Every registered pace model's race table at the newest chart's own anchor
+ * -- what the paces rail's model dropdown swaps the Current column between.
+ * The `daniels_gilbert` entry is the model the athlete grades against; the
+ * rest are cross-checks and are never scored against. Null when
+ * `scripts/pace-models/` is not installed, and the dropdown does not render. */
+export const PaceModelsCurrent = z.looseObject({
+  source_chart: str,
+  effective_vo2max: num,
+  models: z.record(z.string(), PaceModelTable).nullable().optional(),
 });
 
 export const Week = z.looseObject({
@@ -800,6 +826,9 @@ export const Payload = z.looseObject({
   /** The athlete's paces as of TODAY -- the newest chart on disk, whatever week
    *  is on screen. One record rather than a copy inside each week. */
   pace_chart_current: PaceChart.nullable().optional(),
+  /** Its sibling singleton: every pace model's race table at that same
+   *  anchor. See `PaceModelsCurrent`. */
+  pace_models_current: PaceModelsCurrent.nullable().optional(),
   adherence_csv: z.array(z.record(z.string(), z.string())).default([]),
   load_csv: z.array(z.record(z.string(), z.string())).default([]),
 });
@@ -818,6 +847,8 @@ export type SessionDetail = z.infer<typeof SessionDetail>;
 export type Flag = z.infer<typeof Flag>;
 export type Readiness = z.infer<typeof Readiness>;
 export type PaceChart = z.infer<typeof PaceChart>;
+export type PaceModelTable = z.infer<typeof PaceModelTable>;
+export type PaceModelsCurrent = z.infer<typeof PaceModelsCurrent>;
 export type Day = z.infer<typeof Day>;
 export type Score = z.infer<typeof Score>;
 

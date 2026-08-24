@@ -1,0 +1,202 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "Continue Build",
+  "runs": [
+   {
+    "date": "2025-02-03",
+    "key": "2025-02-03",
+    "prescribed": "Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-02-04",
+    "key": "2025-02-04",
+    "prescribed": "Easy 60 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-02-05",
+    "key": "2025-02-05",
+    "prescribed": "Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-02-06",
+    "key": "2025-02-06-wu",
+    "prescribed": "warmup",
+    "role": "volume_only"
+   },
+   {
+    "date": "2025-02-06",
+    "key": "2025-02-06",
+    "prescribed": "4xMile w/ 200m jog",
+    "role": "subt"
+   },
+   {
+    "date": "2025-02-06",
+    "key": "2025-02-06-b",
+    "prescribed": "4x200m w/ 200m jog, in spikes",
+    "role": "repetition"
+   },
+   {
+    "date": "2025-02-06",
+    "key": "2025-02-06-cd",
+    "prescribed": "cooldown",
+    "role": "volume_only"
+   },
+   {
+    "date": "2025-02-07",
+    "key": "2025-02-07",
+    "prescribed": "Easy 60 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-02-08",
+    "key": "2025-02-08",
+    "prescribed": "Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-02-09",
+    "key": "2025-02-09-1",
+    "prescribed": "first part of the 75 min, outdoors",
+    "role": "volume_only"
+   },
+   {
+    "date": "2025-02-09",
+    "key": "2025-02-09-2",
+    "prescribed": "Easy 75 min",
+    "role": "long"
+   }
+  ],
+  "week_start": "2025-02-03",
+  "week_type": "Intensity"
+ },
+ "pace_chart": {
+  "bands": {
+   "easy": {
+    "display": "8:06-8:44/mi",
+    "fast_sec_per_mi": 486,
+    "pct": [
+     0.63,
+     0.68
+    ],
+    "slow_sec_per_mi": 524
+   },
+   "long": {
+    "display": "7:39-8:06/mi",
+    "fast_sec_per_mi": 459,
+    "pct": [
+     0.68,
+     0.72
+    ],
+    "slow_sec_per_mi": 486
+   },
+   "recovery": {
+    "display": "8:44-9:29/mi",
+    "fast_sec_per_mi": 524,
+    "pct": [
+     0.58,
+     0.63
+    ],
+    "slow_sec_per_mi": 569
+   },
+   "rep_10min": {
+    "display": "6:43-6:58/mi",
+    "fast_sec_per_mi": 403,
+    "pct": [
+     0.79,
+     0.82
+    ],
+    "slow_sec_per_mi": 418
+   },
+   "rep_15min": {
+    "display": "6:53-7:09/mi",
+    "fast_sec_per_mi": 413,
+    "pct": [
+     0.77,
+     0.8
+    ],
+    "slow_sec_per_mi": 429
+   },
+   "rep_1min": {
+    "display": "6:15-6:29/mi",
+    "fast_sec_per_mi": 375,
+    "pct": [
+     0.85,
+     0.88
+    ],
+    "slow_sec_per_mi": 389
+   },
+   "rep_3min": {
+    "display": "6:24-6:38/mi",
+    "fast_sec_per_mi": 384,
+    "pct": [
+     0.83,
+     0.86
+    ],
+    "slow_sec_per_mi": 398
+   },
+   "rep_6min": {
+    "display": "6:33-6:48/mi",
+    "fast_sec_per_mi": 393,
+    "pct": [
+     0.81,
+     0.84
+    ],
+    "slow_sec_per_mi": 408
+   }
+  },
+  "confirmed_by_athlete": true,
+  "effective_vo2max": 57.57,
+  "race_paces": {
+   "10000m": {
+    "display": "36:38 @ 5:54/mi",
+    "sec_per_mi": 354,
+    "seconds": 2198
+   },
+   "1500m": {
+    "display": "4:46 @ 5:06/mi",
+    "sec_per_mi": 306,
+    "seconds": 286
+   },
+   "21097m": {
+    "display": "1:21:00 @ 6:11/mi",
+    "sec_per_mi": 371,
+    "seconds": 4860
+   },
+   "3000m": {
+    "display": "10:12 @ 5:28/mi",
+    "sec_per_mi": 328,
+    "seconds": 612
+   },
+   "42195m": {
+    "display": "2:49:13 @ 6:27/mi",
+    "sec_per_mi": 387,
+    "seconds": 10153
+   },
+   "5000m": {
+    "display": "17:40 @ 5:41/mi",
+    "sec_per_mi": 341,
+    "seconds": 1060
+   },
+   "800m": {
+    "display": "2:24 @ 4:51/mi",
+    "sec_per_mi": 291,
+    "seconds": 144
+   },
+   "tempo": {
+    "basis": "60-80 minute race pace, the Daniels threshold definition, from the model's duration prognosis.",
+    "display": "6:04-6:10/mi",
+    "fast_sec_per_mi": 364,
+    "slow_sec_per_mi": 370
+   }
+  },
+  "week_ending": "2025-02-02"
+ },
+ "pace_chart_is_carried_forward": false,
+ "week_end": "2025-02-09",
+ "week_start": "2025-02-03"
+}

@@ -5,10 +5,14 @@ import {
   columnScale,
   inBand,
   labelStride,
-  lineDomain,
+  labelWidth,
+  lineScale,
+  niceStep,
+  niceStepNear,
   niceTicks,
   repHrDomain,
   repPaceDomain,
+  tickCount,
   type Column,
 } from "./scales";
 
@@ -147,42 +151,164 @@ describe("columnScale", () => {
   });
 });
 
-describe("lineDomain", () => {
-  it("pads 15% either side", () => {
-    const { lo, hi } = lineDomain([0, 100]);
-    expect(lo).toBeCloseTo(-15, 6);
-    expect(hi).toBeCloseTo(115, 6);
+describe("niceStep", () => {
+  it("climbs the 1 / 2 / 2.5 / 5 ladder", () => {
+    expect(niceStep(1)).toBe(1);
+    expect(niceStep(1.1)).toBe(2);
+    expect(niceStep(2.1)).toBe(2.5);
+    expect(niceStep(2.6)).toBe(5);
+    expect(niceStep(5.1)).toBe(10);
   });
 
+  it("scales by powers of ten in both directions", () => {
+    expect(niceStep(0.011)).toBe(0.02);
+    expect(niceStep(1100)).toBe(2000);
+  });
+
+  it("degrades to 1 rather than dividing by a bad input", () => {
+    for (const bad of [0, -1, NaN, Infinity]) expect(niceStep(bad)).toBe(1);
+  });
+});
+
+describe("niceStepNear", () => {
+  it("may step BELOW the ideal, which `niceStep` may never do", () => {
+    // 57.7 miles over five ticks wants 11.54: rounded up it is 20 and the axis
+    // has three rules, which is the undershoot this exists to fix.
+    expect(niceStepNear(11.54)).toBe(10);
+    expect(niceStep(11.54)).toBe(20);
+  });
+
+  it("is nearest in RATIO, because the ladder is geometric", () => {
+    // 1.6 is closer to 2 than to 1 by difference AND by ratio; 1.4 to 1.
+    expect(niceStepNear(1.6)).toBe(2);
+    expect(niceStepNear(1.4)).toBe(1);
+    expect(niceStepNear(7.5)).toBe(10);
+  });
+
+  it("scales by powers of ten", () => {
+    expect(niceStepNear(0.058)).toBe(0.05);
+    expect(niceStepNear(1154)).toBe(1000);
+  });
+
+  it("degrades to 1 rather than dividing by a bad input", () => {
+    for (const bad of [0, -1, NaN, Infinity]) expect(niceStepNear(bad)).toBe(1);
+  });
+});
+
+describe("labelWidth", () => {
+  it("grows with the widest label, because a year is wider than a date", () => {
+    expect(labelWidth(["10/1/25", "8/17"])).toBeGreaterThan(labelWidth(["8/17"]));
+  });
+
+  it("measures the WIDEST, not the last", () => {
+    expect(labelWidth(["8/1", "10/1/25", "9/2"])).toBe(labelWidth(["10/1/25"]));
+  });
+
+  it("falls back to the old fixed minimum with nothing to measure", () => {
+    expect(labelWidth([])).toBe(34);
+    expect(labelWidth([""])).toBe(34);
+  });
+});
+
+describe("tickCount", () => {
+  it("is 4 for the Load tab's box, which must not move", () => {
+    // 240 tall less its 12/30 margins.
+    expect(tickCount(198)).toBe(4);
+  });
+
+  it("gives a taller plot more rules", () => {
+    expect(tickCount(274)).toBeGreaterThan(tickCount(96));
+  });
+
+  it("floors at 2 and caps at 6", () => {
+    expect(tickCount(10)).toBe(2);
+    expect(tickCount(96)).toBe(2);
+    expect(tickCount(5000)).toBe(6);
+  });
+
+  it("survives a degenerate height", () => {
+    for (const bad of [0, -10, NaN]) expect(tickCount(bad)).toBe(2);
+  });
+});
+
+describe("lineScale", () => {
   it("contains every value", () => {
     const vals = [44, 47, 41, 52, 45];
-    const { lo, hi } = lineDomain(vals);
+    const { lo, hi } = lineScale(vals);
     for (const v of vals) {
-      expect(v).toBeGreaterThan(lo);
-      expect(v).toBeLessThan(hi);
+      expect(v).toBeGreaterThanOrEqual(lo);
+      expect(v).toBeLessThanOrEqual(hi);
     }
   });
 
+  it("BOTH BOUNDS ARE TICKS, which is what puts the wash's floor on the axis", () => {
+    /* The defect: `lineDomain` padded 15% past the data and ruled the unpadded
+     * ends, so the plot floor sat a sixth of a chart BELOW the bottom rule and
+     * the area fill hung under its own axis. */
+    for (const vals of [[0, 57.7], [41, 52], [-12, 9], [1.02, 1.31]]) {
+      const { lo, hi, ticks } = lineScale(vals);
+      expect(ticks[0]).toBe(lo);
+      expect(ticks[ticks.length - 1]).toBe(hi);
+    }
+  });
+
+  it("steps evenly, in round numbers", () => {
+    const { ticks } = lineScale([0, 57.7], { zero: true, count: 5 });
+    expect(ticks).toEqual([0, 10, 20, 30, 40, 50, 60]);
+    expect(lineScale([41, 52], { count: 5 }).ticks).toEqual([
+      40, 42, 44, 46, 48, 50, 52,
+    ]);
+  });
+
+  it("prints no floating-point crumbs", () => {
+    // 0.1 + 0.2 is 0.30000000000000004, and a tick is read by a person.
+    for (const vals of [[1.02, 1.31], [0, 0.9], [6.1, 8.4]]) {
+      for (const t of lineScale(vals).ticks) {
+        expect(String(t).length).toBeLessThan(8);
+      }
+    }
+  });
+
+  it("asks for about the count it was given", () => {
+    const { ticks } = lineScale([41, 52], { count: 5 });
+    expect(ticks.length).toBeGreaterThanOrEqual(4);
+    expect(ticks.length).toBeLessThanOrEqual(8);
+  });
+
   it("widens a flat series rather than dividing by zero", () => {
-    const { lo, hi } = lineDomain([5, 5, 5]);
+    const { lo, hi } = lineScale([5, 5, 5]);
     expect(hi).toBeGreaterThan(lo);
     expect(Number.isFinite(lo)).toBe(true);
     expect(Number.isFinite(hi)).toBe(true);
   });
 
   it("a single point is still a usable domain", () => {
-    const { lo, hi } = lineDomain([7]);
+    const { lo, hi } = lineScale([7]);
     expect(hi).toBeGreaterThan(lo);
   });
 
-  it("zero:true pulls the floor down to include 0", () => {
-    const { lo } = lineDomain([40, 50], { zero: true });
-    expect(lo).toBeLessThanOrEqual(0);
+  it("zero:true pins the floor AT zero, not below it", () => {
+    // Below it is the wash under the axis again, on the series most likely to
+    // sit on the floor.
+    expect(lineScale([40, 50], { zero: true }).lo).toBe(0);
+    expect(lineScale([0, 0, 0], { zero: true }).lo).toBe(0);
+    expect(lineScale([0.0, 57.7], { zero: true }).lo).toBe(0);
   });
 
   it("zero:true does not raise a floor already below zero", () => {
-    const { lo } = lineDomain([-5, 50], { zero: true });
-    expect(lo).toBeLessThan(-5);
+    expect(lineScale([-5, 50], { zero: true }).lo).toBeLessThanOrEqual(-5);
+  });
+
+  it("a series that crosses zero keeps both ends", () => {
+    const { lo, hi } = lineScale([-18, 12]);
+    expect(lo).toBeLessThanOrEqual(-18);
+    expect(hi).toBeGreaterThanOrEqual(12);
+  });
+
+  it("degrades to a usable scale with no values at all", () => {
+    const { lo, hi, ticks } = lineScale([]);
+    expect(hi).toBeGreaterThan(lo);
+    expect(ticks.length).toBeGreaterThan(1);
   });
 });
 

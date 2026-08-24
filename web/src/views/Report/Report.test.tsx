@@ -21,7 +21,17 @@ afterEach(() => {
 
 const D = PUBLISHED;
 
-const select = (c: HTMLElement) => c.querySelector("select") as HTMLSelectElement;
+/* THE WEEK CONTROL IS A DATE FIELD, not a dropdown, since 2026-08-22. Scoped to
+   `.week-nav`, because the page carries other date inputs the moment the
+   calendar or trends tab is showing. */
+const weekField = (c: HTMLElement) =>
+  c.querySelector(".week-nav input[type=date]") as HTMLInputElement;
+const pickWeek = (c: HTMLElement, key: string) =>
+  fireEvent.change(weekField(c), { target: { value: key } });
+const weekArrow = (c: HTMLElement, name: string) =>
+  [...c.querySelectorAll<HTMLButtonElement>(".week-nav .stepper button")].find(
+    (b) => b.getAttribute("aria-label") === name,
+  )!;
 const tabNamed = (c: HTMLElement, name: string) =>
   [...c.querySelectorAll("[role='tab']")].find(
     (t) => t.textContent === name,
@@ -38,13 +48,51 @@ describe("Report", () => {
       .sort()
       .filter((k) => (D!.weeks[k].adherence?.results ?? []).length > 0);
     expect(lived.length).toBeGreaterThan(0);
-    expect(select(container).value).toBe(lived[lived.length - 1]);
+    expect(weekField(container).value).toBe(lived[lived.length - 1]);
   });
 
-  has(D)("lists every week, newest first", () => {
+  has(D)("bounds the week field to the whole record", () => {
+    /* It listed every week as an option until 2026-08-22. At 88 -- and at 102
+     * once the plan was brought forward -- that list was the thing making the
+     * page tedious, so the reach is stated as bounds instead. */
     const { container } = wrap(<Report payload={D!} />);
-    const values = [...select(container).options].map((o) => o.value);
-    expect(values).toEqual(Object.keys(D!.weeks).sort().reverse());
+    const keys = Object.keys(D!.weeks).sort();
+    expect(weekField(container).getAttribute("min")).toBe(keys[0]);
+    expect(weekField(container).getAttribute("max")).toBe(keys[keys.length - 1]);
+    expect(container.querySelector(".week-nav select")).toBeNull();
+  });
+
+  has(D)("walks week by week with the arrows", () => {
+    const { container } = wrap(<Report payload={D!} />);
+    const keys = Object.keys(D!.weeks).sort();
+    const start = weekField(container).value;
+    const i = keys.indexOf(start);
+    expect(i).toBeGreaterThan(0);
+
+    fireEvent.click(weekArrow(container, "Previous week"));
+    expect(weekField(container).value).toBe(keys[i - 1]);
+    fireEvent.click(weekArrow(container, "Next week"));
+    expect(weekField(container).value).toBe(keys[i]);
+  });
+
+  has(D)("SNAPS a mid-week date onto its Monday", () => {
+    // A native date input cannot grey out six days in seven, so the snap is
+    // what "only Mondays" means here.
+    const { container } = wrap(<Report payload={D!} />);
+    const key = Object.keys(D!.weeks).sort()[0];
+    // PARSED AT NOON, like `grid.ts`: `new Date("2026-07-27")` is UTC midnight,
+    // which is the previous day in every western timezone.
+    const d = new Date(key + "T12:00:00");
+    d.setDate(d.getDate() + 2);
+    const wednesday =
+      d.getFullYear() +
+      "-" +
+      String(d.getMonth() + 1).padStart(2, "0") +
+      "-" +
+      String(d.getDate()).padStart(2, "0");
+    pickWeek(container, wednesday);
+    expect(weekField(container).value).toBe(key);
+    expect(container.textContent).toContain("Week of " + key);
   });
 
   has(D)("renders the athlete's name", () => {
@@ -78,19 +126,23 @@ describe("Report", () => {
   });
 
   has(D)("hides the week picker on the other tabs but keeps its space", () => {
+    /* ON THE WRAPPER, not the label: the control is a field AND a stepper now,
+       and hiding half of it would leave two arrows floating above the calendar
+       with nothing to step. */
     const { container } = wrap(<Report payload={D!} />);
-    const label = container.querySelector("label.field") as HTMLElement;
-    expect(label.style.visibility).toBe("visible");
+    const nav = container.querySelector(".week-nav") as HTMLElement;
+    expect(nav.style.visibility).toBe("visible");
+    expect(nav.querySelector(".stepper")).toBeTruthy();
     fireEvent.click(tabNamed(container, "Trends"));
-    expect(label.style.visibility).toBe("hidden");
+    expect(nav.style.visibility).toBe("hidden");
   });
 
   has(D)("shows the chosen week", () => {
     const { container } = wrap(<Report payload={D!} />);
     const keys = Object.keys(D!.weeks).sort();
     const other = keys[0];
-    fireEvent.change(select(container), { target: { value: other } });
-    expect(select(container).value).toBe(other);
+    pickWeek(container, other);
+    expect(weekField(container).value).toBe(other);
     expect(container.textContent).toContain("Week of " + other);
   });
 
@@ -115,9 +167,9 @@ describe("Report", () => {
       );
 
       const other = trainingWeeks().find(
-        (k) => k !== select(container).value,
+        (k) => k !== weekField(container).value,
       )!;
-      fireEvent.change(select(container), { target: { value: other } });
+      pickWeek(container, other);
 
       expect(tabNamed(container, "Overall").getAttribute("aria-selected")).toBe(
         "true",
@@ -142,9 +194,9 @@ describe("Report", () => {
       expect(container.querySelector("tr.is-open")).toBeTruthy();
 
       const other = trainingWeeks().find(
-        (k) => k !== select(container).value,
+        (k) => k !== weekField(container).value,
       )!;
-      fireEvent.change(select(container), { target: { value: other } });
+      pickWeek(container, other);
       fireEvent.click(tabNamed(container, "Training"));
 
       expect(container.querySelector("tr.is-open")).toBeNull();
@@ -162,8 +214,8 @@ describe("Report", () => {
        * and make the card impossible to interact with. */
       const { container } = wrap(<Report payload={D!} />);
       fireEvent.click(tabNamed(container, "Training"));
-      const same = select(container).value;
-      fireEvent.change(select(container), { target: { value: same } });
+      const same = weekField(container).value;
+      pickWeek(container, same);
       expect(tabNamed(container, "Training").getAttribute("aria-selected")).toBe(
         "true",
       );
@@ -194,35 +246,60 @@ describe("Report", () => {
 
 describe("the FIRST PAINT, before any JavaScript runs", () => {
   /* THE ONE THING EVERY OTHER CASE HERE MISSES. `render()` is a CLIENT render:
-   * React assigns `select.value` directly, so a `<select>` whose markup marks
-   * the wrong option still shows the right one and every assertion passes.
+   * React assigns the control's `.value` directly, so markup that marks the
+   * wrong week still displays the right one and every assertion passes.
    *
-   * The server emits no `value` attribute at all -- React puts `selected` on
-   * the matching `<option>` instead -- and that attribute is the whole of what
-   * a browser has to go on until hydration finishes. If it lands on the wrong
-   * option the reader sees a week they did not choose sitting above a card
-   * describing a different one, which is exactly what the athlete reported on
-   * 2026-08-14.
+   * What the SERVER emits is all a browser has to go on until hydration
+   * finishes, and it is a different thing entirely. On the old `<select>` it
+   * was a `selected` attribute on one `<option>`; on the date field it is the
+   * `value` attribute. Land it on the wrong week and the reader sees a date
+   * they did not choose sitting above a card describing another one, which is
+   * exactly what the athlete reported on 2026-08-14.
+   *
+   * THE CONTROL CHANGED AND THE HAZARD DID NOT, which is why this block
+   * survived the rewrite rather than going with the dropdown.
    */
-  has(D)("marks the week the card renders, not the newest one", () => {
+
+  /** The week field's server-rendered `value`, or null.
+   *
+   * Sliced to the `.week-nav` wrapper first, then the FIRST input inside it.
+   * Not a single regex over the whole document: attribute order in React's
+   * output is a function of prop order, so pinning `type="date" value=`
+   * adjacency would make this case fail the day somebody reorders two props on
+   * a component that is still correct.
+   */
+  const painted = (html: string) => {
+    const at = html.indexOf('class="week-nav"');
+    if (at < 0) return null;
+    const m = /<input\b[^>]*\bvalue="(\d{4}-\d{2}-\d{2})"/.exec(html.slice(at));
+    return m ? m[1] : null;
+  };
+
+  has(D)("paints the week the card renders, not the newest one", () => {
     const html = renderToString(<Report payload={D!} />);
     const lived = Object.keys(D!.weeks)
       .sort()
       .filter((k) => (D!.weeks[k].adherence?.results ?? []).length > 0);
     const want = lived[lived.length - 1];
     expect(want).toBeTruthy();
-
-    const options = [...html.matchAll(/<option value="([^"]+)"([^>]*)>/g)];
-    expect(options.length).toBe(Object.keys(D!.weeks).length);
-    const marked = options.filter(([, , attrs]) => attrs.includes("selected"));
-    expect(marked.map(([, k]) => k)).toEqual([want]);
+    expect(painted(html)).toBe(want);
   });
 
-  has(D)("does NOT mark the newest week, which is the plan's far edge", () => {
-    /* The regression in its own words. The plan reaches two Mondays ahead, and
+  has(D)("does NOT paint the newest week, which is the plan's far edge", () => {
+    /* The regression in its own words. The plan reaches months ahead now, and
      * the newest key is a week nobody has run. */
     const html = renderToString(<Report payload={D!} />);
     const newest = Object.keys(D!.weeks).sort().at(-1)!;
-    expect(html).not.toContain(`<option value="${newest}" selected`);
+    expect(painted(html)).not.toBe(newest);
+  });
+
+  has(D)("paints no week LIST at all", () => {
+    /* The point of the rewrite, asserted on the bytes: 88 `<option>` elements
+     * used to reach the browser on every request, and at 102 the control was
+     * what made the page tedious to work through. The paces rail's model
+     * dropdown is a real `<select>` and stays, so this is scoped to
+     * week-shaped option values rather than to `<option>` at large. */
+    const html = renderToString(<Report payload={D!} />);
+    expect([...html.matchAll(/<option value="\d{4}-\d{2}-\d{2}"/g)]).toHaveLength(0);
   });
 });

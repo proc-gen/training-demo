@@ -1,0 +1,339 @@
+{
+ "acwr_mech": 0.6681197281402967,
+ "acwr_mech_on": "2025-09-07",
+ "acwr_run": 0.49894132432657473,
+ "bg_trimp": 36.85719610978334,
+ "ceiling_inputs": {
+  "background_source": "baseline",
+  "background_steps": 1954.0,
+  "background_window_days": 28,
+  "cadence_source": "measured",
+  "cadence_spm": 177.0,
+  "default_cadence_spm": 172,
+  "margin": 1.05,
+  "run_step_weight": 2.5
+ },
+ "csv": "2025-09-01,Intensity,Block,151937,140170,11767,100,71,86,0.67,0.50,1.39,210629,477,37,95,47,47,none",
+ "days": [
+  {
+   "atl": 85.49047802832673,
+   "bg_trimp": 5.422897608805733,
+   "bg_trimp_hr_rest_source": "measured",
+   "ceiling": 29929.2,
+   "ceiling_source": "prescribed",
+   "completeness": "full",
+   "ctl": 106.01152358375192,
+   "date": "2025-09-01",
+   "nonrun_se": 1749.0,
+   "nonrun_steps": 1749,
+   "pct": 100.0,
+   "prescribed_run_seconds": 3600.0,
+   "prescribed_run_steps": 10620.0,
+   "role": "easy",
+   "run_se": 26655.0,
+   "run_step_source": "cadence-stream",
+   "run_steps": 10662,
+   "scored": true,
+   "se": 28404.0,
+   "total_steps": 12411,
+   "trimp": 87.1,
+   "tsb": 20.52104555542519
+  },
+  {
+   "atl": 111.20285852124505,
+   "bg_trimp": 7.645891334500392,
+   "bg_trimp_hr_rest_source": "measured",
+   "ceiling": 48624.593898849474,
+   "ceiling_source": "session-default",
+   "completeness": "full",
+   "ctl": 109.84075504497277,
+   "date": "2025-09-02",
+   "nonrun_se": 2535.0,
+   "nonrun_steps": 2535,
+   "pct": 100.0,
+   "prescribed_run_seconds": 6014.255870715024,
+   "prescribed_run_steps": 17742.054818609322,
+   "role": "repetition",
+   "run_se": 42315.0,
+   "run_step_source": "cadence-stream",
+   "run_steps": 16926,
+   "scored": true,
+   "se": 44850.0,
+   "total_steps": 19461,
+   "trimp": 188.34,
+   "tsb": -1.3621034762722815
+  },
+  {
+   "atl": 104.46964389093378,
+   "bg_trimp": 6.803524016205439,
+   "bg_trimp_hr_rest_source": "measured",
+   "ceiling": 29929.2,
+   "ceiling_source": "prescribed",
+   "completeness": "full",
+   "ctl": 108.65141760102054,
+   "date": "2025-09-03",
+   "nonrun_se": 2136.0,
+   "nonrun_steps": 2136,
+   "pct": 100.0,
+   "prescribed_run_seconds": 3600.0,
+   "prescribed_run_steps": 10620.0,
+   "role": "easy",
+   "run_se": 27185.0,
+   "run_step_source": "cadence-stream",
+   "run_steps": 10874,
+   "scored": true,
+   "se": 29321.0,
+   "total_steps": 13010,
+   "trimp": 84.27,
+   "tsb": 4.181773710086759
+  },
+  {
+   "atl": 102.48973291820035,
+   "bg_trimp": 6.019972092990768,
+   "bg_trimp_hr_rest_source": "measured",
+   "ceiling": 36898.575000000004,
+   "ceiling_source": "prescribed",
+   "completeness": "full",
+   "ctl": 108.08856096841492,
+   "date": "2025-09-04",
+   "nonrun_se": 1890.0,
+   "nonrun_steps": 1890,
+   "pct": 100.0,
+   "prescribed_run_seconds": 4500.0,
+   "prescribed_run_steps": 13275.0,
+   "role": "easy",
+   "run_se": 33247.5,
+   "run_step_source": "cadence-stream",
+   "run_steps": 13299,
+   "scored": true,
+   "se": 35137.5,
+   "total_steps": 15189,
+   "trimp": 96.55000000000001,
+   "tsb": 5.598828050214578
+  },
+  {
+   "atl": 77.32229968865026,
+   "bg_trimp": 2.572759490465023,
+   "bg_trimp_hr_rest_source": "measured",
+   "ceiling": 43867.950000000004,
+   "ceiling_source": "prescribed",
+   "completeness": "full",
+   "ctl": 103.14583720244214,
+   "date": "2025-09-05",
+   "nonrun_se": 853.0,
+   "nonrun_steps": 853,
+   "pct": 100.0,
+   "prescribed_run_seconds": 5400.0,
+   "prescribed_run_steps": 15930.0,
+   "role": "threshold",
+   "run_se": 1135.0,
+   "run_step_source": "cadence-stream",
+   "run_steps": 454,
+   "scored": true,
+   "se": 1988.0,
+   "total_steps": 1307,
+   "trimp": 1.82,
+   "tsb": 25.823537513791877
+  },
+  {
+   "atl": 62.44672476648769,
+   "bg_trimp": 3.780024799275964,
+   "bg_trimp_hr_rest_source": "measured",
+   "ceiling": 22959.825,
+   "ceiling_source": "prescribed",
+   "completeness": "full",
+   "ctl": 99.17719361163087,
+   "date": "2025-09-06",
+   "nonrun_se": 1156.0,
+   "nonrun_steps": 1156,
+   "pct": 100.0,
+   "prescribed_run_seconds": 2700.0,
+   "prescribed_run_steps": 7965.0,
+   "role": "easy",
+   "run_se": 8305.0,
+   "run_step_source": "cadence-stream",
+   "run_steps": 3322,
+   "scored": true,
+   "se": 9461.0,
+   "total_steps": 4478,
+   "trimp": 17.82,
+   "tsb": 36.73046884514318
+  },
+  {
+   "atl": 47.217543574865765,
+   "bg_trimp": 4.612126767540017,
+   "bg_trimp_hr_rest_source": "measured",
+   "ceiling": 43867.950000000004,
+   "ceiling_source": "prescribed",
+   "completeness": "full",
+   "ctl": 94.63546367620617,
+   "date": "2025-09-07",
+   "nonrun_se": 1448.0,
+   "nonrun_steps": 1448,
+   "pct": 100.0,
+   "prescribed_run_seconds": 5400.0,
+   "prescribed_run_steps": 15930.0,
+   "role": "long",
+   "run_se": 1327.5,
+   "run_step_source": "cadence-stream",
+   "run_steps": 531,
+   "scored": true,
+   "se": 2775.5,
+   "total_steps": 1979,
+   "trimp": 1.53,
+   "tsb": 47.41792010134041
+  }
+ ],
+ "fitness": {
+  "activities": 12,
+  "acwr_run": 0.49894132432657473,
+  "atl": 47.217543574865765,
+  "atl_converged": true,
+  "ctl": 94.63546367620617,
+  "ctl_converged": true,
+  "ctl_warmup_days": 126,
+  "days_covered": 7,
+  "earliest_activity": "2024-08-01",
+  "history_days": 403,
+  "on_date": "2025-09-07",
+  "seed_date": "2024-08-01",
+  "stream_share": 0.9967953417254886,
+  "trimp": 477.43,
+  "trimp_source": "mixed",
+  "tsb": 47.41792010134041,
+  "unpriced": 0
+ },
+ "flags": [
+  {
+   "status": "clear",
+   "token": "steps-data-incomplete",
+   "why": "all 7 days covered by the export"
+  },
+  {
+   "status": "not-evaluable",
+   "token": "recovery-day-not-recovering",
+   "why": "no fully-covered rest or recovery day this week"
+  },
+  {
+   "status": "clear",
+   "token": "background-load-spike",
+   "why": "11,767 SE background against a 13,570 SE baseline = 0.87x (fires above 1.3x)"
+  },
+  {
+   "status": "clear",
+   "token": "hidden-load",
+   "why": "mechanical A:C 0.67 against running-only 0.50 from our TRIMP (optimum 0.8-1.3)"
+  },
+  {
+   "status": "clear",
+   "token": "load-monotony",
+   "why": "day-to-day SE coefficient of variation 0.72 (fires below 0.15)"
+  },
+  {
+   "status": "clear",
+   "token": "resting-hr-rise",
+   "why": "trailing resting-HR mean -0.5 bpm (fires at +5)"
+  },
+  {
+   "status": "clear",
+   "token": "hrv-suppressed",
+   "why": "longest run of 2 day(s) below 64.8 (90% of a 72.0 baseline); fires at 3"
+  },
+  {
+   "status": "clear",
+   "token": "sleep-debt",
+   "why": "mean 6.7 h over 7 night(s) (fires below 6.5)"
+  },
+  {
+   "status": "clear",
+   "token": "strain-spike",
+   "why": "strain 210,629 SE against a 673,600 SE baseline = 0.31x (fires above 1.5x)"
+  },
+  {
+   "status": "clear",
+   "token": "form-suppressed",
+   "why": "running-only TSB +47 from our TRIMP (fires below -25) with mechanical A:C 0.67 (fires above 1.3)"
+  }
+ ],
+ "integrity": {
+  "earned": 151937.0,
+  "excluded": [],
+  "pct": 100.0,
+  "scored_days": 7,
+  "total": 151937.0
+ },
+ "monotony_mech": 1.386293817218046,
+ "overall": 85.71428571428572,
+ "phase": "Block",
+ "readiness": {
+  "available": 21,
+  "hrv_baseline": 72,
+  "hrv_baseline_source": "snapshot",
+  "passed": 15,
+  "pct": 71.42857142857143,
+  "per_day": [
+   {
+    "checks": {
+     "hrv": true,
+     "resting_hr": true,
+     "sleep": false
+    },
+    "date": "2025-09-01"
+   },
+   {
+    "checks": {
+     "hrv": true,
+     "resting_hr": true,
+     "sleep": false
+    },
+    "date": "2025-09-02"
+   },
+   {
+    "checks": {
+     "hrv": true,
+     "resting_hr": true,
+     "sleep": true
+    },
+    "date": "2025-09-03"
+   },
+   {
+    "checks": {
+     "hrv": true,
+     "resting_hr": true,
+     "sleep": false
+    },
+    "date": "2025-09-04"
+   },
+   {
+    "checks": {
+     "hrv": false,
+     "resting_hr": true,
+     "sleep": false
+    },
+    "date": "2025-09-05"
+   },
+   {
+    "checks": {
+     "hrv": false,
+     "resting_hr": true,
+     "sleep": true
+    },
+    "date": "2025-09-06"
+   },
+   {
+    "checks": {
+     "hrv": true,
+     "resting_hr": true,
+     "sleep": true
+    },
+    "date": "2025-09-07"
+   }
+  ],
+  "resting_hr_ceiling": 47
+ },
+ "shape_days_covered": 7,
+ "shape_days_needed": 7,
+ "strain_mech": 210629.32370665824,
+ "week_start": "2025-09-01",
+ "week_type": "Intensity"
+}

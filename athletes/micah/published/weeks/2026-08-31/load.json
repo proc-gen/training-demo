@@ -5,7 +5,7 @@
  "bg_trimp": null,
  "ceiling_inputs": {
   "background_source": "baseline",
-  "background_steps": 1756.0,
+  "background_steps": 1665.0,
   "background_window_days": 28,
   "cadence_source": "measured",
   "cadence_spm": 175.0,
@@ -13,7 +13,7 @@
   "margin": 1.05,
   "run_step_weight": 2.5
  },
- "csv": "2026-08-31,Volume,General Prep,0,0,0,,,,,,,,,,,,,none",
+ "csv": "2026-08-31,Intensity,General Prep,0,0,0,,,,,,,,,,,,,none",
  "days": [],
  "fitness": null,
  "flags": [
@@ -45,12 +45,12 @@
   {
    "status": "clear",
    "token": "resting-hr-rise",
-   "why": "trailing resting-HR mean -1.4 bpm (fires at +5)"
+   "why": "trailing resting-HR mean -0.4 bpm (fires at +5)"
   },
   {
    "status": "clear",
    "token": "hrv-suppressed",
-   "why": "longest run of 0 day(s) below 67.5 (90% of a 75.0 baseline); fires at 3"
+   "why": "longest run of 0 day(s) below 63.0 (90% of a 70.0 baseline); fires at 3"
   },
   {
    "status": "not-evaluable",
@@ -65,7 +65,7 @@
   {
    "status": "not-evaluable",
    "token": "form-suppressed",
-   "why": "tsb_floor is null in the load model — TSB -- is reported, not scored, until a floor is calibrated. It is calibratable now: TSB is a series we hold for every date rather than five hand-read points"
+   "why": "running-only TSB --, mechanical A:C -- — needs both"
   }
  ],
  "integrity": {
@@ -80,7 +80,7 @@
  "phase": "General Prep",
  "readiness": {
   "available": 0,
-  "hrv_baseline": 75,
+  "hrv_baseline": 70,
   "hrv_baseline_source": "snapshot",
   "passed": 0,
   "pct": null,
@@ -91,5 +91,5 @@
  "shape_days_needed": 0,
  "strain_mech": null,
  "week_start": "2026-08-31",
- "week_type": "Volume"
+ "week_type": "Intensity"
 }

@@ -1,0 +1,208 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "Block",
+  "runs": [
+   {
+    "date": "2025-07-07",
+    "key": "2025-07-07",
+    "prescribed": "Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-07-08",
+    "key": "2025-07-08-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-07-08",
+    "key": "2025-07-08-wu",
+    "prescribed": "warmup",
+    "role": "volume_only"
+   },
+   {
+    "date": "2025-07-08",
+    "key": "2025-07-08-b",
+    "prescribed": "B - 1xmile w/ 200m jog, 6-8x200m w/ 200m jog",
+    "role": "repetition"
+   },
+   {
+    "date": "2025-07-08",
+    "key": "2025-07-08-cd",
+    "prescribed": "cooldown",
+    "role": "volume_only"
+   },
+   {
+    "date": "2025-07-09",
+    "key": "2025-07-09",
+    "prescribed": "Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-07-10",
+    "key": "2025-07-10-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-07-10",
+    "key": "2025-07-10-b",
+    "prescribed": "B - Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-07-11",
+    "key": "2025-07-11-a",
+    "prescribed": "A - Easy 30 min -> Added 4x1:00 hard w/ 1:00 jog to morning",
+    "role": "easy"
+   },
+   {
+    "date": "2025-07-11",
+    "key": "2025-07-11-b",
+    "prescribed": "B - Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-07-12",
+    "key": "2025-07-12",
+    "prescribed": "Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-07-13",
+    "key": "2025-07-13",
+    "prescribed": "Easy 90 min",
+    "role": "long"
+   }
+  ],
+  "week_start": "2025-07-07",
+  "week_type": "Intensity"
+ },
+ "pace_chart": {
+  "bands": {
+   "easy": {
+    "display": "7:42-8:18/mi",
+    "fast_sec_per_mi": 462,
+    "pct": [
+     0.63,
+     0.68
+    ],
+    "slow_sec_per_mi": 498
+   },
+   "long": {
+    "display": "7:16-7:42/mi",
+    "fast_sec_per_mi": 436,
+    "pct": [
+     0.68,
+     0.72
+    ],
+    "slow_sec_per_mi": 462
+   },
+   "recovery": {
+    "display": "8:18-9:01/mi",
+    "fast_sec_per_mi": 498,
+    "pct": [
+     0.58,
+     0.63
+    ],
+    "slow_sec_per_mi": 541
+   },
+   "rep_10min": {
+    "display": "6:23-6:37/mi",
+    "fast_sec_per_mi": 383,
+    "pct": [
+     0.79,
+     0.82
+    ],
+    "slow_sec_per_mi": 397
+   },
+   "rep_15min": {
+    "display": "6:32-6:48/mi",
+    "fast_sec_per_mi": 392,
+    "pct": [
+     0.77,
+     0.8
+    ],
+    "slow_sec_per_mi": 408
+   },
+   "rep_1min": {
+    "display": "5:57-6:09/mi",
+    "fast_sec_per_mi": 357,
+    "pct": [
+     0.85,
+     0.88
+    ],
+    "slow_sec_per_mi": 369
+   },
+   "rep_3min": {
+    "display": "6:05-6:18/mi",
+    "fast_sec_per_mi": 365,
+    "pct": [
+     0.83,
+     0.86
+    ],
+    "slow_sec_per_mi": 378
+   },
+   "rep_6min": {
+    "display": "6:14-6:28/mi",
+    "fast_sec_per_mi": 374,
+    "pct": [
+     0.81,
+     0.84
+    ],
+    "slow_sec_per_mi": 388
+   }
+  },
+  "confirmed_by_athlete": true,
+  "effective_vo2max": 61.31,
+  "race_paces": {
+   "10000m": {
+    "display": "34:43 @ 5:35/mi",
+    "sec_per_mi": 335,
+    "seconds": 2083
+   },
+   "1500m": {
+    "display": "4:30 @ 4:50/mi",
+    "sec_per_mi": 290,
+    "seconds": 270
+   },
+   "21097m": {
+    "display": "1:16:42 @ 5:51/mi",
+    "sec_per_mi": 351,
+    "seconds": 4602
+   },
+   "3000m": {
+    "display": "9:39 @ 5:10/mi",
+    "sec_per_mi": 310,
+    "seconds": 579
+   },
+   "42195m": {
+    "display": "2:40:24 @ 6:07/mi",
+    "sec_per_mi": 367,
+    "seconds": 9624
+   },
+   "5000m": {
+    "display": "16:44 @ 5:23/mi",
+    "sec_per_mi": 323,
+    "seconds": 1004
+   },
+   "800m": {
+    "display": "2:17 @ 4:35/mi",
+    "sec_per_mi": 275,
+    "seconds": 137
+   },
+   "tempo": {
+    "basis": "60-80 minute race pace, the Daniels threshold definition, from the model's duration prognosis.",
+    "display": "5:46-5:52/mi",
+    "fast_sec_per_mi": 346,
+    "slow_sec_per_mi": 352
+   }
+  },
+  "week_ending": "2025-07-06"
+ },
+ "pace_chart_is_carried_forward": false,
+ "week_end": "2025-07-13",
+ "week_start": "2025-07-07"
+}

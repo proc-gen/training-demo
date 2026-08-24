@@ -65,4 +65,24 @@ describe("RacePaceTable", () => {
     expect(container.textContent).not.toContain("_source");
     expect(container.textContent).toContain("2:28 @ 4:57/mi");
   });
+
+  it("the Current heading is whatever label it is handed", () => {
+    /* The rail's model dropdown swaps the column's SOURCE, and the heading has
+     * to move with it -- a model's projection under the word "Current" would
+     * wear the confirmed chart's label. Default stays "Current". */
+    const dflt = wrap(
+      <RacePaceTable week={week} current={current} showWeek />,
+    );
+    expect(dflt.container.textContent).toContain("Current");
+    const swapped = wrap(
+      <RacePaceTable
+        week={week}
+        current={current}
+        showWeek
+        currentLabel="Riegel power law"
+      />,
+    );
+    expect(swapped.container.textContent).toContain("Riegel power law");
+    expect(swapped.container.textContent).not.toContain("Current");
+  });
 });

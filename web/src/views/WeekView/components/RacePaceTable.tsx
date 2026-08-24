@@ -3,7 +3,7 @@
 import { clock, pace } from "@/lib/data/format";
 import type { PaceChart, RacePace } from "@/lib/data/payload";
 import { Table } from "@/lib/ux/primitives/Table";
-import { raceRows } from "../data/paceRows";
+import { raceRows } from "@/lib/data/paceRows";
 
 /** The week's estimated race times beside today's.
  *
@@ -16,10 +16,15 @@ export function RacePaceTable({
   week,
   current,
   showWeek,
+  currentLabel = "Current",
 }: {
   week?: PaceChart | null;
   current?: PaceChart | null;
   showWeek: boolean;
+  /** The Current column's heading. "Current" for the confirmed chart; the
+   *  MODEL'S NAME when the rail's dropdown swapped the column's source, so a
+   *  projection never wears the confirmed chart's label. */
+  currentLabel?: string;
 }) {
   const rows = raceRows(showWeek ? week : null, current);
   if (!rows.length) return null;
@@ -30,7 +35,7 @@ export function RacePaceTable({
       headers={[
         { label: "Race" },
         { label: "This week", num: true },
-        { label: "Current", num: true },
+        { label: currentLabel, num: true },
       ]}
     >
       {rows.map((r) => (

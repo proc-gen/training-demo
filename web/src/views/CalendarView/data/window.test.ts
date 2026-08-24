@@ -10,6 +10,7 @@ import {
   defaultLastDay,
   isIsoDate,
   newestMeasuredDate,
+  stepLastDay,
   weekRowsEnding,
 } from "./window";
 
@@ -189,6 +190,79 @@ describe("clampWeeks", () => {
 
   it("the default is one of the choices", () => {
     expect(WEEK_CHOICES).toContain(DEFAULT_WEEKS);
+  });
+});
+
+describe("stepLastDay", () => {
+  it("moves ONE week at 1w", () => {
+    expect(stepLastDay("2026-08-15", 1, -1)).toBe("2026-08-08");
+    expect(stepLastDay("2026-08-15", 1, 1)).toBe("2026-08-22");
+  });
+
+  it.each(WEEK_CHOICES)(
+    "lands the new window FLUSH against the old one at %iw",
+    (weeks) => {
+      /* THE PROPERTY THAT MATTERS, and the athlete's own statement of it: "if 2
+       * weeks is selected, move back and forth by 2 week increments." A window
+       * of N rows, stepped back once, must cover exactly the N rows
+       * immediately before it -- no gap, no overlap. Asserted by showing that
+       * the two windows together ARE the 2N-row window ending where the first
+       * one did. */
+      const now = weekRowsEnding("2026-08-15", weeks).map((r) => r.start);
+      const back = weekRowsEnding(stepLastDay("2026-08-15", weeks, -1), weeks).map(
+        (r) => r.start,
+      );
+      expect([...back, ...now]).toEqual(
+        weekRowsEnding("2026-08-15", weeks * 2).map((r) => r.start),
+      );
+    },
+  );
+
+  it.each(WEEK_CHOICES)("is flush going FORWARD too at %iw", (weeks) => {
+    const now = weekRowsEnding("2026-08-15", weeks).map((r) => r.start);
+    const fwd = stepLastDay("2026-08-15", weeks, 1);
+    expect([...now, ...weekRowsEnding(fwd, weeks).map((r) => r.start)]).toEqual(
+      weekRowsEnding(fwd, weeks * 2).map((r) => r.start),
+    );
+  });
+
+  it("crosses a MONTH end", () => {
+    expect(stepLastDay("2026-09-05", 1, -1)).toBe("2026-08-29");
+  });
+
+  it("crosses a YEAR end", () => {
+    expect(stepLastDay("2027-01-02", 1, -1)).toBe("2026-12-26");
+    expect(stepLastDay("2026-12-28", 1, 1)).toBe("2027-01-04");
+  });
+
+  it("crosses a LEAP DAY", () => {
+    // 2028 is a leap year: 02-24 + 7 lands on 03-02, not 03-03.
+    expect(stepLastDay("2028-02-24", 1, 1)).toBe("2028-03-02");
+    expect(stepLastDay("2028-03-02", 1, -1)).toBe("2028-02-24");
+  });
+
+  it("is identity for a zero step", () => {
+    expect(stepLastDay("2026-08-15", 4, 0)).toBe("2026-08-15");
+  });
+
+  it("is its own inverse", () => {
+    for (const w of WEEK_CHOICES) {
+      const there = stepLastDay("2026-08-15", w, -1);
+      expect(stepLastDay(there, w, 1)).toBe("2026-08-15");
+    }
+  });
+
+  it("takes MANY steps at once", () => {
+    // Nothing calls it this way today; it must not be a ±1 special case.
+    expect(stepLastDay("2026-08-15", 1, -3)).toBe(stepLastDay("2026-08-15", 3, -1));
+  });
+
+  it("IS NOT BOUNDED BY THE DATA", () => {
+    /* The athlete's decision, matching the date field beside it, which has
+     * never been bounded either. Stepping past the record draws empty cells,
+     * which says more than a dead button can. */
+    expect(stepLastDay("2026-08-15", 6, 50)).toBe("2032-05-15");
+    expect(stepLastDay("2026-08-15", 6, -50)).toBe("2020-11-14");
   });
 });
 

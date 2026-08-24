@@ -1,0 +1,190 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "Injury",
+  "runs": [
+   {
+    "date": "2025-09-29",
+    "key": "2025-09-29",
+    "prescribed": "unplanned -- injury-window easy run (32 min)",
+    "role": "easy"
+   },
+   {
+    "date": "2025-09-30",
+    "key": "2025-09-30-a",
+    "prescribed": "unplanned -- injury-window run, first of two files (8 min)",
+    "role": "easy"
+   },
+   {
+    "date": "2025-09-30",
+    "key": "2025-09-30-b",
+    "prescribed": "unplanned -- injury-window run (29 min)",
+    "role": "easy"
+   },
+   {
+    "date": "2025-10-01",
+    "key": "2025-10-01",
+    "prescribed": "unplanned -- injury-window easy run (36 min)",
+    "role": "easy"
+   },
+   {
+    "date": "2025-10-03",
+    "key": "2025-10-03",
+    "prescribed": "unplanned -- injury-window easy run (30 min)",
+    "role": "easy"
+   },
+   {
+    "date": "2025-10-04",
+    "key": "2025-10-04",
+    "prescribed": "unplanned -- injury-window easy run (20 min)",
+    "role": "easy"
+   },
+   {
+    "date": "2025-10-05",
+    "key": "2025-10-05-wu",
+    "prescribed": "warmup",
+    "role": "volume_only"
+   },
+   {
+    "date": "2025-10-05",
+    "key": "2025-10-05",
+    "prescribed": "Local Half Marathon",
+    "role": "race"
+   },
+   {
+    "date": "2025-10-05",
+    "key": "2025-10-05-cd",
+    "prescribed": "cooldown",
+    "role": "volume_only"
+   }
+  ],
+  "week_start": "2025-09-29",
+  "week_type": "Race"
+ },
+ "pace_chart": {
+  "bands": {
+   "easy": {
+    "display": "7:25-8:00/mi",
+    "fast_sec_per_mi": 445,
+    "pct": [
+     0.63,
+     0.68
+    ],
+    "slow_sec_per_mi": 480
+   },
+   "long": {
+    "display": "7:00-7:25/mi",
+    "fast_sec_per_mi": 420,
+    "pct": [
+     0.68,
+     0.72
+    ],
+    "slow_sec_per_mi": 445
+   },
+   "recovery": {
+    "display": "8:00-8:41/mi",
+    "fast_sec_per_mi": 480,
+    "pct": [
+     0.58,
+     0.63
+    ],
+    "slow_sec_per_mi": 521
+   },
+   "rep_10min": {
+    "display": "6:09-6:23/mi",
+    "fast_sec_per_mi": 369,
+    "pct": [
+     0.79,
+     0.82
+    ],
+    "slow_sec_per_mi": 383
+   },
+   "rep_15min": {
+    "display": "6:18-6:33/mi",
+    "fast_sec_per_mi": 378,
+    "pct": [
+     0.77,
+     0.8
+    ],
+    "slow_sec_per_mi": 393
+   },
+   "rep_1min": {
+    "display": "5:44-5:56/mi",
+    "fast_sec_per_mi": 344,
+    "pct": [
+     0.85,
+     0.88
+    ],
+    "slow_sec_per_mi": 356
+   },
+   "rep_3min": {
+    "display": "5:52-6:04/mi",
+    "fast_sec_per_mi": 352,
+    "pct": [
+     0.83,
+     0.86
+    ],
+    "slow_sec_per_mi": 364
+   },
+   "rep_6min": {
+    "display": "6:00-6:13/mi",
+    "fast_sec_per_mi": 360,
+    "pct": [
+     0.81,
+     0.84
+    ],
+    "slow_sec_per_mi": 373
+   }
+  },
+  "confirmed_by_athlete": true,
+  "effective_vo2max": 64.2,
+  "race_paces": {
+   "10000m": {
+    "display": "33:23 @ 5:22/mi",
+    "sec_per_mi": 322,
+    "seconds": 2003
+   },
+   "1500m": {
+    "display": "4:19 @ 4:38/mi",
+    "sec_per_mi": 278,
+    "seconds": 259
+   },
+   "21097m": {
+    "display": "1:13:42 @ 5:37/mi",
+    "sec_per_mi": 337,
+    "seconds": 4422
+   },
+   "3000m": {
+    "display": "9:16 @ 4:58/mi",
+    "sec_per_mi": 298,
+    "seconds": 556
+   },
+   "42195m": {
+    "display": "2:34:13 @ 5:53/mi",
+    "sec_per_mi": 353,
+    "seconds": 9253
+   },
+   "5000m": {
+    "display": "16:05 @ 5:11/mi",
+    "sec_per_mi": 311,
+    "seconds": 965
+   },
+   "800m": {
+    "display": "2:12 @ 4:25/mi",
+    "sec_per_mi": 265,
+    "seconds": 132
+   },
+   "tempo": {
+    "basis": "60-80 minute race pace, the Daniels threshold definition, from the model's duration prognosis.",
+    "display": "5:33-5:39/mi",
+    "fast_sec_per_mi": 333,
+    "slow_sec_per_mi": 339
+   }
+  },
+  "week_ending": "2025-09-28"
+ },
+ "pace_chart_is_carried_forward": false,
+ "week_end": "2025-10-05",
+ "week_start": "2025-09-29"
+}

@@ -22,8 +22,6 @@ const FIT = {
   ctl_converged: true,
   ctl_warmup_days: 126,
   history_days: 188,
-  ctl_max_in_series: 84,
-  series_span_days: 188,
   stream_share: 1,
 };
 
@@ -81,11 +79,18 @@ describe("FitnessNote", () => {
       expect(t).toContain("not enough history yet");
     });
 
-    it("reports the highest fitness in the series once converged", () => {
+    it("says nothing extra once fitness has converged", () => {
+      /* This asserted "Highest fitness 84 over the 188 days we hold" until
+       * 2026-08-23. That sentence read `ctl_max_in_series` and
+       * `series_span_days`, both properties of the WHOLE series -- so every
+       * added activity rewrote them in all 86 published week records, and on a
+       * 2024 week the number was a peak first reached in 2026. A global claim
+       * does not belong inside a week card; a real one belongs in a top-level
+       * singleton beside `pace-chart-current.json`. */
       const t = text(load(FIT));
-      expect(t).toContain("84");
-      expect(t).toContain("188 days");
       expect(t).not.toContain("withheld");
+      expect(t).not.toContain("Highest fitness");
+      expect(t).not.toContain("days we hold");
     });
   });
 

@@ -1,7 +1,7 @@
 {
- "acwr_mech": 1.1770427393836043,
+ "acwr_mech": 1.1778452949164895,
  "acwr_mech_on": "2026-08-02",
- "acwr_run": 1.1847886267656347,
+ "acwr_run": 1.1827584044045085,
  "bg_trimp": 87.38184521637119,
  "ceiling_inputs": {
   "background_source": "baseline",
@@ -16,13 +16,13 @@
  "csv": "2026-07-27,Volume,General Prep,208497,180280,28217,92,86,89,1.18,1.18,4.35,906598,591,87,78,92,-14,recovery-day-not-recovering;background-load-spike;strain-spike",
  "days": [
   {
-   "atl": 81.38583445922505,
+   "atl": 81.3862445980265,
    "bg_trimp": 6.778539281054561,
    "bg_trimp_hr_rest_source": "measured",
    "ceiling": 16306.5,
    "ceiling_source": "prescribed",
    "completeness": "full",
-   "ctl": 72.29515483046863,
+   "ctl": 72.47235013817414,
    "date": "2026-07-27",
    "nonrun_se": 2073.0,
    "nonrun_steps": 2073,
@@ -37,16 +37,16 @@
    "se": 15258.0,
    "total_steps": 7347,
    "trimp": 30.09,
-   "tsb": -9.090679628756419
+   "tsb": -8.913894459852358
   },
   {
-   "atl": 89.9493758444188,
+   "atl": 89.94968344851986,
    "bg_trimp": 11.343344315474324,
    "bg_trimp_hr_rest_source": "measured",
    "ceiling": 35441.072446910046,
    "ceiling_source": "session-default",
    "completeness": "full",
-   "ctl": 74.31119414067939,
+   "ctl": 74.48014780616603,
    "date": "2026-07-28",
    "nonrun_se": 3469.0,
    "nonrun_steps": 3469,
@@ -61,16 +61,16 @@
    "se": 32364.0,
    "total_steps": 15027,
    "trimp": 115.64000000000001,
-   "tsb": -15.638181703739406
+   "tsb": -15.469535642353833
   },
   {
-   "atl": 86.5570318833141,
+   "atl": 86.5572625863899,
    "bg_trimp": 3.6710753395231497,
    "bg_trimp_hr_rest_source": "measured",
    "ceiling": 32292.75,
    "ceiling_source": "prescribed",
    "completeness": "full",
-   "ctl": 74.40741766901988,
+   "ctl": 74.56851302448389,
    "date": "2026-07-29",
    "nonrun_se": 1184.0,
    "nonrun_steps": 1184,
@@ -85,16 +85,16 @@
    "se": 30724.0,
    "total_steps": 13000,
    "trimp": 76.38,
-   "tsb": -12.149614214294218
+   "tsb": -11.988749561906005
   },
   {
-   "atl": 91.63027391248556,
+   "atl": 91.63044693979242,
    "bg_trimp": 3.1533187153761166,
    "bg_trimp_hr_rest_source": "measured",
    "ceiling": 28867.125,
    "ceiling_source": "session-default",
    "completeness": "full",
-   "ctl": 75.9163749867399,
+   "ctl": 76.06997753497302,
    "date": "2026-07-30",
    "nonrun_se": 990.0,
    "nonrun_steps": 990,
@@ -109,16 +109,16 @@
    "se": 27702.5,
    "total_steps": 11675,
    "trimp": 106.85,
-   "tsb": -15.713898925745667
+   "tsb": -15.5604694048194
   },
   {
-   "atl": 92.94270543436417,
+   "atl": 92.94283520484431,
    "bg_trimp": 3.734245952225909,
    "bg_trimp_hr_rest_source": "measured",
    "ceiling": 30009.0,
    "ceiling_source": "prescribed",
    "completeness": "full",
-   "ctl": 76.89142731293803,
+   "ctl": 77.03788555660218,
    "date": "2026-07-31",
    "nonrun_se": 1142.0,
    "nonrun_steps": 1142,
@@ -133,16 +133,16 @@
    "se": 32029.5,
    "total_steps": 13497,
    "trimp": 96.88,
-   "tsb": -16.051278121426137
+   "tsb": -15.904949648242138
   },
   {
-   "atl": 76.71952907577314,
+   "atl": 76.71962640363324,
    "bg_trimp": 52.821497018187515,
    "bg_trimp_hr_rest_source": "measured",
    "ceiling": 16306.5,
    "ceiling_source": "prescribed",
    "completeness": "full",
-   "ctl": 74.619733019313,
+   "ctl": 74.75937925164394,
    "date": "2026-08-01",
    "nonrun_se": 17513.0,
    "nonrun_steps": 17513,
@@ -157,16 +157,16 @@
    "se": 30645.5,
    "total_steps": 22766,
    "trimp": 28.05,
-   "tsb": -2.0997960564601357
+   "tsb": -1.9602471519893072
   },
   {
-   "atl": 91.86214680682986,
+   "atl": 91.86221980272492,
    "bg_trimp": 5.879824594529608,
    "bg_trimp_hr_rest_source": "measured",
    "ceiling": 43711.5,
    "ceiling_source": "prescribed",
    "completeness": "full",
-   "ctl": 77.53462915794961,
+   "ctl": 77.66778021668375,
    "date": "2026-08-02",
    "nonrun_se": 1846.0,
    "nonrun_steps": 1846,
@@ -181,28 +181,26 @@
    "se": 39773.5,
    "total_steps": 17017,
    "trimp": 137.29,
-   "tsb": -14.327517648880246
+   "tsb": -14.19443958604117
   }
  ],
  "fitness": {
   "activities": 10,
-  "acwr_run": 1.1847886267656347,
-  "atl": 91.86214680682986,
+  "acwr_run": 1.1827584044045085,
+  "atl": 91.86221980272492,
   "atl_converged": true,
-  "ctl": 77.53462915794961,
+  "ctl": 77.66778021668375,
   "ctl_converged": true,
-  "ctl_max_in_series": 83.82298839458575,
   "ctl_warmup_days": 126,
   "days_covered": 7,
-  "earliest_activity": "2026-02-09",
-  "history_days": 175,
+  "earliest_activity": "2024-08-01",
+  "history_days": 732,
   "on_date": "2026-08-02",
-  "seed_date": "2026-02-09",
-  "series_span_days": 189,
+  "seed_date": "2024-08-01",
   "stream_share": 1.0,
   "trimp": 591.18,
   "trimp_source": "stream",
-  "tsb": -14.327517648880246,
+  "tsb": -14.19443958604117,
   "unpriced": 0
  },
  "flags": [
@@ -219,7 +217,7 @@
   {
    "status": "fired",
    "token": "background-load-spike",
-   "why": "28,217 SE background against a 16,330 SE baseline = 1.73x (fires above 1.3x)"
+   "why": "28,217 SE background against a 16,518 SE baseline = 1.71x (fires above 1.3x)"
   },
   {
    "status": "clear",
@@ -249,12 +247,12 @@
   {
    "status": "fired",
    "token": "strain-spike",
-   "why": "strain 906,598 SE against a 386,999 SE baseline = 2.34x (fires above 1.5x)"
+   "why": "strain 906,598 SE against a 385,998 SE baseline = 2.35x (fires above 1.5x)"
   },
   {
-   "status": "not-evaluable",
+   "status": "clear",
    "token": "form-suppressed",
-   "why": "tsb_floor is null in the load model — TSB -14 is reported, not scored, until a floor is calibrated. It is calibratable now: TSB is a series we hold for every date rather than five hand-read points"
+   "why": "running-only TSB -14 from our TRIMP (fires below -25) with mechanical A:C 1.18 (fires above 1.3)"
   }
  ],
  "integrity": {

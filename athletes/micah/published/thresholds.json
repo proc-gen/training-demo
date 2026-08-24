@@ -40,6 +40,11 @@
   "sex": "male"
  },
  "updated": "2026-08-05",
+ "vo2max": {
+  "correction_factor": 1.013,
+  "elevation_adjustment": false,
+  "shape_window_days": 42
+ },
  "vvo2max_calibration": {
   "effective_vo2max": 55.57,
   "observed": "2026-08-04 Runalyze Training paces table",

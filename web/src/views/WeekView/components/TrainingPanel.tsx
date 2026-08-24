@@ -71,22 +71,6 @@ export function TrainingPanel({ week }: { week: Week }) {
         scored what it scored. A run that has not happened yet shows what was
         prescribed — its target pace and heart-rate ceiling.
       </Note>
-
-      {/* AN ACTIVITY NOBODY CLAIMED IS WORTH SAYING OUT LOUD. A workout arrives
-          as several Garmin files and the ids get pasted onto the manifest one
-          at a time, so this is normal mid-reconciliation -- and the omission
-          fails loudly nowhere else. `derived/runs.json`'s own note records a
-          day whose entire evening workout was attributed to background because
-          two rows were missing. */}
-      {a.unclaimed.length ? (
-        <Note>
-          {a.unclaimed.length} recorded{" "}
-          {a.unclaimed.length === 1 ? "activity" : "activities"} inside this week{" "}
-          {a.unclaimed.length === 1 ? "is" : "are"} not named by any row (
-          {a.unclaimed.map((u) => `${u.date} #${u.runalyze_id}`).join(", ")}).
-          Its mileage is not in the totals above.
-        </Note>
-      ) : null}
     </>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import type { PaceChart, Week } from "@/lib/data/payload";
+import type { PaceChart, PaceModelsCurrent, Week } from "@/lib/data/payload";
 import { PaceRail } from "./components/PaceRail";
 import { WeekBanners } from "./components/WeekBanners";
 import { WeekCard } from "./components/WeekCard";
@@ -30,10 +30,12 @@ export function WeekView({
   week,
   banners,
   paceChartCurrent,
+  paceModels,
 }: {
   week: Week;
   banners: string[];
   paceChartCurrent?: PaceChart | null;
+  paceModels?: PaceModelsCurrent | null;
 }) {
   return (
     <>
@@ -46,7 +48,7 @@ export function WeekView({
           is what the reader came for. */}
       <div className="week-layout">
         <WeekCard week={week} />
-        <PaceRail week={week} current={paceChartCurrent} />
+        <PaceRail week={week} current={paceChartCurrent} models={paceModels} />
       </div>
     </>
   );

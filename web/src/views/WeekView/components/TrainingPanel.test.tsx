@@ -17,13 +17,12 @@ const week = (over: Record<string, unknown>): Week =>
     manifest: { runs: [] },
     trimp: [],
     ...over,
-    // `planned` and `unclaimed` are `.default([])` in the schema, so a real
-    // payload always carries them -- these fixtures are cast past zod, so the
-    // defaults are supplied here rather than in every case below.
+    // `planned` is `.default([])` in the schema, so a real payload always
+    // carries it -- these fixtures are cast past zod, so the default is
+    // supplied here rather than in every case below.
     adherence: {
       results: [],
       planned: [],
-      unclaimed: [],
       ...((over.adherence as Record<string, unknown>) ?? {}),
     },
   }) as unknown as Week;
@@ -214,15 +213,22 @@ describe("the open week, end to end", () => {
    * fixture cannot go stale on the calendar again. */
   const weeks = PUBLISHED ? Object.values(PUBLISHED.weeks) : [];
   const withResults = weeks.filter((w) => (w.adherence?.results.length ?? 0) > 0);
-  const withPlanned = weeks.filter((w) => (w.adherence?.planned.length ?? 0) > 0);
+  /* PENDING rows, not merely planned ones. Since the 2025 backfill a SETTLED
+   * week can carry planned rows forever -- 2025-02-10's two illness misses --
+   * and picking the first such week handed these cases a fixture whose every
+   * planned session already reads Missed. The open week these cases are about
+   * is the one with sessions still AHEAD. */
+  const pendingRows = (w: Week) =>
+    (w.adherence?.planned ?? []).filter((r) => r.status === "pending");
+  const withPending = weeks.filter((w) => pendingRows(w).length > 0);
   const OPEN: Week | undefined =
-    withResults.find((w) => (w.adherence?.planned.length ?? 0) > 0) ??
-    (withResults.length && withPlanned.length
+    withResults.find((w) => pendingRows(w).length > 0) ??
+    (withResults.length && withPending.length
       ? ({
           ...withResults[withResults.length - 1],
           adherence: {
             ...withResults[withResults.length - 1].adherence!,
-            planned: withPlanned[0].adherence!.planned,
+            planned: withPending[0].adherence!.planned,
           },
         } as Week)
       : undefined);
@@ -352,10 +358,4 @@ describe("the open week, end to end", () => {
     expect(text).toMatch(/reference, not the criterion/i);
   });
 
-  has(OPEN)("REPORTS NOTHING UNCLAIMED -- every activity has a row", () => {
-    /* The reconciliation check. A workout arrives as several Garmin files and
-     * the ids get pasted on one at a time; a file nobody claimed is mileage
-     * missing from the totals. */
-    expect(OPEN!.adherence!.unclaimed).toEqual([]);
-  });
 });

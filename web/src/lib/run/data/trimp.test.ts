@@ -63,7 +63,12 @@ describe("trimpByActivity", () => {
       const m = trimpByActivity(w);
       for (const [, row] of m) {
         expect(row.trimp === null || Number.isFinite(row.trimp)).toBe(true);
-        if (row.source) expect(["stream", "average-hr"]).toContain(row.source);
+        // `stream-disavowed` joined 2026-08-20: the estimate priced from the
+        // file's own summary after its stream was rejected against it.
+        if (row.source)
+          expect(["stream", "average-hr", "stream-disavowed"]).toContain(
+            row.source,
+          );
       }
     }
   });

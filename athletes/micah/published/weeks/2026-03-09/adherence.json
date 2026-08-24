@@ -1,0 +1,609 @@
+{
+ "csv": "2026-03-09,Volume,Injury,10.1,100,,100,none",
+ "facts": {
+  "doubles": 0,
+  "easy_seconds": 3404,
+  "elapsed_days": 7,
+  "graded_through": "2026-03-15",
+  "long_run_miles": 0.0,
+  "long_run_share": 0.0,
+  "miles": 10.115923009623797,
+  "non_run_days": [],
+  "plan_unpriceable": [],
+  "planned_seconds": null,
+  "planned_seconds_week": null,
+  "prescribed_dates": 3,
+  "prescribed_dates_due": 3,
+  "projected_seconds": 5119.0,
+  "quality_days": 1,
+  "quality_seconds": 1715,
+  "quality_share": 0.3350263723383473,
+  "remaining_planned_seconds": 0.0,
+  "rest_days": 4,
+  "running_days": 3,
+  "seconds": 5119,
+  "volume_vs_plan": null,
+  "walk_recovery_runs": 0,
+  "walk_recovery_seconds": 0
+ },
+ "flags": [
+  {
+   "status": "clear",
+   "token": "unilateral-complaint",
+   "why": "no complaint word in the week's 1 note(s); Runalyze daily notes and activity descriptions are NOT searched"
+  },
+  {
+   "status": "not-evaluable",
+   "token": "consecutive-compromised",
+   "why": "1 quality session(s) this week; the flag needs two to find two in a row"
+  }
+ ],
+ "graded_through": "2026-03-15",
+ "judged_facts": {
+  "doubles": 0,
+  "easy_seconds": 3404,
+  "elapsed_days": 7,
+  "graded_through": "2026-03-15",
+  "long_run_miles": 0.0,
+  "long_run_share": 0.0,
+  "miles": 10.115923009623797,
+  "non_run_days": [],
+  "plan_unpriceable": [],
+  "planned_seconds": null,
+  "planned_seconds_week": null,
+  "prescribed_dates": 3,
+  "prescribed_dates_due": 3,
+  "projected_seconds": 5119.0,
+  "quality_days": 1,
+  "quality_seconds": 1715,
+  "quality_share": 0.3350263723383473,
+  "remaining_planned_seconds": 0.0,
+  "rest_days": 4,
+  "running_days": 3,
+  "seconds": 5119,
+  "volume_vs_plan": null,
+  "walk_recovery_runs": 0,
+  "walk_recovery_seconds": 0
+ },
+ "phase": "Injury",
+ "planned": [],
+ "results": [
+  {
+   "cadence": 177,
+   "ceiling": "137",
+   "ceiling_tiers": [
+    [
+     null,
+     137
+    ]
+   ],
+   "date": "2026-03-09",
+   "detail": {
+    "laps": [
+     {
+      "cad": 177,
+      "dist_km": 1.609,
+      "dur": 545,
+      "end": 545,
+      "hr_avg": 116,
+      "hr_max": 126,
+      "index": 1,
+      "pace": 545.1165195773773,
+      "start": 0
+     },
+     {
+      "cad": 177,
+      "dist_km": 1.609,
+      "dur": 518,
+      "end": 1063,
+      "hr_avg": 125,
+      "hr_max": 130,
+      "index": 2,
+      "pace": 518.1107470478559,
+      "start": 545
+     },
+     {
+      "cad": 176,
+      "dist_km": 1.609,
+      "dur": 509,
+      "end": 1572,
+      "hr_avg": 125,
+      "hr_max": 129,
+      "index": 3,
+      "pace": 509.1088228713487,
+      "start": 1063
+     },
+     {
+      "cad": 178,
+      "dist_km": 0.731,
+      "dur": 229,
+      "end": 1801,
+      "hr_avg": 126,
+      "hr_max": 130,
+      "index": 4,
+      "pace": 504.1583803009576,
+      "start": 1572
+     }
+    ]
+   },
+   "duration": null,
+   "duration_factor": 1.0,
+   "earned": 1801.0,
+   "emphasis": [],
+   "excursions": {
+    "above_seconds": 0,
+    "excursions": 0,
+    "longest_above_seconds": 0,
+    "sustained_above_seconds": 0
+   },
+   "hr_avg": 122,
+   "hr_max": 130,
+   "hr_pace_response": {
+    "block_seconds": 180,
+    "blocks": 10,
+    "r": -0.837448575393354
+   },
+   "hr_pct": 100.0,
+   "key": "2026-03-09",
+   "km": 5.56,
+   "miles": 3.4548238288395763,
+   "ordinal": 0,
+   "pace": 521.3000978417267,
+   "pct": 100.0,
+   "planned": {
+    "band": "easy",
+    "band_display": "7:54-8:31/mi",
+    "band_is_reference": true,
+    "band_sec_per_mi": [
+     474,
+     511
+    ],
+    "ceiling": "137",
+    "ceiling_tiers": [
+     [
+      null,
+      137
+     ]
+    ],
+    "chart_confirmed": true,
+    "chart_is_carried_forward": false,
+    "chart_week_ending": "2026-03-08",
+    "criterion": "hr",
+    "hr_ceiling": null,
+    "prescribed": "unplanned -- injury-window easy run (30 min)",
+    "prescribed_seconds": null,
+    "role": "easy",
+    "sets": null,
+    "target_display": null,
+    "target_sec_per_mi": null,
+    "target_seconds": null,
+    "target_tolerance_seconds": null
+   },
+   "prescribed": "unplanned -- injury-window easy run (30 min)",
+   "role": "easy",
+   "runalyze_id": 169478707,
+   "score_bucket": "easy",
+   "seconds": 1801,
+   "session": null,
+   "status": "completed",
+   "total": 1801,
+   "volume_km": 5.56,
+   "volume_miles": 3.4548238288395763,
+   "volume_seconds": 1801,
+   "volume_source": "file"
+  },
+  {
+   "cadence": 180,
+   "compromised": true,
+   "date": "2026-03-10",
+   "detail": {
+    "autolaps": [
+     {
+      "dist_km": 1.054,
+      "dur": 352,
+      "index": 1,
+      "remainder_dur": 442
+     },
+     {
+      "dist_km": 1.609,
+      "dur": 442,
+      "index": 2,
+      "remainder_dur": 442
+     },
+     {
+      "dist_km": 1.609,
+      "dur": 442,
+      "index": 3,
+      "remainder_dur": 76
+     },
+     {
+      "dist_km": 1.609,
+      "dur": 450,
+      "index": 6,
+      "remainder_dur": 226
+     }
+    ],
+    "cooldown": null,
+    "core_seconds": 1715,
+    "data_quality": [
+     "reps [6] dip >12 bpm below their neighbours — check strap"
+    ],
+    "detected_reps": 12,
+    "laps": [
+     {
+      "cad": 177,
+      "dist_km": 1.609,
+      "dur": 548,
+      "end": 548,
+      "hr_avg": 131,
+      "hr_max": 142,
+      "index": 1,
+      "pace": 548.1171609695464,
+      "start": 0
+     },
+     {
+      "cad": 177,
+      "dist_km": 1.054,
+      "dur": 352,
+      "end": 900,
+      "hr_avg": 137,
+      "hr_max": 146,
+      "index": 2,
+      "pace": 537.4659278937381,
+      "start": 548
+     },
+     {
+      "cad": 182,
+      "dist_km": 1.609,
+      "dur": 442,
+      "end": 1342,
+      "hr_avg": 156,
+      "hr_max": 161,
+      "index": 3,
+      "pace": 442.0944984462399,
+      "start": 900
+     },
+     {
+      "cad": 183,
+      "dist_km": 1.609,
+      "dur": 442,
+      "end": 1784,
+      "hr_avg": 162,
+      "hr_max": 167,
+      "index": 4,
+      "pace": 442.0944984462399,
+      "start": 1342
+     },
+     {
+      "cad": 183,
+      "dist_km": 0.274,
+      "dur": 76,
+      "end": 1860,
+      "hr_avg": 166,
+      "hr_max": 168,
+      "index": 5,
+      "pace": 446.3873868613138,
+      "start": 1784
+     },
+     {
+      "cad": 174,
+      "dist_km": 0.509,
+      "dur": 180,
+      "end": 2040,
+      "hr_avg": 156,
+      "hr_max": 169,
+      "index": 6,
+      "pace": 569.1196856581532,
+      "start": 1860
+     },
+     {
+      "cad": 181,
+      "dist_km": 1.609,
+      "dur": 450,
+      "end": 2490,
+      "hr_avg": 157,
+      "hr_max": 163,
+      "index": 7,
+      "pace": 450.0962088253574,
+      "start": 2040
+     },
+     {
+      "cad": 182,
+      "dist_km": 0.819,
+      "dur": 226,
+      "end": 2716,
+      "hr_avg": 160,
+      "hr_max": 163,
+      "index": 8,
+      "pace": 444.0924835164835,
+      "start": 2490
+     }
+    ],
+    "laps_recovered": false,
+    "prescribed_reps": null,
+    "recoveries": 0,
+    "recoveries_failed": 0,
+    "recovery_failure_pct": null,
+    "rep_hr": [
+     154,
+     158,
+     160,
+     163,
+     166,
+     148,
+     154,
+     158,
+     159,
+     163,
+     163,
+     161
+    ],
+    "rep_paces": [
+     446.9406798489225,
+     425.76188605108047,
+     445.2096934823501,
+     425.9195393273127,
+     432.01344537815135,
+     443.1989424983451,
+     430.72176046390564,
+     438.1864315581342,
+     442.4678323985475,
+     445.3575381890664,
+     438.89604014399197,
+     425.10710604945416
+    ],
+    "sets": [
+     {
+      "band": null,
+      "band_display": null,
+      "band_how": "ambiguous",
+      "band_pace": null,
+      "band_sec_per_mi": null,
+      "ceiling": "162/166",
+      "detected_reps": 0,
+      "hr_ceiling": [
+       162,
+       166
+      ],
+      "mode": "subt",
+      "pct": null,
+      "prescribed_reps": null,
+      "rep_hr": [],
+      "rep_paces": [],
+      "rep_rows": null,
+      "rep_seconds": [],
+      "scored_on": "hr",
+      "work_seconds": 0
+     }
+    ],
+    "slivers": [],
+    "suspect_seconds": 0,
+    "treadmill_mph": null,
+    "treadmill_warning": null,
+    "unassisted_reps": null,
+    "unscorable": "detected rep count disagrees with the prescription",
+    "work_seconds": 832
+   },
+   "deviation_reason": "injury",
+   "earned": null,
+   "emphasis": [
+    "quality"
+   ],
+   "hr_avg": 150,
+   "hr_max": 169,
+   "key": "2026-03-10",
+   "km": 9.09,
+   "miles": 5.648264137437366,
+   "ordinal": 0,
+   "pace": 480.855699009901,
+   "pct": null,
+   "planned": {
+    "band": null,
+    "band_display": null,
+    "band_is_reference": false,
+    "band_sec_per_mi": null,
+    "ceiling": "162/166",
+    "ceiling_tiers": null,
+    "chart_confirmed": true,
+    "chart_is_carried_forward": false,
+    "chart_week_ending": "2026-03-08",
+    "criterion": "hr",
+    "hr_ceiling": [
+     162,
+     166
+    ],
+    "prescribed": "unplanned -- an attempt at the plan's 3x16:00, cut by the glute (45 min at HR 150)",
+    "prescribed_seconds": null,
+    "role": "subt",
+    "sets": [
+     {
+      "band": null,
+      "band_display": null,
+      "band_how": "ambiguous",
+      "band_sec_per_mi": null,
+      "ceiling": "162/166",
+      "float_distance_m": null,
+      "float_mode": null,
+      "float_seconds": null,
+      "group_float_distance_m": null,
+      "group_float_seconds": null,
+      "groups": null,
+      "hr_ceiling": [
+       162,
+       166
+      ],
+      "mode": "subt",
+      "rep_distance_m": null,
+      "rep_seconds": null,
+      "reps": null,
+      "reps_per_group": null,
+      "scored_on": "hr",
+      "target_display": null,
+      "target_pace": null,
+      "target_sec_per_mi": null,
+      "target_seconds": null,
+      "target_tolerance_seconds": null
+     }
+    ],
+    "target_display": null,
+    "target_sec_per_mi": null,
+    "target_seconds": null,
+    "target_tolerance_seconds": null
+   },
+   "prescribed": "unplanned -- an attempt at the plan's 3x16:00, cut by the glute (45 min at HR 150)",
+   "role": "subt",
+   "runalyze_id": 169607597,
+   "score_bucket": null,
+   "seconds": 2716,
+   "session": null,
+   "status": "completed",
+   "total": null,
+   "volume_km": 9.09,
+   "volume_miles": 5.648264137437366,
+   "volume_seconds": 2716,
+   "volume_source": "file"
+  },
+  {
+   "cadence": 175,
+   "ceiling": "137",
+   "ceiling_tiers": [
+    [
+     null,
+     137
+    ]
+   ],
+   "date": "2026-03-14",
+   "detail": {
+    "laps": [
+     {
+      "cad": 175,
+      "dist_km": 1.609,
+      "dur": 553,
+      "end": 553,
+      "hr_avg": 121,
+      "hr_max": 131,
+      "index": 1,
+      "pace": 553.1182299564947,
+      "start": 0
+     },
+     {
+      "cad": 173,
+      "dist_km": 0.139,
+      "dur": 48,
+      "end": 601,
+      "hr_avg": 127,
+      "hr_max": 129,
+      "index": 2,
+      "pace": 555.744690647482,
+      "start": 553
+     }
+    ]
+   },
+   "duration": null,
+   "duration_factor": 1.0,
+   "earned": 602.0,
+   "emphasis": [],
+   "excursions": {
+    "above_seconds": 0,
+    "excursions": 0,
+    "longest_above_seconds": 0,
+    "sustained_above_seconds": 0
+   },
+   "hr_avg": 121,
+   "hr_max": 131,
+   "hr_pace_response": {
+    "block_seconds": 180,
+    "blocks": 4,
+    "r": -0.09518464880723457
+   },
+   "hr_pct": 100.0,
+   "key": "2026-03-14",
+   "km": 1.63,
+   "miles": 1.0128350433468543,
+   "ordinal": 0,
+   "pace": 594.3712196319019,
+   "pct": 100.0,
+   "planned": {
+    "band": "easy",
+    "band_display": "7:54-8:31/mi",
+    "band_is_reference": true,
+    "band_sec_per_mi": [
+     474,
+     511
+    ],
+    "ceiling": "137",
+    "ceiling_tiers": [
+     [
+      null,
+      137
+     ]
+    ],
+    "chart_confirmed": true,
+    "chart_is_carried_forward": false,
+    "chart_week_ending": "2026-03-08",
+    "criterion": "hr",
+    "hr_ceiling": null,
+    "prescribed": "unplanned -- ten-minute treadmill test of the glute",
+    "prescribed_seconds": null,
+    "role": "easy",
+    "sets": null,
+    "target_display": null,
+    "target_sec_per_mi": null,
+    "target_seconds": null,
+    "target_tolerance_seconds": null
+   },
+   "prescribed": "unplanned -- ten-minute treadmill test of the glute",
+   "role": "easy",
+   "runalyze_id": 170097393,
+   "score_bucket": "easy",
+   "seconds": 602,
+   "session": null,
+   "status": "completed",
+   "total": 602,
+   "volume_km": 1.63,
+   "volume_miles": 1.0128350433468543,
+   "volume_seconds": 602,
+   "volume_source": "file"
+  }
+ ],
+ "scores": {
+  "easy": {
+   "earned": 2403.0,
+   "pct": 100.0,
+   "total": 2403
+  },
+  "recorded": {
+   "earned": 2403.0,
+   "pct": 100.0,
+   "total": 2403
+  },
+  "week": {
+   "earned": 2403.0,
+   "pct": 100.0,
+   "total": 2403
+  },
+  "workout": {
+   "earned": 0,
+   "pct": null,
+   "total": 0
+  }
+ },
+ "structure": {
+  "checks": {
+   "long_run_share": true,
+   "quality_days_met": true,
+   "rest_days_met": null,
+   "volume_vs_plan": null
+  },
+  "pct": 100.0,
+  "why": {
+   "long_run_share": "the long run was 0.0% of the running distance, against a 25% ceiling",
+   "quality_days_met": "1 quality day(s) against the 1 the plan has asked for so far, which is what a Volume week asks for",
+   "rest_days_met": "Volume weeks state no rest-day requirement, so this check does not apply and left the denominator",
+   "volume_vs_plan": "the manifest states no planned_time_seconds, so there is nothing to compare the week's running time against"
+  }
+ },
+ "week_end": "2026-03-15",
+ "week_start": "2026-03-09",
+ "week_type": "Volume"
+}

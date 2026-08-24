@@ -1,0 +1,347 @@
+{
+ "acwr_mech": 1.7439179588219351,
+ "acwr_mech_on": "2025-12-14",
+ "acwr_run": 1.3534871143808649,
+ "bg_trimp": 45.08002089529658,
+ "ceiling_inputs": {
+  "background_source": "baseline",
+  "background_steps": 1552.0,
+  "background_window_days": 28,
+  "cadence_source": "measured",
+  "cadence_spm": 168.0,
+  "default_cadence_spm": 172,
+  "margin": 1.05,
+  "run_step_weight": 2.5
+ },
+ "csv": "2025-12-08,Volume,Injury,0,0,0,,95,95,1.74,1.35,3.20,434887,394,45,44,59,-15,strain-spike",
+ "days": [
+  {
+   "atl": 47.48454278762904,
+   "bg_trimp": 3.9071635645638376,
+   "bg_trimp_hr_rest_source": "measured",
+   "ceiling": null,
+   "ceiling_source": null,
+   "completeness": "full",
+   "ctl": 39.25144621366995,
+   "date": "2025-12-08",
+   "nonrun_se": 1372.0,
+   "nonrun_steps": 1372,
+   "pct": null,
+   "prescribed_run_seconds": null,
+   "prescribed_run_steps": null,
+   "role": "easy",
+   "run_se": 18915.0,
+   "run_step_source": "cadence-stream",
+   "run_steps": 7566,
+   "scored": false,
+   "se": 20287.0,
+   "total_steps": 8938,
+   "trimp": 60.87,
+   "tsb": -8.233096573959088
+  },
+  {
+   "atl": 50.45840709072178,
+   "bg_trimp": 4.0459735498326435,
+   "bg_trimp_hr_rest_source": "measured",
+   "ceiling": null,
+   "ceiling_source": null,
+   "completeness": "full",
+   "ctl": 40.1876580176853,
+   "date": "2025-12-09",
+   "nonrun_se": 1380.0,
+   "nonrun_steps": 1380,
+   "pct": null,
+   "prescribed_run_seconds": null,
+   "prescribed_run_steps": null,
+   "role": "easy",
+   "run_se": 19192.5,
+   "run_step_source": "cadence-stream",
+   "run_steps": 7677,
+   "scored": false,
+   "se": 20572.5,
+   "total_steps": 9057,
+   "trimp": 59.38,
+   "tsb": -10.270749073036477
+  },
+  {
+   "atl": 51.47880531804133,
+   "bg_trimp": 4.497480743074837,
+   "bg_trimp_hr_rest_source": "measured",
+   "ceiling": null,
+   "ceiling_source": null,
+   "completeness": "full",
+   "ctl": 40.8552088075604,
+   "date": "2025-12-10",
+   "nonrun_se": 1534.0,
+   "nonrun_steps": 1534,
+   "pct": null,
+   "prescribed_run_seconds": null,
+   "prescribed_run_steps": null,
+   "role": "easy",
+   "run_se": 19070.0,
+   "run_step_source": "cadence-stream",
+   "run_steps": 7628,
+   "scored": false,
+   "se": 20604.0,
+   "total_steps": 9162,
+   "trimp": 54.54,
+   "tsb": -10.62359651048093
+  },
+  {
+   "atl": 38.609103988531,
+   "bg_trimp": 16.796653961587836,
+   "bg_trimp_hr_rest_source": "measured",
+   "ceiling": null,
+   "ceiling_source": null,
+   "completeness": "full",
+   "ctl": 38.954966537441315,
+   "date": "2025-12-11",
+   "nonrun_se": 5729.0,
+   "nonrun_steps": 5729,
+   "pct": null,
+   "prescribed_run_seconds": null,
+   "prescribed_run_steps": null,
+   "role": null,
+   "run_se": 0.0,
+   "run_step_source": "none",
+   "run_steps": 0,
+   "scored": false,
+   "se": 5729.0,
+   "total_steps": 5729,
+   "trimp": 0.0,
+   "tsb": 0.3458625489103184
+  },
+  {
+   "atl": 45.82432799139825,
+   "bg_trimp": 4.908347616560198,
+   "bg_trimp_hr_rest_source": "measured",
+   "ceiling": null,
+   "ceiling_source": null,
+   "completeness": "full",
+   "ctl": 40.281247163606835,
+   "date": "2025-12-12",
+   "nonrun_se": 1541.0,
+   "nonrun_steps": 1541,
+   "pct": null,
+   "prescribed_run_seconds": null,
+   "prescribed_run_steps": null,
+   "role": "easy",
+   "run_se": 18952.5,
+   "run_step_source": "cadence-stream",
+   "run_steps": 7581,
+   "scored": false,
+   "se": 20493.5,
+   "total_steps": 9122,
+   "trimp": 67.47,
+   "tsb": -5.543080827791414
+  },
+  {
+   "atl": 53.765745993548684,
+   "bg_trimp": 4.975374720337677,
+   "bg_trimp_hr_rest_source": "measured",
+   "ceiling": null,
+   "ceiling_source": null,
+   "completeness": "full",
+   "ctl": 42.01653799320651,
+   "date": "2025-12-13",
+   "nonrun_se": 1697.0,
+   "nonrun_steps": 1697,
+   "pct": null,
+   "prescribed_run_seconds": null,
+   "prescribed_run_steps": null,
+   "role": "easy",
+   "run_se": 19220.0,
+   "run_step_source": "cadence-stream",
+   "run_steps": 7688,
+   "scored": false,
+   "se": 20917.0,
+   "total_steps": 9385,
+   "trimp": 77.59,
+   "tsb": -11.749208000342172
+  },
+  {
+   "atl": 58.901809495161515,
+   "bg_trimp": 5.949026739339546,
+   "bg_trimp_hr_rest_source": "measured",
+   "ceiling": null,
+   "ceiling_source": null,
+   "completeness": "full",
+   "ctl": 43.51855948189458,
+   "date": "2025-12-14",
+   "nonrun_se": 2089.0,
+   "nonrun_steps": 2089,
+   "pct": null,
+   "prescribed_run_seconds": null,
+   "prescribed_run_steps": null,
+   "role": "long",
+   "run_se": 25362.5,
+   "run_step_source": "cadence-stream",
+   "run_steps": 10145,
+   "scored": false,
+   "se": 27451.5,
+   "total_steps": 12234,
+   "trimp": 74.31,
+   "tsb": -15.383250013266938
+  }
+ ],
+ "fitness": {
+  "activities": 6,
+  "acwr_run": 1.3534871143808649,
+  "atl": 58.901809495161515,
+  "atl_converged": true,
+  "ctl": 43.51855948189458,
+  "ctl_converged": true,
+  "ctl_warmup_days": 126,
+  "days_covered": 7,
+  "earliest_activity": "2024-08-01",
+  "history_days": 501,
+  "on_date": "2025-12-14",
+  "seed_date": "2024-08-01",
+  "stream_share": 1.0,
+  "trimp": 394.16,
+  "trimp_source": "stream",
+  "tsb": -15.383250013266938,
+  "unpriced": 0
+ },
+ "flags": [
+  {
+   "status": "clear",
+   "token": "steps-data-incomplete",
+   "why": "all 7 days covered by the export"
+  },
+  {
+   "status": "not-evaluable",
+   "token": "recovery-day-not-recovering",
+   "why": "no fully-covered rest or recovery day this week"
+  },
+  {
+   "status": "not-evaluable",
+   "token": "background-load-spike",
+   "why": "needs a 4-week non-run baseline in history; this week was 0 SE"
+  },
+  {
+   "status": "clear",
+   "token": "hidden-load",
+   "why": "mechanical A:C 1.74 against running-only 1.35 from our TRIMP (optimum 0.8-1.3)"
+  },
+  {
+   "status": "clear",
+   "token": "load-monotony",
+   "why": "day-to-day SE coefficient of variation 0.31 (fires below 0.15)"
+  },
+  {
+   "status": "clear",
+   "token": "resting-hr-rise",
+   "why": "trailing resting-HR mean -1.1 bpm (fires at +5)"
+  },
+  {
+   "status": "clear",
+   "token": "hrv-suppressed",
+   "why": "longest run of 0 day(s) below 49.5 (90% of a 55.0 baseline); fires at 3"
+  },
+  {
+   "status": "clear",
+   "token": "sleep-debt",
+   "why": "mean 7.7 h over 7 night(s) (fires below 6.5)"
+  },
+  {
+   "status": "fired",
+   "token": "strain-spike",
+   "why": "strain 434,887 SE against a 95,028 SE baseline = 4.58x (fires above 1.5x)"
+  },
+  {
+   "status": "clear",
+   "token": "form-suppressed",
+   "why": "running-only TSB -15 from our TRIMP (fires below -25) with mechanical A:C 1.74 (fires above 1.3)"
+  }
+ ],
+ "integrity": {
+  "earned": 0,
+  "excluded": [
+   "2025-12-08",
+   "2025-12-09",
+   "2025-12-10",
+   "2025-12-11",
+   "2025-12-12",
+   "2025-12-13",
+   "2025-12-14"
+  ],
+  "pct": null,
+  "scored_days": 0,
+  "total": 0
+ },
+ "monotony_mech": 3.1964171579017413,
+ "overall": 95.23809523809524,
+ "phase": "Injury",
+ "readiness": {
+  "available": 21,
+  "hrv_baseline": 55,
+  "hrv_baseline_source": "snapshot",
+  "passed": 20,
+  "pct": 95.23809523809524,
+  "per_day": [
+   {
+    "checks": {
+     "hrv": true,
+     "resting_hr": true,
+     "sleep": true
+    },
+    "date": "2025-12-08"
+   },
+   {
+    "checks": {
+     "hrv": true,
+     "resting_hr": true,
+     "sleep": true
+    },
+    "date": "2025-12-09"
+   },
+   {
+    "checks": {
+     "hrv": true,
+     "resting_hr": true,
+     "sleep": true
+    },
+    "date": "2025-12-10"
+   },
+   {
+    "checks": {
+     "hrv": true,
+     "resting_hr": true,
+     "sleep": true
+    },
+    "date": "2025-12-11"
+   },
+   {
+    "checks": {
+     "hrv": true,
+     "resting_hr": true,
+     "sleep": true
+    },
+    "date": "2025-12-12"
+   },
+   {
+    "checks": {
+     "hrv": true,
+     "resting_hr": true,
+     "sleep": false
+    },
+    "date": "2025-12-13"
+   },
+   {
+    "checks": {
+     "hrv": true,
+     "resting_hr": true,
+     "sleep": true
+    },
+    "date": "2025-12-14"
+   }
+  ],
+  "resting_hr_ceiling": 47
+ },
+ "shape_days_covered": 7,
+ "shape_days_needed": 7,
+ "strain_mech": 434886.9382097425,
+ "week_start": "2025-12-08",
+ "week_type": "Volume"
+}

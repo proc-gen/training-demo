@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import type { RunResult } from "@/lib/data/payload";
 import { TooltipProvider } from "@/lib/ux/tooltip/TooltipProvider";
 import { PUBLISHED, has, weekWithReps } from "@/test/payload";
+import { runShapes } from "@/test/runShapes";
 import { RunRow } from "./RunRow";
 
 afterEach(cleanup);
@@ -112,6 +113,17 @@ describe("RunRow", () => {
               trimp={{ trimp: 40, source: "stream" }}  />,
     );
     expect(container.textContent).not.toContain("≈");
+  });
+
+  it("MARKS A stream-disavowed TRIMP WITH ≈ — it is the same estimate", () => {
+    /* The tier priced from the file's own summary after its stream was
+     * rejected against it (the 2026-02-09 strap misread). Every tier except
+     * `stream` is an estimate and reads as one. */
+    const { container } = inTable(
+      <RunRow r={run({})} prescribed="" chart={null} showDay
+              trimp={{ trimp: 34.35, source: "stream-disavowed" }}  />,
+    );
+    expect(container.textContent).toContain("≈34");
   });
 
   it("shows -- for an activity with no TRIMP row", () => {
@@ -284,19 +296,24 @@ describe("RunRow", () => {
     expect(markers.length).toBeGreaterThan(0);
   });
 
-  has(PUBLISHED)("expands every real run without throwing", () => {
+  has(PUBLISHED)("expands every shape of real run without throwing", () => {
     /* Every row opens now, so every row has to survive being opened -- including
-     * the volume_only warmups and any run the grader could not score. */
-    for (const w of Object.values(PUBLISHED!.weeks)) {
-      if (!w.adherence) continue;
-      for (const r of w.adherence.results) {
-        const { container, unmount } = inTable(
-          <RunRow r={r} prescribed="" chart={w.pace_chart} showDay  />,
-        );
-        fireEvent.click(row(container));
-        expect(container.textContent!.length).toBeGreaterThan(0);
-        unmount();
-      }
+     * the volume_only warmups and any run the grader could not score.
+     *
+     * ONE PER SHAPE. This opened all 719 runs in the tree and timed out; the
+     * shapes it was actually covering number a few dozen, and the largest single
+     * one holds 325 runs. See `src/test/runShapes.ts` for what a shape is and
+     * why the key is derived rather than hand-picked. */
+    for (const { run, week, weekKey } of runShapes(PUBLISHED!)) {
+      const { container, unmount } = inTable(
+        <RunRow r={run} prescribed="" chart={week.pace_chart} showDay />,
+      );
+      fireEvent.click(row(container));
+      expect(
+        container.textContent!.length,
+        `${weekKey} ${run.key} rendered nothing when expanded`,
+      ).toBeGreaterThan(0);
+      unmount();
     }
   });
 });

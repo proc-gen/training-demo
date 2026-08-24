@@ -25,7 +25,6 @@ const FULL = week({
     // `.default([])` in the schema, so a real payload always carries them; this
     // fixture is cast past zod.
     planned: [],
-    unclaimed: [],
     flags: [],
   } as unknown as Week["adherence"],
   load: {

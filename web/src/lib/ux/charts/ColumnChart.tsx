@@ -4,7 +4,13 @@ import { Fragment, type ReactNode } from "react";
 
 import { num } from "@/lib/data/format";
 import { ColumnGroup } from "./ColumnGroup";
-import { columnScale, labelStride, type Column } from "./data/scales";
+import {
+  columnScale,
+  labelStride,
+  labelWidth,
+  tickCount,
+  type Column,
+} from "./data/scales";
 
 /* Hand-written inline SVG, ported from the standalone page's viewer.
  *
@@ -19,7 +25,13 @@ import { columnScale, labelStride, type Column } from "./data/scales";
  * only emission.
  */
 
-const M = { t: 12, r: 12, b: 30, l: 46 };
+/** The plot's margins, in viewBox units.
+ *
+ * EXPORTED so a caller can compute the same inner width this chart plots over.
+ * The Trends view needs it to work out how many x labels will fit before it
+ * decides which dates deserve one -- see `Column.tick`. */
+export const COLUMN_MARGIN = { t: 12, r: 12, b: 30, l: 46 };
+const M = COLUMN_MARGIN;
 
 /** A stacked column chart with an optional per-column ceiling rule.
  *
@@ -42,15 +54,28 @@ export function ColumnChart({
 }) {
   const iw = width - M.l - M.r;
   const ih = height - M.t - M.b;
-  const { ticks, top } = columnScale(columns);
+  /* The y ticks are spaced by the plot's HEIGHT rather than fixed at four: the
+     Load tab's 240-unit box still resolves to four and is unchanged, while the
+     Trends view's 320 gets five. A taller plot with the same four rules is a
+     scale a reader cannot read between. */
+  const { ticks, top } = columnScale(columns, tickCount(ih));
   const y = (v: number) => M.t + ih - (v / top) * ih;
 
   const band = iw / Math.max(columns.length, 1);
   const bw = Math.min(24, band * 0.62);
   /* One label per column is right for a week and unreadable for a month, which
      is what the Trends view asks of this chart. `labelStride` returns 1 wherever
-     there is room, so a seven-column chart is drawn exactly as it always was. */
-  const stride = labelStride(columns.length, band);
+     there is room, so a seven-column chart is drawn exactly as it always was.
+     A caller that FLAGS its own ticks wins outright -- which is how the Trends
+     view puts them on calendar boundaries rather than every nth day. */
+  const flagged = columns.some((c) => c.tick);
+  const stride = labelStride(
+    columns.length,
+    band,
+    labelWidth(columns.map((c) => c.label)),
+  );
+  const labelled = (i: number) =>
+    flagged ? Boolean(columns[i].tick) : (columns.length - 1 - i) % stride === 0;
 
   return (
     <svg
@@ -118,7 +143,7 @@ export function ColumnChart({
             ) : null}
             {/* Counted back from the LAST column, so the newest day always
                 carries its date. */}
-            {(columns.length - 1 - i) % stride === 0 ? (
+            {labelled(i) ? (
               <text className="axis-label" x={cx} y={height - 10} textAnchor="middle">
                 {c.label}
               </text>

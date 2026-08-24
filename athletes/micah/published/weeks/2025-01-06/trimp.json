@@ -1,0 +1,123 @@
+[
+ {
+  "activity_id": "119133762",
+  "avg_hr": "126",
+  "date": "2025-01-06",
+  "hr_rest": "46",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "1800",
+  "trimp": "32.81",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "119266196",
+  "avg_hr": "145",
+  "date": "2025-01-07",
+  "hr_rest": "46",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "",
+  "seconds": "955",
+  "trimp": "27.08",
+  "trimp_source": "average-hr"
+ },
+ {
+  "activity_id": "119270622",
+  "avg_hr": "153",
+  "date": "2025-01-07",
+  "hr_rest": "46",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "1817",
+  "trimp": "64.67",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "119273332",
+  "avg_hr": "169",
+  "date": "2025-01-07",
+  "hr_rest": "46",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "929",
+  "trimp": "46.85",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "119329085",
+  "avg_hr": "100",
+  "date": "2025-01-07",
+  "hr_rest": "46",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "",
+  "seconds": "3226",
+  "trimp": "27.16",
+  "trimp_source": "average-hr"
+ },
+ {
+  "activity_id": "119415524",
+  "avg_hr": "140",
+  "date": "2025-01-08",
+  "hr_rest": "45",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "2779",
+  "trimp": "70.64",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "119533793",
+  "avg_hr": "132",
+  "date": "2025-01-09",
+  "hr_rest": "42",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "1837",
+  "trimp": "40.15",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "119664303",
+  "avg_hr": "141",
+  "date": "2025-01-10",
+  "hr_rest": "43",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "2941",
+  "trimp": "80.37",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "119716875",
+  "avg_hr": "97",
+  "date": "2025-01-10",
+  "hr_rest": "43",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "",
+  "seconds": "3153",
+  "trimp": "25.60",
+  "trimp_source": "average-hr"
+ },
+ {
+  "activity_id": "119798958",
+  "avg_hr": "126",
+  "date": "2025-01-11",
+  "hr_rest": "43",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "1414",
+  "trimp": "27.08",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "119903821",
+  "avg_hr": "130",
+  "date": "2025-01-12",
+  "hr_rest": "42",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "4371",
+  "trimp": "89.67",
+  "trimp_source": "stream"
+ }
+]

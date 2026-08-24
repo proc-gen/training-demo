@@ -6,12 +6,15 @@ import {
   PRESETS,
   defaultRange,
   isIsoDate,
+  isShiftable,
   plotted,
   pointsIn,
   presetRange,
   shiftMonths,
+  shiftRange,
   spanOf,
 } from "./range";
+import type { PresetKey, Range } from "./range";
 
 /** A panel-shaped thing: only its points matter here. */
 const P = (...dates: string[]) => ({
@@ -227,5 +230,119 @@ describe("plotted", () => {
 
   it("is zero for nothing", () => {
     expect(plotted([])).toBe(0);
+  });
+});
+
+describe("isShiftable", () => {
+  /* The athlete's rule, stated exactly: "if a custom time period is selected,
+   * whether it's the All selection or a period not set by the buttons like 7
+   * weeks, disable the buttons until a standard increment is selected." */
+
+  it.each(["1m", "3m", "6m", "1y"] as PresetKey[])(
+    "%s names a period, so it can be stepped",
+    (key) => {
+      expect(isShiftable(key)).toBe(true);
+    },
+  );
+
+  it("`all` cannot -- the window IS the data", () => {
+    expect(isShiftable("all")).toBe(false);
+  });
+
+  it("`custom` cannot -- somebody typed a window with no period", () => {
+    expect(isShiftable("custom")).toBe(false);
+  });
+
+  it("agrees with PRESETS rather than repeating it", () => {
+    // A preset added later must not be silently unsteppable.
+    for (const p of PRESETS) expect(isShiftable(p.key)).toBe(p.months !== null);
+  });
+});
+
+describe("shiftRange", () => {
+  const R: Range = { from: "2026-07-15", to: "2026-08-15" };
+
+  it("moves a month window back one month", () => {
+    expect(shiftRange(R, "1m", -1)).toEqual({
+      from: "2026-06-15",
+      to: "2026-07-15",
+    });
+  });
+
+  it("moves it forward one month", () => {
+    expect(shiftRange(R, "1m", 1)).toEqual({
+      from: "2026-08-15",
+      to: "2026-09-15",
+    });
+  });
+
+  it.each([
+    ["3m", 3],
+    ["6m", 6],
+    ["1y", 12],
+  ] as const)("moves a %s window by %i whole months", (key, months) => {
+    expect(shiftRange(R, key, -1)).toEqual({
+      from: shiftMonths(R.from, -months),
+      to: shiftMonths(R.to, -months),
+    });
+  });
+
+  it("KEEPS THE WINDOW'S LENGTH, so repeated stepping cannot drift", () => {
+    // Both ends move by the same amount. Re-deriving the far end from the near
+    // one each time is how a window creeps.
+    let at: Range = R;
+    for (let i = 0; i < 5; i += 1) at = shiftRange(at, "1m", -1)!;
+    expect(at).toEqual({ from: "2026-02-15", to: "2026-03-15" });
+  });
+
+  it("is its own inverse", () => {
+    expect(shiftRange(shiftRange(R, "3m", -1)!, "3m", 1)).toEqual(R);
+  });
+
+  it("takes MANY steps at once", () => {
+    expect(shiftRange(R, "1m", -3)).toEqual(shiftRange(R, "3m", -1));
+  });
+
+  it("is identity for a zero step", () => {
+    expect(shiftRange(R, "1m", 0)).toEqual(R);
+  });
+
+  it("CLAMPS the day of month into a short month", () => {
+    /* `shiftMonths` carries the leap rule; this is the case that proves the
+     * step goes through it rather than doing its own arithmetic. */
+    const end: Range = { from: "2026-02-28", to: "2026-03-31" };
+    expect(shiftRange(end, "1m", -1)).toEqual({
+      from: "2026-01-28",
+      to: "2026-02-28",
+    });
+  });
+
+  it("returns null for `all`", () => {
+    expect(shiftRange(R, "all", -1)).toBeNull();
+  });
+
+  it("returns null for `custom`", () => {
+    expect(shiftRange(R, "custom", -1)).toBeNull();
+  });
+
+  it("IS NOT BOUNDED BY THE DATA", () => {
+    // Nothing here knows what was measured; the panel says `0 of N points` and
+    // names where the series does run, which is the honest answer.
+    expect(shiftRange(R, "1y", -20)).toEqual({
+      from: "2006-07-15",
+      to: "2006-08-15",
+    });
+  });
+
+  it("moves a CLAMPED window as it stands, not as the preset names it", () => {
+    /* `presetRange` clamps `from` to the data's own start, so on a short record
+     * the resolved window is shorter than a month. Stepping it must preserve
+     * what it actually is rather than quietly growing it back. */
+    const short = presetRange([P("2026-08-01", "2026-08-15")], "1m")!;
+    expect(short).toEqual({ from: "2026-08-01", to: "2026-08-15" });
+    expect(shiftRange(short, "1m", -1)).toEqual({
+      from: "2026-07-01",
+      to: "2026-07-15",
+    });
   });
 });

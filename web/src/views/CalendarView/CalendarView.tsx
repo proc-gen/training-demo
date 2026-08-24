@@ -24,6 +24,7 @@ import {
   DEFAULT_WEEKS,
   clampWeeks,
   defaultLastDay,
+  stepLastDay,
   weekRowsEnding,
 } from "./data/window";
 
@@ -91,6 +92,9 @@ export function CalendarView({ payload }: { payload: Payload }) {
           weeks={weeks}
           onLastDay={setLastDay}
           onWeeks={(w) => setWeeks(clampWeeks(w))}
+          /* The step is a function of the window that is showing, so it is
+             resolved here where both halves of that window are held. */
+          onStep={(steps) => setLastDay(stepLastDay(lastDay, weeks, steps))}
         />
 
         {/* TWO ROWS, BECAUSE THERE ARE TWO KINDS OF THING IN THIS KEY. The first

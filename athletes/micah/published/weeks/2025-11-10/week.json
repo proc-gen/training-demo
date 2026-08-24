@@ -1,0 +1,135 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "Injury",
+  "runs": [],
+  "week_start": "2025-11-10",
+  "week_type": "Recovery"
+ },
+ "pace_chart": {
+  "bands": {
+   "easy": {
+    "display": "8:13-8:52/mi",
+    "fast_sec_per_mi": 493,
+    "pct": [
+     0.63,
+     0.68
+    ],
+    "slow_sec_per_mi": 532
+   },
+   "long": {
+    "display": "7:45-8:13/mi",
+    "fast_sec_per_mi": 465,
+    "pct": [
+     0.68,
+     0.72
+    ],
+    "slow_sec_per_mi": 493
+   },
+   "recovery": {
+    "display": "8:52-9:38/mi",
+    "fast_sec_per_mi": 532,
+    "pct": [
+     0.58,
+     0.63
+    ],
+    "slow_sec_per_mi": 578
+   },
+   "rep_10min": {
+    "display": "6:49-7:04/mi",
+    "fast_sec_per_mi": 409,
+    "pct": [
+     0.79,
+     0.82
+    ],
+    "slow_sec_per_mi": 424
+   },
+   "rep_15min": {
+    "display": "6:59-7:15/mi",
+    "fast_sec_per_mi": 419,
+    "pct": [
+     0.77,
+     0.8
+    ],
+    "slow_sec_per_mi": 435
+   },
+   "rep_1min": {
+    "display": "6:21-6:34/mi",
+    "fast_sec_per_mi": 381,
+    "pct": [
+     0.85,
+     0.88
+    ],
+    "slow_sec_per_mi": 394
+   },
+   "rep_3min": {
+    "display": "6:30-6:44/mi",
+    "fast_sec_per_mi": 390,
+    "pct": [
+     0.83,
+     0.86
+    ],
+    "slow_sec_per_mi": 404
+   },
+   "rep_6min": {
+    "display": "6:39-6:54/mi",
+    "fast_sec_per_mi": 399,
+    "pct": [
+     0.81,
+     0.84
+    ],
+    "slow_sec_per_mi": 414
+   }
+  },
+  "confirmed_by_athlete": true,
+  "effective_vo2max": 56.56,
+  "race_paces": {
+   "10000m": {
+    "display": "37:12 @ 5:59/mi",
+    "sec_per_mi": 359,
+    "seconds": 2232
+   },
+   "1500m": {
+    "display": "4:50 @ 5:11/mi",
+    "sec_per_mi": 311,
+    "seconds": 290
+   },
+   "21097m": {
+    "display": "1:22:15 @ 6:16/mi",
+    "sec_per_mi": 376,
+    "seconds": 4935
+   },
+   "3000m": {
+    "display": "10:21 @ 5:33/mi",
+    "sec_per_mi": 333,
+    "seconds": 621
+   },
+   "42195m": {
+    "display": "2:51:47 @ 6:33/mi",
+    "sec_per_mi": 393,
+    "seconds": 10307
+   },
+   "5000m": {
+    "display": "17:56 @ 5:46/mi",
+    "sec_per_mi": 346,
+    "seconds": 1076
+   },
+   "800m": {
+    "display": "2:27 @ 4:55/mi",
+    "sec_per_mi": 295,
+    "seconds": 147
+   },
+   "tempo": {
+    "basis": "60-80 minute race pace, the Daniels threshold definition, from the model's duration prognosis.",
+    "display": "6:09-6:16/mi",
+    "fast_sec_per_mi": 369,
+    "slow_sec_per_mi": 376
+   }
+  },
+  "week_ending": "2025-11-09"
+ },
+ "pace_chart_is_carried_forward": false,
+ "week_end": "2025-11-16",
+ "week_start": "2025-11-10"
+}

@@ -18,9 +18,12 @@ import type { Week } from "@/lib/data/payload";
 export type TrimpRow = {
   /** Null when the row exists but carries no value. Never 0 -- see below. */
   trimp: number | null;
-  /** "stream" (measured, integrating the per-second heart rate) or
-   *  "average-hr" (an ESTIMATE from one average, which understates by ~3%).
-   *  The table marks the second so an estimate never reads as a measurement. */
+  /** "stream" (measured, integrating the per-second heart rate),
+   *  "average-hr" (an ESTIMATE from one average, which understates by ~3%),
+   *  or "stream-disavowed" (the same estimate, priced from the file's own
+   *  summary after its stream was rejected against it -- the 2026-02-09
+   *  strap misread). The table marks everything but "stream" so an estimate
+   *  never reads as a measurement. */
   source: string | null;
 };
 

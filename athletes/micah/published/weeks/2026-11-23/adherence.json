@@ -1,0 +1,228 @@
+{
+ "csv": "2026-11-23,Race,General Prep,0.0,,,,none",
+ "facts": {
+  "doubles": 0,
+  "easy_seconds": 0,
+  "elapsed_days": 0,
+  "graded_through": "2026-08-23",
+  "long_run_miles": 0.0,
+  "long_run_share": 0,
+  "miles": 0.0,
+  "non_run_days": [],
+  "plan_unpriceable": [
+   [
+    "2026-11-26",
+    "2026-11-26",
+    "Thanksgiving 5 miler"
+   ]
+  ],
+  "planned_seconds": null,
+  "planned_seconds_week": null,
+  "prescribed_dates": 2,
+  "prescribed_dates_due": 0,
+  "projected_seconds": 1800.0,
+  "quality_days": 0,
+  "quality_seconds": 0,
+  "quality_share": 0,
+  "remaining_planned_seconds": 1800.0,
+  "rest_days": 0,
+  "running_days": 0,
+  "seconds": 0,
+  "volume_vs_plan": null,
+  "walk_recovery_runs": 0,
+  "walk_recovery_seconds": 0
+ },
+ "flags": [
+  {
+   "status": "clear",
+   "token": "unilateral-complaint",
+   "why": "no complaint word in the week's 0 note(s); Runalyze daily notes and activity descriptions are NOT searched"
+  },
+  {
+   "status": "not-evaluable",
+   "token": "consecutive-compromised",
+   "why": "0 quality session(s) this week; the flag needs two to find two in a row"
+  }
+ ],
+ "graded_through": null,
+ "judged_facts": {
+  "doubles": 0,
+  "easy_seconds": 0,
+  "elapsed_days": 0,
+  "graded_through": "2026-08-22",
+  "long_run_miles": 0.0,
+  "long_run_share": 0,
+  "miles": 0.0,
+  "non_run_days": [],
+  "plan_unpriceable": [
+   [
+    "2026-11-26",
+    "2026-11-26",
+    "Thanksgiving 5 miler"
+   ]
+  ],
+  "planned_seconds": null,
+  "planned_seconds_week": null,
+  "prescribed_dates": 2,
+  "prescribed_dates_due": 0,
+  "projected_seconds": 1800.0,
+  "quality_days": 0,
+  "quality_seconds": 0,
+  "quality_share": 0,
+  "remaining_planned_seconds": 1800.0,
+  "rest_days": 0,
+  "running_days": 0,
+  "seconds": 0,
+  "volume_vs_plan": null,
+  "walk_recovery_runs": 0,
+  "walk_recovery_seconds": 0
+ },
+ "phase": "General Prep",
+ "planned": [
+  {
+   "cadence": null,
+   "date": "2026-11-23",
+   "detail": null,
+   "deviation_reason": null,
+   "earned": null,
+   "emphasis": [],
+   "hr_avg": null,
+   "hr_max": null,
+   "key": "2026-11-23",
+   "km": null,
+   "miles": null,
+   "miss_forgiven": false,
+   "ordinal": 0,
+   "pace": null,
+   "pct": null,
+   "planned": {
+    "band": "recovery",
+    "band_display": "8:50-9:36/mi",
+    "band_is_reference": true,
+    "band_sec_per_mi": [
+     530,
+     576
+    ],
+    "ceiling": "130",
+    "ceiling_tiers": [
+     [
+      null,
+      130
+     ]
+    ],
+    "chart_confirmed": false,
+    "chart_is_carried_forward": true,
+    "chart_week_ending": "2026-08-23",
+    "criterion": "hr",
+    "hr_ceiling": null,
+    "prescribed": "30 min recovery",
+    "prescribed_seconds": 1800,
+    "role": "recovery",
+    "sets": null,
+    "target_display": null,
+    "target_sec_per_mi": null,
+    "target_seconds": null,
+    "target_tolerance_seconds": null
+   },
+   "prescribed": "30 min recovery",
+   "prescribed_denominator": 1800.0,
+   "prescribed_denominator_source": "prescribed",
+   "role": "recovery",
+   "runalyze_id": null,
+   "seconds": null,
+   "session": null,
+   "status": "pending",
+   "total": null
+  },
+  {
+   "cadence": null,
+   "date": "2026-11-26",
+   "detail": null,
+   "deviation_reason": null,
+   "earned": null,
+   "emphasis": [
+    "race"
+   ],
+   "hr_avg": null,
+   "hr_max": null,
+   "key": "2026-11-26",
+   "km": null,
+   "miles": null,
+   "miss_forgiven": false,
+   "ordinal": 0,
+   "pace": null,
+   "pct": null,
+   "planned": {
+    "band": "8047m",
+    "band_display": null,
+    "band_is_reference": true,
+    "band_sec_per_mi": null,
+    "ceiling": "none (race)",
+    "ceiling_tiers": null,
+    "chart_confirmed": false,
+    "chart_is_carried_forward": true,
+    "chart_week_ending": "2026-08-23",
+    "criterion": null,
+    "hr_ceiling": null,
+    "prescribed": "Thanksgiving 5 miler",
+    "prescribed_seconds": null,
+    "role": "race",
+    "sets": null,
+    "target_display": null,
+    "target_sec_per_mi": null,
+    "target_seconds": null,
+    "target_tolerance_seconds": null
+   },
+   "prescribed": "Thanksgiving 5 miler",
+   "prescribed_denominator": null,
+   "prescribed_denominator_source": null,
+   "role": "race",
+   "runalyze_id": null,
+   "seconds": null,
+   "session": null,
+   "status": "pending",
+   "total": null
+  }
+ ],
+ "results": [],
+ "scores": {
+  "easy": {
+   "earned": 0,
+   "pct": null,
+   "total": 0
+  },
+  "recorded": {
+   "earned": 0,
+   "pct": null,
+   "total": 0
+  },
+  "week": {
+   "earned": 0,
+   "pct": null,
+   "total": 0
+  },
+  "workout": {
+   "earned": 0,
+   "pct": null,
+   "total": 0
+  }
+ },
+ "structure": {
+  "checks": {
+   "long_run_share": null,
+   "quality_days_met": null,
+   "rest_days_met": null,
+   "volume_vs_plan": null
+  },
+  "pct": null,
+  "why": {
+   "long_run_share": "nothing this week prescribes has come due through 2026-08-22, so this check left the denominator",
+   "quality_days_met": "nothing this week prescribes has come due through 2026-08-22, so this check left the denominator",
+   "rest_days_met": "nothing this week prescribes has come due through 2026-08-22, so this check left the denominator",
+   "volume_vs_plan": "nothing this week prescribes has come due through 2026-08-22, so this check left the denominator"
+  }
+ },
+ "week_end": "2026-11-29",
+ "week_start": "2026-11-23",
+ "week_type": "Race"
+}

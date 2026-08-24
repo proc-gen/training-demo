@@ -6,6 +6,55 @@
  * thin framework-coupled layer); everything that decides a coordinate is here.
  */
 
+/** A value with its floating-point crumbs swept up.
+ *
+ * `0.1 + 0.2` is 0.30000000000000004, and a tick is a number a reader is meant
+ * to read: unrounded, the y axis of an A:C chart prints thirteen decimal places
+ * beside a two-decimal series. Twelve significant digits is far more precision
+ * than any measurement here carries and far less than the artifact needs.
+ */
+const round12 = (v: number) => (Number.isFinite(v) ? Number(v.toPrecision(12)) : v);
+
+/** The gap between ticks: 1, 2, 2.5 or 5 times a power of ten, at or above `raw`.
+ *
+ * ONE LADDER, TWO CALLERS. `niceTicks` builds a column axis up from zero and
+ * `lineScale` snaps a line's domain outward to a multiple of this; both mean the
+ * same thing by "a round number", and two ladders would eventually disagree
+ * about what one is.
+ */
+const LADDER = [1, 2, 2.5, 5, 10];
+
+const rungs = (raw: number) => {
+  const mag = Math.pow(10, Math.floor(Math.log10(raw)));
+  return LADDER.map((m) => round12(m * mag));
+};
+
+export function niceStep(raw: number): number {
+  if (!isFinite(raw) || raw <= 0) return 1;
+  const up = rungs(raw);
+  return up.filter((v) => v >= raw)[0] || up[up.length - 1];
+}
+
+/** The NEAREST rung of the same ladder, above or below.
+ *
+ * FOR A DOMAIN, WHERE `niceStep` IS FOR A CEILING. `niceTicks` must never step
+ * below the data -- a bar past the top tick escapes the plot -- so it always
+ * rounds up, and rounding up systematically UNDERSHOOTS the tick count: a
+ * 57.7-mile series asking for five ticks wants a step of 11.5, gets 20, and is
+ * drawn with three. A line's domain is snapped outward at both ends instead, so
+ * a step below the ideal costs nothing and buys the reader the interior marks
+ * this whole change is about.
+ *
+ * Nearest in RATIO, not in difference: the ladder is geometric, so 11.5 sits
+ * closer to 10 than to 20 even though the gaps look equal on a page.
+ */
+export function niceStepNear(raw: number): number {
+  if (!isFinite(raw) || raw <= 0) return 1;
+  return rungs(raw).reduce((best, v) =>
+    Math.abs(Math.log(v / raw)) < Math.abs(Math.log(best / raw)) ? v : best,
+  );
+}
+
 /** Axis ticks from 0, the last one at or ABOVE `max`.
  *
  * THE BUG THIS MODULE IS TESTED FOR. It used to return the last tick at or
@@ -20,14 +69,10 @@
  */
 export function niceTicks(max: number, count?: number): number[] {
   if (!max || max <= 0) return [0];
-  const raw = max / (count || 4);
-  const mag = Math.pow(10, Math.floor(Math.log10(raw)));
-  const step =
-    [1, 2, 2.5, 5, 10].map((m) => m * mag).filter((v) => v >= raw)[0] ||
-    10 * mag;
+  const step = niceStep(max / (count || 4));
   const out: number[] = [];
-  for (let v = 0; v < max - step * 0.001; v += step) out.push(v);
-  out.push(out.length ? out[out.length - 1] + step : step);
+  for (let v = 0; v < max - step * 0.001; v += step) out.push(round12(v));
+  out.push(round12(out.length ? out[out.length - 1] + step : step));
   return out;
 }
 
@@ -36,6 +81,13 @@ export type Column = {
   label: string;
   parts: Part[];
   ceiling?: number | null;
+  /** Whether this slot carries an x-axis label.
+   *
+   * SET BY THE CALLER, because deciding it needs to know what the labels MEAN --
+   * the Trends view puts them on calendar boundaries, which is a fact about
+   * dates and none of a chart's business. When no column carries one the chart
+   * falls back to `labelStride`, so every existing caller is unchanged. */
+  tick?: boolean;
 };
 
 /** The top of a column chart's y-scale.
@@ -86,24 +138,75 @@ export function labelStride(count: number, band: number, minWidth = 34): number 
   return Math.ceil(minWidth / band);
 }
 
-/** The [lo, hi] a line chart plots over, padded by 15% each way.
+/** How wide the widest of these labels needs, in viewBox units.
  *
- * A flat series would otherwise divide by zero: every point equal makes
- * `hi - lo` zero, so the range is widened by one before padding.
+ * `.axis-label` is 11px, and an SVG font-size is in USER UNITS -- so a label's
+ * footprint scales with the viewBox and can be estimated from it. 0.56em per
+ * character is the average across digits and a slash; the 10 is the gap that
+ * keeps two labels from touching.
+ *
+ * WHY IT IS NOT A CONSTANT. `8/17` and `10/1/25` differ by half again, and a
+ * year-bearing axis thinned at the four-character width overlaps every label.
  */
-export function lineDomain(
+export function labelWidth(labels: string[], px = 11): number {
+  const longest = labels.reduce((a, s) => Math.max(a, s.length), 0);
+  return longest ? longest * px * 0.56 + 10 : 34;
+}
+
+/** How many y ticks a plot this tall can carry.
+ *
+ * ONE EVERY ~55 UNITS. Two was the whole y axis until 2026-08-21 -- the data's
+ * own min and max, which is a RANGE and not a scale: no interior value could be
+ * read off a 320-unit plot. Capped at 6 so a tall chart does not turn into
+ * ruled paper, floored at 2 so the 130-unit small-multiple box is unchanged.
+ */
+export function tickCount(innerHeight: number): number {
+  if (!isFinite(innerHeight) || innerHeight <= 0) return 2;
+  return Math.max(2, Math.min(6, Math.round(innerHeight / 55)));
+}
+
+/** The domain and the ticks a line chart plots over.
+ *
+ * BOTH BOUNDS ARE THEMSELVES TICKS. `lineDomain` padded 15% past the data and
+ * drew its two rules at the unpadded ends, which put the bottom of the PLOT a
+ * sixth of a chart below the bottom RULE -- so an area wash closed at the plot
+ * floor hung below its own axis, which is exactly what the athlete saw on
+ * 2026-08-21. Snapping outward to a whole multiple of `niceStep` makes the plot
+ * floor and the lowest gridline the same line, and hands the reader round
+ * numbers instead of `57.7 mi`.
+ *
+ * A flat series would divide by zero -- every point equal makes `hi - lo` zero
+ * -- so it is widened by one first. ON A ZERO-ANCHORED SCALE IT WIDENS UPWARD
+ * ONLY: dropping to -1 would reinstate the wash below the axis for the one
+ * series most likely to be flat at zero.
+ */
+export function lineScale(
   values: number[],
-  opts: { zero?: boolean } = {},
-): { lo: number; hi: number; pad: number } {
-  let lo = Math.min(...values);
-  let hi = Math.max(...values);
+  opts: { zero?: boolean; count?: number } = {},
+): { lo: number; hi: number; ticks: number[] } {
+  const finite = values.filter((v) => Number.isFinite(v));
+  if (!finite.length) return { lo: 0, hi: 1, ticks: [0, 1] };
+
+  const count = Math.max(2, Math.round(opts.count ?? 4));
+  let lo = Math.min(...finite);
+  let hi = Math.max(...finite);
   if (opts.zero) lo = Math.min(0, lo);
   if (lo === hi) {
-    lo -= 1;
     hi += 1;
+    if (!opts.zero || lo < 0) lo -= 1;
   }
-  const pad = (hi - lo) * 0.15;
-  return { lo: lo - pad, hi: hi + pad, pad };
+
+  const step = niceStepNear((hi - lo) / count);
+  const loT = round12(Math.floor(round12(lo / step)) * step);
+  const hiT = round12(Math.ceil(round12(hi / step)) * step);
+
+  const ticks: number[] = [];
+  for (let i = 0; i <= 200; i += 1) {
+    const t = round12(loT + i * step);
+    ticks.push(t);
+    if (t >= hiT) break;
+  }
+  return { lo: loT, hi: ticks[ticks.length - 1], ticks };
 }
 
 /** The [lo, hi] for the rep-pace plot, which must contain the whole band.

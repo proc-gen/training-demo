@@ -1,5 +1,6 @@
 "use client";
 
+import { Stepper } from "@/lib/ux/primitives/Stepper";
 import { WEEK_CHOICES, isIsoDate } from "../data/window";
 
 /** What the grid covers: a last day, and how many weeks back from it.
@@ -22,32 +23,56 @@ import { WEEK_CHOICES, isIsoDate } from "../data/window";
  * AN UNPARSEABLE DATE IS IGNORED AND THE LAST GOOD WINDOW STANDS. A date input
  * reports `""` while it is half typed, and treating that as a boundary would
  * blank the calendar between two keystrokes.
+ *
+ * THE STEPPER MOVES BY WHATEVER THE PILLS SAY. Its accessible names carry the
+ * increment -- `Back 4 weeks` -- because the glyphs cannot, and because the
+ * increment is the whole point: the same two buttons mean a week at `1w` and a
+ * month at `4w`. It BRACKETS the date rather than trailing it -- `<< [date] >>`
+ * -- so each arrow is on the side it takes you; see `Stepper`. The pills stay
+ * outside it and still trail the row: the date is what the window IS, and they
+ * are how long it runs.
  */
 export function CalendarControls({
   lastDay,
   weeks,
   onLastDay,
   onWeeks,
+  onStep,
 }: {
   lastDay: string | null;
   weeks: number;
   onLastDay: (date: string) => void;
   onWeeks: (weeks: number) => void;
+  /** Move the window by `steps` whole windows, negative for earlier. */
+  onStep: (steps: number) => void;
 }) {
+  const unit = weeks === 1 ? "week" : "weeks";
   return (
     <div className="trend-controls">
-      <label className="field">
-        <span>Last day</span>
-        <input
-          type="date"
-          value={lastDay ?? ""}
-          autoComplete="off"
-          disabled={!lastDay}
-          onChange={(e) => {
-            if (isIsoDate(e.target.value)) onLastDay(e.target.value);
-          }}
-        />
-      </label>
+      <Stepper
+        label="Move the window"
+        prev={`Back ${weeks} ${unit}`}
+        next={`Forward ${weeks} ${unit}`}
+        onPrev={() => onStep(-1)}
+        onNext={() => onStep(1)}
+        /* Disabled ONLY where there is no window at all. Never at the edge of
+           the data -- see `stepLastDay`. */
+        prevDisabled={!lastDay}
+        nextDisabled={!lastDay}
+      >
+        <label className="field">
+          <span>Last day</span>
+          <input
+            type="date"
+            value={lastDay ?? ""}
+            autoComplete="off"
+            disabled={!lastDay}
+            onChange={(e) => {
+              if (isIsoDate(e.target.value)) onLastDay(e.target.value);
+            }}
+          />
+        </label>
+      </Stepper>
 
       <div className="range-presets" role="group" aria-label="Weeks shown">
         {WEEK_CHOICES.map((w) => (

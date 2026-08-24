@@ -195,8 +195,19 @@
    "duration_factor": 1.0,
    "earned": 4062.0,
    "emphasis": [],
+   "excursions": {
+    "above_seconds": 108,
+    "excursions": 6,
+    "longest_above_seconds": 39,
+    "sustained_above_seconds": 0
+   },
    "hr_avg": 127,
    "hr_max": 140,
+   "hr_pace_response": {
+    "block_seconds": 300,
+    "blocks": 14,
+    "r": -0.7280267509504201
+   },
    "hr_pct": 97.41007194244604,
    "key": "2026-07-21",
    "km": 12.28,
@@ -245,6 +256,7 @@
    "runalyze_id": 193198931,
    "score_bucket": "easy",
    "seconds": 4171,
+   "session": null,
    "status": "completed",
    "total": 4170,
    "volume_km": 12.28,
@@ -367,8 +379,19 @@
    "duration_factor": 1.0,
    "earned": 1897.0,
    "emphasis": [],
+   "excursions": {
+    "above_seconds": 2378,
+    "excursions": 23,
+    "longest_above_seconds": 931,
+    "sustained_above_seconds": 1924
+   },
    "hr_avg": 137,
    "hr_max": 152,
+   "hr_pace_response": {
+    "block_seconds": 300,
+    "blocks": 15,
+    "r": -0.3668418626876344
+   },
    "hr_pct": 44.37426900584796,
    "key": "2026-07-22",
    "km": 12.54,
@@ -417,6 +440,7 @@
    "runalyze_id": 193485329,
    "score_bucket": "easy",
    "seconds": 4275,
+   "session": null,
    "status": "completed",
    "total": 4275,
    "volume_km": 12.54,
@@ -539,8 +563,19 @@
    "duration_factor": 1.0,
    "earned": 3925.0,
    "emphasis": [],
+   "excursions": {
+    "above_seconds": 112,
+    "excursions": 3,
+    "longest_above_seconds": 82,
+    "sustained_above_seconds": 0
+   },
    "hr_avg": 128,
    "hr_max": 142,
+   "hr_pace_response": {
+    "block_seconds": 300,
+    "blocks": 14,
+    "r": -0.5597928851122145
+   },
    "hr_pct": 97.22566262075799,
    "key": "2026-07-23",
    "km": 11.82,
@@ -589,6 +624,7 @@
    "runalyze_id": 193780811,
    "score_bucket": "easy",
    "seconds": 4037,
+   "session": null,
    "status": "completed",
    "total": 4037,
    "volume_km": 11.82,
@@ -667,8 +703,19 @@
    "duration_factor": 1.0,
    "earned": 1435.0,
    "emphasis": [],
+   "excursions": {
+    "above_seconds": 365,
+    "excursions": 11,
+    "longest_above_seconds": 234,
+    "sustained_above_seconds": 234
+   },
    "hr_avg": 125,
    "hr_max": 137,
+   "hr_pace_response": {
+    "block_seconds": 180,
+    "blocks": 10,
+    "r": -0.9265951917128127
+   },
    "hr_pct": 79.72222222222223,
    "key": "2026-07-24-am",
    "km": 5.3,
@@ -711,6 +758,7 @@
    "runalyze_id": 193899185,
    "score_bucket": "easy",
    "seconds": 1801,
+   "session": null,
    "status": "completed",
    "total": 1800,
    "volume_km": 5.3,
@@ -800,8 +848,19 @@
    "duration_factor": 1.0,
    "earned": 2141.0,
    "emphasis": [],
+   "excursions": {
+    "above_seconds": 232,
+    "excursions": 8,
+    "longest_above_seconds": 72,
+    "sustained_above_seconds": 0
+   },
    "hr_avg": 124,
    "hr_max": 136,
+   "hr_pace_response": {
+    "block_seconds": 180,
+    "blocks": 14,
+    "r": -0.5593532496716606
+   },
    "hr_pct": 90.22334597555836,
    "key": "2026-07-24-pm",
    "km": 7.05,
@@ -844,6 +903,7 @@
    "runalyze_id": 194031037,
    "score_bucket": "easy",
    "seconds": 2374,
+   "session": null,
    "status": "completed",
    "total": 2373,
    "volume_km": 7.05,
@@ -944,8 +1004,19 @@
    "duration_factor": 1.0,
    "earned": 1756.0,
    "emphasis": [],
+   "excursions": {
+    "above_seconds": 955,
+    "excursions": 8,
+    "longest_above_seconds": 467,
+    "sustained_above_seconds": 781
+   },
    "hr_avg": 131,
    "hr_max": 147,
+   "hr_pace_response": {
+    "block_seconds": 300,
+    "blocks": 10,
+    "r": -0.347048492394665
+   },
    "hr_pct": 64.77314644042788,
    "key": "2026-07-25",
    "km": 8.28,
@@ -988,6 +1059,7 @@
    "runalyze_id": 194168023,
    "score_bucket": "easy",
    "seconds": 2711,
+   "session": null,
    "status": "completed",
    "total": 2711,
    "volume_km": 8.28,
@@ -1273,6 +1345,7 @@
    "runalyze_id": 194439715,
    "score_bucket": "easy",
    "seconds": 5082,
+   "session": null,
    "status": "completed",
    "total": 1214,
    "volume_km": 17.26,
@@ -1318,7 +1391,6 @@
    "volume_vs_plan": "6:47:31 run against a plan of 6:45:00, tolerance 5%"
   }
  },
- "unclaimed": [],
  "week_end": "2026-07-26",
  "week_start": "2026-07-20",
  "week_type": "Recovery"

@@ -119,6 +119,31 @@ export function weekRowsEnding(
   return rows;
 }
 
+/** The last day moved by whole windows, `steps` negative for earlier.
+ *
+ * THE INCREMENT IS WHATEVER THE GRID IS SHOWING. At 2w the arrows move a
+ * fortnight and at 4w a month, which is the athlete's own statement of it:
+ * *"if 2 weeks is selected, move back and forth by 2 week increments."* So the
+ * window that replaces the one on screen is the one immediately beside it, with
+ * no overlap and no gap -- `7 x weeks` days moves `weekRowsEnding`'s rows by
+ * exactly `weeks` whole rows, because every row is seven days and the window is
+ * anchored on `mondayOf(lastDay)`.
+ *
+ * IT IS NEVER BOUNDED BY THE DATA. The athlete's decision, and it matches the
+ * date field beside it, which has never been bounded either: stepping past the
+ * record draws a grid of empty cells, which is an honest answer rather than a
+ * disabled button that cannot say why. The alternative -- disabling at the edge
+ * of what has been measured -- also has to decide what "the edge" is on a view
+ * that deliberately reaches into a plan authored months ahead.
+ */
+export function stepLastDay(
+  lastDay: string,
+  weeks: number,
+  steps: number,
+): string {
+  return addDays(lastDay, 7 * weeks * steps);
+}
+
 /** A week count clamped to what the strip offers.
  *
  * State arriving from outside -- a restored form control, a future URL

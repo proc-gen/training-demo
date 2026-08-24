@@ -11,6 +11,7 @@ afterEach(cleanup);
 const panel = (key: string, title: string): Panel => ({
   key,
   title,
+  cadence: "week",
   points: [],
   seriesTitle: key,
   format: String,

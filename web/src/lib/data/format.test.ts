@@ -10,6 +10,7 @@ import {
   pct,
   severity,
   shortDate,
+  shortDateY,
   signed,
 } from "./format";
 
@@ -240,6 +241,26 @@ describe("shortDate", () => {
 
   it("strips leading zeros without a Date and so cannot shift a day", () => {
     expect(shortDate("2026-08-01")).toBe("8/1");
+  });
+});
+
+describe("shortDateY", () => {
+  it.each([
+    ["2026-07-27", "7/27/26"],
+    ["2025-08-25", "8/25/25"],
+    ["2026-01-09", "1/9/26"],
+    ["1999-12-31", "12/31/99"],
+    ["2000-01-01", "1/1/00"],
+  ])("%s is %s", (iso, want) => {
+    expect(shortDateY(iso)).toBe(want);
+  });
+
+  it("is shortDate plus the year, never a second date format", () => {
+    // A trend axis that crosses a year mixes the two, one label per slot; they
+    // have to read as the same thing with one more field.
+    for (const iso of ["2026-07-27", "2025-01-05"]) {
+      expect(shortDateY(iso).startsWith(shortDate(iso) + "/")).toBe(true);
+    }
   });
 });
 

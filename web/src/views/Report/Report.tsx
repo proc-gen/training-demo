@@ -33,8 +33,11 @@ export function Report({ payload }: { payload: Payload }) {
 
       {/* One filter row above everything it scopes, never inside a card. */}
       <div className="filters">
+        {/* NO `payload`. The picker took it only to label each option with the
+            week type, and the option list is gone -- see `WeekPicker`. It needs
+            the KEY LIST and nothing else, which is also what keeps the shell's
+            one job (which view is showing) from leaking downward. */}
         <WeekPicker
-          payload={payload}
           keys={keys}
           selected={selected}
           onSelect={setSelected}
@@ -70,8 +73,10 @@ export function Report({ payload }: { payload: Payload }) {
               banners={payload.banners ?? []}
               /* The CHART, not the payload. `WeekView` needs one record and
                  handing it the whole payload would give it reach into every
-                 other week, which is what the shell is for. */
+                 other week, which is what the shell is for. The models
+                 singleton rides beside it under the same rule. */
               paceChartCurrent={payload.pace_chart_current}
+              paceModels={payload.pace_models_current}
             />
           ) : (
             <p className="empty-state">No week selected.</p>

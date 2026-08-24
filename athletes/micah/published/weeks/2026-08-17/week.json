@@ -18,9 +18,21 @@
    },
    {
     "date": "2026-08-18",
+    "key": "2026-08-18-pm-wu",
+    "prescribed": "warmup for the 10x800m",
+    "role": "volume_only"
+   },
+   {
+    "date": "2026-08-18",
     "key": "2026-08-18-pm",
     "prescribed": "PM: 10x800m w/ 200m jog at Sub-T",
     "role": "subt"
+   },
+   {
+    "date": "2026-08-18",
+    "key": "2026-08-18-pm-cd",
+    "prescribed": "cooldown for the 10x800m",
+    "role": "volume_only"
    },
    {
     "date": "2026-08-19",
@@ -42,9 +54,27 @@
    },
    {
     "date": "2026-08-21",
+    "key": "2026-08-21-pm-wu",
+    "prescribed": "warmup for the hill sprints + sub-T",
+    "role": "volume_only"
+   },
+   {
+    "date": "2026-08-21",
+    "key": "2026-08-21-pm-hills",
+    "prescribed": "PM: 4x6s hill sprints w/ 2-3 min walking recovery",
+    "role": "neuromuscular"
+   },
+   {
+    "date": "2026-08-21",
     "key": "2026-08-21-pm",
-    "prescribed": "PM: 4x6s hill sprints w/ 2-3 min walking recovery, then 4x6:00 w/ 1:30 jog at Sub-T",
-    "role": "mixed"
+    "prescribed": "PM: 4x6:00 w/ 1:30 jog at Sub-T",
+    "role": "subt"
+   },
+   {
+    "date": "2026-08-21",
+    "key": "2026-08-21-pm-cd",
+    "prescribed": "cooldown for the hill sprints + sub-T",
+    "role": "volume_only"
    },
    {
     "date": "2026-08-22",

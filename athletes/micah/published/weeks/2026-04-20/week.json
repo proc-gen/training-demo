@@ -1,0 +1,154 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "Injury",
+  "runs": [
+   {
+    "date": "2026-04-21",
+    "key": "2026-04-21",
+    "prescribed": "unplanned -- ten-minute return jog",
+    "role": "easy"
+   },
+   {
+    "date": "2026-04-23",
+    "key": "2026-04-23",
+    "prescribed": "unplanned -- return jog (13 min)",
+    "role": "easy"
+   },
+   {
+    "date": "2026-04-25",
+    "key": "2026-04-25",
+    "prescribed": "unplanned -- easy 15 min on the Local trip",
+    "role": "easy"
+   }
+  ],
+  "week_start": "2026-04-20",
+  "week_type": "Volume"
+ },
+ "pace_chart": {
+  "bands": {
+   "easy": {
+    "display": "8:35-9:16/mi",
+    "fast_sec_per_mi": 515,
+    "pct": [
+     0.63,
+     0.68
+    ],
+    "slow_sec_per_mi": 556
+   },
+   "long": {
+    "display": "8:06-8:35/mi",
+    "fast_sec_per_mi": 486,
+    "pct": [
+     0.68,
+     0.72
+    ],
+    "slow_sec_per_mi": 515
+   },
+   "recovery": {
+    "display": "9:16-10:03/mi",
+    "fast_sec_per_mi": 556,
+    "pct": [
+     0.58,
+     0.63
+    ],
+    "slow_sec_per_mi": 603
+   },
+   "rep_10min": {
+    "display": "7:07-7:23/mi",
+    "fast_sec_per_mi": 427,
+    "pct": [
+     0.79,
+     0.82
+    ],
+    "slow_sec_per_mi": 443
+   },
+   "rep_15min": {
+    "display": "7:17-7:35/mi",
+    "fast_sec_per_mi": 437,
+    "pct": [
+     0.77,
+     0.8
+    ],
+    "slow_sec_per_mi": 455
+   },
+   "rep_1min": {
+    "display": "6:38-6:52/mi",
+    "fast_sec_per_mi": 398,
+    "pct": [
+     0.85,
+     0.88
+    ],
+    "slow_sec_per_mi": 412
+   },
+   "rep_3min": {
+    "display": "6:47-7:02/mi",
+    "fast_sec_per_mi": 407,
+    "pct": [
+     0.83,
+     0.86
+    ],
+    "slow_sec_per_mi": 422
+   },
+   "rep_6min": {
+    "display": "6:57-7:12/mi",
+    "fast_sec_per_mi": 417,
+    "pct": [
+     0.81,
+     0.84
+    ],
+    "slow_sec_per_mi": 432
+   }
+  },
+  "confirmed_by_athlete": true,
+  "effective_vo2max": 53.6,
+  "race_paces": {
+   "10000m": {
+    "display": "38:56 @ 6:16/mi",
+    "sec_per_mi": 376,
+    "seconds": 2336
+   },
+   "1500m": {
+    "display": "5:04 @ 5:26/mi",
+    "sec_per_mi": 326,
+    "seconds": 304
+   },
+   "21097m": {
+    "display": "1:26:10 @ 6:34/mi",
+    "sec_per_mi": 394,
+    "seconds": 5170
+   },
+   "3000m": {
+    "display": "10:52 @ 5:50/mi",
+    "sec_per_mi": 350,
+    "seconds": 652
+   },
+   "42195m": {
+    "display": "2:59:48 @ 6:51/mi",
+    "sec_per_mi": 411,
+    "seconds": 10788
+   },
+   "5000m": {
+    "display": "18:47 @ 6:03/mi",
+    "sec_per_mi": 363,
+    "seconds": 1127
+   },
+   "800m": {
+    "display": "2:34 @ 5:09/mi",
+    "sec_per_mi": 309,
+    "seconds": 154
+   },
+   "tempo": {
+    "basis": "60-80 minute race pace, the Daniels threshold definition, from the model's duration prognosis.",
+    "display": "6:25-6:32/mi",
+    "fast_sec_per_mi": 385,
+    "slow_sec_per_mi": 392
+   }
+  },
+  "week_ending": "2026-04-19"
+ },
+ "pace_chart_is_carried_forward": false,
+ "week_end": "2026-04-26",
+ "week_start": "2026-04-20"
+}

@@ -1,0 +1,178 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "Rebuild",
+  "runs": [
+   {
+    "date": "2026-02-16",
+    "key": "2026-02-16",
+    "prescribed": "30 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-02-17",
+    "key": "2026-02-17",
+    "prescribed": "12x2:30 w/ 1:00 jog recovery -> 6.8 & 9.2 mph",
+    "role": "subt"
+   },
+   {
+    "date": "2026-02-18",
+    "key": "2026-02-18",
+    "prescribed": "60 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-02-19",
+    "key": "2026-02-19",
+    "prescribed": "5x6:30 w/ 1:30 jog recovery -> 6.8 & 8.9 mph",
+    "role": "subt"
+   },
+   {
+    "date": "2026-02-20",
+    "key": "2026-02-20",
+    "prescribed": "60 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-02-21",
+    "key": "2026-02-21",
+    "prescribed": "4x9:00 w/ 2:00 jog recovery -> 6.8 & 8.8 mph",
+    "role": "subt"
+   },
+   {
+    "date": "2026-02-22",
+    "key": "2026-02-22",
+    "prescribed": "114 min easy",
+    "role": "long"
+   }
+  ],
+  "week_start": "2026-02-16",
+  "week_type": "Volume"
+ },
+ "pace_chart": {
+  "bands": {
+   "easy": {
+    "display": "7:56-8:33/mi",
+    "fast_sec_per_mi": 476,
+    "pct": [
+     0.63,
+     0.68
+    ],
+    "slow_sec_per_mi": 513
+   },
+   "long": {
+    "display": "7:29-7:56/mi",
+    "fast_sec_per_mi": 449,
+    "pct": [
+     0.68,
+     0.72
+    ],
+    "slow_sec_per_mi": 476
+   },
+   "recovery": {
+    "display": "8:33-9:18/mi",
+    "fast_sec_per_mi": 513,
+    "pct": [
+     0.58,
+     0.63
+    ],
+    "slow_sec_per_mi": 558
+   },
+   "rep_10min": {
+    "display": "6:34-6:49/mi",
+    "fast_sec_per_mi": 394,
+    "pct": [
+     0.79,
+     0.82
+    ],
+    "slow_sec_per_mi": 409
+   },
+   "rep_15min": {
+    "display": "6:44-7:00/mi",
+    "fast_sec_per_mi": 404,
+    "pct": [
+     0.77,
+     0.8
+    ],
+    "slow_sec_per_mi": 420
+   },
+   "rep_1min": {
+    "display": "6:08-6:21/mi",
+    "fast_sec_per_mi": 368,
+    "pct": [
+     0.85,
+     0.88
+    ],
+    "slow_sec_per_mi": 381
+   },
+   "rep_3min": {
+    "display": "6:16-6:30/mi",
+    "fast_sec_per_mi": 376,
+    "pct": [
+     0.83,
+     0.86
+    ],
+    "slow_sec_per_mi": 390
+   },
+   "rep_6min": {
+    "display": "6:25-6:39/mi",
+    "fast_sec_per_mi": 385,
+    "pct": [
+     0.81,
+     0.84
+    ],
+    "slow_sec_per_mi": 399
+   }
+  },
+  "confirmed_by_athlete": false,
+  "effective_vo2max": 59.07,
+  "race_paces": {
+   "10000m": {
+    "display": "35:50 @ 5:46/mi",
+    "sec_per_mi": 346,
+    "seconds": 2150
+   },
+   "1500m": {
+    "display": "4:39 @ 4:59/mi",
+    "sec_per_mi": 299,
+    "seconds": 279
+   },
+   "21097m": {
+    "display": "1:19:13 @ 6:03/mi",
+    "sec_per_mi": 363,
+    "seconds": 4753
+   },
+   "3000m": {
+    "display": "9:58 @ 5:21/mi",
+    "sec_per_mi": 321,
+    "seconds": 598
+   },
+   "42195m": {
+    "display": "2:45:34 @ 6:19/mi",
+    "sec_per_mi": 379,
+    "seconds": 9934
+   },
+   "5000m": {
+    "display": "17:17 @ 5:34/mi",
+    "sec_per_mi": 334,
+    "seconds": 1037
+   },
+   "800m": {
+    "display": "2:21 @ 4:44/mi",
+    "sec_per_mi": 284,
+    "seconds": 141
+   },
+   "tempo": {
+    "basis": "60-80 minute race pace, the Daniels threshold definition, from the model's duration prognosis.",
+    "display": "5:56-6:03/mi",
+    "fast_sec_per_mi": 356,
+    "slow_sec_per_mi": 363
+   }
+  },
+  "week_ending": "2026-02-15"
+ },
+ "pace_chart_is_carried_forward": false,
+ "week_end": "2026-02-22",
+ "week_start": "2026-02-16"
+}

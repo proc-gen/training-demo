@@ -1,0 +1,190 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "Return of Doubles",
+  "runs": [
+   {
+    "date": "2025-02-10",
+    "key": "2025-02-10-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-02-10",
+    "key": "2025-02-10-b",
+    "prescribed": "B - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-02-11",
+    "key": "2025-02-11",
+    "prescribed": "600m, 500m, 400m, 300m, 200m, 100m w/ 200m walk rest",
+    "role": "repetition"
+   },
+   {
+    "date": "2025-02-12",
+    "key": "2025-02-12",
+    "prescribed": "Easy 75 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-02-13",
+    "key": "2025-02-13-a",
+    "prescribed": "A - Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-02-13",
+    "key": "2025-02-13-b",
+    "prescribed": "B - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-02-14",
+    "key": "2025-02-14",
+    "prescribed": "5xMile w/ 200m jog -> substituted: cutter hills (icy, track closed)",
+    "role": "hill_repeats"
+   },
+   {
+    "date": "2025-02-15",
+    "key": "2025-02-15",
+    "prescribed": "Easy 60 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-02-16",
+    "key": "2025-02-16",
+    "prescribed": "Easy 90 min",
+    "role": "long"
+   }
+  ],
+  "week_start": "2025-02-10",
+  "week_type": "Intensity"
+ },
+ "pace_chart": {
+  "bands": {
+   "easy": {
+    "display": "8:07-8:45/mi",
+    "fast_sec_per_mi": 487,
+    "pct": [
+     0.63,
+     0.68
+    ],
+    "slow_sec_per_mi": 525
+   },
+   "long": {
+    "display": "7:40-8:07/mi",
+    "fast_sec_per_mi": 460,
+    "pct": [
+     0.68,
+     0.72
+    ],
+    "slow_sec_per_mi": 487
+   },
+   "recovery": {
+    "display": "8:45-9:30/mi",
+    "fast_sec_per_mi": 525,
+    "pct": [
+     0.58,
+     0.63
+    ],
+    "slow_sec_per_mi": 570
+   },
+   "rep_10min": {
+    "display": "6:43-6:59/mi",
+    "fast_sec_per_mi": 403,
+    "pct": [
+     0.79,
+     0.82
+    ],
+    "slow_sec_per_mi": 419
+   },
+   "rep_15min": {
+    "display": "6:54-7:10/mi",
+    "fast_sec_per_mi": 414,
+    "pct": [
+     0.77,
+     0.8
+    ],
+    "slow_sec_per_mi": 430
+   },
+   "rep_1min": {
+    "display": "6:16-6:29/mi",
+    "fast_sec_per_mi": 376,
+    "pct": [
+     0.85,
+     0.88
+    ],
+    "slow_sec_per_mi": 389
+   },
+   "rep_3min": {
+    "display": "6:25-6:39/mi",
+    "fast_sec_per_mi": 385,
+    "pct": [
+     0.83,
+     0.86
+    ],
+    "slow_sec_per_mi": 399
+   },
+   "rep_6min": {
+    "display": "6:34-6:48/mi",
+    "fast_sec_per_mi": 394,
+    "pct": [
+     0.81,
+     0.84
+    ],
+    "slow_sec_per_mi": 408
+   }
+  },
+  "confirmed_by_athlete": true,
+  "effective_vo2max": 57.45,
+  "race_paces": {
+   "10000m": {
+    "display": "36:42 @ 5:54/mi",
+    "sec_per_mi": 354,
+    "seconds": 2202
+   },
+   "1500m": {
+    "display": "4:46 @ 5:07/mi",
+    "sec_per_mi": 307,
+    "seconds": 286
+   },
+   "21097m": {
+    "display": "1:21:09 @ 6:11/mi",
+    "sec_per_mi": 371,
+    "seconds": 4869
+   },
+   "3000m": {
+    "display": "10:13 @ 5:29/mi",
+    "sec_per_mi": 329,
+    "seconds": 613
+   },
+   "42195m": {
+    "display": "2:49:31 @ 6:28/mi",
+    "sec_per_mi": 388,
+    "seconds": 10171
+   },
+   "5000m": {
+    "display": "17:42 @ 5:42/mi",
+    "sec_per_mi": 342,
+    "seconds": 1062
+   },
+   "800m": {
+    "display": "2:25 @ 4:51/mi",
+    "sec_per_mi": 291,
+    "seconds": 145
+   },
+   "tempo": {
+    "basis": "60-80 minute race pace, the Daniels threshold definition, from the model's duration prognosis.",
+    "display": "6:04-6:11/mi",
+    "fast_sec_per_mi": 364,
+    "slow_sec_per_mi": 371
+   }
+  },
+  "week_ending": "2025-02-09"
+ },
+ "pace_chart_is_carried_forward": false,
+ "week_end": "2025-02-16",
+ "week_start": "2025-02-10"
+}

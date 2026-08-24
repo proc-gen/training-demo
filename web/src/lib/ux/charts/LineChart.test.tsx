@@ -26,6 +26,39 @@ describe("LineChart", () => {
     expect(markers(container)).toHaveLength(2);
   });
 
+  it("KEEPS THE NULL'S SLOT, so position still means time", () => {
+    /* The defect: nulls were filtered and the survivors re-indexed, so a
+     * month-long hole closed up and the axis lied about every date beside it.
+     * The third of three points belongs at the right edge either way. */
+    const gapped = wrap(<LineChart points={pts(40, null, 42)} width={340} />);
+    const solid = wrap(<LineChart points={pts(40, 41, 42)} width={340} />);
+    const at = (c: HTMLElement, i: number) =>
+      parseFloat(markers(c)[i].getAttribute("cx")!);
+    expect(at(gapped.container, 1)).toBeCloseTo(at(solid.container, 2), 5);
+  });
+
+  it("BREAKS THE LINE at a null rather than drawing across it", () => {
+    // A day nobody measured must be visibly not measured.
+    const { container } = wrap(<LineChart points={pts(40, 41, null, 43, 44)} />);
+    expect(container.querySelectorAll("path.series-line")).toHaveLength(2);
+  });
+
+  it("breaks the wash with it", () => {
+    const { container } = wrap(<LineChart points={pts(40, 41, null, 43, 44)} />);
+    const washes = [...container.querySelectorAll("path")].filter(
+      (p) => p.getAttribute("fill") && !p.classList.contains("series-line"),
+    );
+    expect(washes).toHaveLength(2);
+  });
+
+  it("draws no line or wash for a lone point between two gaps", () => {
+    // A zero-width sliver of fill reads as a rendering fault; the marker is
+    // what says the day was measured.
+    const { container } = wrap(<LineChart points={pts(40, null, 42, null, 44)} />);
+    expect(container.querySelectorAll("path")).toHaveLength(0);
+    expect(markers(container)).toHaveLength(3);
+  });
+
   it("renders an empty chart, not a crash, when every point is null", () => {
     const { container } = wrap(<LineChart points={pts(null, null)} />);
     expect(container.querySelector("svg")).toBeTruthy();
@@ -79,12 +112,32 @@ describe("LineChart", () => {
     expect(beside(last)[0].textContent).toBe("42");
   });
 
-  it("labels the first and last x, not every one", () => {
+  it("labels every x that fits, and thins the rest by width", () => {
+    /* It labelled the first and the last and NOTHING ELSE until 2026-08-21,
+     * which over a year of weeks read `8/25 ... 8/17`: two dates is a range,
+     * not a scale. Four points across a 340-wide box have room for all four. */
     const { container } = wrap(<LineChart points={pts(1, 2, 3, 4)} />);
     const labels = texts(container);
-    expect(labels).toContain("7/1");
-    expect(labels).toContain("7/4");
-    expect(labels).not.toContain("7/2");
+    for (const want of ["7/1", "7/2", "7/3", "7/4"]) {
+      expect(labels).toContain(want);
+    }
+  });
+
+  it("thins them once they would overlap, keeping the last", () => {
+    const many = pts(...Array.from({ length: 40 }, (_, i) => i));
+    const { container } = wrap(<LineChart points={many} width={340} />);
+    const shown = texts(container).filter((t) => t?.startsWith("7/"));
+    expect(shown.length).toBeLessThan(40);
+    expect(shown).toContain("7/40");
+  });
+
+  it("labels exactly the points FLAGGED by the caller, when any is", () => {
+    /* Which dates deserve a label is a fact about the calendar, and this
+     * library knows nothing about dates -- so the Trends view flags them. */
+    const flagged = pts(1, 2, 3, 4).map((p, i) => ({ ...p, tick: i === 1 }));
+    const { container } = wrap(<LineChart points={flagged} />);
+    const shown = texts(container).filter((t) => t?.startsWith("7/"));
+    expect(shown).toEqual(["7/2"]);
   });
 
   it("draws a reference rule when it falls inside the domain", () => {
@@ -114,6 +167,80 @@ describe("LineChart", () => {
       expect(cy).toBeGreaterThanOrEqual(-0.001);
       expect(cy).toBeLessThanOrEqual(h + 0.001);
     }
+  });
+
+  it("THE WASH STOPS AT THE AXIS", () => {
+    /* The defect the athlete named: the domain was padded 15% below its lowest
+     * rule and the fill closed at the plot floor, so the wash hung under its
+     * own axis. Both are the same line now. */
+    const { container } = wrap(
+      <LineChart points={pts(0, 40, 57.7)} width={1000} height={320} zero />,
+    );
+    const base = parseFloat(
+      container.querySelector("line.baseline")!.getAttribute("y1")!,
+    );
+    const wash = [...container.querySelectorAll("path")].find(
+      (p) => p.getAttribute("fill") && !p.classList.contains("series-line"),
+    )!;
+    // `... L<x> <y> L<x> <y> Z` -- both closing corners sit on the baseline.
+    const closes = [...wash.getAttribute("d")!.matchAll(/L[\d.-]+ ([\d.-]+)/g)]
+      .map((m) => parseFloat(m[1]))
+      .slice(-2);
+    for (const y of closes) expect(y).toBeCloseTo(base, 5);
+  });
+
+  it("puts the baseline on the LOWEST gridline, not below it", () => {
+    const { container } = wrap(
+      <LineChart points={pts(0, 40, 57.7)} width={1000} height={320} zero />,
+    );
+    const base = parseFloat(
+      container.querySelector("line.baseline")!.getAttribute("y1")!,
+    );
+    const rules = [...container.querySelectorAll("line.gridline")]
+      .filter((l) => l.getAttribute("y1") === l.getAttribute("y2"))
+      .map((l) => parseFloat(l.getAttribute("y1")!));
+    expect(Math.max(...rules)).toBeCloseTo(base, 5);
+  });
+
+  it("rules the plot at round numbers, more than two of them", () => {
+    const { container } = wrap(
+      <LineChart
+        points={pts(0, 40, 57.7)}
+        width={1000}
+        height={320}
+        zero
+        format={(v) => `${v} mi`}
+      />,
+    );
+    const shown = texts(container).filter((t) => t?.endsWith(" mi"));
+    // 0 / 10 / ... / 60, plus the endpoint label.
+    expect(shown).toContain("0 mi");
+    expect(shown).toContain("60 mi");
+    expect(shown.length).toBeGreaterThan(4);
+  });
+
+  it("draws vertical rules only where there is a label to read back to", () => {
+    const flagged = pts(1, 2, 3, 4).map((p, i) => ({ ...p, tick: i === 2 }));
+    const { container } = wrap(<LineChart points={flagged} />);
+    const verticals = [...container.querySelectorAll("line.gridline")].filter(
+      (l) => l.getAttribute("x1") === l.getAttribute("x2"),
+    );
+    expect(verticals).toHaveLength(1);
+  });
+
+  it("labels the endpoint at the last MEASURED point, not the last slot", () => {
+    // A window can end on a date nobody measured; the value belongs beside the
+    // mark it describes.
+    const { container } = wrap(<LineChart points={pts(40, 44, null)} />);
+    const marks = [...markers(container)];
+    const lastMark = parseFloat(marks[marks.length - 1].getAttribute("cx")!);
+    /* Positionally, like the case above: a y-axis rule can carry the same
+       number, and it sits left of the plot rather than beside the mark. */
+    const beside = [...container.querySelectorAll("text")].filter(
+      (t) => parseFloat(t.getAttribute("x")!) === lastMark + 8,
+    );
+    expect(beside).toHaveLength(1);
+    expect(beside[0].textContent).toBe("44");
   });
 
   it("carries an accessible name", () => {

@@ -94,13 +94,16 @@ export function RunRow({
         <td className="num">
           {(r.hr_avg || "--") + " / " + (r.hr_max || "--")}
         </td>
-        {/* `≈` MARKS AN ESTIMATE. The `average-hr` tier prices an activity from
-            one average rather than the per-second stream and understates by
-            about 3%; an estimate must never read as a measurement. */}
+        {/* `≈` MARKS AN ESTIMATE. Every tier except `stream` is one:
+            `average-hr` prices from a listing's average (understating ~3%),
+            `stream-disavowed` from the file's own summary after its stream
+            was rejected against it. Keying on "not the measurement" means a
+            future tier defaults to being marked -- an estimate reading as a
+            measurement is the failure mode. */}
         <td className="num">
           {trimp?.trimp === null || trimp?.trimp === undefined
             ? "--"
-            : (trimp.source === "average-hr" ? "≈" : "") + num(trimp.trimp, 0)}
+            : (trimp.source !== "stream" ? "≈" : "") + num(trimp.trimp, 0)}
         </td>
         <td className="num">{num(r.cadence)}</td>
         <td className="num">

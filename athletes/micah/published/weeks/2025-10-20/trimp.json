@@ -1,0 +1,24 @@
+[
+ {
+  "activity_id": "152959843",
+  "avg_hr": "155",
+  "date": "2025-10-25",
+  "hr_rest": "48",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "",
+  "seconds": "1199",
+  "trimp": "42.40",
+  "trimp_source": "average-hr"
+ },
+ {
+  "activity_id": "153066004",
+  "avg_hr": "155",
+  "date": "2025-10-26",
+  "hr_rest": "50",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "2701",
+  "trimp": "97.58",
+  "trimp_source": "stream"
+ }
+]

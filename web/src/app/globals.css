@@ -154,6 +154,47 @@
   --tint-race: color-mix(in oklab, var(--emph-race) 22%, var(--surface-1));
   --tint-quality: color-mix(in oklab, var(--emph-quality) 22%, var(--surface-1));
 
+  /* THE CATEGORICAL SLOTS, IN THE REFERENCE PALETTE'S OWN ORDER -- for the two
+   * Trends pace panels, which are the only charts here carrying more than three
+   * series at once.
+   *
+   * THESE ARE ALIASES, NOT NEW COLOURS, and that is the whole point. Six of the
+   * eight slots are already on this page under names that say what they MEAN
+   * here -- slots 1-3 are the three series colours, slots 7/4/6 are the calendar's
+   * long/race/quality tints. Re-typing their hexes under a second name would be a
+   * transcription of a measurement, which is the same objection `--track` records.
+   * Aliasing also means the dark steps come for free: each referenced token
+   * already carries its own dark value, and those values are the reference
+   * palette's dark column. Only slot 5 is new.
+   *
+   * THE ORDER IS THE CVD-SAFETY MECHANISM, NOT COSMETIC. The palette's slot
+   * ordering was chosen so that ADJACENT pairs clear the gates, which is the
+   * pairlist a line chart is held to. Do not reorder these to taste.
+   *
+   * MEASURED, not assumed -- `scripts/validate_palette.js` over the seven in use,
+   * against this page's own surfaces (#fcfcfb / #1a1a19):
+   *   light  worst adjacent CVD dE 9.1 (protan) . normal-vision 19.6 . ALL PASS
+   *   dark   worst adjacent CVD dE 8.4 (protan) . normal-vision 19.3 . ALL PASS
+   * Light mode WARNs on contrast for aqua (2.74), yellow (2.11) and magenta
+   * (2.62) against a 3:1 bar. That warning is not dismissable and is discharged
+   * the way the validator asks: every series is named beside its own swatch in
+   * the checkbox row, carries a direct end-label, and is named in its tooltip.
+   *
+   * EIGHT IS THE CEILING AND IT IS A HARD ONE. There is no ninth slot -- a ninth
+   * series folds, facets, or merges, and re-stepping a documented palette is off
+   * the table. That ceiling is why the target-paces panel merges easy+recovery
+   * into one region and drops `long`, and why the race panel plots seven
+   * distances. A single-hue ordinal ramp was measured as the alternative and is
+   * worse: the blue ramp steps by dL 0.047 against the validator's 0.06 floor, so
+   * it carries five steps, not nine. */
+  --cat-1: var(--series-1);      /* slot 1  blue */
+  --cat-2: var(--series-2);      /* slot 2  orange */
+  --cat-3: var(--series-3);      /* slot 3  aqua */
+  --cat-4: var(--emph-race);     /* slot 4  yellow */
+  --cat-5: #e87ba4;              /* slot 5  magenta -- the one slot with no other job */
+  --cat-6: var(--emph-quality);  /* slot 6  green */
+  --cat-7: var(--emph-long);     /* slot 7  violet */
+
   --radius: 10px;
   --gap: 2px;
   --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -182,6 +223,10 @@
     --emph-long: #9085e9;
     --emph-race: #c98500;
     --emph-quality: #008300;
+    /* Slot 5 is the one categorical slot with no other job on this page, so it
+       is the only one needing its own dark step; the other six alias tokens
+       that already carry theirs. */
+    --cat-5: #d55181;
   }
 }
 
@@ -203,6 +248,9 @@
   --emph-long: #9085e9;
   --emph-race: #c98500;
   --emph-quality: #008300;
+  /* See the media block above: slot 5 is the only categorical slot with no
+     other job here, so it is the only one carrying its own dark step. */
+  --cat-5: #d55181;
 }
 
 * { box-sizing: border-box; }
@@ -313,6 +361,23 @@ h1 { font-size: 1.4rem; margin: 0; letter-spacing: -0.01em; }
 /* There was no focus style at all, so the strips were invisible to the
    keyboard. Same rule as `button.meter-row`, so the page has one focus idea. */
 .tab:focus-visible { outline: 2px solid var(--series-1); outline-offset: 1px; }
+/* A DISABLED PILL, which `.tab` had no state for until the steppers arrived.
+   Three of them can be dead at once — the week arrows at either end of the
+   record, and both trends arrows on `All` or a typed window.
+
+   SOURCE ORDER IS WHAT MAKES THIS WORK. `.tab:hover` and `.tab:disabled` have
+   EQUAL specificity (0,2,0), so whichever is written last wins; this must sit
+   BELOW the hover rule or a dead pill would light up under the cursor. And
+   `:hover` still MATCHES on a disabled button — the browser only suppresses the
+   click — so the pair is written out rather than assumed. It stays ABOVE the
+   selected block, which no stepper button can ever be in. */
+.tab:disabled,
+.tab:disabled:hover {
+  opacity: 0.45;
+  cursor: default;
+  background: var(--track);
+  color: var(--text-secondary);
+}
 /* LAST, AND WITH ITS OWN :hover. `.tab:hover` and `.tab[aria-selected="true"]`
    have EQUAL specificity (0,2,0), so source order alone decides — a hover rule
    below this one would repaint the selected pill grey under the cursor.
@@ -334,6 +399,39 @@ h1 { font-size: 1.4rem; margin: 0; letter-spacing: -0.01em; }
 /* In-card pills share a header row with the week's title, so they take a
    slightly tighter scale — the same step down `.card > h2` takes from `h1`. */
 .tabs.in-card .tab { font-size: 0.82rem; padding: 0.3rem 0.75rem; }
+/* THE BACK/FORWARD PAIR, shared by all three views. It BRACKETS the control it
+   steps — `<< [date] >>` — so the row it lays out is an arrow, one or two
+   labelled fields, and an arrow.
+
+   Its own class rather than `.tabs`, which carries `margin-left: auto` and would
+   shove the arrows to the far margin away from the field they move.
+
+   `align-items: end` IS LOAD-BEARING NOW that fields sit between the buttons: a
+   `.field` puts its label ABOVE its input, so centring would float the arrows
+   into the middle of the field. Same rule and same reason as `.trend-controls`.
+
+   `gap` is 0.5rem rather than the 0.35rem it had as a bare pair — that was a
+   button-to-button gap in a pill strip, and this is an arrow hugging a control.
+
+   `min-width` because `<<` is two narrow glyphs and an unconstrained pill would
+   be half the width of the one opposite it. It matters MORE now, not less: the
+   two arrows bracket the field and have to read as a symmetric pair. */
+.stepper { display: flex; align-items: end; gap: 0.5rem; }
+.stepper .tab { min-width: 2.75rem; text-align: center; }
+/* TWO ADJACENT FIELDS KEEP THE ROW'S OWN 1rem. Only `RangePicker` has them, and
+   From and To sat 1rem apart before the bracket existed — 0.5rem is the gap an
+   arrow should hug its field at, not the gap between the two ends of a window.
+   Topping the pair back up beats widening the gap, which would detach both
+   arrows from what they move. */
+.stepper .field + .field { margin-left: 0.5rem; }
+
+/* THE WEEK CONTROL. This wrapper does ONE thing: it is what `visibility: hidden`
+   sits on, so hiding the picker on the Calendar and Trends tabs takes the arrows
+   with the field and still keeps the row's height. The layout is `.stepper`'s
+   above, and `Stepper` has no `style` prop to hang a toggle on — nor should it,
+   for the reason `Tabs` takes `className` and no more. */
+.week-nav { display: flex; }
+
 /* A strip that is NOT in a header row. `.tabs` carries `margin-left: auto`
    because every strip until 2026-08-15 sat beside a title and had to be pushed
    to the far end of it; the Load tab's Steps/Readiness toggle stands on its own
@@ -855,6 +953,56 @@ details.prose > summary {
 /* Pushed to the far end of the row: the two dates are what the window IS, and
    these are shortcuts for filling them in. */
 .range-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-left: auto;
+}
+
+/* THE SERIES ROW IS THE LEGEND. A multi-series panel puts its checkboxes and
+   its key in one control rather than shipping both -- two swatches on screen for
+   one meaning is the duplication `Legend` warns about, and it would make the
+   reader match a colour in one row against a word in another.
+
+   `align-items: start` so a wrapped picker keeps the unit pills on the first
+   line, beside the series they qualify; `margin-left: auto` on the toggle is the
+   same far-end placement `.range-presets` uses for the same reason. */
+.series-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  gap: 0.4rem 1rem;
+  margin: 0 0 0.7rem;
+}
+.series-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.9rem;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+.series-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  /* The label is the hit target, so it must not be selected by a double click
+     on the way to a third toggle. */
+  user-select: none;
+}
+.series-item input {
+  margin: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+/* AN UNTICKED SERIES DIMS ITS OWN SWATCH. Without it the key still shows seven
+   saturated chips while the plot shows three, so the row stops describing the
+   chart it is a key to. `:has()` keeps this in CSS rather than adding a class the
+   component would have to remember to set. */
+.series-item:has(input:not(:checked)) { color: var(--text-muted); }
+.series-item:has(input:not(:checked)) .swatch { opacity: 0.3; }
+
+.unit-toggle {
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;

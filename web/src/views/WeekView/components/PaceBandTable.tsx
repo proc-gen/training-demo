@@ -3,7 +3,7 @@
 import { pace } from "@/lib/data/format";
 import type { Band, PaceChart } from "@/lib/data/payload";
 import { Table } from "@/lib/ux/primitives/Table";
-import { bandRows } from "../data/paceRows";
+import { bandRows } from "@/lib/data/paceRows";
 
 /** The week's training paces beside today's.
  *

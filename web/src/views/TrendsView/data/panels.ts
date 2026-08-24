@@ -22,8 +22,9 @@ import type { Payload } from "@/lib/data/payload";
 import { shortDate } from "@/lib/data/format";
 import { hasRuns, weekKeys } from "@/lib/data/weeks";
 import type { Point } from "@/lib/ux/charts/LineChart";
-import { isIncomplete } from "./coverage";
+import { isIncomplete, isLived } from "./coverage";
 import { fitnessSeries } from "./fitnessSeries";
+import { paceSeries } from "./paceSeries";
 
 /** A plotted point that still knows its own date.
  *
@@ -40,7 +41,54 @@ import { fitnessSeries } from "./fitnessSeries";
 export type TrendPoint = Point & {
   date: string;
   parts?: { value: number | null; color: string; label: string }[];
+  /** For a MULTI-SERIES panel: this date's value for each series, by key.
+   *
+   * A plain number is a line. `{lo, hi}` is a band, and `mid` marks a real seam
+   * inside one -- the target-paces panel draws Easy and Recovery as a single
+   * region with the boundary between them ruled across it. */
+  values?: Record<string, SeriesValue>;
+  /** The effective VO2max the pace panels' whole point derives from.
+   *
+   * DISPLAY ONLY, for the tooltip. Deliberately its own field rather than being
+   * packed into `value`: whether a point EXISTS must not depend on a provenance
+   * figure that none of its series are drawn from. One early chart records this
+   * nested under `source`, which is why it arrives through `chartVo2max()`. */
+  vo2max?: number | null;
 };
+
+/** One series' value on one date. */
+export type SeriesValue = number | { lo: number; hi: number; mid?: number } | null;
+
+/** A line or band in a multi-series panel. Colour is assigned by POSITION in the
+ *  palette's own validated order and never by rank, so a checkbox that hides a
+ *  series cannot repaint the ones left behind. */
+export type SeriesSpec = { key: string; label: string; color: string };
+
+/** An alternative quantity for the same panel -- its own points, its own
+ *  formatter, its own scale. Two modes are two measurements, not one series
+ *  wearing two formatters, which is why each carries a full point set. */
+export type PanelMode = {
+  key: string;
+  label: string;
+  points: TrendPoint[];
+  format: (v: number) => string;
+};
+
+/** Whether a point carries anything a chart would draw.
+ *
+ * A MULTI-SERIES POINT IS DRAWN WHEN ANY OF ITS SERIES HAS A VALUE. It has no
+ * single scalar to be, and the two shortcuts both misreport: anchoring on the
+ * chart's VO2max makes a point's existence depend on a provenance field, and
+ * nominating one "primary" distance picks a series arbitrarily. It must also stay
+ * independent of which boxes are ticked -- reading the enabled set here would
+ * mean unticking a series moved the shared date window.
+ */
+export function drawn(p: TrendPoint): boolean {
+  if (p.values) {
+    return Object.values(p.values).some((v) => v !== null && v !== undefined);
+  }
+  return p.value !== null;
+}
 
 /** The stacked total of a point, or null when a component was never measured.
  *
@@ -59,13 +107,29 @@ export function stackTotal(point: TrendPoint): number | null {
   return parts.reduce((a, p) => a + (p.value ?? 0), 0);
 }
 
+/** How often this series has a value to plot.
+ *
+ * REQUIRED ON EVERY PANEL, deliberately: it is what `densify` walks to build the
+ * x axis, and a weekly series stepped daily gets six empty slots between every
+ * pair of points. A default would make that a silent mistake in whichever panel
+ * somebody adds next.
+ */
+export type Cadence = "day" | "week";
+
 export type Panel = {
   key: string;
   title: string;
   /** How to draw it. A per-day IMPULSE is a quantity per bucket, which is a bar;
    *  CTL, HRV and sleep are states sampled over time, which is a line. */
   kind?: "line" | "columns";
+  cadence: Cadence;
   points: TrendPoint[];
+  /** Present on a MULTI-SERIES panel, and what makes it one. */
+  series?: SeriesSpec[];
+  /** Alternative quantities the reader can switch between. `points` above is
+   *  `modes[0].points` whenever this is set, so every window and count helper
+   *  keeps working against the panel unchanged. */
+  modes?: PanelMode[];
   color?: string;
   places?: number;
   zero?: boolean;
@@ -96,8 +160,15 @@ export function trendPanels(payload: Payload): Panel[] {
   /* A WEEK THAT HAS NOT BEEN RUN LEAVES EVERY WEEK-KEYED SERIES. The plan
    * reaches two Mondays ahead, and those records are not empty -- `facts.miles`
    * is 0.0 and `facts.quality_share` is 0, which are good numbers and not
-   * measurements. Plotted, they read as a collapse in training. See `hasRuns`. */
-  const ran = keys.filter((k) => hasRuns(payload.weeks[k]));
+   * measurements. Plotted, they read as a collapse in training. See `hasRuns`.
+   *
+   * A WEEK THAT WAS LIVED AND HELD NO RUNNING IS A DIFFERENT THING, and joined
+   * the series on 2026-08-21. Its `0.0` miles IS the measurement -- six such
+   * weeks sit in the last year, five of them the March-April layoff -- and
+   * dropping them drew the line straight across a month nobody ran a step.
+   * `isLived` is what separates the two; a score of null still keeps its own
+   * slot empty, because nothing scoreable came due. */
+  const ran = keys.filter((k) => hasRuns(payload.weeks[k]) || isLived(payload.weeks[k]));
   /* The load half asks its own question of its own record: a week can carry
    * step data with no running in it at all, so the test is whether the grader
    * built any days -- not whether the athlete ran. */
@@ -110,6 +181,7 @@ export function trendPanels(payload: Payload): Panel[] {
     panels.push({
       key: "volume",
       title: "Weekly volume",
+      cadence: "week",
       points: ran.map((k) => ({
         date: k,
         label: shortDate(k),
@@ -125,6 +197,7 @@ export function trendPanels(payload: Payload): Panel[] {
     panels.push({
       key: "adherence",
       title: "Adherence scores",
+      cadence: "week",
       points: ran.map((k) => ({
         date: k,
         label: shortDate(k),
@@ -145,13 +218,22 @@ export function trendPanels(payload: Payload): Panel[] {
     panels.push({
       key: "quality",
       title: "Quality share of weekly time",
-      points: ran.map((k) => ({
-        date: k,
-        label: shortDate(k),
-        value:
-          ((payload.weeks[k].adherence?.facts as { quality_share?: number })
-            ?.quality_share ?? 0) * 100,
-      })),
+      cadence: "week",
+      points: ran.map((k) => {
+        const facts = (payload.weeks[k].adherence?.facts ?? {}) as {
+          quality_share?: number;
+          seconds?: number;
+        };
+        return {
+          date: k,
+          label: shortDate(k),
+          /* A week that ran no seconds has NO SHARE, not a share of zero. The
+           * grader publishes `quality_share: 0` there because 0/0 has to be
+           * something, and plotted as 0% it reads as a week of nothing but easy
+           * running rather than a week of no running at all. */
+          value: facts.seconds ? (facts.quality_share ?? 0) * 100 : null,
+        };
+      }),
       seriesTitle: "quality",
       places: 1,
       zero: true,
@@ -170,6 +252,7 @@ export function trendPanels(payload: Payload): Panel[] {
     panels.push({
       key: "load",
       title: "Total load",
+      cadence: "week",
       points: whole.map((k) => ({
         date: k,
         label: shortDate(k),
@@ -187,6 +270,7 @@ export function trendPanels(payload: Payload): Panel[] {
     panels.push({
       key: "acwr",
       title: "Acute:chronic, mechanical",
+      cadence: "week",
       points: loaded.map((k) => ({
         date: k,
         label: shortDate(k),
@@ -226,6 +310,7 @@ export function trendPanels(payload: Payload): Panel[] {
       key: "trimp",
       title: "Daily TRIMP",
       kind: "columns",
+      cadence: "day",
       points: impulse.map((d) => ({
         date: d.date,
         label: shortDate(d.date),
@@ -247,6 +332,7 @@ export function trendPanels(payload: Payload): Panel[] {
     panels.push({
       key: "ctl",
       title: "Fitness (CTL)",
+      cadence: "day",
       points: covered.map((d) => ({
         date: d.date,
         label: shortDate(d.date),
@@ -259,6 +345,7 @@ export function trendPanels(payload: Payload): Panel[] {
     panels.push({
       key: "tsb",
       title: "Form (TSB)",
+      cadence: "day",
       points: covered.map((d) => ({
         date: d.date,
         label: shortDate(d.date),
@@ -276,6 +363,7 @@ export function trendPanels(payload: Payload): Panel[] {
     panels.push({
       key: "atl",
       title: "Fatigue (ATL)",
+      cadence: "day",
       points: fatigue.map((d) => ({
         date: d.date,
         label: shortDate(d.date),
@@ -298,6 +386,7 @@ export function trendPanels(payload: Payload): Panel[] {
     panels.push({
       key: "rhr",
       title: "Resting heart rate",
+      cadence: "day",
       points: rhr.map((d) => ({
         date: d.date,
         label: shortDate(d.date),
@@ -314,6 +403,7 @@ export function trendPanels(payload: Payload): Panel[] {
     panels.push({
       key: "sleep",
       title: "Sleep",
+      cadence: "day",
       points: sleep.map((d) => ({
         date: d.date,
         label: shortDate(d.date),
@@ -332,6 +422,7 @@ export function trendPanels(payload: Payload): Panel[] {
     panels.push({
       key: "hrv",
       title: "HRV",
+      cadence: "day",
       points: hrv.map((d) => ({
         date: d.date,
         label: shortDate(d.date),
@@ -342,6 +433,12 @@ export function trendPanels(payload: Payload): Panel[] {
       format: (v) => num(v) + " ms",
     });
   }
+
+  /* LAST, and the only multi-series panels here. They answer a different
+   * question from everything above -- not "what did the athlete do" but "what is
+   * the athlete now capable of", which is the whole consequence of effective
+   * VO2max moving and had never been drawn. */
+  panels.push(...paceSeries(payload));
 
   return panels;
 }

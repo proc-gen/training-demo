@@ -231,6 +231,10 @@ export function assemble(explicit?: string): Assembled {
         // record rather than a copy inside each week -- see `current_pace_chart`
         // in publish.py.
         pace_chart_current: readJson(slug, "pace-chart-current.json"),
+        // Its sibling singleton: every pace model's race table at that same
+        // anchor, for the rail's model dropdown. Null -- written as a null
+        // record, like the chart above -- when pace-models is not installed.
+        pace_models_current: readJson(slug, "pace-models-current.json"),
         adherence_csv: readJson(slug, "series/adherence.json"),
         load_csv: readJson(slug, "series/load.json"),
       },
