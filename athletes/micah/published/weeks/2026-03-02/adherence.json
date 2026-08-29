@@ -1,5 +1,4 @@
 {
- "csv": "2026-03-02,Volume,Rebuild,40.0,100,72,96,consecutive-compromised",
  "facts": {
   "doubles": 0,
   "easy_seconds": 17544,
@@ -44,7 +43,6 @@
    "why": "3 of 3 quality sessions compromised (2026-03-03, 2026-03-05, 2026-03-07)"
   }
  ],
- "graded_through": "2026-03-08",
  "judged_facts": {
   "doubles": 0,
   "easy_seconds": 17544,
@@ -77,7 +75,6 @@
   "walk_recovery_runs": 0,
   "walk_recovery_seconds": 0
  },
- "phase": "Rebuild",
  "planned": [
   {
    "cadence": null,
@@ -106,6 +103,7 @@
      474
     ],
     "ceiling": "137/140/143",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       3600,
@@ -134,7 +132,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "122 min easy -> Right glute still being bothersome, so I decided rest was a better option",
    "prescribed_denominator": 7320.0,
    "prescribed_denominator_source": "prescribed",
    "role": "long",
@@ -148,13 +145,6 @@
  "results": [
   {
    "cadence": 181,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2026-03-02",
    "detail": {
     "laps": [
@@ -247,6 +237,7 @@
      512
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -267,8 +258,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "30 min easy",
-   "prescribed_seconds": 1800,
    "role": "easy",
    "runalyze_id": 168563338,
    "score_bucket": "easy",
@@ -540,6 +529,7 @@
     "band_is_reference": false,
     "band_sec_per_mi": null,
     "ceiling": "162/166",
+    "ceiling_kind": "hr",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": false,
@@ -559,6 +549,7 @@
       "band_how": "named",
       "band_sec_per_mi": null,
       "ceiling": "162/166",
+      "ceiling_kind": "hr",
       "float_distance_m": null,
       "float_mode": null,
       "float_seconds": 180,
@@ -587,7 +578,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "3x15:00 w/ 3:00 jog recovery -> 6.8 & 8.5 mph",
    "role": "subt",
    "runalyze_id": 168698153,
    "score_bucket": null,
@@ -619,13 +609,6 @@
   },
   {
    "cadence": 176,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2026-03-04",
    "detail": {
     "laps": [
@@ -750,6 +733,7 @@
      512
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -770,8 +754,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "60 min easy",
-   "prescribed_seconds": 3600,
    "role": "easy",
    "runalyze_id": 168825429,
    "score_bucket": "easy",
@@ -786,7 +768,6 @@
   },
   {
    "cadence": 179,
-   "ceiling": "162/166",
    "compromised": true,
    "date": "2026-03-05",
    "detail": {
@@ -1131,6 +1112,7 @@
     "band_is_reference": false,
     "band_sec_per_mi": null,
     "ceiling": "162/166",
+    "ceiling_kind": "hr",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": false,
@@ -1150,6 +1132,7 @@
       "band_how": "named",
       "band_sec_per_mi": null,
       "ceiling": "162/166",
+      "ceiling_kind": "hr",
       "float_distance_m": null,
       "float_mode": null,
       "float_seconds": 60,
@@ -1178,7 +1161,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "12x2:30 w/ 1:00 jog recovery -> Only 7 reps because HR spiked early. Jogged rest",
    "role": "subt",
    "runalyze_id": 168969629,
    "score_bucket": "workout",
@@ -1214,13 +1196,6 @@
   },
   {
    "cadence": 177,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2026-03-06",
    "detail": {
     "laps": [
@@ -1357,6 +1332,7 @@
      512
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -1377,8 +1353,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "60 min easy",
-   "prescribed_seconds": 3600,
    "role": "easy",
    "runalyze_id": 169094757,
    "score_bucket": "easy",
@@ -1488,6 +1462,7 @@
     "band_is_reference": false,
     "band_sec_per_mi": null,
     "ceiling": "162/166",
+    "ceiling_kind": "hr",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": false,
@@ -1507,6 +1482,7 @@
       "band_how": "named",
       "band_sec_per_mi": null,
       "ceiling": "162/166",
+      "ceiling_kind": "hr",
       "float_distance_m": null,
       "float_mode": null,
       "float_seconds": 90,
@@ -1535,7 +1511,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "5x6:30 w/ 1:30 jog recovery -> Right glute (piriformis?) was not having it, so 1 rep and jog out to 30 min",
    "role": "subt",
    "runalyze_id": 169235569,
    "score_bucket": null,
@@ -1597,11 +1572,10 @@
   "why": {
    "long_run_share": "the long run was 0.0% of the running distance, against a 25% ceiling",
    "quality_days_met": "3 quality day(s) against the 2 the plan has asked for so far, which is what a Volume week asks for",
-   "rest_days_met": "Volume weeks state no rest-day requirement, so this check does not apply and left the denominator",
+   "rest_days_met": "the plan schedules no rest day, so this check does not apply and left the denominator",
    "volume_vs_plan": "5:36:04 run against a plan of 8:18:00, tolerance 5%"
   }
  },
  "week_end": "2026-03-08",
- "week_start": "2026-03-02",
- "week_type": "Volume"
+ "week_start": "2026-03-02"
 }

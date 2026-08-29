@@ -52,9 +52,15 @@ export function WeekCard({ week }: { week: Week }) {
    * session has not landed -- nothing in it has come due -- and that is a week
    * that must say so LOUDEST, not one that says nothing. Falling through to
    * `null` here would have printed it exactly like a settled week. */
+  /* `graded_through` MOVED INTO `judged_facts` on 2026-08-29 -- that block is
+     by definition the one computed through it, so the top-level field was its
+     echo. `facts.graded_through` is deliberately NOT the one read here: it
+     runs through `evaluation_cutoff`, a day later on a live week, and this
+     line is about what was JUDGED. */
+  const through = a?.judged_facts?.graded_through ?? null;
   const live =
-    a?.week_end && (!a.graded_through || a.graded_through < a.week_end)
-      ? (a.graded_through ?? "nothing yet")
+    a?.week_end && (!through || through < a.week_end)
+      ? (through ?? "nothing yet")
       : null;
 
   return (

@@ -1,0 +1,122 @@
+{
+ "bands": {
+  "easy": {
+   "display": "7:45-8:22/mi",
+   "fast_sec_per_mi": 465,
+   "pct": [
+    0.63,
+    0.68
+   ],
+   "slow_sec_per_mi": 502
+  },
+  "long": {
+   "display": "7:19-7:45/mi",
+   "fast_sec_per_mi": 439,
+   "pct": [
+    0.68,
+    0.72
+   ],
+   "slow_sec_per_mi": 465
+  },
+  "recovery": {
+   "display": "8:22-9:05/mi",
+   "fast_sec_per_mi": 502,
+   "pct": [
+    0.58,
+    0.63
+   ],
+   "slow_sec_per_mi": 545
+  },
+  "rep_10min": {
+   "display": "6:25-6:40/mi",
+   "fast_sec_per_mi": 385,
+   "pct": [
+    0.79,
+    0.82
+   ],
+   "slow_sec_per_mi": 400
+  },
+  "rep_15min": {
+   "display": "6:35-6:50/mi",
+   "fast_sec_per_mi": 395,
+   "pct": [
+    0.77,
+    0.8
+   ],
+   "slow_sec_per_mi": 410
+  },
+  "rep_1min": {
+   "display": "5:59-6:12/mi",
+   "fast_sec_per_mi": 359,
+   "pct": [
+    0.85,
+    0.88
+   ],
+   "slow_sec_per_mi": 372
+  },
+  "rep_3min": {
+   "display": "6:08-6:21/mi",
+   "fast_sec_per_mi": 368,
+   "pct": [
+    0.83,
+    0.86
+   ],
+   "slow_sec_per_mi": 381
+  },
+  "rep_6min": {
+   "display": "6:16-6:30/mi",
+   "fast_sec_per_mi": 376,
+   "pct": [
+    0.81,
+    0.84
+   ],
+   "slow_sec_per_mi": 390
+  }
+ },
+ "confirmed_by_athlete": true,
+ "effective_vo2max": 60.79,
+ "race_paces": {
+  "10000m": {
+   "display": "34:58 @ 5:38/mi",
+   "sec_per_mi": 338,
+   "seconds": 2098
+  },
+  "1500m": {
+   "display": "4:32 @ 4:52/mi",
+   "sec_per_mi": 292,
+   "seconds": 272
+  },
+  "21097m": {
+   "display": "1:17:16 @ 5:54/mi",
+   "sec_per_mi": 354,
+   "seconds": 4636
+  },
+  "3000m": {
+   "display": "9:43 @ 5:13/mi",
+   "sec_per_mi": 313,
+   "seconds": 583
+  },
+  "42195m": {
+   "display": "2:41:34 @ 6:10/mi",
+   "sec_per_mi": 370,
+   "seconds": 9694
+  },
+  "5000m": {
+   "display": "16:51 @ 5:26/mi",
+   "sec_per_mi": 326,
+   "seconds": 1011
+  },
+  "800m": {
+   "display": "2:18 @ 4:37/mi",
+   "sec_per_mi": 277,
+   "seconds": 138
+  },
+  "tempo": {
+   "basis": "60-80 minute race pace, the Daniels threshold definition, from the model's duration prognosis.",
+   "display": "5:48-5:54/mi",
+   "fast_sec_per_mi": 348,
+   "slow_sec_per_mi": 354
+  }
+ },
+ "week_ending": "2025-06-01"
+}

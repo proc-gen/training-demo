@@ -1,41 +1,40 @@
-import { Report } from "@/views/Report/Report";
-import { loadPayload } from "@/lib/data/loadPayload";
+import { loadShell, loadWeek } from "@/lib/data/loadPayload";
+import { WeekRoute } from "@/views/WeekView/WeekRoute";
 
-/* The page reads the published records. It runs no Python.
+/* The default week. `/week/<start>` renders the same thing for a named one.
  *
- * A SERVER COMPONENT rather than a client fetch of /api/data: it renders with
- * the data already in hand, so there is no loading state and no second round
- * trip. THIS MIRROR DROPS the /api/data route the private repo carries: it
- * reads `?athlete=` off the request, and a Route Handler that relies on
- * Request cannot be statically exported.
+ * NOT A REDIRECT to `/week/<default>`, deliberately. `output: export` cannot
+ * emit a server redirect, so the demo would need a client bounce or a
+ * meta-refresh -- a visible flash on the one URL every reader arrives at, to
+ * save a page this route renders in three lines.
  *
- * `force-static` IN THIS MIRROR ONLY. The private repo declares
- * `force-dynamic` here, because there the page re-reads the published tree on
- * every request and a prerendered copy would freeze whatever was published
- * when `next build` ran. A static export has no server to re-read anything:
- * the records are baked in at build time, and re-running the export and
- * pushing is what updates the site.
+ * `force-dynamic` because this reads the published tree on every request, and a
+ * prerendered copy would freeze whatever was published when `next build` ran,
+ * inside `.next/` where nobody would think to look. The demo export patches
+ * this line to `force-static`, which is correct THERE: that build has the tree
+ * it is publishing and no server to re-read it with.
  */
+/* `force-static` IN THIS MIRROR ONLY. The private repo declares
+ * `force-dynamic` here, because there each route re-reads the published
+ * tree on every request and a prerendered copy would freeze whatever was
+ * published when `next build` ran. A static export has no server to
+ * re-read anything: the records are baked in at build time, and re-running
+ * the export and pushing is what updates the site. */
 export const dynamic = "force-static";
 
 export default function Page() {
-  const got = loadPayload();
+  const shell = loadShell();
+  // The layout has already rendered the error for this case and no children.
+  if (!shell.ok) return null;
 
-  if (!got.ok) {
+  const start = shell.shell.defaultWeek;
+  if (!start) {
     return (
-      <main>
-        <div className="banner stop">
-          <b>Nothing to show. </b>
-          {got.error}
-        </div>
-        <p className="note">
-          This page reads <code>athletes/&lt;slug&gt;/published/</code>, which is
-          written by <code>python scripts/publish.py</code>. Run that from
-          the repo root, then refresh.
-        </p>
-      </main>
+      <div className="banner stop">
+        <b>Nothing to show. </b>No week has been published for this athlete.
+      </div>
     );
   }
 
-  return <Report payload={got.payload} />;
+  return <WeekRoute start={start} loaded={loadWeek(start)} />;
 }

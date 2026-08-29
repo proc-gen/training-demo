@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { axisPoints, crossesYears, densify } from "./axis";
+import { axisPoints, crossesYears, densify, slotAt } from "./axis";
 import { addDays } from "./dates";
 import type { TrendPoint } from "./panels";
 
@@ -45,13 +45,14 @@ describe("densify", () => {
     const rich: TrendPoint = {
       date: "2026-08-12",
       label: "8/12",
-      value: 30.6,
-      parts: [{ value: 30.6, color: "var(--series-1)", label: "run" }],
+      value: null,
+      values: { trimp: 30.6 },
     };
     const got = densify([pt("2026-08-10", 12), rich], "day");
     expect(got[2]).toBe(rich);
-    // An invented slot carries no parts, so a column chart draws no bar on it.
-    expect(got[1].parts).toBeUndefined();
+    // An invented slot carries no values, so a multi-series chart draws nothing
+    // on it -- the line breaks there.
+    expect(got[1].values).toBeUndefined();
   });
 
   it("is INTERIOR ONLY -- it never reaches out to a window's edges", () => {
@@ -173,5 +174,52 @@ describe("axisPoints", () => {
 
   it("is empty for no points", () => {
     expect(axisPoints({ points: [], cadence: "day", innerWidth: 854 })).toEqual([]);
+  });
+});
+
+describe("slotAt", () => {
+  /* The pace panel's own grid: charts confirmed on Sundays, seven days apart. */
+  const weekly = ["2026-07-26", "2026-08-02", "2026-08-09", "2026-08-16", "2026-08-23"].map(
+    (d) => ({ date: d }),
+  );
+
+  it("PLACES A TUESDAY BETWEEN TWO SUNDAY CHARTS -- the whole point", () => {
+    /* 2026-08-18 is two days past the 08-16 chart, which is slot 3, so it sits
+       two sevenths of the way to slot 4. A weekly axis has no slot for it and
+       never will: quality lands on Tuesday, Friday and Thursday here. */
+    expect(slotAt("2026-08-18", weekly, "week")).toBeCloseTo(3 + 2 / 7, 10);
+  });
+
+  it("lands exactly on a slot for a date that IS one", () => {
+    expect(slotAt("2026-07-26", weekly, "week")).toBe(0);
+    expect(slotAt("2026-08-09", weekly, "week")).toBe(2);
+    expect(slotAt("2026-08-23", weekly, "week")).toBe(4);
+  });
+
+  it("is null outside the grid, at either end", () => {
+    /* A workout in a week the window clipped: there is no pair of slots to put
+       it between, and extrapolating past the last would draw it off the plot. */
+    expect(slotAt("2026-07-25", weekly, "week")).toBeNull();
+    expect(slotAt("2026-08-24", weekly, "week")).toBeNull();
+  });
+
+  it("REFUSES ON AN UNEVEN GRID rather than placing every mark wrong", () => {
+    /* `densify` hands its input back untouched when a date misses the cadence,
+       and a linear date -> index map over uneven slots looks entirely plausible
+       while being wrong about every mark on the plot. */
+    const uneven = [{ date: "2026-07-26" }, { date: "2026-08-02" }, { date: "2026-08-11" }];
+    expect(slotAt("2026-08-02", uneven, "week")).toBeNull();
+  });
+
+  it("steps by one on a daily cadence", () => {
+    const daily = ["2026-08-10", "2026-08-11", "2026-08-12"].map((d) => ({ date: d }));
+    expect(slotAt("2026-08-11", daily, "day")).toBe(1);
+    expect(slotAt("2026-08-13", daily, "day")).toBeNull();
+  });
+
+  it("is null for fewer than two slots, and for a date that is not one", () => {
+    expect(slotAt("2026-08-18", [{ date: "2026-08-16" }], "week")).toBeNull();
+    expect(slotAt("2026-08-18", [], "week")).toBeNull();
+    expect(slotAt("not-a-date", weekly, "week")).toBeNull();
   });
 });

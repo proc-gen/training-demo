@@ -112,3 +112,43 @@ export function axisPoints({
   const ticks = new Set(axisTicks(dates, budget));
   return labelled.map((p) => (ticks.has(p.date) ? { ...p, tick: true } : p));
 }
+
+/** Where a date sits on the drawn grid, as a FRACTIONAL slot index.
+ *
+ * THE ONE PLACE "on the date they were run" IS WRITTEN DOWN. The pace panels are
+ * weekly and their slots are the Sundays a chart closes on, so a workout run on
+ * a Tuesday has no slot of its own -- and never will, because the athlete runs
+ * quality on Tuesday, Friday and Thursday and never on the chart's own day.
+ * `2026-08-18` against slots seven days apart returns `3 + 2/7`, which
+ * `MultiLineChart` turns into an x between the 8/16 and 8/23 gridlines.
+ *
+ * The consequence, stated rather than hidden: the band drawn UNDER that mark is
+ * the straight line between two weekly charts, not the flat band that graded the
+ * session. Consecutive charts move 1-3 s/mi, so that is under a second per mile
+ * -- the price of putting the mark on its real date, which is what was asked for.
+ *
+ * **IT REFUSES ON AN UNEVEN GRID.** `densify` hands its input back untouched when
+ * any date misses the cadence, and a linear date -> index map over slots that are
+ * not evenly spaced would place every mark wrong while looking perfectly
+ * plausible. The check is one subtraction: `last - first` must be exactly
+ * `(n - 1) * step`.
+ *
+ * Null outside `[0, n - 1]` too. A window that clipped the week a workout sits in
+ * has no pair of slots to place it between, and extrapolating past the last slot
+ * would draw a mark outside the plot.
+ */
+export function slotAt(
+  date: string,
+  slots: { date: string }[],
+  cadence: Cadence,
+): number | null {
+  if (slots.length < 2) return null;
+  const step = STEP[cadence] ?? 1;
+  const first = dayIndex(slots[0].date);
+  const last = dayIndex(slots[slots.length - 1].date);
+  const at = dayIndex(date);
+  if (first === null || last === null || at === null) return null;
+  if (last - first !== (slots.length - 1) * step) return null;
+  const index = (at - first) / step;
+  return index >= 0 && index <= slots.length - 1 ? index : null;
+}

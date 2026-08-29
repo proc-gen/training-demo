@@ -1,0 +1,123 @@
+{
+ "bands": {
+  "easy": {
+   "display": "8:32-9:12/mi",
+   "fast_sec_per_mi": 511.5,
+   "pct": [
+    0.63,
+    0.68
+   ],
+   "slow_sec_per_mi": 552.1
+  },
+  "long": {
+   "display": "8:03-8:32/mi",
+   "fast_sec_per_mi": 483.1,
+   "pct": [
+    0.68,
+    0.72
+   ],
+   "slow_sec_per_mi": 511.5
+  },
+  "recovery": {
+   "display": "9:12-10:00/mi",
+   "fast_sec_per_mi": 552.1,
+   "pct": [
+    0.58,
+    0.63
+   ],
+   "slow_sec_per_mi": 599.7
+  },
+  "rep_10min": {
+   "display": "7:04-7:20/mi",
+   "fast_sec_per_mi": 424.2,
+   "pct": [
+    0.79,
+    0.82
+   ],
+   "slow_sec_per_mi": 440.3
+  },
+  "rep_15min": {
+   "display": "7:15-7:32/mi",
+   "fast_sec_per_mi": 434.8,
+   "pct": [
+    0.77,
+    0.8
+   ],
+   "slow_sec_per_mi": 451.8
+  },
+  "rep_1min": {
+   "display": "6:35-6:49/mi",
+   "fast_sec_per_mi": 395.3,
+   "pct": [
+    0.85,
+    0.88
+   ],
+   "slow_sec_per_mi": 409.2
+  },
+  "rep_3min": {
+   "display": "6:44-6:59/mi",
+   "fast_sec_per_mi": 404.5,
+   "pct": [
+    0.83,
+    0.86
+   ],
+   "slow_sec_per_mi": 419.1
+  },
+  "rep_6min": {
+   "display": "6:54-7:09/mi",
+   "fast_sec_per_mi": 414.1,
+   "pct": [
+    0.81,
+    0.84
+   ],
+   "slow_sec_per_mi": 429.4
+  }
+ },
+ "captured": "2026-08-09",
+ "confirmed_by_athlete": true,
+ "effective_vo2max": 54.3,
+ "race_paces": {
+  "10000m": {
+   "display": "38:30 @ 6:11/mi",
+   "sec_per_mi": 371,
+   "seconds": 2310
+  },
+  "1500m": {
+   "display": "5:00 @ 5:22/mi",
+   "sec_per_mi": 322,
+   "seconds": 300
+  },
+  "21097m": {
+   "display": "1:25:13 @ 6:30/mi",
+   "sec_per_mi": 390,
+   "seconds": 5113
+  },
+  "3000m": {
+   "display": "10:44 @ 5:45/mi",
+   "sec_per_mi": 345,
+   "seconds": 644
+  },
+  "42195m": {
+   "display": "2:57:51 @ 6:46/mi",
+   "sec_per_mi": 406,
+   "seconds": 10671
+  },
+  "5000m": {
+   "display": "18:34 @ 5:58/mi",
+   "sec_per_mi": 358,
+   "seconds": 1114
+  },
+  "800m": {
+   "display": "2:31 @ 5:05/mi",
+   "sec_per_mi": 305,
+   "seconds": 151
+  },
+  "tempo": {
+   "basis": "60-80 minute race pace, the Daniels threshold definition. From the 2026-08-15 calculator run: 1:00:00 -> 9.4 mi at 6:21/mi, 1:20:00 -> 12.4 mi at 6:28/mi.",
+   "display": "6:21-6:28/mi",
+   "fast_sec_per_mi": 381,
+   "slow_sec_per_mi": 388
+  }
+ },
+ "week_ending": "2026-07-19"
+}

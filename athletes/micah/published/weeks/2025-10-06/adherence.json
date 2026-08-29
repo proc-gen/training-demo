@@ -1,5 +1,4 @@
 {
- "csv": "2025-10-06,Volume,Injury,43.0,49,,49,none",
  "facts": {
   "doubles": 0,
   "easy_seconds": 20514,
@@ -38,7 +37,6 @@
    "why": "0 quality session(s) this week; the flag needs two to find two in a row"
   }
  ],
- "graded_through": "2025-10-12",
  "judged_facts": {
   "doubles": 0,
   "easy_seconds": 20514,
@@ -65,18 +63,10 @@
   "walk_recovery_runs": 0,
   "walk_recovery_seconds": 0
  },
- "phase": "Injury",
  "planned": [],
  "results": [
   {
    "cadence": 172,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2025-10-06",
    "detail": {
     "laps": [
@@ -181,6 +171,7 @@
      491
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -201,7 +192,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- injury-window easy run (45 min), the day after the half",
    "role": "easy",
    "runalyze_id": 150624429,
    "score_bucket": "easy",
@@ -216,7 +206,6 @@
   },
   {
    "cadence": 175,
-   "ceiling": "none (volume_only)",
    "date": "2025-10-07",
    "detail": {
     "laps": [
@@ -260,6 +249,8 @@
     "band_is_reference": false,
     "band_sec_per_mi": null,
     "ceiling": "none (volume_only)",
+    "ceiling_kind": "none",
+    "ceiling_role": "volume_only",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": false,
@@ -275,7 +266,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "warmup",
    "role": "volume_only",
    "runalyze_id": 150797932,
    "score_bucket": null,
@@ -290,7 +280,6 @@
   },
   {
    "cadence": 174,
-   "ceiling": "none (threshold)",
    "date": "2025-10-07",
    "detail": {
     "laps": [
@@ -391,6 +380,8 @@
     "band_is_reference": false,
     "band_sec_per_mi": null,
     "ceiling": "none (threshold)",
+    "ceiling_kind": "none",
+    "ceiling_role": "threshold",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": false,
@@ -406,7 +397,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- 4x800m w/ 400m jog, two days after the half",
    "role": "threshold",
    "runalyze_id": 150797937,
    "score_bucket": null,
@@ -430,7 +420,6 @@
   },
   {
    "cadence": 171,
-   "ceiling": "none (volume_only)",
    "date": "2025-10-07",
    "detail": {
     "laps": [
@@ -474,6 +463,8 @@
     "band_is_reference": false,
     "band_sec_per_mi": null,
     "ceiling": "none (volume_only)",
+    "ceiling_kind": "none",
+    "ceiling_role": "volume_only",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": false,
@@ -489,7 +480,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "cooldown",
    "role": "volume_only",
    "runalyze_id": 150797942,
    "score_bucket": null,
@@ -504,13 +494,6 @@
   },
   {
    "cadence": 173,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2025-10-08",
    "detail": {
     "laps": [
@@ -615,6 +598,7 @@
      491
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -635,7 +619,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- injury-window easy run (46 min)",
    "role": "easy",
    "runalyze_id": 150923032,
    "score_bucket": "easy",
@@ -650,13 +633,6 @@
   },
   {
    "cadence": 175,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2025-10-09",
    "detail": {
     "laps": [
@@ -783,6 +759,7 @@
      491
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -803,7 +780,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- injury-window easy run (56 min)",
    "role": "easy",
    "runalyze_id": 151059570,
    "score_bucket": "easy",
@@ -818,13 +794,6 @@
   },
   {
    "cadence": 176,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2025-10-10",
    "detail": {
     "laps": [
@@ -918,6 +887,7 @@
      491
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -938,7 +908,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- injury-window easy run (33 min)",
    "role": "easy",
    "runalyze_id": 151179844,
    "score_bucket": "easy",
@@ -953,13 +922,6 @@
   },
   {
    "cadence": 171,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2025-10-11",
    "detail": {
     "laps": [
@@ -1042,6 +1004,7 @@
      491
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -1062,7 +1025,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- injury-window easy run (30 min)",
    "role": "easy",
    "runalyze_id": 151243662,
    "score_bucket": "easy",
@@ -1077,21 +1039,6 @@
   },
   {
    "cadence": 176,
-   "ceiling": "137/140/143",
-   "ceiling_tiers": [
-    [
-     3600,
-     137
-    ],
-    [
-     7200,
-     140
-    ],
-    [
-     null,
-     143
-    ]
-   ],
    "date": "2025-10-12",
    "detail": {
     "laps": [
@@ -1254,6 +1201,7 @@
      455
     ],
     "ceiling": "137/140/143",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       3600,
@@ -1282,7 +1230,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- injury-window long run (83 min)",
    "role": "long",
    "runalyze_id": 151365254,
    "score_bucket": "easy",
@@ -1329,11 +1276,10 @@
   "why": {
    "long_run_share": "the long run was 24.4% of the running distance, against a 25% ceiling",
    "quality_days_met": "0 quality day(s) against the 0 the plan has asked for so far, which is what a Volume week asks for",
-   "rest_days_met": "Volume weeks state no rest-day requirement, so this check does not apply and left the denominator",
+   "rest_days_met": "the plan schedules no rest day, so this check does not apply and left the denominator",
    "volume_vs_plan": "the manifest states no planned_time_seconds, so there is nothing to compare the week's running time against"
   }
  },
  "week_end": "2025-10-12",
- "week_start": "2025-10-06",
- "week_type": "Volume"
+ "week_start": "2025-10-06"
 }

@@ -24,8 +24,9 @@
  * midnight, which is the previous day in every western timezone.
  */
 
+import { newestMeasuredDate } from "@/lib/data/measured";
 import type { Payload } from "@/lib/data/payload";
-import { addDays, mondayOf } from "./grid";
+import { addDays, mondayOf, weekEnding } from "@/lib/data/weekDates";
 
 /** How many weeks the grid may show. */
 export const WEEK_CHOICES = [1, 2, 3, 4, 5, 6] as const;
@@ -65,27 +66,22 @@ export function isIsoDate(s: string): boolean {
   return mo >= 1 && mo <= 12 && d >= 1 && d <= daysIn(y, mo);
 }
 
-/** The newest date the payload MEASURED, or null.
- *
- * `payload.days` is the steps/wellness join, so it stops at the last day an
- * export covered. Deliberately not the newest week record, which reaches into
- * the plan: opening on a week nobody has run is the defect `defaultWeekKey`
- * fixed on 2026-08-14, and this is the same question one view over.
- */
-export function newestMeasuredDate(payload: Payload): string | null {
-  let newest: string | null = null;
-  for (const d of payload.days ?? []) {
-    const date = d.date;
-    if (date && (newest === null || date > newest)) newest = date;
-  }
-  return newest;
-}
-
 /** The window the page opens on: the last day of measured data.
+ *
+ * `newestMeasuredDate` lived here until the Trends pace panel became its second
+ * consumer; it is `@/lib/data/measured` now, docstring and all.
  *
  * Falls back to the newest week's END where nothing has been measured at all --
  * a fresh athlete with a plan and no exports still gets a grid rather than an
  * empty state, and the plan is the only thing there is to show them.
+ *
+ * IT IS THE REFERENCE NOW, NOT THE IMPLEMENTATION (2026-08-29). The anchor is a
+ * ROUTE, so the default is resolved in `slices.defaultAnchor` -- in SQL, and
+ * normalised to the week's Sunday, because a URL has to name one date where all
+ * seven name the same window. `slices.test.ts` asserts the two agree over the
+ * committed tree, which is this function's job now: the readable implementation
+ * a faster one is proven equal to, the same shape `lib/db/records.ts` has
+ * against the index.
  */
 export function defaultLastDay(payload: Payload): string | null {
   const measured = newestMeasuredDate(payload);
@@ -93,6 +89,38 @@ export function defaultLastDay(payload: Payload): string | null {
   const keys = Object.keys(payload.weeks ?? {}).sort();
   const last = keys[keys.length - 1];
   return last ? addDays(mondayOf(last), 6) : null;
+}
+
+/** The anchor a URL asks for, normalised, or `fallback` where it asks for none.
+ *
+ * THE ANCHOR IS A QUERY PARAMETER NOW (2026-08-29) -- `/calendar?end=<sunday>`
+ * -- and it used to be a route SEGMENT. The segment had to be enumerated by
+ * `generateStaticParams` for the static export, which is the only reason
+ * `ANCHOR_MARGIN_WEEKS` ever existed: the demo 404'd twenty-six weeks either
+ * side of the record while the private app's own stepper was deliberately
+ * unbounded. A query parameter is read from the URL by the browser, so there is
+ * nothing to enumerate and nothing to bound, and BOTH apps carry the same URL.
+ *
+ * IT VALIDATES RATHER THAN TRUSTING, because a query parameter is typed by
+ * hand. `?end=2026-02-31` is a real thing a URL can say and not a real day, and
+ * a window bounded by a day that does not exist lands its grid wherever `Date`
+ * decided to roll it over to.
+ *
+ * IT NORMALISES TO THE WEEK'S SUNDAY, which the segment got for free from
+ * `generateStaticParams` naming only Sundays. Every one of a week's seven dates
+ * selects the same window, and the URL has to name it once or the same grid
+ * exists at seven addresses. The GRID does not need this -- `weekRowsEnding`
+ * takes `mondayOf` of whatever it is handed -- the ADDRESS does.
+ */
+export function resolveAnchor(
+  raw: string | string[] | undefined,
+  fallback: string | null,
+): string | null {
+  // An array means the parameter was repeated; the first wins, which is what a
+  // reader editing a URL by hand means by it.
+  const value = Array.isArray(raw) ? raw[0] : raw;
+  if (typeof value === "string" && isIsoDate(value)) return weekEnding(value);
+  return fallback;
 }
 
 /** `weeks` Monday-based rows ending with the week that contains `lastDay`.

@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import type { Lap } from "@/lib/data/payload";
 import { PUBLISHED } from "@/test/payload";
 import { wrap } from "@/test/render";
+import { runShapes } from "@/test/runShapes";
 import { LapTable } from "./LapTable";
 
 afterEach(cleanup);
@@ -103,18 +104,21 @@ describe("LapTable", () => {
     expect([...c2.querySelectorAll("thead th")].length).toBe(headers + 1);
   });
 
-  it("renders every real lap table in the payload without throwing", () => {
+  /* ONE TABLE PER RENDERING SHAPE. This rendered all 644 real lap tables and
+   * timed out under full-suite load -- see the note in `RunScoreWhy.test.tsx`.
+   * `shapeOf` keys on `lapShape`, which distinguishes a declared, rep-numbered
+   * table from an undeclared one and both distance units, so deduping here
+   * cannot lose a branch. */
+  it("renders every shape of real lap table in the payload without throwing", () => {
     if (!PUBLISHED) return;
     let seen = 0;
-    for (const w of Object.values(PUBLISHED.weeks)) {
-      for (const r of w.adherence?.results ?? []) {
-        const laps = r.detail?.laps;
-        if (!laps?.length) continue;
-        const { container, unmount } = wrap(<LapTable laps={laps} />);
-        expect(bodyRows(container)).toHaveLength(laps.length);
-        seen += 1;
-        unmount();
-      }
+    for (const { run } of runShapes(PUBLISHED)) {
+      const laps = run.detail?.laps;
+      if (!laps?.length) continue;
+      const { container, unmount } = wrap(<LapTable laps={laps} />);
+      expect(bodyRows(container)).toHaveLength(laps.length);
+      seen += 1;
+      unmount();
     }
     expect(seen).toBeGreaterThan(0);
   });

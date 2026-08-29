@@ -1,5 +1,4 @@
 {
- "csv": "2026-03-09,Volume,Injury,10.1,100,,100,none",
  "facts": {
   "doubles": 0,
   "easy_seconds": 3404,
@@ -38,7 +37,6 @@
    "why": "1 quality session(s) this week; the flag needs two to find two in a row"
   }
  ],
- "graded_through": "2026-03-15",
  "judged_facts": {
   "doubles": 0,
   "easy_seconds": 3404,
@@ -65,18 +63,10 @@
   "walk_recovery_runs": 0,
   "walk_recovery_seconds": 0
  },
- "phase": "Injury",
  "planned": [],
  "results": [
   {
    "cadence": 177,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2026-03-09",
    "detail": {
     "laps": [
@@ -159,6 +149,7 @@
      511
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -179,7 +170,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- injury-window easy run (30 min)",
    "role": "easy",
    "runalyze_id": 169478707,
    "score_bucket": "easy",
@@ -403,6 +393,7 @@
     "band_is_reference": false,
     "band_sec_per_mi": null,
     "ceiling": "162/166",
+    "ceiling_kind": "hr",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": false,
@@ -422,6 +413,7 @@
       "band_how": "ambiguous",
       "band_sec_per_mi": null,
       "ceiling": "162/166",
+      "ceiling_kind": "hr",
       "float_distance_m": null,
       "float_mode": null,
       "float_seconds": null,
@@ -450,7 +442,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- an attempt at the plan's 3x16:00, cut by the glute (45 min at HR 150)",
    "role": "subt",
    "runalyze_id": 169607597,
    "score_bucket": null,
@@ -465,13 +456,6 @@
   },
   {
    "cadence": 175,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2026-03-14",
    "detail": {
     "laps": [
@@ -532,6 +516,7 @@
      511
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -552,7 +537,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- ten-minute treadmill test of the glute",
    "role": "easy",
    "runalyze_id": 170097393,
    "score_bucket": "easy",
@@ -599,11 +583,10 @@
   "why": {
    "long_run_share": "the long run was 0.0% of the running distance, against a 25% ceiling",
    "quality_days_met": "1 quality day(s) against the 1 the plan has asked for so far, which is what a Volume week asks for",
-   "rest_days_met": "Volume weeks state no rest-day requirement, so this check does not apply and left the denominator",
+   "rest_days_met": "the plan schedules no rest day, so this check does not apply and left the denominator",
    "volume_vs_plan": "the manifest states no planned_time_seconds, so there is nothing to compare the week's running time against"
   }
  },
  "week_end": "2026-03-15",
- "week_start": "2026-03-09",
- "week_type": "Volume"
+ "week_start": "2026-03-09"
 }

@@ -41,11 +41,13 @@ export function LoadPanel({ week }: { week: Week }) {
   const [tab, setTab] = useState("steps");
   const panelId = "load-day-panel";
 
+  /* The tab label is BARE. It read `Readiness 8/9` from 2026-08-15 (when the
+   * table's own <h3> was deleted as duplication and the count moved here) to
+   * 2026-08-27, when the athlete read `8/9` as a DATE -- August 9th -- sitting
+   * in a strip beside day-of-week tables. The count is not lost with it: the
+   * Overall tab's Readiness ledger states `8 of 9 checks passed` in words no
+   * one can read as a calendar. */
   const r = l.readiness;
-  const readinessLabel =
-    r?.available == null
-      ? "Readiness"
-      : `Readiness ${r.passed ?? "--"}/${r.available}`;
 
   return (
     <>
@@ -94,7 +96,7 @@ export function LoadPanel({ week }: { week: Week }) {
       <Tabs
         items={[
           { key: "steps", label: "Steps" },
-          { key: "readiness", label: readinessLabel },
+          { key: "readiness", label: "Readiness" },
         ]}
         active={tab}
         onSelect={setTab}

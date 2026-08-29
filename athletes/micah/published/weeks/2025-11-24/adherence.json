@@ -1,5 +1,4 @@
 {
- "csv": "2025-11-24,Race,Injury,16.6,37,,37,none",
  "facts": {
   "doubles": 0,
   "easy_seconds": 7714,
@@ -38,7 +37,6 @@
    "why": "0 quality session(s) this week; the flag needs two to find two in a row"
   }
  ],
- "graded_through": "2025-11-30",
  "judged_facts": {
   "doubles": 0,
   "easy_seconds": 7714,
@@ -65,18 +63,10 @@
   "walk_recovery_runs": 0,
   "walk_recovery_seconds": 0
  },
- "phase": "Injury",
  "planned": [],
  "results": [
   {
    "cadence": 174,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2025-11-24",
    "detail": {
     "laps": [
@@ -159,6 +149,7 @@
      590
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -179,7 +170,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- rebuild easy run (30 min)",
    "role": "easy",
    "runalyze_id": 156376144,
    "score_bucket": "easy",
@@ -194,13 +184,6 @@
   },
   {
    "cadence": 172,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2025-11-26",
    "detail": {
     "laps": [
@@ -283,6 +266,7 @@
      590
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -303,7 +287,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- easy run while travelling (31 min)",
    "role": "easy",
    "runalyze_id": 156574945,
    "score_bucket": "easy",
@@ -318,13 +301,6 @@
   },
   {
    "cadence": 171,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2025-11-27",
    "detail": {
     "laps": [
@@ -407,6 +383,7 @@
      590
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -427,7 +404,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- Thanksgiving morning easy run (37 min)",
    "role": "easy",
    "runalyze_id": 156696356,
    "score_bucket": "easy",
@@ -442,7 +418,6 @@
   },
   {
    "cadence": 175,
-   "ceiling": "none (race)",
    "date": "2025-11-29",
    "detail": {
     "race": {
@@ -498,6 +473,8 @@
     "band_is_reference": true,
     "band_sec_per_mi": null,
     "ceiling": "none (race)",
+    "ceiling_kind": "none",
+    "ceiling_role": "race",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": false,
@@ -513,7 +490,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- a fun trail race while travelling (21 min)",
    "role": "race",
    "runalyze_id": 156904888,
    "score_bucket": null,
@@ -528,13 +504,6 @@
   },
   {
    "cadence": 175,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2025-11-30",
    "detail": {
     "laps": [
@@ -628,6 +597,7 @@
      590
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -648,7 +618,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- trail run while travelling (30 min)",
    "role": "easy",
    "runalyze_id": 157026704,
    "score_bucket": "easy",
@@ -688,18 +657,17 @@
   "checks": {
    "long_run_share": true,
    "quality_days_met": true,
-   "rest_days_met": true,
+   "rest_days_met": null,
    "volume_vs_plan": null
   },
   "pct": 100.0,
   "why": {
    "long_run_share": "the long run was 0.0% of the running distance, against a 25% ceiling",
    "quality_days_met": "1 quality day(s) against the 1 the plan has asked for so far, which is what a Race week asks for",
-   "rest_days_met": "2 rest day(s) against the 2 a Race week asks for",
+   "rest_days_met": "the plan schedules no rest day, so this check does not apply and left the denominator",
    "volume_vs_plan": "the manifest states no planned_time_seconds, so there is nothing to compare the week's running time against"
   }
  },
  "week_end": "2025-11-30",
- "week_start": "2025-11-24",
- "week_type": "Race"
+ "week_start": "2025-11-24"
 }

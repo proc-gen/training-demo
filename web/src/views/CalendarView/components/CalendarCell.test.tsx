@@ -9,12 +9,12 @@ afterEach(cleanup);
 
 const DATE = "2026-07-27";
 
-const day = (over: Record<string, string>): Day =>
+const day = (over: Partial<Day>): Day =>
   ({
     date: DATE,
-    total_steps: "15258",
-    run_steps: "7000",
-    nonrun_steps: "8258",
+    total_steps: 15258,
+    run_steps: 7000,
+    nonrun_steps: 8258,
     ...over,
   }) as Day;
 
@@ -78,14 +78,14 @@ describe("CalendarCell", () => {
 
   it("scales proportionally against the busiest day", () => {
     const { container } = cell({
-      d: day({ total_steps: "10000", run_steps: "10000", nonrun_steps: "0" }),
+      d: day({ total_steps: 10000, run_steps: 10000, nonrun_steps: 0 }),
     });
     expect(widths(container)[0]).toBeCloseTo(50, 6);
   });
 
   it("draws no bar segments for a day with no steps", () => {
     const { container } = cell({
-      d: day({ total_steps: "", run_steps: "", nonrun_steps: "" }),
+      d: day({ total_steps: null, run_steps: null, nonrun_steps: null }),
     });
     expect(widths(container)).toHaveLength(0);
   });

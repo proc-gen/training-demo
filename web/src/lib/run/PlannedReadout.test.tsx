@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it } from "vitest";
 
 import type { Planned } from "@/lib/data/payload";
 import { PUBLISHED } from "@/test/payload";
+import { runShapes } from "@/test/runShapes";
 import { PlannedReadout } from "./PlannedReadout";
 
 afterEach(cleanup);
@@ -368,19 +369,21 @@ describe("PlannedReadout", () => {
     });
   });
 
-  it("renders every planned block in the committed payload", () => {
-    /* Exercises the reader as well as the component: each of these came through
-     * `assemble()` from the real published tree. */
+  /* ONE BLOCK PER RENDERING SHAPE. This rendered all 728 and timed out under
+   * full-suite load -- see the note in `RunScoreWhy.test.tsx`. `shapeOf` keys on
+   * `plannedShape`, which carries every field this component branches on
+   * including each set's rep/float/group arity, so deduping cannot lose a
+   * branch. Still exercises the reader as well as the component: each of these
+   * came through `assemble()` from the real published tree. */
+  it("renders every shape of planned block in the committed payload", () => {
     if (!PUBLISHED) return;
     let seen = 0;
-    for (const w of Object.values(PUBLISHED.weeks)) {
-      for (const r of w.adherence?.results ?? []) {
-        if (!r.planned) continue;
-        seen += 1;
-        const { container } = render(<PlannedReadout planned={r.planned} />);
-        expect(container.querySelector("table")).toBeTruthy();
-        cleanup();
-      }
+    for (const { run } of runShapes(PUBLISHED)) {
+      if (!run.planned) continue;
+      seen += 1;
+      const { container } = render(<PlannedReadout planned={run.planned} />);
+      expect(container.querySelector("table")).toBeTruthy();
+      cleanup();
     }
     expect(seen).toBeGreaterThan(0);
   });

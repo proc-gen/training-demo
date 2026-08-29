@@ -1,5 +1,4 @@
 {
- "csv": "2026-04-27,Volume,Injury,8.8,70,,70,none",
  "facts": {
   "doubles": 0,
   "easy_seconds": 4569,
@@ -38,7 +37,6 @@
    "why": "0 quality session(s) this week; the flag needs two to find two in a row"
   }
  ],
- "graded_through": "2026-05-03",
  "judged_facts": {
   "doubles": 0,
   "easy_seconds": 4569,
@@ -65,18 +63,10 @@
   "walk_recovery_runs": 0,
   "walk_recovery_seconds": 0
  },
- "phase": "Injury",
  "planned": [],
  "results": [
   {
    "cadence": 172,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2026-04-28",
    "detail": {
     "laps": [
@@ -148,6 +138,7 @@
      573
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -168,7 +159,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- return run (21 min)",
    "role": "easy",
    "runalyze_id": 176217009,
    "score_bucket": "easy",
@@ -183,13 +173,6 @@
   },
   {
    "cadence": 168,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2026-04-30",
    "detail": {
     "laps": [
@@ -261,6 +244,7 @@
      573
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -281,7 +265,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- return run (25 min)",
    "role": "easy",
    "runalyze_id": 176494619,
    "score_bucket": "easy",
@@ -296,13 +279,6 @@
   },
   {
    "cadence": 168,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2026-05-02",
    "detail": {
     "laps": [
@@ -385,6 +361,7 @@
      573
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -405,7 +382,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- return run (30 min)",
    "role": "easy",
    "runalyze_id": 176762197,
    "score_bucket": "easy",
@@ -452,11 +428,10 @@
   "why": {
    "long_run_share": "the long run was 0.0% of the running distance, against a 25% ceiling",
    "quality_days_met": "0 quality day(s) against the 0 the plan has asked for so far, which is what a Volume week asks for",
-   "rest_days_met": "Volume weeks state no rest-day requirement, so this check does not apply and left the denominator",
+   "rest_days_met": "the plan schedules no rest day, so this check does not apply and left the denominator",
    "volume_vs_plan": "the manifest states no planned_time_seconds, so there is nothing to compare the week's running time against"
   }
  },
  "week_end": "2026-05-03",
- "week_start": "2026-04-27",
- "week_type": "Volume"
+ "week_start": "2026-04-27"
 }

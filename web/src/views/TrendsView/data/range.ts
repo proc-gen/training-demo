@@ -19,7 +19,7 @@
  * day-of-month is clamped by a leap-year rule written out below.
  */
 
-import { daysIn, parts } from "./dates";
+import { addDays, daysIn, parts } from "./dates";
 import { type TrendPoint, drawn } from "./panels";
 
 /** A window, both ends INCLUSIVE. */
@@ -131,13 +131,18 @@ export function shiftRange(
  * because two forward-authored weeks carried a null score. `trendPanels` now
  * drops those weeks outright; this is the guard that holds whatever else goes
  * null, since a week that WAS run can score null too.
+ *
+ * A CARRIED POINT NEVER ANCHORS A WINDOW. It restates the newest pace chart
+ * under a Sunday that has not happened; anchoring To on it would be the
+ * forward-authored-week defect above wearing a new date. Drawn, but not a
+ * measurement -- `plotted` makes the same call.
  */
 export function spanOf(panels: { points: TrendPoint[] }[]): Range | null {
   let first: string | null = null;
   let last: string | null = null;
   for (const p of panels) {
     for (const pt of p.points) {
-      if (!drawn(pt)) continue;
+      if (pt.carried || !drawn(pt)) continue;
       if (first === null || pt.date < first) first = pt.date;
       if (last === null || pt.date > last) last = pt.date;
     }
@@ -180,10 +185,34 @@ export function defaultRange(panels: { points: TrendPoint[] }[]): Range | null {
  * the date it is plotted at -- so a week that began before the window is not
  * drawn half outside it, and the x axis never claims to cover more than the
  * window states.
+ *
+ * GENERIC OVER ANYTHING DATED, so the executed-workout marks are windowed by
+ * this rule rather than by a second copy of it. A mark is not a `TrendPoint` --
+ * it has no value of its own and never anchors a window -- but "inside the
+ * window" has to mean one thing on one plot.
+ *
+ * A CARRIED POINT IS KEPT WHILE THE WEEK IT CLOSES OVERLAPS THE WINDOW. Its own
+ * date is a Sunday still ahead of the newest measurement, so filtering on it
+ * would drop the live week the point exists to draw; `-6` is the Monday of the
+ * week that Sunday closes, and carried points are weekly by construction --
+ * `paceSeries` is the only producer. The axis then shows that Sunday's slot
+ * while the caption's To reads the newest measurement, which is the Calendar's
+ * whole-weeks rule: the last day selects WHICH week is last, it does not cut
+ * that week short. One accepted edge: a window inside the live week alone
+ * (say 08-24 -> 08-26) holds the carried point and zero measurements, so `n` is
+ * 0 and the panel shows its empty state -- honest, and `slotAt` needs two slots
+ * to place a mark regardless.
  */
-export function pointsIn(points: TrendPoint[], range: Range | null): TrendPoint[] {
+export function pointsIn<T extends { date: string; carried?: string }>(
+  points: T[],
+  range: Range | null,
+): T[] {
   if (!range) return points;
-  return points.filter((p) => p.date >= range.from && p.date <= range.to);
+  return points.filter(
+    (p) =>
+      p.date >= range.from &&
+      (p.carried ? addDays(p.date, -6) <= range.to : p.date <= range.to),
+  );
 }
 
 /** How many of these points a chart would actually draw.
@@ -192,7 +221,10 @@ export function pointsIn(points: TrendPoint[], range: Range | null): TrendPoint[
  * the array would promise marks that never appear. `drawn` is the one definition
  * of that, and it answers for a multi-series point too -- where "measured" means
  * ANY of its series carried a value.
+ *
+ * A CARRIED POINT IS AXIS REACH, NOT A MEASUREMENT, so it stays out of
+ * `n of N` -- counting it would inflate the caption with a restatement.
  */
 export function plotted(points: TrendPoint[]): number {
-  return points.filter(drawn).length;
+  return points.filter((p) => !p.carried && drawn(p)).length;
 }

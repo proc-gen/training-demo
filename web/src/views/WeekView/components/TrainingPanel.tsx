@@ -50,7 +50,7 @@ export function TrainingPanel({ week }: { week: Week }) {
           <RunRow
             key={r.key ?? i}
             r={r}
-            prescribed={(r.key ? byKey.get(r.key) : "") || r.prescribed || ""}
+            prescribed={(r.key ? byKey.get(r.key) : "") || r.planned?.prescribed || ""}
             chart={week.pace_chart}
             showDay={breaks[i]}
             // Keyed on the RUNALYZE id: TRIMP is priced per activity, so a

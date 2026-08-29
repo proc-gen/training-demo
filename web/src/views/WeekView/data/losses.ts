@@ -90,7 +90,7 @@ function ratioTotal(
 function easyWhy(r: RunResult): string {
   const bits: string[] = [];
   if (r.hr_pct !== null && r.hr_pct !== undefined)
-    bits.push(`${pct(r.hr_pct, 0)} of it at or below the ${r.ceiling ?? "--"} ceiling`);
+    bits.push(`${pct(r.hr_pct, 0)} of it at or below the ${r.planned?.ceiling ?? "--"} ceiling`);
   if (r.hr_avg !== null && r.hr_avg !== undefined) bits.push(`${r.hr_avg} avg`);
   const f = r.duration_factor;
   if (f !== null && f !== undefined && f !== 1) {

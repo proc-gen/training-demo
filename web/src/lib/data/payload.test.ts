@@ -213,3 +213,76 @@ describe("paceChartBand", () => {
     expect(paceChartBand({ bands: null }, "rep_3min")).toBeNull();
   });
 });
+
+describe("the belt", () => {
+  const raw = publishedPayload();
+
+  it.skipIf(!raw)("carries treadmill_mph through the parse, typed", () => {
+    /* `RunResult` is loose, so the value survived before it was declared -- and
+       was invisible to TypeScript, which is what the declaration fixes. It is
+       the only reading of an indoor session's pace, so a schema change that
+       dropped it would silently take fourteen sessions off the pace graph and
+       leave every other number identical. */
+    const runs = Object.values(Payload.parse(raw).weeks).flatMap(
+      (w) => w.adherence?.results ?? [],
+    );
+    const belted = runs.filter((r) => (r.treadmill_mph?.reps ?? []).length > 0);
+    expect(belted.length).toBeGreaterThan(10);
+    for (const r of belted) {
+      for (const mph of r.treadmill_mph!.reps!) expect(mph).toBeGreaterThan(0);
+    }
+  });
+
+  it.skipIf(!raw)("carries the non-rep speed beside the reps", () => {
+    /* `other` prices the warmup, the jogs and the cooldown. Nothing on the
+       pace graph reads it -- this is here so the whole authored value is known
+       to survive, rather than the half one consumer happens to use. */
+    const runs = Object.values(Payload.parse(raw).weeks).flatMap(
+      (w) => w.adherence?.results ?? [],
+    );
+    expect(
+      runs.filter((r) => typeof r.treadmill_mph?.other === "number").length,
+    ).toBeGreaterThan(10);
+  });
+
+  it.skipIf(!raw)("carries distance_source, which is what SAYS the belt won", () => {
+    /* `treadmill_mph` is the DECLARATION; this is the grader's verdict on it --
+       `apply_treadmill_distance` stamps it only when the declaration describes
+       the whole run, so it is the one field that says a published pace came
+       off the belt rather than the watch. `easyMarks` reads it to label a dot,
+       and a schema change that dropped it would relabel 36 belt measurements as
+       watch ones while moving no number at all. */
+    const runs = Object.values(Payload.parse(raw).weeks).flatMap(
+      (w) => w.adherence?.results ?? [],
+    );
+    const declared = runs.filter((r) => r.distance_source === "treadmill-declared");
+    expect(declared.length).toBeGreaterThan(10);
+    for (const r of runs) {
+      if (r.distance_source !== null && r.distance_source !== undefined) {
+        expect(typeof r.distance_source).toBe("string");
+      }
+    }
+  });
+});
+
+describe("the race detail", () => {
+  const raw = publishedPayload();
+
+  it.skipIf(!raw)("carries detail.race through the parse, typed", () => {
+    /* `SessionDetail` is loose, so the value survived before it was declared --
+       `runWhy.ts` read it untyped -- and was invisible to TypeScript, which is
+       what the declaration fixes. It is the only measured account of a race,
+       so a schema change that dropped it would silently take every race dot
+       off the Trends race-times graph and leave every other number identical. */
+    const runs = Object.values(Payload.parse(raw).weeks).flatMap(
+      (w) => w.adherence?.results ?? [],
+    );
+    const raced = runs.filter((r) => r.detail?.race);
+    expect(raced.length).toBeGreaterThan(5);
+    for (const r of raced) {
+      const race = r.detail!.race!;
+      expect(Number.isFinite(race.seconds) && race.seconds! > 0).toBe(true);
+      expect(Number.isFinite(race.pace) && race.pace! > 0).toBe(true);
+    }
+  });
+});

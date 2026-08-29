@@ -1,5 +1,4 @@
 {
- "csv": "2026-04-13,Volume,Injury,4.7,100,,100,none",
  "facts": {
   "doubles": 0,
   "easy_seconds": 3601,
@@ -38,7 +37,6 @@
    "why": "0 quality session(s) this week; the flag needs two to find two in a row"
   }
  ],
- "graded_through": "2026-04-19",
  "judged_facts": {
   "doubles": 0,
   "easy_seconds": 3601,
@@ -65,18 +63,10 @@
   "walk_recovery_runs": 0,
   "walk_recovery_seconds": 0
  },
- "phase": "Injury",
  "planned": [],
  "results": [
   {
    "cadence": 134,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2026-04-17",
    "detail": {
     "laps": [
@@ -148,6 +138,7 @@
      516
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -168,7 +159,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- first run since 3/14 (30 min walk-jog, HR 104)",
    "role": "easy",
    "runalyze_id": 174686837,
    "score_bucket": "easy",
@@ -183,13 +173,6 @@
   },
   {
    "cadence": 143,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2026-04-19",
    "detail": {
     "laps": [
@@ -261,6 +244,7 @@
      516
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -281,7 +265,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- return walk-jog (30 min, HR 104)",
    "role": "easy",
    "runalyze_id": 174965745,
    "score_bucket": "easy",
@@ -328,11 +311,10 @@
   "why": {
    "long_run_share": "the long run was 0.0% of the running distance, against a 25% ceiling",
    "quality_days_met": "0 quality day(s) against the 0 the plan has asked for so far, which is what a Volume week asks for",
-   "rest_days_met": "Volume weeks state no rest-day requirement, so this check does not apply and left the denominator",
+   "rest_days_met": "the plan schedules no rest day, so this check does not apply and left the denominator",
    "volume_vs_plan": "the manifest states no planned_time_seconds, so there is nothing to compare the week's running time against"
   }
  },
  "week_end": "2026-04-19",
- "week_start": "2026-04-13",
- "week_type": "Volume"
+ "week_start": "2026-04-13"
 }

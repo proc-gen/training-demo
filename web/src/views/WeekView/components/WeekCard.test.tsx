@@ -96,11 +96,19 @@ describe("WeekCard: a week still being lived", () => {
   /* A partial score printed like a whole-week one is the defect this whole
    * pass is about, so the card has to say which window it covers. */
 
+  /* `graded_through` LIVES ON `judged_facts` since 2026-08-29 -- that block is
+   * by definition the one computed through it, so the top-level field was its
+   * echo and went. The card reads it there now, so the fixture states it
+   * there; setting it at the top level would build a week the publisher can no
+   * longer produce and assert nothing about the component. */
   const live = (graded: string | null, end = "2026-08-02") =>
     week({
       adherence: {
         ...(FULL.adherence as object),
-        graded_through: graded,
+        judged_facts: {
+          ...((FULL.adherence as { judged_facts?: object })?.judged_facts ?? {}),
+          graded_through: graded,
+        },
         week_end: end,
       } as unknown as Week["adherence"],
     });

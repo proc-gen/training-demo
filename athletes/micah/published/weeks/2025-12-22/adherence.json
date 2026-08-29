@@ -1,5 +1,4 @@
 {
- "csv": "2025-12-22,Volume,Rebuild,31.4,98,71,88,none",
  "facts": {
   "doubles": 0,
   "easy_seconds": 10594,
@@ -44,7 +43,6 @@
    "why": "1 of 3 quality sessions compromised (2025-12-28)"
   }
  ],
- "graded_through": "2025-12-28",
  "judged_facts": {
   "doubles": 0,
   "easy_seconds": 10594,
@@ -77,12 +75,10 @@
   "walk_recovery_runs": 0,
   "walk_recovery_seconds": 0
  },
- "phase": "Rebuild",
  "planned": [],
  "results": [
   {
    "cadence": 170,
-   "ceiling": "162/166",
    "date": "2025-12-22",
    "detail": {
     "autolaps": [
@@ -234,6 +230,7 @@
     "band_is_reference": false,
     "band_sec_per_mi": null,
     "ceiling": "162/166",
+    "ceiling_kind": "hr",
     "ceiling_tiers": null,
     "chart_confirmed": false,
     "chart_is_carried_forward": false,
@@ -253,6 +250,7 @@
       "band_how": "named",
       "band_sec_per_mi": null,
       "ceiling": "162/166",
+      "ceiling_kind": "hr",
       "float_distance_m": null,
       "float_mode": null,
       "float_seconds": 120,
@@ -281,7 +279,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "2x10:00 w/ 2:00 jog recovery -> 6.6 & 8.5 mph",
    "role": "subt",
    "runalyze_id": 159431572,
    "score_bucket": "workout",
@@ -312,13 +309,6 @@
   },
   {
    "cadence": 169,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2025-12-23",
    "detail": {
     "laps": [
@@ -433,6 +423,7 @@
      563
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -453,8 +444,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "50 min easy",
-   "prescribed_seconds": 3000,
    "role": "easy",
    "runalyze_id": 159543815,
    "score_bucket": "easy",
@@ -472,7 +461,6 @@
   },
   {
    "cadence": 171,
-   "ceiling": "162/166",
    "date": "2025-12-24",
    "detail": {
     "autolaps": [
@@ -765,6 +753,7 @@
     "band_is_reference": false,
     "band_sec_per_mi": null,
     "ceiling": "162/166",
+    "ceiling_kind": "hr",
     "ceiling_tiers": null,
     "chart_confirmed": false,
     "chart_is_carried_forward": false,
@@ -784,6 +773,7 @@
       "band_how": "named",
       "band_sec_per_mi": null,
       "ceiling": "162/166",
+      "ceiling_kind": "hr",
       "float_distance_m": null,
       "float_mode": null,
       "float_seconds": 60,
@@ -812,7 +802,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "6x3:00 w/ 1:00 jog recovery -> 6.6 & 8.7 mph",
    "role": "subt",
    "runalyze_id": 159643539,
    "score_bucket": "workout",
@@ -847,13 +836,6 @@
   },
   {
    "cadence": 167,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2025-12-27",
    "detail": {
     "laps": [
@@ -968,6 +950,7 @@
      563
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -988,8 +971,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "50 min easy",
-   "prescribed_seconds": 3000,
    "role": "easy",
    "runalyze_id": 159953058,
    "score_bucket": "easy",
@@ -1197,6 +1178,7 @@
     "band_is_reference": false,
     "band_sec_per_mi": null,
     "ceiling": "162/166",
+    "ceiling_kind": "hr",
     "ceiling_tiers": null,
     "chart_confirmed": false,
     "chart_is_carried_forward": false,
@@ -1216,6 +1198,7 @@
       "band_how": "named",
       "band_sec_per_mi": null,
       "ceiling": "162/166",
+      "ceiling_kind": "hr",
       "float_distance_m": null,
       "float_mode": null,
       "float_seconds": 90,
@@ -1244,7 +1227,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "4x5:30 w/ 1:30 jog recovery -> 6.6 & 8.6 mph",
    "role": "subt",
    "runalyze_id": 160071035,
    "score_bucket": null,
@@ -1302,18 +1284,17 @@
   "checks": {
    "long_run_share": true,
    "quality_days_met": false,
-   "rest_days_met": null,
+   "rest_days_met": true,
    "volume_vs_plan": true
   },
-  "pct": 66.66666666666667,
+  "pct": 75.0,
   "why": {
    "long_run_share": "the long run was 0.0% of the running distance, against a 25% ceiling",
    "quality_days_met": "3 quality day(s) against the 2 the plan has asked for so far, which is what a Volume week asks for",
-   "rest_days_met": "Volume weeks state no rest-day requirement, so this check does not apply and left the denominator",
+   "rest_days_met": "the plan's scheduled rest day(s) 2025-12-25, 2025-12-26 were taken -- no run recorded on any of them",
    "volume_vs_plan": "4:24:02 run against a plan of 4:24:00, tolerance 5%"
   }
  },
  "week_end": "2025-12-28",
- "week_start": "2025-12-22",
- "week_type": "Volume"
+ "week_start": "2025-12-22"
 }

@@ -25,6 +25,8 @@ const PLANNED_BLOCK = {
   prescribed: "60-70 min easy",
   criterion: "hr",
   ceiling: "137",
+  ceiling_kind: "hr",
+  ceiling_tiers: [[null, 137]],
   band: "easy",
   band_display: "8:17-8:58/mi",
   band_is_reference: true,
@@ -59,7 +61,7 @@ describe("RunDetail", () => {
      * makes them scroll past a table to find out what they are looking at. */
     const { container } = wrap(
       <RunDetail
-        run={run({ hr_pct: 96, ceiling: "137", earned: 10, total: 11, pct: 96, detail: LAPS })}
+        run={run({ hr_pct: 96, planned: PLANNED_BLOCK, earned: 10, total: 11, pct: 96, detail: LAPS })}
         chart={null}
       />,
     );
@@ -77,7 +79,7 @@ describe("RunDetail", () => {
      * scored it -- the same pairing a sub-T set has. */
     const { container } = wrap(
       <RunDetail
-        run={run({ detail: LAPS, ceiling: "137", ceiling_tiers: [[null, 137]] })}
+        run={run({ detail: LAPS, planned: PLANNED_BLOCK })}
         chart={null}
       />,
     );
@@ -145,7 +147,9 @@ describe("RunDetail", () => {
 
   it("shows the explanation even when there is no segment table at all", () => {
     const { container } = wrap(
-      <RunDetail run={run({ ceiling: "none (walk)", pct: null })} chart={null} />,
+      <RunDetail run={run({ planned: { ceiling: "none (walk)", ceiling_kind: "none",
+                       ceiling_role: "walk" } as unknown as RunResult["planned"],
+              pct: null })} chart={null} />,
     );
     expect(container.textContent).toContain("Load tab");
   });
@@ -203,7 +207,7 @@ describe("RunDetail", () => {
     it("offers both sides on a COMPLETED run", () => {
       const { container } = wrap(
         <RunDetail
-          run={run({ detail: LAPS, ceiling: "137", planned: PLANNED_BLOCK })}
+          run={run({ detail: LAPS, planned: PLANNED_BLOCK })}
           chart={null}
         />,
       );
@@ -216,7 +220,7 @@ describe("RunDetail", () => {
     it("opens a completed run on ACTUAL", () => {
       const { container } = wrap(
         <RunDetail
-          run={run({ detail: LAPS, ceiling: "137", planned: PLANNED_BLOCK })}
+          run={run({ detail: LAPS, planned: PLANNED_BLOCK })}
           chart={null}
         />,
       );
@@ -229,7 +233,7 @@ describe("RunDetail", () => {
     it("switches to the prescription and back", () => {
       const { container } = wrap(
         <RunDetail
-          run={run({ detail: LAPS, ceiling: "137", planned: PLANNED_BLOCK })}
+          run={run({ detail: LAPS, planned: PLANNED_BLOCK })}
           chart={null}
         />,
       );
@@ -257,8 +261,12 @@ describe("RunDetail", () => {
     );
 
     it("shows no strip on a record published before the block existed", () => {
+      /* NO `planned` AT ALL -- that is the whole case. It carried a top-level
+         `ceiling` before 2026-08-29, which said nothing about this and simply
+         had to be dropped when the field moved onto the block being tested
+         for absence. */
       const { container } = wrap(
-        <RunDetail run={run({ detail: LAPS, ceiling: "137" })} chart={null} />,
+        <RunDetail run={run({ detail: LAPS })} chart={null} />,
       );
       expect(tabs(container)).toHaveLength(0);
       expect(container.textContent).toContain("lap");
@@ -269,7 +277,7 @@ describe("RunDetail", () => {
        * the one nobody re-checks after copying markup. */
       const { container } = wrap(
         <RunDetail
-          run={run({ detail: LAPS, ceiling: "137", planned: PLANNED_BLOCK })}
+          run={run({ detail: LAPS, planned: PLANNED_BLOCK })}
           chart={null}
         />,
       );
@@ -293,8 +301,6 @@ describe("RunDetail", () => {
         <RunDetail
           run={run({
             detail: LAPS,
-            ceiling: "137",
-            ceiling_tiers: [[null, 137]],
             planned: PLANNED_BLOCK,
           })}
           chart={chart}
@@ -311,8 +317,6 @@ describe("RunDetail", () => {
         <RunDetail
           run={run({
             detail: LAPS,
-            ceiling: "137",
-            ceiling_tiers: [[null, 137]],
             planned: PLANNED_BLOCK,
           })}
           chart={null}

@@ -151,6 +151,10 @@ export const RepSet = z.looseObject({
   hr_ceiling: z.array(z.number()).nullable().optional(),
   /** The same criterion as a printed string ("148/166", "3000m pace"). */
   ceiling: str,
+  /** WHICH KIND of criterion that string states -- "hr" | "pace" | "none".
+   *  Emitted where the kind is KNOWN rather than parsed back out of the
+   *  display form. See `CEILING_KINDS` in prescription.py. */
+  ceiling_kind: str,
   /** "fast" | "slow" when EVERY judged rep missed the band on one side, which
    *  is a target mismatch rather than an execution failure. Null when the reps
    *  straddle it, which is what execution scatter looks like. */
@@ -168,7 +172,26 @@ export const RepSet = z.looseObject({
   work_seconds: num,
 });
 
+/** A RACE, MEASURED. The grader's own account of a completed race: the clock,
+ *  the pace over the measured distance, and that distance itself -- which is
+ *  the tooltip's provenance line on the Trends race dots, because the series
+ *  label states the NOMINAL distance and 3.09 mi says this was the actual race.
+ *
+ *  `RunResult` is loose, so the value survived the parse before this
+ *  declaration existed (`runWhy.ts` reads it untyped). Declaring it is what
+ *  makes it visible to TypeScript -- the `treadmill_mph` precedent. `splits`
+ *  and `halves` stay undeclared until something walks them. */
+export const RaceDetail = z.looseObject({
+  seconds: num,
+  /** Seconds per mile over `total_mi`, not over the nominal distance. */
+  pace: num,
+  total_mi: num,
+});
+export type RaceDetail = z.infer<typeof RaceDetail>;
+
 export const SessionDetail = z.looseObject({
+  /** Present only on a completed race -- see `RaceDetail`. */
+  race: RaceDetail.nullable().optional(),
   sets: z.array(RepSet).nullable().optional(),
   core_seconds: num,
   work_seconds: num,
@@ -274,7 +297,19 @@ export const Planned = z.looseObject({
     .optional(),
   /** "hr" | "pace" | null. Null on a `mixed` run, which genuinely has two. */
   criterion: str,
+  /** THE ONLY PLACE A RUN'S CEILING IS NAMED, since 2026-08-29. `score_run`
+   *  published a second copy that had to stay character-identical, and on
+   *  seven multi-set runs it already did not: the scored row read
+   *  `162/166 + 800m-3000m pace` while this block read null. */
   ceiling: str,
+  /** WHICH KIND that string states -- "hr" | "pace" | "none" |
+   *  "uncalibrated" | "monotonic" | "mixed" -- decided in Python where it is
+   *  KNOWN. `runWhy.ts` used to recover it by string-matching `none (race)`
+   *  and four siblings, which is a sentence used as a key. */
+  ceiling_kind: str,
+  /** The SUBJECT of a `none (x)` or `uncalibrated (x)` ceiling: the role, or
+   *  the threshold label. Null for every other kind. */
+  ceiling_role: str,
   ceiling_tiers: z.array(z.array(z.number().nullable())).nullable().optional(),
   hr_ceiling: z.array(z.number()).nullable().optional(),
   band: str,
@@ -357,14 +392,6 @@ export const RunResult = z.looseObject({
   emphasis: z.array(z.string()).nullable().optional(),
   /** `surface` was here until 2026-08-10 and is gone from the graders. Nothing
    *  declares it, so a stale record carrying one is simply ignored. */
-  prescribed: str,
-  /** A RANGE as often as a scalar -- "50-60 min" is how the plan states most
-   *  easy runs, and treating that as unscorable is what the 2026-08-04
-   *  vocabulary widening fixed. */
-  prescribed_seconds: z
-    .union([z.number(), z.array(z.number())])
-    .nullable()
-    .optional(),
   seconds: num,
   km: num,
   miles: num,
@@ -372,16 +399,48 @@ export const RunResult = z.looseObject({
   hr_avg: num,
   hr_max: num,
   hr_pct: num,
-  /** A NAME or a printed range, never a number -- see RepSet.band. */
-  ceiling: str,
-  /** The same ceiling as `[through_seconds, bpm]` pairs, `through_seconds`
-   *  null on the last tier. The string above is a DISPLAY form and cannot be
-   *  plotted; splitting it to recover the rules would be a second parser for a
-   *  value the grader already holds. */
-  ceiling_tiers: z.array(z.array(z.number().nullable())).nullable().optional(),
+  /* `ceiling`, `ceiling_tiers`, `prescribed` and `prescribed_seconds` LEFT
+   * THIS RECORD ON 2026-08-29. All four describe the PRESCRIPTION and all four
+   * were already on `planned` below, from the same manifest and the same
+   * chart. Read them there. The two ceilings had to stay character-identical
+   * and on seven multi-set runs they did not, which is what a value stored
+   * twice eventually does. */
   /** The run's own average cadence in spm, display factor applied. On every
    *  role, so a column of it is never structurally absent. */
   cadence: num,
+  /** THE BELT, on an indoor run. Authored on the manifest and carried here
+   *  verbatim: `reps[i]` is the i-th rep's set speed in mph and `other` is
+   *  everything else.
+   *
+   *  IT IS THE MEASUREMENT, NOT AN ANNOTATION. The watch under-records work
+   *  intervals by roughly 15% on this setup, so the belt speed is the only
+   *  reading of an indoor session's pace and the watch's is an artifact. The
+   *  grader already substitutes it into each rep's pace where the counts line
+   *  up; `workoutMarks` reads it directly, which is what lets a session whose
+   *  rep detection disagreed with the prescription still state what was run.
+   *
+   *  `RunResult` is loose, so the value survived the parse before this
+   *  declaration existed. Declaring it is what makes it visible to TypeScript --
+   *  the schema's rule is strict on the structure the page walks. */
+  treadmill_mph: z
+    .looseObject({
+      reps: z.array(z.number()).nullable().optional(),
+      other: num,
+    })
+    .nullable()
+    .optional(),
+  /** WHERE THE DISTANCE CAME FROM. `"treadmill-declared"` says the grader
+   *  rewrote `km`, `miles` and `pace` from the belt speeds above, which it does
+   *  only when the declaration describes the WHOLE run; absent means the watch
+   *  measured it.
+   *
+   *  Declared for the same reason `treadmill_mph` and `RaceDetail` are: the
+   *  value was already on disk and already surviving the loose parse, and
+   *  declaring it is what makes it visible to TypeScript. `easyMarks` reads it
+   *  so an indoor run's dot can name its tier -- an estimate must never read as
+   *  a measurement, and here the belt is the BETTER measurement, so the label
+   *  is provenance rather than a warning. */
+  distance_source: str,
   /** Which denominator this run fed -- "easy" | "workout" | null. Stamped by
    *  `roll_up()` because deriving it here means copying the role vocabulary
    *  into TypeScript, where it drifts from the scorer that owns it. */
@@ -433,10 +492,27 @@ export const Structure = z.looseObject({
  * schema follows. `data_warnings()` still exists and `grade_week.py` still
  * prints every one. Re-adding it here means finding a reader first. */
 
+/** One fact block. TWO INSTANCES per record, over different windows.
+ *
+ * ONE SHAPE, because it is one function called twice -- `facts` through
+ * `evaluation_cutoff` and `judged_facts` through `judged_through`, a day
+ * apart on a live week and identical on every finished one. Declaring
+ * `graded_through` here rather than at the top level is where it lives since
+ * 2026-08-29: the block is BY DEFINITION the one computed through that date,
+ * so the field belongs to it and the old top-level copy was the echo.
+ *
+ * LOOSE beyond that key, like every other block the page reads a few fields
+ * from -- `facts.ts` in WeekView declares what it needs. */
+const Facts = z.looseObject({
+  graded_through: str,
+});
+
 export const Adherence = z.looseObject({
   week_start: str,
-  week_type: str,
-  phase: str,
+  /* `week_type` AND `phase` LEFT THIS RECORD ON 2026-08-29. The MANIFEST
+   * authors them and `week.json` carries the manifest -- which is where
+   * `WeekCard` has always read them from. These were the third and fourth
+   * spelling of one authored value and no component ever asked for them. */
   scores: z.looseObject({
     week: Score.nullable().optional(),
     easy: Score.nullable().optional(),
@@ -469,7 +545,10 @@ export const Adherence = z.looseObject({
    *
    *  **NULL on a Monday** whose session has not landed: nothing in the week has
    *  come due, so there is no date to name. */
-  graded_through: str,
+  /* MOVED INTO `judged_facts` ON 2026-08-29. That block is BY DEFINITION the
+   * one computed through this date, so the top-level field was its echo. Read
+   * `adherence.judged_facts.graded_through`; `facts.graded_through` is a
+   * DIFFERENT window (one day later on a live week) and both still exist. */
   week_end: str,
   // `unclaimed` LEFT THE PAYLOAD 2026-08-17, the `warnings` precedent a second
   // time: a data-gap notice is raised in conversation while grading, never
@@ -477,7 +556,7 @@ export const Adherence = z.looseObject({
   // output is the channel. Re-adding the field means finding a reader first.
   flags: z.array(Flag).default([]),
   /** Every measurement, through TODAY -- what the week has actually done. */
-  facts: z.looseObject({}).nullable().optional(),
+  facts: Facts.nullable().optional(),
   /** The same block over the JUDGED window, which is what Structure scored.
    *
    *  Two blocks because the two questions have different answers while a week
@@ -485,8 +564,11 @@ export const Adherence = z.looseObject({
    *  morning, and the plan comparison must not, or `volume_vs_plan` divides a
    *  numerator covering more dates than its denominator. They are IDENTICAL on
    *  every finished week. */
-  judged_facts: z.looseObject({}).nullable().optional(),
-  csv: str,
+  judged_facts: Facts.nullable().optional(),
+  /* `csv` LEFT THE PAYLOAD ON 2026-08-29 -- a pre-rendered comma line whose
+   * every field is already in this record, published in a form no reader
+   * could use without splitting it again. `csv_row()` still exists and
+   * `--csv` still prints it: a comma line is a RENDERING of a grade. */
 });
 
 /* ------------------------------------------------------------------ load */
@@ -578,6 +660,12 @@ export const Readiness = z.looseObject({
       z.looseObject({
         date: z.string(),
         checks: z.record(z.string(), z.boolean().nullable()),
+        /** The measured numbers behind the checks (the `sleep` key carries
+         *  sleep_hours) and a Python-composed sentence per check -- the page
+         *  must never re-derive the floor, so the reason arrives whole.
+         *  Optional, so a record published before 2026-08-27 still parses. */
+        values: z.record(z.string(), z.number().nullable()).nullable().optional(),
+        why: z.record(z.string(), z.string()).nullable().optional(),
       }),
     )
     .default([]),
@@ -638,8 +726,8 @@ export const Fitness = z.looseObject({
 
 export const Load = z.looseObject({
   week_start: str,
-  week_type: str,
-  phase: str,
+  /* `week_type` and `phase` left this record on 2026-08-29 too -- see
+   * `Adherence` above. Read them off `week.manifest`. */
   days: z.array(LoadDay).default([]),
   ceiling_inputs: CeilingInputs.nullable().optional(),
   integrity: z.looseObject({}).nullable().optional(),
@@ -771,7 +859,13 @@ export const PaceModelsCurrent = z.looseObject({
 
 export const Week = z.looseObject({
   week_start: z.string(),
-  week_end: z.string(),
+  /* `week_end` LEFT THIS RECORD ON 2026-08-29 -- it is `week_start + 6` and it
+   * was stored here AND on `adherence.json`, which is the copy `live_weeks()`
+   * and `WeekCard` read. The unread arithmetic went. */
+  /** PROJECTED, not the whole manifest: `week_start`, `week_type`, `phase` and
+   *  each run's `key`, `date`, `role` and `prescribed`. Seven fields out of
+   *  forty, which is what the app renders -- see `project_manifest()` in
+   *  publish.py and its pin in `tests/test_publish.py`. */
   manifest: z.looseObject({}).nullable().optional(),
   pace_chart: PaceChart.nullable().optional(),
   /** Whether `pace_chart` belongs to an EARLIER week, because this one's own
@@ -793,9 +887,9 @@ export const Week = z.looseObject({
    *  omits still appears and the week's total stays checkable against the rows
    *  behind it.
    *
-   *  Values stay STRINGS, like `Day` and `adherence_csv`: the empty string is
-   *  how these files spell NOT MEASURED, and `Number("")` is 0 -- a number a
-   *  reader cannot tell from a real zero. */
+   *  Values stay STRINGS, like `Day`: the empty string is how these files
+   *  spell NOT MEASURED, and `Number("")` is 0 -- a number a reader cannot
+   *  tell from a real zero. */
   trimp: z.array(z.record(z.string(), z.string())).default([]),
   notes: z.looseObject({
     adherence: str,
@@ -803,14 +897,32 @@ export const Week = z.looseObject({
   }),
 });
 
-/** A joined steps+wellness row.
+/** A joined steps+wellness row -- `StepsRow` union `WellnessRow`, on `date`.
  *
- * Values stay STRINGS. `read_csv_rows()` does not type them on purpose: the
- * empty string distinguishes an absent number from a zero one across JSON,
- * where a coerced 0 would plot as a real measurement. A resting HR of 0 is not
- * a resting HR.
- */
-export const Day = z.record(z.string(), z.string());
+ * TYPED SINCE 2026-08-29. It was `Record<string, string>` because the CSV
+ * spells "not measured" as an empty cell and `Number("")` is 0 -- a resting HR
+ * of 0 is not a resting HR. `publish.py` types the row now and writes `null`
+ * for an empty cell, which says the same thing in the word JSON already has.
+ *
+ * WHY IT MATTERED: `load.json -> days[]` publishes five of these same
+ * measurements -- the three step counts, the completeness and the run-step
+ * source -- and published them as numbers while this record published them as
+ * strings. One measurement, two types, two records, and no way to compare them
+ * without a coercion somebody had to remember. */
+export const Day = z.looseObject({
+  date: z.string(),
+  total_steps: num,
+  run_steps: num,
+  nonrun_steps: num,
+  completeness: str,
+  export_completeness: str,
+  source: str,
+  run_step_source: str,
+  resting_hr: num,
+  hrv: num,
+  sleep_hours: num,
+  sleep_score: num,
+});
 
 export const Payload = z.looseObject({
   schema: z.number(),
@@ -829,11 +941,69 @@ export const Payload = z.looseObject({
   /** Its sibling singleton: every pace model's race table at that same
    *  anchor. See `PaceModelsCurrent`. */
   pace_models_current: PaceModelsCurrent.nullable().optional(),
-  adherence_csv: z.array(z.record(z.string(), z.string())).default([]),
-  load_csv: z.array(z.record(z.string(), z.string())).default([]),
+  /* `adherence_csv` AND `load_csv` ARE GONE (2026-08-29). They were
+   * `published/series/*.json`, which was `derived/<half>.csv`, which was a row
+   * somebody PASTED out of a grader's terminal. Declared here and read by no
+   * component -- and by the time they were deleted they covered 7 of 102 weeks
+   * with 3 adherence rows and 4 load rows already disagreeing with a fresh
+   * grade. `history.json`'s lesson, one tier down.
+   *
+   * A series is built by iterating `index.weeks` and reading the week records,
+   * which is what `weeks.ts` and `defaultWeek.ts` already do. */
 });
 
 export type Payload = z.infer<typeof Payload>;
+
+/** A payload, or a sentence saying why there isn't one. What a route renders.
+ *
+ * EXACTLY ONE OF THE TWO, which is the contract `published/` itself holds:
+ * absence is the signal and the reason sits beside it. The same shape
+ * `resolveSlug()` and `run_grader()` in `scripts/publish.py` return, for the
+ * same reason -- an envelope with both fields would let a caller read a
+ * payload that was never built.
+ *
+ * IT LIVES HERE AND NOT IN `loadPayload.ts`, WHICH IMPORTS `server-only`. The
+ * static export builds these same slices in the browser, so the client route
+ * wrappers CONSTRUCT `Loaded` values -- and a type whose home is a module that
+ * throws when imported outside a server component is a trap the next reader
+ * steps in, even though `import type` is erased and would have worked.
+ * `loadPayload.ts` re-exports it, so no existing importer moved.
+ */
+export type Loaded =
+  | { ok: true; payload: Payload }
+  | { ok: false; error: string };
+
+/** One slice checked against the schema, naming the field that did not match.
+ *
+ * EVERY SLICE IS PAYLOAD-SHAPED, so one validator serves every route. The
+ * schema is loose and almost every field optional, which is what lets a payload
+ * carrying one week satisfy it exactly as one carrying 102 -- and is why the
+ * views beneath the loaders did not have to change when the routes landed.
+ *
+ * IT LIVES HERE BECAUSE BOTH BUILDS RUN IT. `loadPayload.ts` calls it on the
+ * server and the static export's client routes call it on a slice queried from
+ * the browser's own index. Two copies would be two spellings of the same
+ * failure, and the sentence below is the one a reader sees when a record and
+ * this schema disagree -- it should not depend on which build they opened.
+ */
+export function validatePayload(raw: unknown): Loaded {
+  const parsed = Payload.safeParse(raw);
+  if (!parsed.success) {
+    // Named fields, not "undefined is not an object" three components deep.
+    const first = parsed.error.issues[0];
+    return {
+      ok: false,
+      error:
+        `the published data did not match the expected shape at ` +
+        `\`${first.path.join(".")}\`: ${first.message}` +
+        (parsed.error.issues.length > 1
+          ? ` (and ${parsed.error.issues.length - 1} more)`
+          : ""),
+    };
+  }
+  return { ok: true, payload: parsed.data };
+}
+
 export type RacePace = z.infer<typeof RacePace>;
 export type Week = z.infer<typeof Week>;
 export type Adherence = z.infer<typeof Adherence>;

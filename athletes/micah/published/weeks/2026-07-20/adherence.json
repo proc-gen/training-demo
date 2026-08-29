@@ -1,5 +1,4 @@
 {
- "csv": "2026-07-20,Recovery,General Prep,46.3,80,,80,none",
  "facts": {
   "doubles": 1,
   "easy_seconds": 22802,
@@ -44,7 +43,6 @@
    "why": "0 quality session(s) this week; the flag needs two to find two in a row"
   }
  ],
- "graded_through": "2026-07-26",
  "judged_facts": {
   "doubles": 1,
   "easy_seconds": 22802,
@@ -77,18 +75,10 @@
   "walk_recovery_runs": 0,
   "walk_recovery_seconds": 0
  },
- "phase": "General Prep",
  "planned": [],
  "results": [
   {
    "cadence": 171,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2026-07-21",
    "detail": {
     "laps": [
@@ -224,6 +214,7 @@
      552.1
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -247,11 +238,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "60-70 min easy",
-   "prescribed_seconds": [
-    3600,
-    4200
-   ],
    "role": "easy",
    "runalyze_id": 193198931,
    "score_bucket": "easy",
@@ -266,13 +252,6 @@
   },
   {
    "cadence": 172,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2026-07-22",
    "detail": {
     "laps": [
@@ -408,6 +387,7 @@
      552.1
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -431,11 +411,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "60-70 min easy",
-   "prescribed_seconds": [
-    3600,
-    4200
-   ],
    "role": "easy",
    "runalyze_id": 193485329,
    "score_bucket": "easy",
@@ -450,13 +425,6 @@
   },
   {
    "cadence": 174,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2026-07-23",
    "detail": {
     "laps": [
@@ -592,6 +560,7 @@
      552.1
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -615,11 +584,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "60-70 min easy",
-   "prescribed_seconds": [
-    3600,
-    4200
-   ],
    "role": "easy",
    "runalyze_id": 193780811,
    "score_bucket": "easy",
@@ -634,13 +598,6 @@
   },
   {
    "cadence": 175,
-   "ceiling": "130",
-   "ceiling_tiers": [
-    [
-     null,
-     130
-    ]
-   ],
    "date": "2026-07-24",
    "detail": {
     "laps": [
@@ -732,6 +689,7 @@
      599.7
     ],
     "ceiling": "130",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -752,8 +710,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "AM: 30 min recovery",
-   "prescribed_seconds": 1800,
    "role": "recovery",
    "runalyze_id": 193899185,
    "score_bucket": "easy",
@@ -768,13 +724,6 @@
   },
   {
    "cadence": 174,
-   "ceiling": "130",
-   "ceiling_tiers": [
-    [
-     null,
-     130
-    ]
-   ],
    "date": "2026-07-24",
    "detail": {
     "laps": [
@@ -877,6 +826,7 @@
      599.7
     ],
     "ceiling": "130",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -897,8 +847,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "PM: 40 min recovery",
-   "prescribed_seconds": 2400,
    "role": "recovery",
    "runalyze_id": 194031037,
    "score_bucket": "easy",
@@ -913,13 +861,6 @@
   },
   {
    "cadence": 174,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2026-07-25",
    "detail": {
     "laps": [
@@ -1033,6 +974,7 @@
      552.1
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -1053,8 +995,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "45 min easy",
-   "prescribed_seconds": 2700,
    "role": "easy",
    "runalyze_id": 194168023,
    "score_bucket": "easy",
@@ -1069,7 +1009,6 @@
   },
   {
    "cadence": 177,
-   "ceiling": "monotonic",
    "date": "2026-07-26",
    "detail": {
     "from_prescription": true,
@@ -1320,6 +1259,7 @@
     "band_is_reference": true,
     "band_sec_per_mi": null,
     "ceiling": "monotonic",
+    "ceiling_kind": "monotonic",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": false,
@@ -1335,8 +1275,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "2 miles warmup, 4 miles progression towards 10k pace, easy until 90 min",
-   "prescribed_seconds": 5400,
    "quality_splits": [
     3,
     6
@@ -1387,11 +1325,10 @@
   "why": {
    "long_run_share": "the long run was 23.2% of the running distance, against a 25% ceiling",
    "quality_days_met": "0 quality day(s) against the 0 the plan has asked for so far, which is what a Recovery week asks for",
-   "rest_days_met": "1 rest day(s) against the 1 a Recovery week asks for",
+   "rest_days_met": "the plan's scheduled rest day(s) 2026-07-20 were taken -- no run recorded on any of them",
    "volume_vs_plan": "6:47:31 run against a plan of 6:45:00, tolerance 5%"
   }
  },
  "week_end": "2026-07-26",
- "week_start": "2026-07-20",
- "week_type": "Recovery"
+ "week_start": "2026-07-20"
 }

@@ -4,7 +4,7 @@ import { shortDate } from "@/lib/data/format";
 import type { Payload, Week } from "@/lib/data/payload";
 import { PUBLISHED } from "@/test/payload";
 import { dayIndex } from "./dates";
-import { type TrendPoint, drawn, stackTotal, trendPanels } from "./panels";
+import { type TrendPoint, drawn, trendPanels } from "./panels";
 
 const week = (over: Partial<Week>): Week => over as Week;
 
@@ -179,10 +179,12 @@ describe("a week nobody has run", () => {
   });
 });
 
-describe("the fitness curve", () => {
-  /* Fitness, fatigue and form got their first chart on 2026-08-11. Until then
-   * they were five hand-read weekly points off Runalyze's form curve; they are
-   * a daily series computed from heart rate now. */
+describe("the fitness panel", () => {
+  /* ONE PANEL SINCE 2026-08-27, the athlete's instruction. Daily TRIMP, CTL,
+   * TSB and ATL were four picker entries showing four cuts of the same quantity
+   * family, all in the TRIMP unit -- so they share one axis and the series
+   * checkboxes stand in for the old picker entries. TRIMP is a line now, the
+   * athlete's explicit choice over bars beside lines. */
   const day = (date: string, over: Record<string, unknown> = {}) => ({
     date,
     trimp: 90,
@@ -195,129 +197,78 @@ describe("the fitness curve", () => {
   const withDays = (days: Record<string, unknown>[]) =>
     payload({ weeks: { "2026-07-27": week({ load: L({ days }) }) } });
 
-  it("adds fitness, form and fatigue when a curve is published", () => {
+  it("adds ONE combined panel when a curve is published, replacing the old four", () => {
     const got = keys(withDays([day("2026-07-27")]));
-    expect(got).toContain("ctl");
-    expect(got).toContain("tsb");
-    expect(got).toContain("atl");
-  });
-
-  it("omits all three when no week carries a curve", () => {
-    const got = keys(
-      payload({ weeks: { w: week({ load: L({ days: [{ date: "2026-07-27" }] }) }) } }),
-    );
-    expect(got).not.toContain("ctl");
-    expect(got).not.toContain("atl");
-  });
-
-  it("gives form a zero reference, since it is a difference", () => {
-    expect(panel(withDays([day("2026-07-27")]), "tsb").reference).toBe(0);
-  });
-
-  it("gives fitness no reference line, because there is no danger level", () => {
-    expect(panel(withDays([day("2026-07-27")]), "ctl").reference ?? null).toBeNull();
-  });
-
-  it("colours all three as LOAD, following the domain", () => {
-    const p = trendPanels(withDays([day("2026-07-27")]));
-    for (const k of ["ctl", "atl", "tsb"]) {
-      expect(p.find((x) => x.key === k)!.color).toBe("var(--series-2)");
+    expect(got).toContain("fitness");
+    for (const old of ["trimp", "ctl", "tsb", "atl"]) {
+      expect(got).not.toContain(old);
     }
   });
 
-  it("DROPS a day whose fitness was withheld, and says nothing about it", () => {
-    /* The 42-day average had not yet forgotten its zero seed. The panel stated
-     * the count until 2026-08-15; the drop is unchanged, the sentence is gone. */
-    const p = withDays([day("2026-07-27", { ctl: null, tsb: null }), day("2026-07-28")]);
-    expect(panel(p, "ctl").points.map((pt) => pt.date)).toEqual(["2026-07-28"]);
+  it("omits it when no week carries a priced day", () => {
+    const got = keys(
+      payload({ weeks: { w: week({ load: L({ days: [{ date: "2026-07-27" }] }) }) } }),
+    );
+    expect(got).not.toContain("fitness");
   });
 
-  it("still plots fatigue when every fitness figure was withheld", () => {
-    const got = keys(withDays([day("2026-07-27", { ctl: null, tsb: null })]));
-    expect(got).toContain("atl");
-    expect(got).not.toContain("ctl");
-  });
-});
-
-describe("the daily TRIMP panel", () => {
-  const day = (date: string, trimp: unknown, bg: unknown) => ({
-    date,
-    trimp,
-    bg_trimp: bg,
-    ctl: 80,
-    atl: 95,
-    tsb: -15,
-  });
-  const withDays = (days: Record<string, unknown>[]) =>
-    payload({ weeks: { "2026-08-10": week({ load: L({ days }) }) } });
-
-  const P = withDays([day("2026-08-10", 30.59, 4.19), day("2026-08-11", 129.65, 11.28)]);
-
-  it("is BARS, not a line -- a per-day impulse is a quantity per bucket", () => {
-    expect(panel(P, "trimp").kind).toBe("columns");
-  });
-
-  it("carries the run and background components as parts", () => {
-    expect(panel(P, "trimp").points[0].parts).toEqual([
-      { value: 30.59, color: "var(--series-1)", label: "run" },
-      { value: 4.19, color: "var(--series-2)", label: "background" },
+  it("declares the five series in reading order, coloured by CAT position", () => {
+    /* The multi-series rule: colour by position in the palette's validated
+     * order, never shuffled to taste. Slots 1 and 2 land on blue run / orange
+     * background, the same split `CalendarCell` and `LoadPanel` encode. */
+    expect(panel(withDays([day("2026-07-27")]), "fitness").series).toEqual([
+      { key: "trimp", label: "TRIMP", color: "var(--cat-1)" },
+      { key: "bg", label: "background", color: "var(--cat-2)" },
+      { key: "ctl", label: "Fitness", color: "var(--cat-3)" },
+      { key: "atl", label: "Fatigue", color: "var(--cat-4)" },
+      { key: "tsb", label: "Form", color: "var(--cat-5)" },
     ]);
   });
 
-  it("takes the CALENDAR's colours for the split, not this view's domain rule", () => {
-    /* Blue run, orange background -- already encoded twice for the identical
-     * distinction, in `CalendarCell` and `LoadPanel`. One meaning per colour
-     * across the page beats one rule per view. */
-    const parts = panel(P, "trimp").points[0].parts!;
-    expect(parts.map((x) => x.color)).toEqual(["var(--series-1)", "var(--series-2)"]);
+  it("carries every quantity as a per-date value, with the scalar left null", () => {
+    const pt = panel(withDays([day("2026-07-27")]), "fitness").points[0];
+    expect(pt.value).toBeNull();
+    expect(pt.values).toEqual({ trimp: 90, bg: 5, ctl: 80, atl: 95, tsb: -15 });
   });
 
-  it("counts and anchors on the RUN trimp, which is the measured instrument", () => {
-    expect(panel(P, "trimp").points.map((pt) => pt.value)).toEqual([30.59, 129.65]);
+  it("keeps the zero reference the old Form panel stated -- TSB is a difference", () => {
+    expect(panel(withDays([day("2026-07-27")]), "fitness").reference).toBe(0);
   });
 
-  it("keeps a day whose background was never measured", () => {
+  it("KEEPS a pre-convergence day, with fitness and form as gaps in their lines", () => {
+    /* The 42-day average has not yet forgotten its zero seed, so CTL and TSB
+     * are withheld while TRIMP and ATL publish. The old CTL panel DROPPED the
+     * date; on the union point set it stays, and the two lines start later. */
+    const p = withDays([day("2026-07-27", { ctl: null, tsb: null }), day("2026-07-28")]);
+    const pts = panel(p, "fitness").points;
+    expect(pts.map((pt) => pt.date)).toEqual(["2026-07-27", "2026-07-28"]);
+    expect(pts[0].values).toEqual({ trimp: 90, bg: 5, ctl: null, atl: 95, tsb: null });
+  });
+
+  it("drops a checkbox for a quantity NO day ever measured, and closes the colour gap", () => {
+    /* A series that would draw nothing offers a tick that does nothing. Colours
+     * stay positional AFTER the filter, so no slot sits unused between two
+     * drawn series. */
+    const p = withDays([day("2026-07-27", { ctl: null, tsb: null })]);
+    expect(panel(p, "fitness").series).toEqual([
+      { key: "trimp", label: "TRIMP", color: "var(--cat-1)" },
+      { key: "bg", label: "background", color: "var(--cat-2)" },
+      { key: "atl", label: "Fatigue", color: "var(--cat-3)" },
+    ]);
+  });
+
+  it("keeps a day whose background was never measured, as a null in that one series", () => {
     // 2026-08-15 is exactly this: 32.99 of running impulse, no background row.
-    const p = withDays([day("2026-08-15", 32.99, null)]);
-    expect(panel(p, "trimp").points[0].value).toBe(32.99);
-    expect(panel(p, "trimp").points[0].parts![1].value).toBeNull();
+    const p = withDays([day("2026-08-15", { trimp: 32.99, bg_trimp: null })]);
+    expect(panel(p, "fitness").points[0].values).toMatchObject({
+      trimp: 32.99,
+      bg: null,
+    });
   });
 
   it("keeps a REST day, whose zero is a measurement", () => {
-    const p = withDays([day("2026-08-10", 0, 3.2)]);
-    expect(panel(p, "trimp").points.map((pt) => pt.value)).toEqual([0]);
-  });
-
-  it("is omitted when no day priced an impulse", () => {
-    const p = withDays([day("2026-08-10", null, null)]);
-    expect(keys(p)).not.toContain("trimp");
-  });
-});
-
-describe("stackTotal", () => {
-  const pt = (...values: (number | null)[]) => ({
-    date: "2026-08-10",
-    label: "8/10",
-    value: values[0],
-    parts: values.map((value) => ({ value, color: "x", label: "y" })),
-  });
-
-  it("sums the components", () => {
-    expect(stackTotal(pt(30.5, 4.5))).toBe(35);
-  });
-
-  it("sums a zero, which is a measurement", () => {
-    expect(stackTotal(pt(0, 4.5))).toBe(4.5);
-  });
-
-  it("WITHHOLDS when a component was never measured", () => {
-    /* Summing what is present would publish a smaller number wearing the same
-     * name. */
-    expect(stackTotal(pt(32.99, null))).toBeNull();
-  });
-
-  it("withholds for a point with no parts at all", () => {
-    expect(stackTotal({ date: "d", label: "d", value: 1 })).toBeNull();
+    const p = withDays([day("2026-07-27", { trimp: 0 })]);
+    expect(panel(p, "fitness").points[0].values).toMatchObject({ trimp: 0 });
   });
 });
 
@@ -623,11 +574,11 @@ describe("the pace panels join the graph list", () => {
     expect(keys.slice(-2)).toEqual(["race-times", "target-paces"]);
   });
 
-  it("gives them series where every other panel has none", () => {
+  it("gives series only to the multi-series panels", () => {
     if (!PUBLISHED) return;
+    const multi = new Set(["race-times", "target-paces", "fitness"]);
     for (const p of trendPanels(PUBLISHED)) {
-      const multi = p.key === "race-times" || p.key === "target-paces";
-      expect(Boolean(p.series), p.key).toBe(multi);
+      expect(Boolean(p.series), p.key).toBe(multi.has(p.key));
     }
   });
 });

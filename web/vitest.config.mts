@@ -46,6 +46,13 @@ export default defineConfig({
           // tear the window down and build it again, which cost more than the
           // whole logic project takes to run.
           pool: "forks",
+          // `node:sqlite` is stability-1.1 in Node 24 and announces itself on
+          // stderr from every worker that touches the index. The flag is the
+          // NARROW one -- `--no-warnings` would also silence a deprecation
+          // that is worth reading. Set here rather than in an npm script
+          // because `NODE_OPTIONS=... vitest` is not portable to the shell npm
+          // uses on Windows, and this repo is checked out on two of them.
+          execArgv: ["--disable-warning=ExperimentalWarning"],
           // Two workers, not one per core -- 280 tests in well under a second.
           maxWorkers: 2,
           // The two projects run one after the other rather than at once.
@@ -64,6 +71,28 @@ export default defineConfig({
           environment: "jsdom",
           include: ["src/**/*.test.tsx"],
           pool: "threads",
+          // See the `logic` project: `node:sqlite` announces itself, and the
+          // render suite reaches it too because `src/test/payload.ts` builds
+          // the index for its fixture.
+          execArgv: ["--disable-warning=ExperimentalWarning"],
+          // FOUR, MEASURED -- and it is a correctness fix, not a speed one.
+          //
+          //   2: 7.9s   3: 6.3s   4: 5.3s   5: 5.5s   6: 6.0s   8: 6.2s
+          //   12: 7.7s   uncapped (32 on this box): 21s+ AND FOUR TIMEOUTS
+          //
+          // The pool was uncapped, so vitest took one worker per CPU. On 32
+          // threads the corpus sweeps -- `page`, `LapTable`, `RunDetail`,
+          // `RunRow`, each of which renders every distinct run SHAPE over the
+          // committed payload -- blew the 5s default timeout while taking 3.3s
+          // when run alone. It presented as flakiness: 2122 passing on one run
+          // and three failing on the next over identical code.
+          //
+          // Same curve `GRADER_WORKERS = 8` in scripts/publish.py records, and
+          // the same reason the `logic` project caps itself at 2: past a
+          // handful of workers this machine contends and gets WORSE. A literal
+          // with its measurement beside it is the honest form -- `cpu_count`
+          // picks the far end of the curve.
+          maxWorkers: 4,
           sequence: { groupOrder: 1 },
           // ONE jsdom per worker, reused across files. Standing up a fresh
           // window for each of ~55 files costs more than every assertion in

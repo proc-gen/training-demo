@@ -48,10 +48,23 @@ const isDecl = (r: string) => r.endsWith(".d.ts");
  * `test/**` is shared FIXTURE code -- writing a test for a test helper is
  * checking the tape measure with itself, and every case that uses it fails
  * loudly when it breaks.
+ *
+ * `lib/wasmdb/engine.ts` IS THE ONE THAT NEEDED ARGUING FOR. It is two imports:
+ * sql.js, and its `.wasm` as a bundler ASSET URL. vitest resolves no such
+ * thing, so a test beside it could not even import it -- and a test that
+ * scanned its source text instead would assert that two lines say what they
+ * plainly say. What actually checks it is `npm run build`, which is why that
+ * command is in the verification steps and not just `npm run check`. The two
+ * cases below pin what the exemption is worth: the module stays tiny, and it
+ * stays the ONLY place the engine package is named.
  */
 const EXEMPT = [
   { pattern: /\.test\.tsx?$/, why: "test files are the tests" },
   { pattern: /^test\//, why: "shared fixtures, exercised by every test that uses them" },
+  {
+    pattern: /^lib\/wasmdb\/engine\.ts$/,
+    why: "it imports a .wasm as a bundler asset URL, which only a bundler resolves",
+  },
 ];
 
 /** Files exempt from the reuse rule specifically. */
@@ -59,13 +72,6 @@ const REUSE_EXEMPT = [
   {
     pattern: /^lib\/(repo|repository)\.ts$/,
     why: "pinned by literal path in tests/test_web_segregation.py",
-  },
-  {
-    pattern: /^lib\/data\/loadPayload\.ts$/,
-    why:
-      "THIS MIRROR ONLY. The private repo has two consumers -- app/page.tsx " +
-      "and the /api/data route -- and that route reads `?athlete=` off the " +
-      "request, which a static export cannot do, so the export drops it.",
   },
 ];
 
@@ -77,11 +83,18 @@ const SOURCES = ALL.filter((f) => !isTest(f.rel) && !isDecl(f.rel));
 const exempt = (r: string) => EXEMPT.some((e) => e.pattern.test(r));
 
 /* A COMPONENT DECLARATION: `function Name(`, `export function Name(`,
- * `export default function Name(`, or a `const Name = (`/`= function` arrow.
- * A PascalCase const holding a plain object or array -- `const M = {`,
- * `const VIEWS: View[] = [` -- is data, not a component, and does not match. */
+ * `export default function Name(`, `export default async function Name(`, or a
+ * `const Name = (`/`= function` arrow. A PascalCase const holding a plain
+ * object or array -- `const M = {`, `const VIEWS: View[] = [` -- is data, not a
+ * component, and does not match.
+ *
+ * `async` JOINED IT WHEN THE ROUTES LANDED. A dynamic route's page awaits its
+ * `params` and so must be `export default async function Page(`, which this
+ * read as no component at all -- so the "one component per file" rule silently
+ * stopped applying to exactly the files that were newest. A regex that matches
+ * nothing passes everything built on it, which is why the case below exists. */
 const COMPONENT =
-  /^(?:export\s+)?(?:default\s+)?function\s+[A-Z]|^(?:export\s+)?const\s+[A-Z][A-Za-z0-9]*(?:\s*:[^=]+)?\s*=\s*(?:\(|function)/gm;
+  /^(?:export\s+)?(?:default\s+)?(?:async\s+)?function\s+[A-Z]|^(?:export\s+)?const\s+[A-Z][A-Za-z0-9]*(?:\s*:[^=]+)?\s*=\s*(?:\(|function)/gm;
 
 /** Every module specifier a file imports from.
  *
@@ -131,6 +144,64 @@ describe("the exemption lists", () => {
 
   it.each(REUSE_EXEMPT)("$why matches something", ({ pattern }) => {
     expect(ALL.some((f) => pattern.test(f.rel))).toBe(true);
+  });
+
+  it("keeps the untestable module tiny, which is what earns it the exemption", () => {
+    /* `lib/wasmdb/engine.ts` cannot be imported outside a bundler, so nothing
+     * in it is covered. That is only acceptable while there is nothing in it:
+     * two imports and one re-export. Logic that drifted in here would be logic
+     * no test can reach, which is the failure mode of every exemption. */
+    const engine = ALL.find((f) => f.rel === "lib/wasmdb/engine.ts")!;
+    const code = engine.text
+      .split("\n")
+      .map((l) => l.trim())
+      .filter((l) => l && !l.startsWith("//") && !l.startsWith("*") && !l.startsWith("/*"));
+    expect(code.length).toBeLessThanOrEqual(4);
+  });
+
+  it("names the engine package in that ONE module and nowhere else in src/", () => {
+    /* The engine is a bundler-visible dependency with an asset beside it, and
+     * the whole point of isolating it is that a change of engine moves one
+     * file. `open.ts` reaches it through `./engine`; TEST code may name it --
+     * cases and the shared `test/wasmIndex.ts` fixture run it directly in node,
+     * where there is no asset to resolve and no bundler to resolve one. */
+    const named = SOURCES.filter(
+      (f) => !f.rel.startsWith("test/") && /["']sql\.js/.test(f.text),
+    ).map((f) => f.rel);
+    expect(named).toEqual(["lib/wasmdb/engine.ts"]);
+  });
+
+  it("mocks next/navigation in ONE shape, because the registry is shared", () => {
+    /* THE RENDER PROJECT RUNS WITH `isolate: false` -- one jsdom and one module
+     * registry per worker, which is what took the suite from 50s to 10s. So a
+     * `vi.mock("next/navigation", ...)` is not file-scoped in practice:
+     * whichever factory the worker registers first answers for every file it
+     * later loads. Eight files mocked it with four different shapes, each with
+     * its OWN hoisted `push` spy, so a file whose mock lost never saw its spy
+     * called -- and `ReportShell.test.tsx` and `CalendarView.test.tsx` failed
+     * together on about one run in three while passing alone every time.
+     *
+     * Every factory returns `@/test/navigation`'s single object now, so a
+     * collision cannot matter. This is the pin that keeps it that way. */
+    const mocks = ALL.filter(
+      (f) => f.rel !== "test/navigation.ts" && /vi\.mock\(\s*["']next\/navigation/.test(f.text),
+    );
+    expect(mocks.length).toBeGreaterThan(4);
+    for (const f of mocks) {
+      expect(f.text, f.rel).toContain('(await import("@/test/navigation")).navigation()');
+    }
+  });
+
+  it("has exactly one .wasm import, which is why the turbopack rule may be global", () => {
+    /* `next.config.ts` sets `*.wasm` to `type: "asset"` for the whole project.
+     * That is a wider statement than the one being made unless this holds. */
+    /* SOURCES, not ALL: `open.test.ts` resolves the same file off disk with
+     * `createRequire`, which is how it hands the real engine a real `.wasm` in
+     * node. That is a path string, not an import the bundler ever sees. */
+    const wasmImports = SOURCES.filter((f) =>
+      /["'][^"']*\.wasm["']/.test(f.text),
+    ).map((f) => f.rel);
+    expect(wasmImports).toEqual(["lib/wasmdb/engine.ts"]);
   });
 
   it("finds source files at all", () => {
@@ -238,11 +309,17 @@ describe("the layers point one way", () => {
     expect(wrong).toEqual([]);
   });
 
-  it("no view imports a sibling view, except the shell that hosts them", () => {
-    // Report composes the three; the three know nothing about each other.
+  it("no view imports a sibling view", () => {
+    /* THE CARVE-OUT IS GONE, AND THAT IS THE ROUTES LANDING. `Report` used to
+     * be exempt because it was the shell that composed the other three -- one
+     * client component holding which view was showing, which is exactly why
+     * every week's data had to reach the browser. `app/` composes them now, so
+     * `views/Report` imports no sibling and the rule applies to all four
+     * without exception. The guard that the composition still happens moved
+     * with it: see "the routes compose the views" below. */
     const wrong = SOURCES.flatMap((f) => {
       const from = viewOf(f.rel);
-      if (!from || from === "Report") return [];
+      if (!from) return [];
       return imports(f.text)
         .map((s) => resolveImport(f.rel, s))
         .filter((t): t is string => Boolean(t))
@@ -255,11 +332,31 @@ describe("the layers point one way", () => {
     expect(wrong).toEqual([]);
   });
 
-  it("Report imports the views it hosts", () => {
-    // The carve-out above is only sound if the shell is the thing using it.
-    const report = SOURCES.find((f) => f.rel === "views/Report/Report.tsx")!;
-    const hosted = imports(report.text).filter((s) => /View\/\w+View$/.test(s));
-    expect(hosted.length).toBe(3);
+  it("the routes compose the views", () => {
+    /* The rule above says the views do not know about each other. This says
+     * SOMETHING still puts them on a page -- without it, deleting a view's only
+     * consumer would make the tree "more correct" by every check here while
+     * taking a third of the app off the screen.
+     *
+     * `app/` and not `views/Report`, because that is where composition moved.
+     * `WeekView` is reached through `WeekRoute`, which `/` and `/week/[start]`
+     * both render, so the match is on the view DIRECTORY rather than on the
+     * `<Name>View` module. */
+    const routed = new Set(
+      SOURCES.filter((f) => f.rel.startsWith("app/")).flatMap((f) =>
+        imports(f.text)
+          .map((s) => resolveImport(f.rel, s))
+          .filter((t): t is string => Boolean(t))
+          .map((t) => viewOf(t))
+          .filter((v): v is string => Boolean(v)),
+      ),
+    );
+    expect([...routed].sort()).toEqual([
+      "CalendarView",
+      "Report",
+      "TrendsView",
+      "WeekView",
+    ]);
   });
 });
 
@@ -315,6 +412,212 @@ describe("proximity follows reuse", () => {
     // report every shared module as an orphan -- or nothing as lonely.
     const payload = importers("lib/data/payload.ts");
     expect(payload.length).toBeGreaterThan(5);
+  });
+});
+
+describe("the server layer never reaches the browser", () => {
+  /* THE ONE FAILURE THIS WHOLE FILE EXISTS FOR, and the suite could not see it.
+   *
+   * `CalendarView` is a client component. It needed to normalise a date before
+   * navigating, and the helper it wanted happened to live in `lib/db/slices.ts`
+   * -- so one import dragged `records.ts`, and with it `node:fs`, into the
+   * browser bundle. Turbopack refused the route with "the chunking context does
+   * not support external modules (request: node:fs)" and `/calendar/<end>`
+   * returned 500.
+   *
+   * `npm run check` PASSED THE WHOLE TIME. jsdom runs no bundler, so every
+   * render test imported the module happily and every assertion held; the route
+   * was broken only when a browser asked for it. That is the exact shape
+   * `tests/test_web_segregation.py` describes -- a thing that "would WORK on the
+   * machine that wrote it" -- and the fix was to put the date helper with the
+   * other date arithmetic, where it belonged anyway.
+   *
+   * IT IS TRANSITIVE, because one hop is not the hazard. `CalendarView` imported
+   * `lib/db` directly, but a client component importing something that imports
+   * it is the same bundle and the same 500.
+   *
+   * `lib/query/` IS THE SANCTIONED WAY ACROSS, and it arrived when the static
+   * export needed the index in a browser. The SQL is shared, the HANDLE is not:
+   * `lib/query/` holds the queries and touches no filesystem, `lib/db/` opens
+   * files and stays server-side. The last case below is what keeps that split
+   * real -- a rule saying "the browser may not reach the server" is worth
+   * little without one saying which directory the browser MAY reach.
+   */
+
+  /** Module specifiers a file imports for their VALUES.
+   *
+   * `import type { X } from "@/lib/db/records"` is ERASED by the compiler and
+   * reaches no bundle, so it is not the hazard this rule is about -- naming
+   * the shape of something is exactly what a type import is for. A bare
+   * `import { X }` used only as a type is erased too, and IS flagged here: the
+   * difference is invisible to a text scan, and the conservative direction
+   * pushes towards the explicit keyword rather than towards a rule that can be
+   * defeated by dropping it.
+   */
+  function valueImports(text: string): string[] {
+    const out: string[] = [];
+    const re = /(?:^|\n)\s*import\s+(type\s+)?[^"']*["']([^"']+)["']/g;
+    for (const m of text.matchAll(re)) if (!m[1]) out.push(m[2]);
+    return out;
+  }
+
+  /** Everything `rel` imports for its values, directly or not, within `src/`. */
+  function reachable(rel: string): Set<string> {
+    const seen = new Set<string>();
+    const stack = [rel];
+    while (stack.length) {
+      const at = stack.pop()!;
+      const file = ALL.find((f) => f.rel === at);
+      if (!file) continue;
+      for (const spec of valueImports(file.text)) {
+        const target = resolveImport(at, spec);
+        if (target && !seen.has(target)) {
+          seen.add(target);
+          stack.push(target);
+        }
+      }
+    }
+    return seen;
+  }
+
+  const clients = SOURCES.filter((f) => /^\s*["']use client["']/.test(f.text));
+
+  it("finds the client components at all", () => {
+    // Every rule below is vacuous if this matches nothing.
+    expect(clients.length).toBeGreaterThan(20);
+  });
+
+  it("no client component reaches lib/db, even transitively", () => {
+    const wrong = clients
+      .filter((f) => [...reachable(f.rel)].some((t) => t.startsWith("lib/db/")))
+      .map((f) => f.rel);
+    expect(wrong).toEqual([]);
+  });
+
+  it("no client component reaches a node builtin", () => {
+    /* The same rule stated on the symptom rather than the directory, so a
+     * server-only module added somewhere else is caught too. */
+    const wrong = clients
+      .filter((f) =>
+        [f.rel, ...reachable(f.rel)].some((t) => {
+          const src = ALL.find((x) => x.rel === t);
+          return src
+            ? valueImports(src.text).some((sp) => sp.startsWith("node:"))
+            : false;
+        }),
+      )
+      .map((f) => f.rel);
+    expect(wrong).toEqual([]);
+  });
+
+  it("TOLERATES a type-only import, which the compiler erases", () => {
+    /* Pinned because the rule above would be trivially satisfiable by banning
+     * the directory outright, and that would be wrong: a client component
+     * naming the shape of its own props is what `import type` is for.
+     *
+     * ASSERTED ON `valueImports` ITSELF rather than on a file that happens to
+     * do it today. `ReportShell` was the example until the SQL moved to
+     * `lib/query/` -- which is node-free, so its import is no longer a
+     * tolerance at all -- and an example that stops being one turns this into
+     * a case that passes without checking anything. */
+    const sample = [
+      'import type { Shell } from "@/lib/db/records";',
+      'import { openIndex } from "@/lib/db/open";',
+    ].join("\n");
+    expect(valueImports(sample)).toEqual(["@/lib/db/open"]);
+  });
+
+  it("no lib/query module reaches a node builtin, which is what makes it shared", () => {
+    /* THE POSITIVE HALF OF THE RULE ABOVE. `lib/query/` holds the SQL that BOTH
+     * engines run -- `node:sqlite` on the server, sqlite-wasm in the browser for
+     * the static export -- and it is only shareable while it stays free of the
+     * filesystem. Without this, the two rules above could be satisfied by
+     * nothing importing the queries at all, and the day a client route did, the
+     * failure would be a 500 in a bundler rather than a sentence here.
+     *
+     * `lib/db/` is the deliberate other side: it opens files, and nothing that
+     * reaches the browser may reach it. */
+    const shared = SOURCES.filter((f) => f.rel.startsWith("lib/query/"));
+    expect(shared.length).toBeGreaterThan(4);
+    const wrong = shared
+      .filter((f) =>
+        [f.rel, ...reachable(f.rel)].some((t) => {
+          const src = ALL.find((x) => x.rel === t);
+          return src
+            ? valueImports(src.text).some((sp) => sp.startsWith("node:")) ||
+                t.startsWith("lib/db/")
+            : false;
+        }),
+      )
+      .map((f) => f.rel);
+    expect(wrong).toEqual([]);
+  });
+
+  it("resolves a transitive chain at all", () => {
+    // If `reachable` returned nothing, both rules above would pass on anything.
+    const shell = clients.find((f) => f.rel === "views/Report/ReportShell.tsx");
+    expect(shell).toBeTruthy();
+    expect(reachable(shell!.rel).size).toBeGreaterThan(3);
+  });
+});
+
+describe("the routes stay statically exportable", () => {
+  /* THE DEMO HAS NO SERVER. `export_demo.py` patches every `force-dynamic` to
+   * `force-static` and Next writes one HTML file per route; anything that needs
+   * a request at run time simply cannot be built. Both rules below are things
+   * that WORK in the private app and fail three repositories away, which is the
+   * class this file exists to catch.
+   *
+   * Text scanning, like every other rule here -- and it is why these two live in
+   * this module rather than beside the routes they describe: a render test that
+   * read its own source through `import.meta.url` broke, because vitest's module
+   * URLs are not file URLs. */
+
+  const routes = SOURCES.filter((f) => /^app\/.*page\.tsx$/.test(f.rel));
+
+  it("finds the routes at all", () => {
+    expect(routes.length).toBeGreaterThan(3);
+  });
+
+  it("declares force-dynamic on every page", () => {
+    // The patch has to have something to replace, once, per route -- and
+    // `export_demo.py` fails naming the file if it does not match exactly once.
+    const missing = routes
+      .filter((f) => !/export const dynamic = "force-dynamic"/.test(f.text))
+      .map((f) => f.rel);
+    expect(missing).toEqual([]);
+  });
+
+  it("uses NO redirect", () => {
+    /* `output: export` cannot emit a server redirect, so `/` renders the
+     * default week rather than bouncing to `/week/<default>` -- a redirect
+     * would need a client bounce or a meta-refresh, which is a visible flash on
+     * the one URL every reader arrives at. */
+    const wrong = routes
+      .filter((f) => /redirect\s*\(/.test(f.text))
+      .map((f) => f.rel);
+    expect(wrong).toEqual([]);
+  });
+
+  it("gives every dynamic segment a generateStaticParams", () => {
+    /* Without it the demo build has no list of pages to write, and a URL that
+     * was not built does not exist. `force-dynamic` ignores it here, so its
+     * absence costs nothing until the export -- which is exactly why it is
+     * asserted rather than noticed. */
+    const missing = routes
+      .filter((f) => f.rel.includes("["))
+      .filter((f) => !/export function generateStaticParams/.test(f.text))
+      .map((f) => f.rel);
+    expect(missing).toEqual([]);
+  });
+
+  it("reads no searchParams", () => {
+    /* A query string forces dynamic rendering, which a static export cannot do
+     * -- so the calendar's window anchor is a SEGMENT rather than `?end=`. */
+    const wrong = SOURCES.filter((f) => f.rel.startsWith("app/"))
+      .filter((f) => /searchParams/.test(f.text))
+      .map((f) => f.rel);
+    expect(wrong).toEqual([]);
   });
 });
 

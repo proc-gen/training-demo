@@ -1,4 +1,4 @@
-import { cleanup } from "@testing-library/react";
+import { cleanup, fireEvent } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { wrap } from "@/test/render";
@@ -22,7 +22,13 @@ const pts = (...rows: Record<string, MultiValue>[]): MultiPoint[] =>
   rows.map((values, i) => ({ label: `7/${i + 1}`, values }));
 
 const lines = (c: HTMLElement) => c.querySelectorAll("path.series-line");
-const fills = (c: HTMLElement) => c.querySelectorAll("path[opacity='0.22']");
+const edges = (c: HTMLElement) => c.querySelectorAll("path.series-edge");
+const fills = (c: HTMLElement) => c.querySelectorAll("path[opacity='0.1']");
+const dots = (c: HTMLElement) => c.querySelectorAll("circle.marker");
+
+/** The y of every vertex on a path, in order. */
+const ysOf = (p: Element) =>
+  [...p.getAttribute("d")!.matchAll(/[ML]\s*[\d.]+\s+([\d.]+)/g)].map((m) => Number(m[1]));
 const texts = (c: HTMLElement) =>
   [...c.querySelectorAll("text")].map((t) => t.textContent);
 
@@ -126,26 +132,91 @@ describe("MultiLineChart", () => {
       expect(fills(container)[0].getAttribute("d")).toMatch(/Z$/);
     });
 
-    it("RULES THE SEAM when a region carries one, and not otherwise", () => {
-      const withMid = draw(
+    it("RULES BOTH EDGES AND NO MIDPOINT -- a zone shows where it STOPS", () => {
+      /* The midpoint rule carried a band's identity until 2026-08-25 and was a
+         DERIVED number standing in for the two measured ones. Athlete's call,
+         and it is also what frees the solid stroke to mean a line or a mark. */
+      const { container } = draw(
         <MultiLineChart
-          points={pts(
-            { z: { lo: 491, hi: 576, mid: 530 } },
-            { z: { lo: 493, hi: 578, mid: 533 } },
-          )}
+          points={pts({ z: { lo: 400, hi: 500 } }, { z: { lo: 400, hi: 500 } })}
           series={B}
           margin={M}
         />,
       );
-      const without = draw(
+      expect(lines(container)).toHaveLength(0);
+      expect(edges(container)).toHaveLength(2);
+
+      // A flat band at 400-500: the two edges must land exactly where 400 and
+      // 500 land as scalars on the same domain -- never at the 450 midpoint.
+      const drawn = [...edges(container)].map((p) => ysOf(p)[0]);
+      const ref = draw(
+        <MultiLineChart
+          points={pts({ z: 400, y: 500 }, { z: 400, y: 500 })}
+          series={[...B, { key: "y", label: "hi", color: "var(--cat-4)" }]}
+          margin={M}
+        />,
+      );
+      const scalar = [...ref.container.querySelectorAll("path.series-line")].map(
+        (p) => ysOf(p)[0],
+      );
+      expect(drawn.sort()).toEqual(scalar.sort());
+    });
+
+    it("dashes the edges, so an edge cannot read as a series", () => {
+      const { container } = draw(
         <MultiLineChart
           points={pts({ z: { lo: 491, hi: 576 } }, { z: { lo: 493, hi: 578 } })}
           series={B}
           margin={M}
         />,
       );
-      expect(lines(withMid.container)).toHaveLength(1);
-      expect(lines(without.container)).toHaveLength(0);
+      // The dash pattern is the stylesheet's, which jsdom does not apply -- so
+      // the assertion is on the CLASS that carries it. `series-line` must not
+      // appear: the two are what tell an edge from a line on screen.
+      expect(edges(container)).toHaveLength(2);
+      expect(lines(container)).toHaveLength(0);
+    });
+
+    it("draws no edge for a run of ONE, like every other mark here", () => {
+      const { container } = draw(
+        <MultiLineChart
+          points={pts({ z: { lo: 400, hi: 500 } }, { z: null }, { z: null })}
+          series={B}
+          margin={M}
+        />,
+      );
+      expect(edges(container)).toHaveLength(0);
+      expect(fills(container)).toHaveLength(0);
+    });
+
+    it("breaks BOTH edges at a gap, so a null is visibly not measured", () => {
+      const { container } = draw(
+        <MultiLineChart
+          points={pts(
+            { z: { lo: 400, hi: 500 } },
+            { z: { lo: 402, hi: 502 } },
+            { z: null },
+            { z: { lo: 404, hi: 504 } },
+            { z: { lo: 406, hi: 506 } },
+          )}
+          series={B}
+          margin={M}
+        />,
+      );
+      // Two runs of two slots -> two edges each.
+      expect(edges(container)).toHaveLength(4);
+      expect(fills(container)).toHaveLength(2);
+    });
+
+    it("washes the fill at the spec 10%, not the 0.22 it shipped with", () => {
+      const { container } = draw(
+        <MultiLineChart
+          points={pts({ z: { lo: 491, hi: 576 } }, { z: { lo: 493, hi: 578 } })}
+          series={B}
+          margin={M}
+        />,
+      );
+      expect(fills(container)).toHaveLength(1);
     });
 
     it("scales to BOTH ends of a band, never just one", () => {
@@ -285,5 +356,239 @@ describe("MultiLineChart", () => {
     expect(container.querySelector("svg")!.getAttribute("aria-label")).toBe(
       "Projected race times",
     );
+  });
+
+  describe("marks", () => {
+    /* Four slots so a fractional `at` has room either side of it. */
+    const four = () => pts({ a: 400 }, { a: 402 }, { a: 404 }, { a: 406 });
+    const A = [S[0]];
+
+    /** The x of every gridline, which is where the slots are. */
+    const slotXs = (c: HTMLElement) =>
+      [...c.querySelectorAll("line.gridline")]
+        .filter((l) => l.getAttribute("x1") === l.getAttribute("x2"))
+        .map((l) => Number(l.getAttribute("x1")));
+
+    it("draws one marker per mark, in its SERIES' colour", () => {
+      const { container } = draw(
+        <MultiLineChart
+          points={four()}
+          series={A}
+          margin={M}
+          marks={[{ at: 1, key: "a", value: 401, label: "2026-08-18" }]}
+        />,
+      );
+      expect(dots(container)).toHaveLength(1);
+      expect(dots(container)[0].getAttribute("fill")).toBe("var(--cat-1)");
+    });
+
+    it("PLACES A FRACTIONAL `at` BETWEEN TWO SLOTS -- the whole point", () => {
+      /* A Tuesday workout between two Sunday charts. 2/7 along the gap from
+         slot 1 to slot 2, which is what `slotAt` returns for 2026-08-18. */
+      const { container } = draw(
+        <MultiLineChart
+          points={four()}
+          series={A}
+          margin={M}
+          marks={[{ at: 1 + 2 / 7, key: "a", value: 401, label: "2026-08-18" }]}
+        />,
+      );
+      const xs = slotXs(container);
+      const cx = Number(dots(container)[0].getAttribute("cx"));
+      const gap = xs[1] - xs[0];
+      expect(cx).toBeCloseTo(xs[1] + (2 / 7) * gap, 5);
+      // And unambiguously NOT on either gridline.
+      expect(cx).toBeGreaterThan(xs[1] + 1);
+      expect(cx).toBeLessThan(xs[2] - 1);
+    });
+
+    it("draws nothing for a mark whose series is not shown", () => {
+      /* This is how unticking a series takes its dots with it -- one rule here
+         rather than a second filter in every caller. */
+      const { container } = draw(
+        <MultiLineChart
+          points={four()}
+          series={A}
+          margin={M}
+          marks={[{ at: 1, key: "gone", value: 401, label: "2026-08-18" }]}
+        />,
+      );
+      expect(dots(container)).toHaveLength(0);
+    });
+
+    it("WIDENS THE SCALE rather than clipping a mark off the plot", () => {
+      /* A workout well outside its zone is exactly what this plot exists to
+         show. Drawn inside the plot box is the assertion; a clipped mark would
+         be a measurement the chart silently declined to draw. */
+      const height = 320;
+      const { container } = draw(
+        <MultiLineChart
+          points={four()}
+          series={A}
+          margin={M}
+          height={height}
+          marks={[{ at: 2, key: "a", value: 250, label: "2026-08-18" }]}
+        />,
+      );
+      const cy = Number(dots(container)[0].getAttribute("cy"));
+      expect(cy).toBeGreaterThanOrEqual(M.t);
+      expect(cy).toBeLessThanOrEqual(height - M.b);
+    });
+
+    it("states the date, the caller's note and the series' own value", () => {
+      const { container } = draw(
+        <MultiLineChart
+          points={four()}
+          series={A}
+          margin={M}
+          format={(v) => `${v}s`}
+          marks={[
+            {
+              at: 1,
+              key: "a",
+              value: 401,
+              label: "2026-08-18",
+              note: { k: "workout", v: "10 reps" },
+            },
+          ]}
+        />,
+      );
+      const g = dots(container)[0].closest("g")!;
+      fireEvent.mouseEnter(g, { clientX: 1, clientY: 1 });
+      const tip = document.body.textContent ?? "";
+      expect(tip).toContain("2026-08-18");
+      expect(tip).toContain("10 reps");
+      expect(tip).toContain("401s");
+    });
+
+    it("draws no mark at all when there are no slots to place it on", () => {
+      /* `points` IS the grid, and `at` indexes it. Marks alone must not bring
+         the plot up on a window that measured nothing. */
+      const { container } = draw(
+        <MultiLineChart
+          points={[]}
+          series={A}
+          margin={M}
+          marks={[{ at: 0, key: "a", value: 401, label: "2026-08-18" }]}
+        />,
+      );
+      expect(dots(container)).toHaveLength(0);
+    });
+
+    describe("standalone (keyless) marks -- the race dots", () => {
+      const race = {
+        at: 1,
+        color: "var(--text-primary)",
+        name: "time",
+        value: 401,
+        label: "2026-07-19",
+        note: { k: "race", v: "3.09 mi" },
+      };
+
+      it("draws a keyless mark in ITS OWN colour", () => {
+        const { container } = draw(
+          <MultiLineChart points={four()} series={A} margin={M} marks={[race]} />,
+        );
+        expect(dots(container)).toHaveLength(1);
+        expect(dots(container)[0].getAttribute("fill")).toBe("var(--text-primary)");
+      });
+
+      it("SURVIVES series ticks -- it belongs to none", () => {
+        /* The keyed rule ("a mark whose series is not shown is not shown") must
+           not reach a mark that never named a series: the marks toggle is what
+           hides these, not the legend's checkboxes. Beside it, a keyed mark
+           whose series is gone drops -- the two contracts on one plot. */
+        const { container } = draw(
+          <MultiLineChart
+            points={four()}
+            series={A}
+            margin={M}
+            marks={[race, { at: 2, key: "gone", value: 402, label: "2026-07-20" }]}
+          />,
+        );
+        expect(dots(container)).toHaveLength(1);
+        expect(dots(container)[0].getAttribute("fill")).toBe("var(--text-primary)");
+      });
+
+      it("widens the scale like a keyed mark", () => {
+        const height = 320;
+        const { container } = draw(
+          <MultiLineChart
+            points={four()}
+            series={A}
+            margin={M}
+            height={height}
+            marks={[{ ...race, at: 2, value: 250 }]}
+          />,
+        );
+        const cy = Number(dots(container)[0].getAttribute("cy"));
+        expect(cy).toBeGreaterThanOrEqual(M.t);
+        expect(cy).toBeLessThanOrEqual(height - M.b);
+      });
+
+      it("labels its value row with its own name, having no series label", () => {
+        const { container } = draw(
+          <MultiLineChart
+            points={four()}
+            series={A}
+            margin={M}
+            format={(v) => `${v}s`}
+            marks={[race]}
+          />,
+        );
+        const g = dots(container)[0].closest("g")!;
+        fireEvent.mouseEnter(g, { clientX: 1, clientY: 1 });
+        const tip = document.body.textContent ?? "";
+        expect(tip).toContain("2026-07-19");
+        expect(tip).toContain("3.09 mi");
+        expect(tip).toContain("time");
+        expect(tip).toContain("401s");
+      });
+
+      it("drops a keyless mark carrying no colour -- nothing honest to draw it in", () => {
+        const { container } = draw(
+          <MultiLineChart
+            points={four()}
+            series={A}
+            margin={M}
+            marks={[{ at: 1, value: 401, label: "2026-07-19" }]}
+          />,
+        );
+        expect(dots(container)).toHaveLength(0);
+      });
+    });
+  });
+
+  describe("the reference rule", () => {
+    /* `LineChart`'s prop, kept identical: a stated criterion drawn as a rule,
+       only when it sits inside the scale, and it never widens one. The fitness
+       panel's zero is the case -- TSB crossing it is the reading. */
+    const spanning = pts({ a: -20, b: 40 }, { a: -15, b: 45 });
+
+    it("draws it when it sits inside the scale", () => {
+      const { container } = draw(
+        <MultiLineChart points={spanning} series={S} margin={M} reference={0} />,
+      );
+      expect(container.querySelectorAll("line.ceiling")).toHaveLength(1);
+    });
+
+    it("draws none when the panel states none", () => {
+      const { container } = draw(
+        <MultiLineChart points={spanning} series={S} margin={M} />,
+      );
+      expect(container.querySelectorAll("line.ceiling")).toHaveLength(0);
+    });
+
+    it("leaves it off rather than widening the scale to reach it", () => {
+      const { container } = draw(
+        <MultiLineChart
+          points={pts({ a: 130, b: 950 }, { a: 135, b: 980 })}
+          series={S}
+          margin={M}
+          reference={-500}
+        />,
+      );
+      expect(container.querySelectorAll("line.ceiling")).toHaveLength(0);
+    });
   });
 });

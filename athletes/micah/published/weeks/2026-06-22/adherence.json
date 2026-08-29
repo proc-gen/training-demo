@@ -1,5 +1,4 @@
 {
- "csv": "2026-06-22,Intensity,General Prep,38.1,19,13,18,consecutive-compromised",
  "facts": {
   "doubles": 0,
   "easy_seconds": 18166,
@@ -38,7 +37,6 @@
    "why": "2 of 2 quality sessions compromised (2026-06-23, 2026-06-25)"
   }
  ],
- "graded_through": "2026-06-28",
  "judged_facts": {
   "doubles": 0,
   "easy_seconds": 18166,
@@ -65,12 +63,10 @@
   "walk_recovery_runs": 0,
   "walk_recovery_seconds": 0
  },
- "phase": "General Prep",
  "planned": [],
  "results": [
   {
    "cadence": 171,
-   "ceiling": "162/166",
    "date": "2026-06-23",
    "detail": {
     "autolaps": [],
@@ -445,6 +441,7 @@
     "band_is_reference": false,
     "band_sec_per_mi": null,
     "ceiling": "162/166",
+    "ceiling_kind": "hr",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": false,
@@ -464,6 +461,7 @@
       "band_how": "named",
       "band_sec_per_mi": null,
       "ceiling": "162/166",
+      "ceiling_kind": "hr",
       "float_distance_m": null,
       "float_mode": null,
       "float_seconds": 15,
@@ -492,7 +490,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "10x45s at sub-t pace w/ 15s jog",
    "role": "subt",
    "runalyze_id": 186076113,
    "score_bucket": "workout",
@@ -516,13 +513,6 @@
   },
   {
    "cadence": 169,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2026-06-24",
    "detail": {
     "laps": [
@@ -614,6 +604,7 @@
      552
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -634,8 +625,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "45 min easy -> 30 min trails followed by barefoot jogging in a separate entry",
-   "prescribed_seconds": 2700,
    "role": "easy",
    "runalyze_id": 186498253,
    "score_bucket": "easy",
@@ -650,7 +639,6 @@
   },
   {
    "cadence": 167,
-   "ceiling": "none (volume_only)",
    "date": "2026-06-24",
    "detail": {
     "laps": [
@@ -694,6 +682,8 @@
     "band_is_reference": false,
     "band_sec_per_mi": null,
     "ceiling": "none (volume_only)",
+    "ceiling_kind": "none",
+    "ceiling_role": "volume_only",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": false,
@@ -709,7 +699,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "barefoot jogging",
    "role": "volume_only",
    "runalyze_id": 186500651,
    "score_bucket": null,
@@ -724,7 +713,6 @@
   },
   {
    "cadence": 171,
-   "ceiling": "none (volume_only)",
    "date": "2026-06-25",
    "detail": {
     "laps": [
@@ -768,6 +756,8 @@
     "band_is_reference": false,
     "band_sec_per_mi": null,
     "ceiling": "none (volume_only)",
+    "ceiling_kind": "none",
+    "ceiling_role": "volume_only",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": false,
@@ -783,7 +773,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "warmup",
    "role": "volume_only",
    "runalyze_id": 186616445,
    "score_bucket": null,
@@ -798,7 +787,6 @@
   },
   {
    "cadence": 141,
-   "ceiling": "none (neuromuscular)",
    "date": "2026-06-25",
    "detail": {
     "laps": [
@@ -954,6 +942,8 @@
     "band_is_reference": false,
     "band_sec_per_mi": null,
     "ceiling": "none (neuromuscular)",
+    "ceiling_kind": "none",
+    "ceiling_role": "neuromuscular",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": false,
@@ -970,6 +960,7 @@
       "band_how": "neuromuscular",
       "band_sec_per_mi": null,
       "ceiling": "none",
+      "ceiling_kind": "none",
       "float_distance_m": null,
       "float_mode": null,
       "float_seconds": null,
@@ -995,7 +986,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "4x(100m walk, 200m jog, 100m at repetition)",
    "role": "neuromuscular",
    "runalyze_id": 186616591,
    "score_bucket": null,
@@ -1010,7 +1000,6 @@
   },
   {
    "cadence": 175,
-   "ceiling": "162/166",
    "compromised": true,
    "date": "2026-06-25",
    "detail": {
@@ -1165,6 +1154,7 @@
     "band_is_reference": false,
     "band_sec_per_mi": null,
     "ceiling": "162/166",
+    "ceiling_kind": "hr",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": false,
@@ -1184,6 +1174,7 @@
       "band_how": "named",
       "band_sec_per_mi": null,
       "ceiling": "162/166",
+      "ceiling_kind": "hr",
       "float_distance_m": 200,
       "float_mode": null,
       "float_seconds": null,
@@ -1224,7 +1215,6 @@
     ],
     "target_tolerance_seconds": null
    },
-   "prescribed": "4x800m at sub-t w/ 200m jog -> couldn't get a good feel for anything on the 800's, so I dropped the last rep. temperature would've been fine if not for humidity",
    "role": "subt",
    "runalyze_id": 186616747,
    "score_bucket": "workout",
@@ -1248,7 +1238,6 @@
   },
   {
    "cadence": 169,
-   "ceiling": "none (volume_only)",
    "date": "2026-06-25",
    "detail": {
     "laps": [
@@ -1292,6 +1281,8 @@
     "band_is_reference": false,
     "band_sec_per_mi": null,
     "ceiling": "none (volume_only)",
+    "ceiling_kind": "none",
+    "ceiling_role": "volume_only",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": false,
@@ -1307,7 +1298,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "cooldown",
    "role": "volume_only",
    "runalyze_id": 186616795,
    "score_bucket": null,
@@ -1322,7 +1312,6 @@
   },
   {
    "cadence": 172,
-   "ceiling": "none (volume_only)",
    "date": "2026-06-26",
    "detail": null,
    "earned": null,
@@ -1341,6 +1330,8 @@
     "band_is_reference": false,
     "band_sec_per_mi": null,
     "ceiling": "none (volume_only)",
+    "ceiling_kind": "none",
+    "ceiling_role": "volume_only",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": false,
@@ -1356,7 +1347,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "first fragment of the 45 min easy",
    "role": "volume_only",
    "runalyze_id": 186837917,
    "score_bucket": null,
@@ -1371,13 +1361,6 @@
   },
   {
    "cadence": 171,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2026-06-26",
    "detail": {
     "laps": [
@@ -1471,6 +1454,7 @@
      552
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -1491,7 +1475,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "45 min easy",
    "role": "easy",
    "runalyze_id": 186837935,
    "score_bucket": "easy",
@@ -1506,7 +1489,6 @@
   },
   {
    "cadence": 94,
-   "ceiling": "none (volume_only)",
    "date": "2026-06-26",
    "detail": null,
    "earned": null,
@@ -1525,6 +1507,8 @@
     "band_is_reference": false,
     "band_sec_per_mi": null,
     "ceiling": "none (volume_only)",
+    "ceiling_kind": "none",
+    "ceiling_role": "volume_only",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": false,
@@ -1540,7 +1524,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "stray 104-second evening fragment (travel day)",
    "role": "volume_only",
    "runalyze_id": 186952889,
    "score_bucket": null,
@@ -1555,13 +1538,6 @@
   },
   {
    "cadence": 170,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2026-06-27",
    "detail": {
     "laps": [
@@ -1686,6 +1662,7 @@
      552
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -1706,8 +1683,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "50 min easy",
-   "prescribed_seconds": 3000,
    "role": "easy",
    "runalyze_id": 187099867,
    "score_bucket": "easy",
@@ -1722,21 +1697,6 @@
   },
   {
    "cadence": 172,
-   "ceiling": "137/140/143",
-   "ceiling_tiers": [
-    [
-     3600,
-     137
-    ],
-    [
-     7200,
-     140
-    ],
-    [
-     null,
-     143
-    ]
-   ],
    "date": "2026-06-28",
    "detail": {
     "laps": [
@@ -1908,6 +1868,7 @@
      512
     ],
     "ceiling": "137/140/143",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       3600,
@@ -1936,8 +1897,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "80 min easy/long on trails",
-   "prescribed_seconds": 4800,
    "role": "long",
    "runalyze_id": 187325019,
    "score_bucket": "easy",
@@ -1977,18 +1936,17 @@
   "checks": {
    "long_run_share": false,
    "quality_days_met": true,
-   "rest_days_met": null,
+   "rest_days_met": true,
    "volume_vs_plan": null
   },
-  "pct": 50.0,
+  "pct": 66.66666666666667,
   "why": {
    "long_run_share": "the long run was 26.7% of the running distance, against a 25% ceiling",
    "quality_days_met": "2 quality day(s) against the 2 the plan has asked for so far, which is what an Intensity week asks for",
-   "rest_days_met": "Intensity weeks state no rest-day requirement, so this check does not apply and left the denominator",
+   "rest_days_met": "the plan's scheduled rest day(s) 2026-06-22 were taken -- no run recorded on any of them",
    "volume_vs_plan": "the manifest states no planned_time_seconds, so there is nothing to compare the week's running time against"
   }
  },
  "week_end": "2026-06-28",
- "week_start": "2026-06-22",
- "week_type": "Intensity"
+ "week_start": "2026-06-22"
 }

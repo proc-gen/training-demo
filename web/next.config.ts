@@ -7,6 +7,15 @@ import { PHASE_DEVELOPMENT_SERVER } from "next/constants";
  * files and runs nothing. `next build` renders the published records into
  * `out/` once; re-running the export and pushing is what updates the site.
  *
+ * IT NO LONGER RENDERS THE DATA INTO THE HTML. `NEXT_PUBLIC_STATIC_DATA` below
+ * flips the four routes onto a browser-side index: the build emits every record
+ * ONCE as `records.json` (~5.5 MB, ~700 KB gzipped) and sqlite-wasm builds the
+ * same index from it that `node:sqlite` builds from the tree in the private
+ * app, then runs the same SQL. What that replaced was ~257 prerendered routes
+ * each carrying its own copy of its slice, in HTML and again in an RSC
+ * payload -- tens of megabytes, re-downloaded on every navigation. The pages
+ * are ~5 KB shells now and moving between them is a query.
+ *
  * `basePath` is the repo name, since a project page is served from a sub-path.
  * `assetPrefix` is deliberately NOT set beside it -- Next already serves assets
  * from under `basePath`, and the config docs say as much: a custom asset prefix
@@ -30,10 +39,40 @@ const nextConfig = (phase: string): NextConfig => ({
   // Served from a sub-path in production, from the root in development.
   ...(phase === PHASE_DEVELOPMENT_SERVER ? {} : { basePath: "/training-demo" }),
 
-  /* Pin the workspace root to THIS directory -- Turbopack otherwise walks up
-   * for a lockfile and can land outside the repo entirely. */
+  env: {
+    /* THE FLAG THAT PUTS THE DATA IN THE BROWSER. `lib/data/staticData.ts`
+     * reads it; the four routes branch on it and render a client wrapper that
+     * queries the index instead of a server component that reads the tree.
+     * `NEXT_PUBLIC_` is what makes it a build-time constant rather than a
+     * runtime lookup, so the unused branch -- `loadPayload`, and `node:sqlite`
+     * behind it -- is dead code the bundler drops. */
+    NEXT_PUBLIC_STATIC_DATA: "1",
+
+    /* WHERE `records.json` IS. Next rewrites its OWN asset URLs for
+     * `basePath`, but the bundle is fetched by this app's own `fetch()` and
+     * nothing rewrites that -- a bare `/records.json` on a GitHub Pages project
+     * site asks another repository for it. Empty in development, exactly as
+     * `basePath` is, and for the same reason. */
+    NEXT_PUBLIC_BASE_PATH:
+      phase === PHASE_DEVELOPMENT_SERVER ? "" : "/training-demo",
+  },
+
   turbopack: {
+    /* Pin the workspace root to THIS directory -- Turbopack otherwise walks up
+     * for a lockfile and can land outside the repo entirely. */
     root: import.meta.dirname,
+
+    /* A `.wasm` IS AN ASSET, NOT A MODULE TO INSTANTIATE. `lib/wasmdb/engine.ts`
+     * wants sql.js's `sql-wasm.wasm` as a URL to hand to `locateFile`, because
+     * sql.js instantiates it itself. Turbopack's default is to treat the import
+     * as a WebAssembly module, resolve the imports the binary declares, and fail
+     * with "Can't resolve 'a'" -- emscripten's single-letter env imports.
+     * WITHOUT THIS THE DEMO DOES NOT BUILD AT ALL, which is at least a loud
+     * failure; `tests/test_export_demo.py` asserts this copy matches the private
+     * repo's so it cannot be lost quietly. */
+    rules: {
+      "*.wasm": { type: "asset" },
+    },
   },
 });
 

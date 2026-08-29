@@ -144,15 +144,17 @@ describe("LoadPanel", () => {
       expect(text).not.toContain("Run TRIMP");
     });
 
-    it("puts the readiness COUNT in the tab label", () => {
-      /* `ReadinessTable`'s own `<h3>` carried it until 2026-08-15 and was
-       * deleted as duplication -- but the count itself must survive, and in
-       * the label it is legible without opening the panel at all. */
+    it("the tab label is BARE -- no count", () => {
+      /* It read `Readiness 6/7` from 2026-08-15 (the count moved here when the
+       * table's own `<h3>` was deleted as duplication) to 2026-08-27, when the
+       * athlete read the live `8/9` as August 9th -- a fraction in a strip
+       * beside day-of-week tables reads as a date. The count survives in the
+       * Overall tab's Readiness ledger, worded `6 of 7 checks passed`. */
       const { container } = wrap(<LoadPanel week={week(FULL)} />);
-      expect(tab(container, "Readiness").textContent).toBe("Readiness 6/7");
+      expect(tab(container, "Readiness").textContent).toBe("Readiness");
     });
 
-    it("says just Readiness when the grader scored none", () => {
+    it("and stays bare when the grader scored none", () => {
       const w = week({ ...FULL, readiness: null });
       const { container } = wrap(<LoadPanel week={w} />);
       expect(tab(container, "Readiness").textContent).toBe("Readiness");

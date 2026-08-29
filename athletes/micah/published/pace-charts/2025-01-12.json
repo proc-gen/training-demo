@@ -1,0 +1,122 @@
+{
+ "bands": {
+  "easy": {
+   "display": "8:22-9:02/mi",
+   "fast_sec_per_mi": 502,
+   "pct": [
+    0.63,
+    0.68
+   ],
+   "slow_sec_per_mi": 542
+  },
+  "long": {
+   "display": "7:54-8:22/mi",
+   "fast_sec_per_mi": 474,
+   "pct": [
+    0.68,
+    0.72
+   ],
+   "slow_sec_per_mi": 502
+  },
+  "recovery": {
+   "display": "9:02-9:48/mi",
+   "fast_sec_per_mi": 542,
+   "pct": [
+    0.58,
+    0.63
+   ],
+   "slow_sec_per_mi": 588
+  },
+  "rep_10min": {
+   "display": "6:56-7:12/mi",
+   "fast_sec_per_mi": 416,
+   "pct": [
+    0.79,
+    0.82
+   ],
+   "slow_sec_per_mi": 432
+  },
+  "rep_15min": {
+   "display": "7:07-7:23/mi",
+   "fast_sec_per_mi": 427,
+   "pct": [
+    0.77,
+    0.8
+   ],
+   "slow_sec_per_mi": 443
+  },
+  "rep_1min": {
+   "display": "6:28-6:42/mi",
+   "fast_sec_per_mi": 388,
+   "pct": [
+    0.85,
+    0.88
+   ],
+   "slow_sec_per_mi": 402
+  },
+  "rep_3min": {
+   "display": "6:37-6:51/mi",
+   "fast_sec_per_mi": 397,
+   "pct": [
+    0.83,
+    0.86
+   ],
+   "slow_sec_per_mi": 411
+  },
+  "rep_6min": {
+   "display": "6:46-7:01/mi",
+   "fast_sec_per_mi": 406,
+   "pct": [
+    0.81,
+    0.84
+   ],
+   "slow_sec_per_mi": 421
+  }
+ },
+ "confirmed_by_athlete": true,
+ "effective_vo2max": 55.29,
+ "race_paces": {
+  "10000m": {
+   "display": "37:55 @ 6:06/mi",
+   "sec_per_mi": 366,
+   "seconds": 2275
+  },
+  "1500m": {
+   "display": "4:56 @ 5:18/mi",
+   "sec_per_mi": 318,
+   "seconds": 296
+  },
+  "21097m": {
+   "display": "1:23:53 @ 6:24/mi",
+   "sec_per_mi": 384,
+   "seconds": 5033
+  },
+  "3000m": {
+   "display": "10:34 @ 5:40/mi",
+   "sec_per_mi": 340,
+   "seconds": 634
+  },
+  "42195m": {
+   "display": "2:55:08 @ 6:41/mi",
+   "sec_per_mi": 401,
+   "seconds": 10508
+  },
+  "5000m": {
+   "display": "18:17 @ 5:53/mi",
+   "sec_per_mi": 353,
+   "seconds": 1097
+  },
+  "800m": {
+   "display": "2:30 @ 5:01/mi",
+   "sec_per_mi": 301,
+   "seconds": 150
+  },
+  "tempo": {
+   "basis": "60-80 minute race pace, the Daniels threshold definition, from the model's duration prognosis.",
+   "display": "6:16-6:23/mi",
+   "fast_sec_per_mi": 376,
+   "slow_sec_per_mi": 383
+  }
+ },
+ "week_ending": "2025-01-12"
+}

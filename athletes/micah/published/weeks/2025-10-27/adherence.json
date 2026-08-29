@@ -1,5 +1,4 @@
 {
- "csv": "2025-10-27,Volume,Taper,22.1,16,,16,none",
  "facts": {
   "doubles": 0,
   "easy_seconds": 11013,
@@ -38,7 +37,6 @@
    "why": "0 quality session(s) this week; the flag needs two to find two in a row"
   }
  ],
- "graded_through": "2025-11-02",
  "judged_facts": {
   "doubles": 0,
   "easy_seconds": 11013,
@@ -65,18 +63,10 @@
   "walk_recovery_runs": 0,
   "walk_recovery_seconds": 0
  },
- "phase": "Taper",
  "planned": [],
  "results": [
   {
    "cadence": 169,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2025-10-28",
    "detail": {
     "laps": [
@@ -159,6 +149,7 @@
      517
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -179,7 +170,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- taper easy run (30 min)",
    "role": "easy",
    "runalyze_id": 153332080,
    "score_bucket": "easy",
@@ -194,13 +184,6 @@
   },
   {
    "cadence": 171,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2025-10-29",
    "detail": {
     "laps": [
@@ -294,6 +277,7 @@
      517
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -314,7 +298,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- taper easy run (40 min)",
    "role": "easy",
    "runalyze_id": 153466444,
    "score_bucket": "easy",
@@ -329,13 +312,6 @@
   },
   {
    "cadence": 169,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2025-10-31",
    "detail": {
     "laps": [
@@ -418,6 +394,7 @@
      517
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -438,7 +415,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- taper easy run (29 min)",
    "role": "easy",
    "runalyze_id": 153721056,
    "score_bucket": "easy",
@@ -453,21 +429,6 @@
   },
   {
    "cadence": 169,
-   "ceiling": "137/140/143",
-   "ceiling_tiers": [
-    [
-     3600,
-     137
-    ],
-    [
-     7200,
-     140
-    ],
-    [
-     null,
-     143
-    ]
-   ],
    "date": "2025-11-02",
    "detail": {
     "laps": [
@@ -630,6 +591,7 @@
      479
     ],
     "ceiling": "137/140/143",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       3600,
@@ -658,7 +620,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- taper long run (85 min)",
    "role": "long",
    "runalyze_id": 153917799,
    "score_bucket": "easy",
@@ -705,11 +666,10 @@
   "why": {
    "long_run_share": "the long run was 46.8% of the running distance, against a 25% ceiling",
    "quality_days_met": "0 quality day(s) against the 0 the plan has asked for so far, which is what a Volume week asks for",
-   "rest_days_met": "Volume weeks state no rest-day requirement, so this check does not apply and left the denominator",
+   "rest_days_met": "the plan schedules no rest day, so this check does not apply and left the denominator",
    "volume_vs_plan": "the manifest states no planned_time_seconds, so there is nothing to compare the week's running time against"
   }
  },
  "week_end": "2025-11-02",
- "week_start": "2025-10-27",
- "week_type": "Volume"
+ "week_start": "2025-10-27"
 }

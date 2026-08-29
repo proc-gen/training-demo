@@ -23,6 +23,18 @@ import type { Payload } from "@/lib/data/payload";
  * week. THE PREDICATE is shared, though — `hasRuns` moved to `lib/data/weeks`
  * on 2026-08-15 when the trend panels needed the same question answered, and two
  * copies of "has this week been run" is how they come to disagree.
+ *
+ * IT IS THE REFERENCE NOW, NOT THE IMPLEMENTATION (2026-08-29). The answer
+ * decides a ROUTE — `/` renders the default week — and making the choice in the
+ * browser would mean shipping every week's grade there to make it, which is the
+ * whole cost the routes remove. `slices.defaultWeekKey` answers it in SQL, and
+ * `slices.test.ts` asserts the two agree over the committed tree.
+ *
+ * SO IT IS CALLED ONLY BY THAT TEST, AND THAT IS ITS JOB rather than a sign it
+ * should go: this is the same shape `lib/db/records.ts` has against the index —
+ * the readable implementation a faster one is proven equal to. Deleting it
+ * would leave the SQL asserting itself, which is what an invariant between two
+ * copies of one number is worth.
  */
 export function defaultWeekKey(payload: Payload): string | null {
   const keys = weekKeys(payload);

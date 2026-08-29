@@ -62,7 +62,8 @@ describe("ledger: easy", () => {
       adherence: {
         scores: { easy: { earned: 190, total: 200 } },
         results: [
-          run({ id: 1, earned: 90, total: 100, pct: 90, hr_pct: 90, ceiling: "137" }),
+          run({ id: 1, earned: 90, total: 100, pct: 90, hr_pct: 90,
+                planned: { ceiling: "137", ceiling_kind: "hr" } }),
           run({ id: 2, earned: 100, total: 100 }),
         ],
       },
@@ -88,7 +89,7 @@ describe("ledger: easy", () => {
             pct: 50,
             hr_pct: 60,
             hr_avg: 148,
-            ceiling: "137/140/143",
+            planned: { ceiling: "137/140/143", ceiling_kind: "hr" },
             duration_factor: 0.83,
             duration: { pct: -12.4 },
           }),

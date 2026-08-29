@@ -42,8 +42,10 @@ describe("TrainingPanel", () => {
     const w = week({
       adherence: {
         results: [
-          { id: 2, date: "2026-07-30", role: "easy", prescribed: "easy day" },
-          { id: 1, date: "2026-07-27", role: "long", prescribed: "long day" },
+          { id: 2, date: "2026-07-30", role: "easy",
+            planned: { prescribed: "easy day" } },
+          { id: 1, date: "2026-07-27", role: "long",
+            planned: { prescribed: "long day" } },
         ],
       },
     });
@@ -62,7 +64,8 @@ describe("TrainingPanel", () => {
       manifest: { runs: [{ key: "2026-07-27", prescribed: "from the plan" }] },
       adherence: {
         results: [
-          { key: "2026-07-27", date: "2026-07-27", prescribed: "from the grader" },
+          { key: "2026-07-27", date: "2026-07-27",
+            planned: { prescribed: "from the grader" } },
         ],
       },
     });
@@ -74,7 +77,8 @@ describe("TrainingPanel", () => {
     const w = week({
       adherence: {
         results: [
-          { key: "2026-07-27", date: "2026-07-27", prescribed: "from the grader" },
+          { key: "2026-07-27", date: "2026-07-27",
+            planned: { prescribed: "from the grader" } },
         ],
       },
     });

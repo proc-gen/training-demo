@@ -9,7 +9,7 @@ import { CalendarGrid } from "./CalendarGrid";
 afterEach(cleanup);
 
 const day = (date: string): Day =>
-  ({ date, total_steps: "10000", run_steps: "5000", nonrun_steps: "5000" }) as Day;
+  ({ date, total_steps: 10000, run_steps: 5000, nonrun_steps: 5000 }) as Day;
 
 const rows = weekRowsEnding("2026-08-09", 2);
 const byDate = new Map<string, Day>(

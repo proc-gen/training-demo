@@ -13,7 +13,6 @@
   "margin": 1.05,
   "run_step_weight": 2.5
  },
- "csv": "2025-02-17,Race,Return of Doubles,210839,194285,16554,87,76,82,1.14,1.15,3.69,778284,674,52,91,104,-13,none",
  "days": [
   {
    "atl": 90.04771563222437,
@@ -264,7 +263,6 @@
  },
  "monotony_mech": 3.6913665097220685,
  "overall": 81.50916736801625,
- "phase": "Return of Doubles",
  "readiness": {
   "available": 21,
   "hrv_baseline": 64,
@@ -278,7 +276,17 @@
      "resting_hr": true,
      "sleep": true
     },
-    "date": "2025-02-17"
+    "date": "2025-02-17",
+    "values": {
+     "hrv": 65.0,
+     "resting_hr": 44.0,
+     "sleep": 7.28
+    },
+    "why": {
+     "hrv": "65 at or above 57.6 (90% of a 64.0 baseline)",
+     "resting_hr": "44 at or below the 47 bpm ceiling",
+     "sleep": "7.28 h at or above the 7 h floor"
+    }
    },
    {
     "checks": {
@@ -286,7 +294,17 @@
      "resting_hr": true,
      "sleep": false
     },
-    "date": "2025-02-18"
+    "date": "2025-02-18",
+    "values": {
+     "hrv": 66.0,
+     "resting_hr": 44.0,
+     "sleep": 6.95
+    },
+    "why": {
+     "hrv": "66 at or above 57.6 (90% of a 64.0 baseline)",
+     "resting_hr": "44 at or below the 47 bpm ceiling",
+     "sleep": "6.95 h below the 7 h floor"
+    }
    },
    {
     "checks": {
@@ -294,7 +312,17 @@
      "resting_hr": true,
      "sleep": false
     },
-    "date": "2025-02-19"
+    "date": "2025-02-19",
+    "values": {
+     "hrv": 70.0,
+     "resting_hr": 43.0,
+     "sleep": 6.42
+    },
+    "why": {
+     "hrv": "70 at or above 57.6 (90% of a 64.0 baseline)",
+     "resting_hr": "43 at or below the 47 bpm ceiling",
+     "sleep": "6.42 h below the 7 h floor"
+    }
    },
    {
     "checks": {
@@ -302,7 +330,17 @@
      "resting_hr": true,
      "sleep": true
     },
-    "date": "2025-02-20"
+    "date": "2025-02-20",
+    "values": {
+     "hrv": 68.0,
+     "resting_hr": 44.0,
+     "sleep": 7.23
+    },
+    "why": {
+     "hrv": "68 at or above 57.6 (90% of a 64.0 baseline)",
+     "resting_hr": "44 at or below the 47 bpm ceiling",
+     "sleep": "7.23 h at or above the 7 h floor"
+    }
    },
    {
     "checks": {
@@ -310,7 +348,17 @@
      "resting_hr": true,
      "sleep": false
     },
-    "date": "2025-02-21"
+    "date": "2025-02-21",
+    "values": {
+     "hrv": 76.0,
+     "resting_hr": 42.0,
+     "sleep": 6.32
+    },
+    "why": {
+     "hrv": "76 at or above 57.6 (90% of a 64.0 baseline)",
+     "resting_hr": "42 at or below the 47 bpm ceiling",
+     "sleep": "6.32 h below the 7 h floor"
+    }
    },
    {
     "checks": {
@@ -318,7 +366,17 @@
      "resting_hr": true,
      "sleep": false
     },
-    "date": "2025-02-22"
+    "date": "2025-02-22",
+    "values": {
+     "hrv": 70.0,
+     "resting_hr": 42.0,
+     "sleep": 6.98
+    },
+    "why": {
+     "hrv": "70 at or above 57.6 (90% of a 64.0 baseline)",
+     "resting_hr": "42 at or below the 47 bpm ceiling",
+     "sleep": "6.98 h below the 7 h floor"
+    }
    },
    {
     "checks": {
@@ -326,7 +384,17 @@
      "resting_hr": true,
      "sleep": false
     },
-    "date": "2025-02-23"
+    "date": "2025-02-23",
+    "values": {
+     "hrv": 67.0,
+     "resting_hr": 44.0,
+     "sleep": 6.72
+    },
+    "why": {
+     "hrv": "67 at or above 57.6 (90% of a 64.0 baseline)",
+     "resting_hr": "44 at or below the 47 bpm ceiling",
+     "sleep": "6.72 h below the 7 h floor"
+    }
    }
   ],
   "resting_hr_ceiling": 47
@@ -334,6 +402,5 @@
  "shape_days_covered": 7,
  "shape_days_needed": 7,
  "strain_mech": 778284.0235432911,
- "week_start": "2025-02-17",
- "week_type": "Race"
+ "week_start": "2025-02-17"
 }

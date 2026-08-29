@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import type { RunResult } from "@/lib/data/payload";
 import { PUBLISHED } from "@/test/payload";
 import { wrap } from "@/test/render";
+import { runShapes } from "@/test/runShapes";
 import { RunScoreWhy } from "./RunScoreWhy";
 
 afterEach(cleanup);
@@ -15,7 +16,7 @@ const SCORED = run({
   hr_pct: 93.4,
   hr_avg: 130,
   hr_max: 145,
-  ceiling: "137",
+  planned: { ceiling: "137", ceiling_kind: "hr" },
   duration_factor: 1,
   earned: 3287,
   total: 3518,
@@ -53,7 +54,8 @@ describe("RunScoreWhy", () => {
 
   it("states why an unscored run was not scored", () => {
     const { container } = wrap(
-      <RunScoreWhy run={run({ ceiling: "none (volume_only)", pct: null })} />,
+      <RunScoreWhy run={run({ planned: { ceiling: "none (volume_only)", ceiling_kind: "none",
+                       ceiling_role: "volume_only" }, pct: null })} />,
     );
     expect(container.textContent).toContain("Not scored");
     expect(container.textContent).toContain("warmup or cooldown");
@@ -71,17 +73,21 @@ describe("RunScoreWhy", () => {
     expect(container.querySelector(".note")!.textContent).toContain("no detail");
   });
 
-  it("explains every real run without throwing", () => {
+  /* ONE RUN PER RENDERING SHAPE, not one per run the athlete has ever logged.
+   * This iterated all 728 and timed out at vitest's 5s default under full-suite
+   * load -- the `THE ATHLETE'S HISTORY IS NOT TEST DATA` rule, which `RunDetail`
+   * and `RunRow` were converted for and this case was missed by. `runShapes`
+   * keys on what the subtree branches on, so the same paths are covered by a
+   * few dozen renders. See `src/test/runShapes.ts`. */
+  it("explains every shape of real run without throwing", () => {
     if (!PUBLISHED) return;
     let seen = 0;
-    for (const w of Object.values(PUBLISHED.weeks)) {
-      for (const r of w.adherence?.results ?? []) {
-        const { container, unmount } = wrap(<RunScoreWhy run={r} />);
-        // Every run must SAY something. A blank panel reads as a broken page.
-        expect(container.textContent!.trim().length).toBeGreaterThan(0);
-        seen += 1;
-        unmount();
-      }
+    for (const { run } of runShapes(PUBLISHED)) {
+      const { container, unmount } = wrap(<RunScoreWhy run={run} />);
+      // Every run must SAY something. A blank panel reads as a broken page.
+      expect(container.textContent!.trim().length).toBeGreaterThan(0);
+      seen += 1;
+      unmount();
     }
     expect(seen).toBeGreaterThan(0);
   });

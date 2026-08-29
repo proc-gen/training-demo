@@ -1,11 +1,12 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import type { Payload } from "@/lib/data/payload";
+import { weekEnding } from "@/lib/data/weekDates";
 import { prescriptionByKey } from "@/lib/run/data/runs";
 import { Card } from "@/lib/ux/primitives/Card";
-import { EmptyState } from "@/lib/ux/primitives/EmptyState";
 import { Legend } from "@/lib/ux/primitives/Legend";
 import { Note } from "@/lib/ux/primitives/Note";
 import { CalendarControls } from "./components/CalendarControls";
@@ -15,7 +16,6 @@ import {
   calendarDays,
   dayByDate,
   loadByDate,
-  maxSteps,
   runsByDate,
   weekFor,
 } from "./data/days";
@@ -23,7 +23,6 @@ import { EMPHASIS_ORDER, EMPHASIS_LABEL, tintVar } from "./data/emphasis";
 import {
   DEFAULT_WEEKS,
   clampWeeks,
-  defaultLastDay,
   stepLastDay,
   weekRowsEnding,
 } from "./data/window";
@@ -40,31 +39,64 @@ import {
  * for the same reason: an answer that depends on when you look cannot be
  * asserted against the committed `published/` tree.
  *
+ * THERE IS NO EMPTY STATE ANY MORE, and that is the athlete's own rule reaching
+ * this component. It used to render "No steps.csv and no week manifests" when
+ * it could not pick a last day; the anchor is a PROP now, so there is always
+ * one, and the honest reading of an anchor the record does not reach is the one
+ * `stepLastDay` already states: *stepping past the record draws a grid of empty
+ * cells, which is an honest answer rather than a disabled button that cannot
+ * say why.* A window in 2019 and a window past the plan are the same case, and
+ * the grid says so by being empty.
+ *
+ * THE ATHLETE-HAS-NOTHING CASE IS REPORTED UPSTREAM, where it can be told
+ * apart: `loadShell` fails and the layout carries the sentence. Keeping a
+ * message here that only the empty window could reach would be a card telling a
+ * reader their data is missing because they stepped into 2019.
+ *
+ * THE ANCHOR IS A ROUTE AND THE WEEK COUNT IS NOT, which is why one of these
+ * two controls navigates and the other sets state. The server sends the widest
+ * window the pills offer, so drawing one to six weeks of it asks nobody; the
+ * anchor reaches across all 102 weeks, and sending all of them is the 2,191 KB
+ * the split exists to avoid. `lastDay` therefore arrives as a PROP and this
+ * component no longer computes `defaultLastDay` -- the same answer, from the
+ * same rule, resolved in `slices.ts` where the route needs it anyway.
+ *
+ * `maxSteps` ARRIVES AS A PROP FOR THE OPPOSITE REASON: it is over the whole
+ * record and the payload here is one window, so it is the one number on this
+ * view that CANNOT be derived from what was sent. Scaling to the busiest day on
+ * screen would make every bar jump the moment the week count changed.
+ *
  * THE DAY TABLE IS GONE and `DayCard` stands in its place. That table listed
  * every date in the payload so the grid's colour-encoded values could also be
  * read as numbers -- seventy-six rows to discharge a concern about one cell.
  * The cells carry their own numbers now, the tooltip carries the provenance,
  * and the card carries the whole day the moment somebody points at it.
  */
-export function CalendarView({ payload }: { payload: Payload }) {
+export function CalendarView({
+  payload,
+  lastDay,
+  maxSteps,
+}: {
+  payload: Payload;
+  /** The window's last day -- a Sunday, and the route's own segment. */
+  lastDay: string;
+  /** The busiest day's steps ON RECORD, not in this window. */
+  maxSteps: number;
+}) {
+  const router = useRouter();
   const days = calendarDays(payload);
-  const [lastDay, setLastDay] = useState<string | null>(() =>
-    defaultLastDay(payload),
-  );
   const [weeks, setWeeks] = useState<number>(DEFAULT_WEEKS);
+  /* A QUERY PARAMETER, NOT A SEGMENT. `?end=` is read from the URL by the
+     browser, so it needs no `generateStaticParams` and the demo can be stepped
+     as far as this app can -- which `stepLastDay` has always allowed and the
+     old bounded segment could not honour. `weekEnding` still normalises, because
+     all seven of a week's dates name one window and the URL names it once. */
+  const go = (to: string) => router.push(`/calendar?end=${weekEnding(to)}`);
   /* NOTHING IS SELECTED TO START. A card the reader did not ask for, about a
    * day the app chose, is a claim that that day is the interesting one -- and
    * on a first paint there is no basis for it. The empty state says what to do
    * in four words. */
   const [selected, setSelected] = useState<string | null>(null);
-
-  if (!lastDay) {
-    return (
-      <Card title="Daily load">
-        <EmptyState>No steps.csv and no week manifests.</EmptyState>
-      </Card>
-    );
-  }
 
   const meta = loadByDate(payload);
   const byDate = dayByDate(days);
@@ -80,7 +112,12 @@ export function CalendarView({ payload }: { payload: Payload }) {
     const byKey = week ? prescriptionByKey(week) : null;
     prescriptions.set(
       date,
-      list.map((r) => (r.key ? byKey?.get(r.key) : "") || r.prescribed || ""),
+      list.map(
+        (r) =>
+          (r.key ? byKey?.get(r.key) : "") ||
+          r.planned?.prescribed ||
+          "",
+      ),
     );
   }
 
@@ -90,11 +127,12 @@ export function CalendarView({ payload }: { payload: Payload }) {
         <CalendarControls
           lastDay={lastDay}
           weeks={weeks}
-          onLastDay={setLastDay}
+          onLastDay={go}
           onWeeks={(w) => setWeeks(clampWeeks(w))}
           /* The step is a function of the window that is showing, so it is
-             resolved here where both halves of that window are held. */
-          onStep={(steps) => setLastDay(stepLastDay(lastDay, weeks, steps))}
+             resolved here where both halves of that window are held. It
+             NAVIGATES: the anchor is the route. */
+          onStep={(steps) => go(stepLastDay(lastDay, weeks, steps))}
         />
 
         {/* TWO ROWS, BECAUSE THERE ARE TWO KINDS OF THING IN THIS KEY. The first
@@ -129,7 +167,7 @@ export function CalendarView({ payload }: { payload: Payload }) {
           meta={meta}
           runs={runs}
           prescriptions={prescriptions}
-          maxSteps={maxSteps(days)}
+          maxSteps={maxSteps}
           selected={selected}
           onSelect={(date) => setSelected((v) => (v === date ? null : date))}
         />

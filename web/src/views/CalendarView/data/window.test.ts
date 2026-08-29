@@ -2,14 +2,14 @@ import { describe, expect, it } from "vitest";
 
 import type { Payload } from "@/lib/data/payload";
 import { PUBLISHED } from "@/test/payload";
-import { mondayOf } from "./grid";
+import { mondayOf } from "@/lib/data/weekDates";
 import {
   DEFAULT_WEEKS,
   WEEK_CHOICES,
   clampWeeks,
   defaultLastDay,
   isIsoDate,
-  newestMeasuredDate,
+  resolveAnchor,
   stepLastDay,
   weekRowsEnding,
 } from "./window";
@@ -49,27 +49,8 @@ describe("isIsoDate", () => {
   });
 });
 
-describe("newestMeasuredDate", () => {
-  it("is the newest date in the steps/wellness join", () => {
-    expect(newestMeasuredDate(payload({ days: days("2026-07-01", "2026-08-15") })))
-      .toBe("2026-08-15");
-  });
-
-  it("does not assume payload order", () => {
-    expect(newestMeasuredDate(payload({ days: days("2026-08-15", "2026-07-01") })))
-      .toBe("2026-08-15");
-  });
-
-  it("is null with nothing measured", () => {
-    expect(newestMeasuredDate(payload({ days: [] }))).toBeNull();
-    expect(newestMeasuredDate(payload({ days: undefined }))).toBeNull();
-  });
-
-  it("ignores a row with no date", () => {
-    const p = payload({ days: [{ total_steps: "100" }] as Payload["days"] });
-    expect(newestMeasuredDate(p)).toBeNull();
-  });
-});
+// `newestMeasuredDate`'s cases moved to `lib/data/measured.test.ts` with the
+// function, when the Trends pace panel became its second consumer.
 
 describe("defaultLastDay", () => {
   it("IS A FACT ABOUT THE DATA, NEVER A BROWSER CLOCK", () => {
@@ -103,6 +84,68 @@ describe("defaultLastDay", () => {
 
   it("is null with no data and no plan at all", () => {
     expect(defaultLastDay(payload({}))).toBeNull();
+  });
+});
+
+describe("resolveAnchor", () => {
+  /* THE ANCHOR IS A QUERY PARAMETER (2026-08-29) AND WAS A ROUTE SEGMENT.
+   *
+   * A segment had to be ENUMERATED by `generateStaticParams` for the static
+   * export, which is the only reason `ANCHOR_MARGIN_WEEKS` ever existed: the
+   * demo 404'd twenty-six weeks either side of the record while `stepLastDay`
+   * -- right below in this very module -- was deliberately unbounded. The two
+   * could not both be satisfied while the anchor lived in the path.
+   *
+   * What a segment gave for free and a query parameter does not: the value was
+   * always one of a list this app produced. Everything below is what has to be
+   * checked now that a reader can type it. */
+  const FALLBACK = "2026-08-30";
+
+  it("takes a Sunday as it is", () => {
+    expect(resolveAnchor("2026-08-30", FALLBACK)).toBe("2026-08-30");
+  });
+
+  it("NORMALISES to the week's Sunday", () => {
+    /* Every one of a week's seven dates selects the same window and the URL has
+     * to name it once, or the same grid exists at seven addresses. The GRID
+     * does not need this -- `weekRowsEnding` takes `mondayOf` of whatever it is
+     * handed -- the ADDRESS does. */
+    for (const d of ["2026-08-24", "2026-08-26", "2026-08-30"]) {
+      expect(resolveAnchor(d, FALLBACK), d).toBe("2026-08-30");
+    }
+  });
+
+  it("falls back where the URL names no anchor", () => {
+    expect(resolveAnchor(undefined, FALLBACK)).toBe(FALLBACK);
+    expect(resolveAnchor("", FALLBACK)).toBe(FALLBACK);
+  });
+
+  it("falls back rather than trusting a date that does not exist", () => {
+    /* `?end=2026-02-31` is a real thing a URL can say and not a real day, and a
+     * window bounded by it lands its grid wherever `Date` rolled it over to --
+     * a grid that looks fine and is about another month. */
+    for (const bad of ["2026-02-31", "2026-13-01", "not-a-date", "20260830"]) {
+      expect(resolveAnchor(bad, FALLBACK), bad).toBe(FALLBACK);
+    }
+  });
+
+  it("takes the first of a repeated parameter", () => {
+    // `?end=a&end=b` arrives as an array. The first is what a reader editing a
+    // URL by hand means by it.
+    expect(resolveAnchor(["2026-08-30", "2026-07-05"], FALLBACK)).toBe("2026-08-30");
+  });
+
+  it("is REACHABLE PAST THE RECORD, which the segment could not be", () => {
+    /* The athlete's own rule for the arrows, now true of the URL as well:
+     * stepping past the record draws a grid of empty cells rather than a 404. */
+    expect(resolveAnchor("2019-01-06", FALLBACK)).toBe("2019-01-06");
+    expect(resolveAnchor("2099-01-04", FALLBACK)).toBe("2099-01-04");
+  });
+
+  it("passes a null fallback through rather than inventing one", () => {
+    // Nothing measured and nothing planned: the route reports it. A date made
+    // up here would be a window about no data wearing a real-looking address.
+    expect(resolveAnchor(undefined, null)).toBeNull();
   });
 });
 

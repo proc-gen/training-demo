@@ -1,7 +1,16 @@
 import { cleanup, render } from "@testing-library/react";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import RootLayout, { metadata } from "./layout";
+
+/* THE LAYOUT RENDERS THE SHELL NOW, and the shell turns clicks into URLs --
+ * so `useRouter` sits under everything here and throws outside an app router
+ * context. Mocked rather than worked around: what these cases are about is the
+ * document element and its children, and a navigation stub is the cheapest way
+ * to keep them about that. */
+vi.mock("next/navigation", async () =>
+  (await import("@/test/navigation")).navigation(),
+);
 
 afterEach(cleanup);
 
@@ -28,13 +37,31 @@ describe("RootLayout", () => {
     expect(html.getAttribute("lang")).toBe("en");
   });
 
-  it("renders its children", () => {
+  it("renders the shell around whatever the route put under it", () => {
     const { getByText } = render(
       <RootLayout params={Promise.resolve({})}>
         <p>child</p>
       </RootLayout>,
     );
     expect(getByText("child")).toBeTruthy();
+  });
+
+  it("carries the shell -- the top bar and the view tabs", () => {
+    /* THE SHELL MOVED HERE FROM `Report` WHEN THE ROUTES LANDED. A layout is
+       rendered once and preserved across navigations within its segment tree,
+       so stepping from one week to the next re-renders the card and not the
+       top bar, the week field or the tab strip. */
+    const { container } = render(
+      <RootLayout params={Promise.resolve({})}>
+        <p>child</p>
+      </RootLayout>,
+    );
+    const root = container.querySelector("html") ?? document.documentElement;
+    // Skips gracefully on a checkout with nothing published, where the layout
+    // renders the reason instead; `payload.test.ts` asserts that condition.
+    if (root.querySelector(".banner.stop")) return;
+    expect(root.querySelector("header.topbar")).toBeTruthy();
+    expect(root.querySelector("[role='tablist']")).toBeTruthy();
   });
 
   it("adds NO font class and NO external stylesheet", () => {

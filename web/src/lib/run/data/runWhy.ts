@@ -75,7 +75,7 @@ function durationRow(r: RunResult): Loss | null {
 /** The effort row for a scored continuous run. */
 function effortRow(r: RunResult): Loss {
   const bits = [
-    `${pct(r.hr_pct, 0)} of it at or below the ${r.ceiling ?? "--"} ceiling`,
+    `${pct(r.hr_pct, 0)} of it at or below the ${r.planned?.ceiling ?? "--"} ceiling`,
   ];
   if (r.hr_avg !== null && r.hr_avg !== undefined)
     bits.push(`${r.hr_avg} avg / ${r.hr_max ?? "--"} max`);
@@ -131,37 +131,63 @@ function reported(r: RunResult, why: string): Ledger {
   };
 }
 
-/** The sentence for a `none (x)` ceiling, or null if it is not one of those. */
-function unscoredReason(ceiling: string): string | null {
-  if (ceiling === "none (race)")
-    return (
-      "Reported, never scored. A race graded against an easy-run ceiling scores " +
-      "near zero for doing exactly what was intended."
-    );
-  if (ceiling === "none (neuromuscular)")
-    return (
-      "Reps of a few seconds: heart rate lags them entirely and no date pace " +
-      "exists for the distance. Reported by design, not by a detection failure."
-    );
-  if (ceiling === "none (volume_only)")
-    return (
-      "A separately-recorded warmup or cooldown. Counted as mileage, and scored " +
-      "as part of no session — its seconds belong to a workout graded in " +
-      "another file, so scoring them here would grade the same work twice."
-    );
-  if (ceiling === "none (walk)" || ceiling === "none (cross)")
-    return (
-      "Pure mechanical load. It belongs to the Load tab and is not running " +
-      "volume here."
-    );
-  if (ceiling.startsWith("uncalibrated ("))
-    return (
-      "This ceiling is not calibrated, so the run is reported rather than " +
-      "scored. Never falling back to the next ceiling down is the point — this " +
-      "kind of session is MEANT to run above the easy ceiling, and grading it " +
-      "there would score correct execution near zero."
-    );
-  return null;
+/** The sentence for a run the grader reports rather than scores, or null.
+ *
+ * IT USED TO MATCH THE CEILING STRING, and that was the defect this file's own
+ * header warns about one level down. `unscoredReason("none (race)")` recovered
+ * the ROLE by string-comparing a sentence Python composed for a human — so a
+ * reworded label would have silently dropped every explanation, and the header
+ * claim that this module "branches on published fields, never on a role list"
+ * was untrue of its own longest function.
+ *
+ * The grader publishes `ceiling_kind` and `ceiling_role` beside the display
+ * string since 2026-08-29, decided where the kind is KNOWN rather than parsed
+ * back out of prose. This reads those.
+ *
+ * `REPORTED_REASON` IS KEYED ON THE ROLE AND MUST NOT BECOME A ROLE LIST: it
+ * explains roles the grader has ALREADY said are unscored, and an unknown one
+ * falls through to a generic sentence rather than to silence. That is the
+ * `EMPHASIS_LABEL` / `FLAG_COMPONENT` precedent -- an unmapped token still
+ * reaches the reader.
+ */
+const REPORTED_REASON: Record<string, string> = {
+  race:
+    "Reported, never scored. A race graded against an easy-run ceiling scores " +
+    "near zero for doing exactly what was intended.",
+  neuromuscular:
+    "Reps of a few seconds: heart rate lags them entirely and no date pace " +
+    "exists for the distance. Reported by design, not by a detection failure.",
+  volume_only:
+    "A separately-recorded warmup or cooldown. Counted as mileage, and scored " +
+    "as part of no session — its seconds belong to a workout graded in " +
+    "another file, so scoring them here would grade the same work twice.",
+  walk:
+    "Pure mechanical load. It belongs to the Load tab and is not running " +
+    "volume here.",
+  cross:
+    "Pure mechanical load. It belongs to the Load tab and is not running " +
+    "volume here.",
+};
+
+const UNCALIBRATED_REASON =
+  "This ceiling is not calibrated, so the run is reported rather than " +
+  "scored. Never falling back to the next ceiling down is the point — this " +
+  "kind of session is MEANT to run above the easy ceiling, and grading it " +
+  "there would score correct execution near zero.";
+
+export function unscoredReason(
+  planned: { ceiling_kind?: string | null; ceiling_role?: string | null } | null
+    | undefined,
+): string | null {
+  const kind = planned?.ceiling_kind;
+  if (kind === "uncalibrated") return UNCALIBRATED_REASON;
+  if (kind !== "none") return null;
+  const role = planned?.ceiling_role ?? "";
+  return (
+    REPORTED_REASON[role] ??
+    "The grader reports this session rather than scoring it: no criterion is " +
+      "defined for it yet."
+  );
 }
 
 /** The whole explanation for one run. */
@@ -172,15 +198,14 @@ export function runWhy(r: RunResult): Ledger {
   // --- reported, not scored. Checked FIRST so a run with no score never falls
   // through to an arithmetic row it has no numbers for.
   if (detail?.unscorable) return reported(r, detail.unscorable);
-  const ceiling = r.ceiling ?? "";
   if (r.pct === null || r.pct === undefined) {
-    const why = unscoredReason(ceiling);
+    const why = unscoredReason(r.planned);
     if (why) return reported(r, why);
   }
 
   // --- a race, which is reported but has a rich detail block of its own.
   if (detail?.race && (r.pct === null || r.pct === undefined))
-    return reported(r, unscoredReason("none (race)") as string);
+    return reported(r, REPORTED_REASON.race);
 
   // --- scored continuous
   if (r.hr_pct !== null && r.hr_pct !== undefined) {

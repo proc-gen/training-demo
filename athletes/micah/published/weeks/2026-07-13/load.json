@@ -13,7 +13,6 @@
   "margin": 1.05,
   "run_step_weight": 2.5
  },
- "csv": "2026-07-13,Race,General Prep,152807,137490,15317,98,86,92,0.93,1.13,2.37,361614,471,47,70,79,-9,none",
  "days": [
   {
    "atl": 73.37556791791451,
@@ -264,7 +263,6 @@
  },
  "monotony_mech": 2.3664756888928156,
  "overall": 92.038520346394,
- "phase": "General Prep",
  "readiness": {
   "available": 21,
   "hrv_baseline": 64,
@@ -278,7 +276,17 @@
      "resting_hr": true,
      "sleep": true
     },
-    "date": "2026-07-13"
+    "date": "2026-07-13",
+    "values": {
+     "hrv": 71.0,
+     "resting_hr": 42.0,
+     "sleep": 7.12
+    },
+    "why": {
+     "hrv": "71 at or above 57.6 (90% of a 64.0 baseline)",
+     "resting_hr": "42 at or below the 47 bpm ceiling",
+     "sleep": "7.12 h at or above the 7 h floor"
+    }
    },
    {
     "checks": {
@@ -286,7 +294,17 @@
      "resting_hr": true,
      "sleep": false
     },
-    "date": "2026-07-14"
+    "date": "2026-07-14",
+    "values": {
+     "hrv": 67.0,
+     "resting_hr": 43.0,
+     "sleep": 6.43
+    },
+    "why": {
+     "hrv": "67 at or above 57.6 (90% of a 64.0 baseline)",
+     "resting_hr": "43 at or below the 47 bpm ceiling",
+     "sleep": "6.43 h below the 7 h floor"
+    }
    },
    {
     "checks": {
@@ -294,7 +312,17 @@
      "resting_hr": true,
      "sleep": false
     },
-    "date": "2026-07-15"
+    "date": "2026-07-15",
+    "values": {
+     "hrv": 66.0,
+     "resting_hr": 45.0,
+     "sleep": 6.8
+    },
+    "why": {
+     "hrv": "66 at or above 57.6 (90% of a 64.0 baseline)",
+     "resting_hr": "45 at or below the 47 bpm ceiling",
+     "sleep": "6.8 h below the 7 h floor"
+    }
    },
    {
     "checks": {
@@ -302,7 +330,17 @@
      "resting_hr": true,
      "sleep": true
     },
-    "date": "2026-07-16"
+    "date": "2026-07-16",
+    "values": {
+     "hrv": 65.0,
+     "resting_hr": 45.0,
+     "sleep": 7.48
+    },
+    "why": {
+     "hrv": "65 at or above 57.6 (90% of a 64.0 baseline)",
+     "resting_hr": "45 at or below the 47 bpm ceiling",
+     "sleep": "7.48 h at or above the 7 h floor"
+    }
    },
    {
     "checks": {
@@ -310,7 +348,17 @@
      "resting_hr": true,
      "sleep": true
     },
-    "date": "2026-07-17"
+    "date": "2026-07-17",
+    "values": {
+     "hrv": 68.0,
+     "resting_hr": 45.0,
+     "sleep": 7.03
+    },
+    "why": {
+     "hrv": "68 at or above 57.6 (90% of a 64.0 baseline)",
+     "resting_hr": "45 at or below the 47 bpm ceiling",
+     "sleep": "7.03 h at or above the 7 h floor"
+    }
    },
    {
     "checks": {
@@ -318,7 +366,17 @@
      "resting_hr": true,
      "sleep": true
     },
-    "date": "2026-07-18"
+    "date": "2026-07-18",
+    "values": {
+     "hrv": 58.0,
+     "resting_hr": 44.0,
+     "sleep": 7.47
+    },
+    "why": {
+     "hrv": "58 at or above 57.6 (90% of a 64.0 baseline)",
+     "resting_hr": "44 at or below the 47 bpm ceiling",
+     "sleep": "7.47 h at or above the 7 h floor"
+    }
    },
    {
     "checks": {
@@ -326,7 +384,17 @@
      "resting_hr": true,
      "sleep": true
     },
-    "date": "2026-07-19"
+    "date": "2026-07-19",
+    "values": {
+     "hrv": 55.0,
+     "resting_hr": 46.0,
+     "sleep": 7.2
+    },
+    "why": {
+     "hrv": "55 below 57.6 (90% of a 64.0 baseline)",
+     "resting_hr": "46 at or below the 47 bpm ceiling",
+     "sleep": "7.2 h at or above the 7 h floor"
+    }
    }
   ],
   "resting_hr_ceiling": 47
@@ -334,6 +402,5 @@
  "shape_days_covered": 7,
  "shape_days_needed": 7,
  "strain_mech": 361614.0505926445,
- "week_start": "2026-07-13",
- "week_type": "Race"
+ "week_start": "2026-07-13"
 }

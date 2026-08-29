@@ -21,8 +21,6 @@ function payload(weeks: Record<string, Partial<Week>>): Payload {
       Object.entries(weeks).map(([k, v]) => [k, week({ week_start: k, ...v })]),
     ),
     days: [],
-    adherence_csv: [],
-    load_csv: [],
   } as unknown as Payload;
 }
 

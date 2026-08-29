@@ -11,7 +11,7 @@
 import { n } from "@/lib/data/format";
 import type { Day, LoadDay, Payload, RunResult, Week } from "@/lib/data/payload";
 import { sortedRuns } from "@/lib/run/data/runs";
-import { mondayOf } from "./grid";
+import { mondayOf } from "@/lib/data/weekDates";
 
 /** Every day the step/wellness series carries, in payload order. */
 export function calendarDays(payload: Payload): Day[] {

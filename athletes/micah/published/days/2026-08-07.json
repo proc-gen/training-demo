@@ -2,13 +2,13 @@
  "completeness": "full",
  "date": "2026-08-07",
  "export_completeness": "full",
- "hrv": "75",
- "nonrun_steps": "1693",
- "resting_hr": "44",
+ "hrv": 75,
+ "nonrun_steps": 1693,
+ "resting_hr": 44,
  "run_step_source": "step-stream-window",
- "run_steps": "14661",
- "sleep_hours": "7.05",
- "sleep_score": "83",
+ "run_steps": 14661,
+ "sleep_hours": 7.05,
+ "sleep_score": 83,
  "source": "health-sync",
- "total_steps": "16354"
+ "total_steps": 16354
 }

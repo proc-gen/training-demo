@@ -1,5 +1,4 @@
 {
- "csv": "2025-06-09,Race,Down,47.5,55,100,56,none",
  "facts": {
   "doubles": 3,
   "easy_seconds": 20197,
@@ -44,7 +43,6 @@
    "why": "1 quality session(s) this week; the flag needs two to find two in a row"
   }
  ],
- "graded_through": "2025-06-15",
  "judged_facts": {
   "doubles": 3,
   "easy_seconds": 20197,
@@ -77,18 +75,10 @@
   "walk_recovery_runs": 0,
   "walk_recovery_seconds": 0
  },
- "phase": "Down",
  "planned": [],
  "results": [
   {
    "cadence": 176,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2025-06-09",
    "detail": {
     "laps": [
@@ -180,6 +170,7 @@
      504
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -200,8 +191,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "A - Easy 30 min",
-   "prescribed_seconds": 1800,
    "role": "easy",
    "runalyze_id": 136583546,
    "score_bucket": "easy",
@@ -216,13 +205,6 @@
   },
   {
    "cadence": 177,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2025-06-09",
    "detail": {
     "laps": [
@@ -314,6 +296,7 @@
      504
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -334,8 +317,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "B - Easy 30 min",
-   "prescribed_seconds": 1800,
    "role": "easy",
    "runalyze_id": 136631727,
    "score_bucket": "easy",
@@ -350,13 +331,6 @@
   },
   {
    "cadence": 177,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2025-06-10",
    "detail": {
     "laps": [
@@ -448,6 +422,7 @@
      504
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -468,8 +443,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "A - Easy 30 min",
-   "prescribed_seconds": 1800,
    "role": "easy",
    "runalyze_id": 136693173,
    "score_bucket": "easy",
@@ -484,7 +457,6 @@
   },
   {
    "cadence": 177,
-   "ceiling": "none (volume_only)",
    "date": "2025-06-10",
    "detail": {
     "laps": [
@@ -528,6 +500,8 @@
     "band_is_reference": false,
     "band_sec_per_mi": null,
     "ceiling": "none (volume_only)",
+    "ceiling_kind": "none",
+    "ceiling_role": "volume_only",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": false,
@@ -543,7 +517,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "warmup",
    "role": "volume_only",
    "runalyze_id": 136757532,
    "score_bucket": null,
@@ -558,7 +531,6 @@
   },
   {
    "cadence": 179,
-   "ceiling": "800m-3000m pace",
    "date": "2025-06-10",
    "detail": {
     "autolaps": [],
@@ -852,6 +824,7 @@
      322.04672
     ],
     "ceiling": "800m-3000m pace",
+    "ceiling_kind": "pace",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": false,
@@ -871,6 +844,7 @@
        322.04672
       ],
       "ceiling": "800m-3000m pace",
+      "ceiling_kind": "pace",
       "float_distance_m": 200,
       "float_mode": null,
       "float_seconds": null,
@@ -911,7 +885,6 @@
     ],
     "target_tolerance_seconds": 1
    },
-   "prescribed": "B - 6-8x200m w/ 200m jog",
    "role": "repetition",
    "runalyze_id": 136757538,
    "score_bucket": "workout",
@@ -938,7 +911,6 @@
   },
   {
    "cadence": 176,
-   "ceiling": "none (volume_only)",
    "date": "2025-06-10",
    "detail": {
     "laps": [
@@ -993,6 +965,8 @@
     "band_is_reference": false,
     "band_sec_per_mi": null,
     "ceiling": "none (volume_only)",
+    "ceiling_kind": "none",
+    "ceiling_role": "volume_only",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": false,
@@ -1008,7 +982,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "cooldown",
    "role": "volume_only",
    "runalyze_id": 136757539,
    "score_bucket": null,
@@ -1023,13 +996,6 @@
   },
   {
    "cadence": 178,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2025-06-11",
    "detail": {
     "laps": [
@@ -1165,6 +1131,7 @@
      504
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -1185,8 +1152,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "Easy 60 min",
-   "prescribed_seconds": 3600,
    "role": "easy",
    "runalyze_id": 136869255,
    "score_bucket": "easy",
@@ -1201,13 +1166,6 @@
   },
   {
    "cadence": 178,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2025-06-12",
    "detail": {
     "laps": [
@@ -1299,6 +1257,7 @@
      504
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -1319,8 +1278,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "A - Easy 30 min",
-   "prescribed_seconds": 1800,
    "role": "easy",
    "runalyze_id": 136934303,
    "score_bucket": "easy",
@@ -1335,13 +1292,6 @@
   },
   {
    "cadence": 176,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2025-06-12",
    "detail": {
     "laps": [
@@ -1455,6 +1405,7 @@
      504
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -1475,8 +1426,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "B - Easy 45 min",
-   "prescribed_seconds": 2700,
    "role": "easy",
    "runalyze_id": 136989280,
    "score_bucket": "easy",
@@ -1491,13 +1440,6 @@
   },
   {
    "cadence": 178,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2025-06-13",
    "detail": {
     "laps": [
@@ -1589,6 +1531,7 @@
      504
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -1609,8 +1552,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "Easy 30 min",
-   "prescribed_seconds": 1800,
    "role": "easy",
    "runalyze_id": 137079288,
    "score_bucket": "easy",
@@ -1625,7 +1566,6 @@
   },
   {
    "cadence": 187,
-   "ceiling": "none (volume_only)",
    "date": "2025-06-14",
    "detail": null,
    "earned": null,
@@ -1644,6 +1584,8 @@
     "band_is_reference": false,
     "band_sec_per_mi": null,
     "ceiling": "none (volume_only)",
+    "ceiling_kind": "none",
+    "ceiling_role": "volume_only",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": false,
@@ -1659,7 +1601,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "82-second pre-race blip",
    "role": "volume_only",
    "runalyze_id": 137199333,
    "score_bucket": null,
@@ -1674,7 +1615,6 @@
   },
   {
    "cadence": 154,
-   "ceiling": "none (race)",
    "date": "2025-06-14",
    "detail": {
     "race": {
@@ -1737,6 +1677,8 @@
     "band_is_reference": true,
     "band_sec_per_mi": null,
     "ceiling": "none (race)",
+    "ceiling_kind": "none",
+    "ceiling_role": "race",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": false,
@@ -1752,7 +1694,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "Mountain Race -> 49:03, half cancelled, only half the intended distance",
    "role": "race",
    "runalyze_id": 137199955,
    "score_bucket": null,
@@ -1767,13 +1708,6 @@
   },
   {
    "cadence": 179,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2025-06-15",
    "detail": {
     "laps": [
@@ -1887,6 +1821,7 @@
      504
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -1907,8 +1842,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "Easy 30 min",
-   "prescribed_seconds": 1800,
    "role": "easy",
    "runalyze_id": 137327055,
    "score_bucket": "easy",
@@ -1948,18 +1881,17 @@
   "checks": {
    "long_run_share": true,
    "quality_days_met": true,
-   "rest_days_met": false,
+   "rest_days_met": null,
    "volume_vs_plan": false
   },
-  "pct": 50.0,
+  "pct": 66.66666666666667,
   "why": {
    "long_run_share": "the long run was 0.0% of the running distance, against a 25% ceiling",
    "quality_days_met": "2 quality day(s) against the 2 the plan has asked for so far, which is what a Race week asks for",
-   "rest_days_met": "0 rest day(s) against the 2 a Race week asks for",
+   "rest_days_met": "the plan schedules no rest day, so this check does not apply and left the denominator",
    "volume_vs_plan": "6:37:52 run against a plan of 7:00:00, tolerance 5%"
   }
  },
  "week_end": "2025-06-15",
- "week_start": "2025-06-09",
- "week_type": "Race"
+ "week_start": "2025-06-09"
 }

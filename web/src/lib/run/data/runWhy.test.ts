@@ -6,6 +6,18 @@ import { prescribedClock, runWhy } from "./runWhy";
 
 const run = (over: Partial<RunResult>): RunResult => over as RunResult;
 
+/** A `planned` block stating one ceiling, as the grader publishes it.
+ *
+ * THE CEILING MOVED HERE ON 2026-08-29 and the KIND moved with it. These cases
+ * used to set `ceiling` at the top level and `unscoredReason` recovered the
+ * role by string-matching the display form -- which is the defect the token
+ * replaced, so the fixtures have to state the token or they would be asserting
+ * against a shape the grader cannot produce.
+ */
+const planned = (ceiling: string, kind: string, role?: string) =>
+  ({ ceiling, ceiling_kind: kind, ceiling_role: role ?? null }) as
+    RunResult["planned"];
+
 /** Every sentence the ledger states, INCLUDING the total's.
  *
  * The total is where a lone contributor ends up: a run with one scoring row was
@@ -49,7 +61,7 @@ describe("runWhy: a scored continuous run", () => {
     hr_pct: 93.4,
     hr_avg: 130,
     hr_max: 145,
-    ceiling: "137",
+    planned: planned("137", "hr"),
     duration_factor: 1,
     earned: 3287,
     total: 3518,
@@ -154,27 +166,48 @@ describe("runWhy: a scored continuous run", () => {
 
 describe("runWhy: reported rather than scored", () => {
   it.each([
-    ["none (race)", "never scored"],
-    ["none (neuromuscular)", "heart rate lags"],
-    ["none (volume_only)", "warmup or cooldown"],
-    ["none (walk)", "Load tab"],
-    ["none (cross)", "Load tab"],
-    ["uncalibrated (tempo)", "not calibrated"],
-  ])("%s explains itself", (ceiling, phrase) => {
-    const l = runWhy(run({ ceiling, pct: null }));
+    ["none", "race", "never scored"],
+    ["none", "neuromuscular", "heart rate lags"],
+    ["none", "volume_only", "warmup or cooldown"],
+    ["none", "walk", "Load tab"],
+    ["none", "cross", "Load tab"],
+    ["uncalibrated", "tempo", "not calibrated"],
+  ])("%s (%s) explains itself", (kind, role, phrase) => {
+    const l = runWhy(
+      run({ planned: planned(`${kind} (${role})`, kind, role), pct: null }),
+    );
     expect(l.total?.why).toContain(phrase);
     expect(l.total?.label).toBe("Not scored");
+  });
+
+  it("an UNKNOWN unscored role still explains itself", () => {
+    /* `REPORTED_REASON` is keyed on the role and must stay total in effect:
+     * a role the map does not know falls through to a generic sentence, never
+     * to silence. The `EMPHASIS_LABEL` / `FLAG_COMPONENT` precedent -- a token
+     * nobody mapped must still reach the reader. */
+    const l = runWhy(
+      run({ planned: planned("none (brand_new)", "none", "brand_new"),
+            pct: null }),
+    );
+    expect(l.total?.label).toBe("Not scored");
+    expect(l.total?.why).toContain("no criterion is");
   });
 
   it("A volume_only run is DISTINGUISHABLE from a grader crash", () => {
     /* It fell through every branch and published no ceiling key at all until
      * 2026-08-11, which is exactly what a crash looks like. */
-    const l = runWhy(run({ ceiling: "none (volume_only)", pct: null }));
+    const l = runWhy(
+      run({ planned: planned("none (volume_only)", "none", "volume_only"),
+            pct: null }),
+    );
     expect(l.total?.why).toContain("scored as part of no session");
   });
 
   it("says why an uncalibrated ceiling does NOT fall back", () => {
-    const l = runWhy(run({ ceiling: "uncalibrated (tempo)", pct: null }));
+    const l = runWhy(
+      run({ planned: planned("uncalibrated (tempo)", "uncalibrated", "tempo"),
+            pct: null }),
+    );
     expect(l.total?.why).toContain("MEANT to run above");
   });
 
@@ -189,7 +222,7 @@ describe("runWhy: reported rather than scored", () => {
   it("explains a continuous run whose heart-rate stream was unusable", () => {
     const l = runWhy(
       run({
-        ceiling: "137",
+        planned: planned("137", "hr"),
         pct: null,
         detail: { unscorable: "no usable heart-rate stream — reported, not scored" },
       }),
@@ -200,7 +233,7 @@ describe("runWhy: reported rather than scored", () => {
   it("still shows the length row for an unscored run that had a prescription", () => {
     const l = runWhy(
       run({
-        ceiling: "none (volume_only)",
+        planned: planned("none (volume_only)", "none", "volume_only"),
         pct: null,
         duration: { actual: 1000, prescribed: 900, factor: 1, pct: 11.1 },
       }),
@@ -212,7 +245,7 @@ describe("runWhy: reported rather than scored", () => {
 describe("runWhy: a progression", () => {
   const prog = run({
     role: "progression",
-    ceiling: "monotonic",
+    planned: planned("monotonic", "monotonic"),
     earned: 3,
     total: 3,
     pct: 100,
@@ -363,7 +396,8 @@ describe("runWhy: the shape of the ledger", () => {
   it("NEVER BRANCHES ON role -- an unknown role still explains itself", () => {
     /* Keying on role would mean copying three role vocabularies into
      * TypeScript, which is the drift score_bucket exists to prevent. */
-    const l = runWhy(run({ role: "something-new", hr_pct: 90, ceiling: "137",
+    const l = runWhy(run({ role: "something-new", hr_pct: 90,
+                           planned: planned("137", "hr"),
                            earned: 10, total: 11, pct: 90 }));
     expect(l.total).toBeTruthy();
     expect(l.total!.why).toContain("137 ceiling");

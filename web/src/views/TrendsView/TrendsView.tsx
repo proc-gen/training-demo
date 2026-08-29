@@ -27,10 +27,12 @@ import {
  * covered its entire history, so there was no way to ask what a measurement has
  * been doing lately.
  *
- * The panels themselves are unchanged and still one series on one axis: the
- * series here are in miles, bpm, percent, SE, a ratio, hours and milliseconds,
- * and putting any two of them on one axis invites a comparison the data does
- * not support.
+ * ONE AXIS PER PANEL, and series share it only when they share a unit: the
+ * single-series panels are in miles, bpm, percent, SE, a ratio, hours and
+ * milliseconds, and putting any two of THOSE on one axis invites a comparison
+ * the data does not support. The fitness panel is the counter-case that proves
+ * the rule -- TRIMP, CTL, ATL and TSB are all the TRIMP unit, so they merged
+ * into one multi-series graph on 2026-08-27 at the athlete's instruction.
  *
  * THE WINDOW IS SHARED ACROSS GRAPHS AND THE GRAPH CHOICE DOES NOT MOVE IT.
  * Switching series to compare two of them over the same dates is the whole
@@ -107,7 +109,7 @@ export function TrendsView({ payload }: { payload: Payload }) {
           they govern. */}
       {/* KEYED ON THE PANEL, so changing graph re-initialises the panel's own
           state -- which series are ticked, and which unit a mode-carrying panel
-          is showing. The two multi-series panels carry entirely different series,
+          is showing. The multi-series panels carry entirely different series,
           so a checkbox set carried across them would mean nothing. Same one-line
           reset `Report` gets from `<WeekView key={selected}>`. The WINDOW is
           deliberately NOT reset: it lives above this and is shared, because

@@ -909,6 +909,21 @@ details.prose > summary {
  * measured ceiling. Weight and colour carry the distinction instead. */
 .ceiling { stroke: var(--critical); stroke-width: 1.5; }
 .series-line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+/* THE TWO EDGES OF A BAND, and dashed here does NOT contradict `.ceiling` above.
+ * That rule is about a measured CRITERION reading as a projection, which is a
+ * real hazard for a single line drawn across a plot with nothing else on it.
+ * This is the BOUNDARY OF A REGION whose interior is already washed in the same
+ * hue -- nobody reads the edge of a shaded band as a forecast -- and dashing is
+ * what keeps it from reading as a SERIES, which on this chart is what a solid
+ * stroke and a dot now mean. Thinner than `.series-line` for the same reason.
+ * `butt` caps, because a round cap on a 5-unit dash reads as a row of lozenges. */
+.series-edge {
+  fill: none;
+  stroke-width: 1.5;
+  stroke-dasharray: 5 4;
+  stroke-linejoin: round;
+  stroke-linecap: butt;
+}
 .marker { stroke: var(--surface-1); stroke-width: 2; }
 
 .legend {
@@ -970,10 +985,17 @@ details.prose > summary {
 .series-controls {
   display: flex;
   flex-wrap: wrap;
-  align-items: start;
+  /* `end`, not `start`, because a `.field` puts its label ABOVE its control:
+     the group dropdown has to sit on the same baseline as the checkbox row and
+     the unit pills beside it, which is the identical reason `.trend-controls`
+     aligns this way. */
+  align-items: end;
   gap: 0.4rem 1rem;
   margin: 0 0 0.7rem;
 }
+/* The checkbox row keeps a little air under it so it lines up with the select's
+   control rather than with the select's label. */
+.series-controls .series-picker { padding-bottom: 0.35rem; }
 .series-picker {
   display: flex;
   flex-wrap: wrap;
@@ -1001,6 +1023,17 @@ details.prose > summary {
    component would have to remember to set. */
 .series-item:has(input:not(:checked)) { color: var(--text-muted); }
 .series-item:has(input:not(:checked)) .swatch { opacity: 0.3; }
+/* THE WORKOUTS TOGGLE IS NOT A LEGEND ENTRY, so it is set off from the series
+   row by a rule rather than sitting inside it -- the dots have no colour of
+   their own for a swatch to show. Same baseline padding as the picker, so the
+   whole row of checkboxes aligns with the group select beside it. */
+.series-controls .marks-toggle {
+  padding-bottom: 0.35rem;
+  border-left: 1px solid var(--border);
+  padding-left: 1rem;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
 
 .unit-toggle {
   display: flex;

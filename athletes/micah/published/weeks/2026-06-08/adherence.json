@@ -1,5 +1,4 @@
 {
- "csv": "2026-06-08,Volume,Rebuild,34.9,54,,54,none",
  "facts": {
   "doubles": 0,
   "easy_seconds": 16814,
@@ -38,7 +37,6 @@
    "why": "1 quality session(s) this week; the flag needs two to find two in a row"
   }
  ],
- "graded_through": "2026-06-14",
  "judged_facts": {
   "doubles": 0,
   "easy_seconds": 16814,
@@ -65,12 +63,10 @@
   "walk_recovery_runs": 0,
   "walk_recovery_seconds": 0
  },
- "phase": "Rebuild",
  "planned": [],
  "results": [
   {
    "cadence": 168,
-   "ceiling": "none (volume_only)",
    "date": "2026-06-09",
    "detail": {
     "laps": [
@@ -125,6 +121,8 @@
     "band_is_reference": false,
     "band_sec_per_mi": null,
     "ceiling": "none (volume_only)",
+    "ceiling_kind": "none",
+    "ceiling_role": "volume_only",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": false,
@@ -140,7 +138,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "warmup",
    "role": "volume_only",
    "runalyze_id": 182742625,
    "score_bucket": null,
@@ -511,6 +508,7 @@
     "band_is_reference": false,
     "band_sec_per_mi": null,
     "ceiling": "162/166",
+    "ceiling_kind": "hr",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": false,
@@ -530,6 +528,7 @@
       "band_how": "ambiguous",
       "band_sec_per_mi": null,
       "ceiling": "162/166",
+      "ceiling_kind": "hr",
       "float_distance_m": null,
       "float_mode": null,
       "float_seconds": null,
@@ -558,7 +557,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- workout (21 min at HR 166)",
    "role": "subt",
    "runalyze_id": 182742641,
    "score_bucket": null,
@@ -573,7 +571,6 @@
   },
   {
    "cadence": 169,
-   "ceiling": "none (volume_only)",
    "date": "2026-06-09",
    "detail": {
     "laps": [
@@ -628,6 +625,8 @@
     "band_is_reference": false,
     "band_sec_per_mi": null,
     "ceiling": "none (volume_only)",
+    "ceiling_kind": "none",
+    "ceiling_role": "volume_only",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": false,
@@ -643,7 +642,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "cooldown",
    "role": "volume_only",
    "runalyze_id": 182742645,
    "score_bucket": null,
@@ -658,13 +656,6 @@
   },
   {
    "cadence": 170,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2026-06-10",
    "detail": {
     "laps": [
@@ -747,6 +738,7 @@
      552
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -767,7 +759,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- easy run (32 min)",
    "role": "easy",
    "runalyze_id": 182996017,
    "score_bucket": "easy",
@@ -782,13 +773,6 @@
   },
   {
    "cadence": 169,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2026-06-11",
    "detail": {
     "laps": [
@@ -1091,6 +1075,7 @@
      552
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -1111,7 +1096,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- easy run (57 min)",
    "role": "easy",
    "runalyze_id": 183240003,
    "score_bucket": "easy",
@@ -1126,13 +1110,6 @@
   },
   {
    "cadence": 168,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2026-06-13",
    "detail": {
     "laps": [
@@ -1259,6 +1236,7 @@
      552
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -1279,7 +1257,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- easy run (65 min)",
    "role": "easy",
    "runalyze_id": 183609519,
    "score_bucket": "easy",
@@ -1294,21 +1271,6 @@
   },
   {
    "cadence": 170,
-   "ceiling": "137/140/143",
-   "ceiling_tiers": [
-    [
-     3600,
-     137
-    ],
-    [
-     7200,
-     140
-    ],
-    [
-     null,
-     143
-    ]
-   ],
    "date": "2026-06-14",
    "detail": {
     "laps": [
@@ -1471,6 +1433,7 @@
      511
     ],
     "ceiling": "137/140/143",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       3600,
@@ -1499,7 +1462,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- long run (87 min)",
    "role": "long",
    "runalyze_id": 183845113,
    "score_bucket": "easy",
@@ -1546,11 +1508,10 @@
   "why": {
    "long_run_share": "the long run was 28.7% of the running distance, against a 25% ceiling",
    "quality_days_met": "1 quality day(s) against the 1 the plan has asked for so far, which is what a Volume week asks for",
-   "rest_days_met": "Volume weeks state no rest-day requirement, so this check does not apply and left the denominator",
+   "rest_days_met": "the plan schedules no rest day, so this check does not apply and left the denominator",
    "volume_vs_plan": "the manifest states no planned_time_seconds, so there is nothing to compare the week's running time against"
   }
  },
  "week_end": "2026-06-14",
- "week_start": "2026-06-08",
- "week_type": "Volume"
+ "week_start": "2026-06-08"
 }

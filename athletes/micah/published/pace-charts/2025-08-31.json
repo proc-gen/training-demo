@@ -1,0 +1,122 @@
+{
+ "bands": {
+  "easy": {
+   "display": "7:21-7:56/mi",
+   "fast_sec_per_mi": 441,
+   "pct": [
+    0.63,
+    0.68
+   ],
+   "slow_sec_per_mi": 476
+  },
+  "long": {
+   "display": "6:56-7:21/mi",
+   "fast_sec_per_mi": 416,
+   "pct": [
+    0.68,
+    0.72
+   ],
+   "slow_sec_per_mi": 441
+  },
+  "recovery": {
+   "display": "7:56-8:37/mi",
+   "fast_sec_per_mi": 476,
+   "pct": [
+    0.58,
+    0.63
+   ],
+   "slow_sec_per_mi": 517
+  },
+  "rep_10min": {
+   "display": "6:06-6:19/mi",
+   "fast_sec_per_mi": 366,
+   "pct": [
+    0.79,
+    0.82
+   ],
+   "slow_sec_per_mi": 379
+  },
+  "rep_15min": {
+   "display": "6:15-6:29/mi",
+   "fast_sec_per_mi": 375,
+   "pct": [
+    0.77,
+    0.8
+   ],
+   "slow_sec_per_mi": 389
+  },
+  "rep_1min": {
+   "display": "5:41-5:53/mi",
+   "fast_sec_per_mi": 341,
+   "pct": [
+    0.85,
+    0.88
+   ],
+   "slow_sec_per_mi": 353
+  },
+  "rep_3min": {
+   "display": "5:49-6:01/mi",
+   "fast_sec_per_mi": 349,
+   "pct": [
+    0.83,
+    0.86
+   ],
+   "slow_sec_per_mi": 361
+  },
+  "rep_6min": {
+   "display": "5:57-6:10/mi",
+   "fast_sec_per_mi": 357,
+   "pct": [
+    0.81,
+    0.84
+   ],
+   "slow_sec_per_mi": 370
+  }
+ },
+ "confirmed_by_athlete": true,
+ "effective_vo2max": 64.89,
+ "race_paces": {
+  "10000m": {
+   "display": "33:05 @ 5:19/mi",
+   "sec_per_mi": 319,
+   "seconds": 1985
+  },
+  "1500m": {
+   "display": "4:17 @ 4:36/mi",
+   "sec_per_mi": 276,
+   "seconds": 257
+  },
+  "21097m": {
+   "display": "1:13:01 @ 5:34/mi",
+   "sec_per_mi": 334,
+   "seconds": 4381
+  },
+  "3000m": {
+   "display": "9:10 @ 4:55/mi",
+   "sec_per_mi": 295,
+   "seconds": 550
+  },
+  "42195m": {
+   "display": "2:32:49 @ 5:50/mi",
+   "sec_per_mi": 350,
+   "seconds": 9169
+  },
+  "5000m": {
+   "display": "15:56 @ 5:08/mi",
+   "sec_per_mi": 308,
+   "seconds": 956
+  },
+  "800m": {
+   "display": "2:10 @ 4:22/mi",
+   "sec_per_mi": 262,
+   "seconds": 130
+  },
+  "tempo": {
+   "basis": "60-80 minute race pace, the Daniels threshold definition, from the model's duration prognosis.",
+   "display": "5:30-5:36/mi",
+   "fast_sec_per_mi": 330,
+   "slow_sec_per_mi": 336
+  }
+ },
+ "week_ending": "2025-08-31"
+}

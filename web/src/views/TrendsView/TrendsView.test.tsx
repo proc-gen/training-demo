@@ -137,16 +137,27 @@ describe("TrendsView", () => {
     expect(container.querySelector(".note")).toBeNull();
   });
 
-  has(D)("offers a daily TRIMP graph", () => {
+  has(D)("offers the combined fitness graph, with the old four merged into it", () => {
+    /* Daily TRIMP, CTL, TSB and ATL were four picker entries until 2026-08-27;
+     * the series checkboxes are the picker entries now. Lines, not bars -- the
+     * athlete's choice -- so no stacked-bar listitems and no separate legend:
+     * the checkbox row names the series. */
     const { container } = wrap(<TrendsView payload={D!} />);
-    fireEvent.change(select(container), { target: { value: "trimp" } });
-    expect(title(container)).toBe("Daily TRIMP");
-    // Bars, and the two components named.
-    expect(container.querySelectorAll("[role='listitem']").length).toBeGreaterThan(0);
-    const legend = [...container.querySelectorAll(".legend-item")].map(
+    for (const old of ["trimp", "ctl", "tsb", "atl"]) {
+      expect(
+        container.querySelector(`option[value='${old}']`),
+        old,
+      ).toBeNull();
+    }
+    fireEvent.change(select(container), { target: { value: "fitness" } });
+    expect(title(container)).toBe("Fitness & fatigue");
+    const boxes = [...container.querySelectorAll(".series-item")].map(
       (e) => e.textContent,
     );
-    expect(legend).toEqual(["run", "background"]);
+    expect(boxes).toEqual(["TRIMP", "background", "Fitness", "Fatigue", "Form"]);
+    expect(container.querySelectorAll("path.series-line").length).toBeGreaterThan(0);
+    expect(container.querySelectorAll("[role='listitem']")).toHaveLength(0);
+    expect(container.querySelectorAll(".legend-item")).toHaveLength(0);
   });
 
   has(D)("plots resting heart rate daily", () => {
@@ -310,16 +321,131 @@ describe("the pace graphs", () => {
 
   has(D)("draws projected race times with every distance ticked", () => {
     const { container } = pick("Projected race times");
-    const boxes = [...container.querySelectorAll<HTMLInputElement>("input[type=checkbox]")];
+    // The series boxes only: the Races toggle is a checkbox too, and it is not
+    // a distance.
+    const boxes = [
+      ...container.querySelectorAll<HTMLInputElement>(".series-picker input[type=checkbox]"),
+    ];
     expect(boxes.length).toBeGreaterThan(4);
     expect(boxes.every((b) => b.checked)).toBe(true);
     expect(container.querySelectorAll("path.series-line").length).toBe(boxes.length);
   });
 
-  has(D)("draws target paces as filled BANDS rather than lines", () => {
+  has(D)("labels each panel's marks toggle with its own word", () => {
+    const races = pick("Projected race times");
+    expect(races.q.getByRole("checkbox", { name: "Races" })).toBeTruthy();
+    cleanup();
+    /* "Runs" and not "Workouts": since 2026-08-26 the Easy / recovery group's
+       dots are continuous runs, and on that group they are the only dots. */
+    const runs = pick("Target paces");
+    expect(runs.q.getByRole("checkbox", { name: "Runs" })).toBeTruthy();
+  });
+
+  has(D)("DRAWS THE RACE EFFORTS as standalone dots, and the toggle hides them", () => {
+    /* The athlete's ruling: races don't go on lines, they just get points on
+       the chart -- so the dots wear the neutral race colour, not a series', and
+       survive whatever the legend's boxes do. Widen to the full window so the
+       committed races are in view. */
+    const r = pick("Projected race times");
+    const all = [
+      ...r.container.querySelectorAll<HTMLButtonElement>(".range-presets button"),
+    ].find((b) => b.textContent === "All")!;
+    fireEvent.click(all);
+    const raceDots = () =>
+      [...r.container.querySelectorAll("circle.marker")].filter(
+        (d) => d.getAttribute("fill") === "var(--text-primary)",
+      );
+    expect(raceDots().length).toBeGreaterThanOrEqual(10);
+    fireEvent.click(r.q.getByRole("checkbox", { name: "Races" }));
+    expect(raceDots()).toHaveLength(0);
+  });
+
+  has(D)("draws target paces as a wash BETWEEN TWO DASHED EDGES per zone", () => {
     const { container } = pick("Target paces");
-    const boxes = [...container.querySelectorAll("input[type=checkbox]")];
-    expect(container.querySelectorAll("path[opacity='0.22']").length).toBe(boxes.length);
+    // The series boxes only: the Runs toggle is a checkbox too, and it is not
+    // a zone.
+    const boxes = [...container.querySelectorAll(".series-picker input[type=checkbox]")];
+    expect(boxes.length).toBeGreaterThan(1);
+    // The wash is context at the spec 10%; the two edges are what carry the
+    // zone's identity, and they say where it STOPS -- which a rule down the
+    // middle never did. Replaced 2026-08-25, athlete's call.
+    expect(container.querySelectorAll("path[opacity='0.1']").length).toBe(boxes.length);
+    expect(container.querySelectorAll("path.series-edge").length).toBe(2 * boxes.length);
+    // NO solid stroke at all on this panel: every series here is a band, and a
+    // solid stroke now means a scalar line or an executed workout.
+    expect(container.querySelectorAll("path.series-line").length).toBe(0);
+  });
+
+  has(D)("groups the target paces, and opens on the sub-threshold ladder", () => {
+    const { container } = pick("Target paces");
+    const sel = [...container.querySelectorAll<HTMLSelectElement>("select")].find((x) =>
+      x.closest("label")?.textContent?.includes("Paces"),
+    )!;
+    expect([...sel.querySelectorAll("option")].map((o) => o.textContent)).toEqual([
+      "Tempo & repetition",
+      "Sub-threshold",
+      "Easy / recovery",
+    ]);
+    expect(sel.value).toBe("subt");
+  });
+
+  has(D)("SWAPS THE ZONES when the group changes, window untouched", () => {
+    const { container } = pick("Target paces");
+    const sel = [...container.querySelectorAll<HTMLSelectElement>("select")].find((x) =>
+      x.closest("label")?.textContent?.includes("Paces"),
+    )!;
+    const window = container.querySelector(".sm-range")!.textContent;
+    fireEvent.change(sel, { target: { value: "speed" } });
+    const names = [...container.querySelectorAll(".series-picker .series-item")].map(
+      (x) => x.textContent,
+    );
+    expect(names).toEqual(["Repetition", "Tempo"]);
+    expect(container.querySelector(".sm-range")!.textContent).toBe(window);
+  });
+
+  has(D)("DRAWS THE EASY RUNS on the Easy / recovery group, and the toggle hides them", () => {
+    /* The group carried a band and no dots until 2026-08-26. Its marks are
+       KEYED, so they wear the zone's colour rather than a colour of their own
+       -- which is why they are counted here as every marker on the plot, and
+       why unticking Easy in the case below takes a share of them away. */
+    const { container, q } = pick("Target paces");
+    const sel = [...container.querySelectorAll<HTMLSelectElement>("select")].find((x) =>
+      x.closest("label")?.textContent?.includes("Paces"),
+    )!;
+    fireEvent.change(sel, { target: { value: "easy" } });
+    const dots = () => container.querySelectorAll("circle.marker");
+    expect(dots().length).toBeGreaterThan(0);
+    fireEvent.click(q.getByRole("checkbox", { name: "Runs" }));
+    expect(dots()).toHaveLength(0);
+  });
+
+  has(D)("TAKES THE LONG RUNS WITH EASY when Easy is unticked", () => {
+    /* The athlete's ruling that a long run is drawn as an easy run, seen from
+       the render side: the dots are keyed to the Easy series, so the series
+       tick governs them. Recovery's dots stay. */
+    const { container } = pick("Target paces");
+    const sel = [...container.querySelectorAll<HTMLSelectElement>("select")].find((x) =>
+      x.closest("label")?.textContent?.includes("Paces"),
+    )!;
+    fireEvent.change(sel, { target: { value: "easy" } });
+    const dots = () => container.querySelectorAll("circle.marker").length;
+    const before = dots();
+    const easy = [
+      ...container.querySelectorAll<HTMLElement>(".series-picker .series-item"),
+    ].find((x) => x.textContent === "Easy")!;
+    fireEvent.click(easy.querySelector("input")!);
+    const after = dots();
+    expect(after).toBeGreaterThan(0);
+    expect(after).toBeLessThan(before);
+  });
+
+  has(D)("offers no group dropdown on the race panel", () => {
+    const { container } = pick("Projected race times");
+    expect(
+      [...container.querySelectorAll("select")].some((x) =>
+        x.closest("label")?.textContent?.includes("Paces"),
+      ),
+    ).toBe(false);
   });
 
   has(D)("offers a unit toggle on race times and none on target paces", () => {
@@ -358,9 +484,32 @@ describe("the pace graphs", () => {
     const range = defaultRange(trendPanels(D!))!;
     const newest = trendPanels(D!)
       .flatMap((p) => p.points)
-      .filter((p) => p.value !== null || p.values)
+      // `!p.carried`: the live-week extension restates the newest chart under
+      // a Sunday still ahead, and it must not anchor the window either -- the
+      // invariant this case exists to hold.
+      .filter((p) => !p.carried && (p.value !== null || p.values))
       .map((p) => p.date)
       .sort();
     expect(range.to).toBe(newest[newest.length - 1]);
+  });
+
+  has(D)("SHOWS A LIVE-WEEK WORKOUT at the default window -- the 2026-08-25 case", () => {
+    /* The mark that started this: run two days after the newest confirmed
+       chart and invisible until the carried segment existed. The caption's To
+       still reads the newest MEASUREMENT -- the axis reaching one Sunday past
+       it is the Calendar's whole-weeks rule, not a moved window. Durable in
+       both tree states: once the week's own chart lands, the mark is in-span
+       ordinarily. */
+    const { container } = pick("Target paces");
+    expect(container.querySelector(".sm-range")!.textContent).toContain(
+      `→ ${defaultRange(trendPanels(D!))!.to}`,
+    );
+    const seen: string[] = [];
+    for (const dot of container.querySelectorAll("circle.marker")) {
+      fireEvent.mouseEnter(dot.closest("g")!, { clientX: 1, clientY: 1 });
+      seen.push(document.body.textContent ?? "");
+      fireEvent.mouseLeave(dot.closest("g")!);
+    }
+    expect(seen.some((t) => t.includes("2026-08-25"))).toBe(true);
   });
 });

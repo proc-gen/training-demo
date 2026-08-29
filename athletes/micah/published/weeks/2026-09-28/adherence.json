@@ -1,10 +1,9 @@
 {
- "csv": "2026-09-28,Race,General Prep,0.0,,,,none",
  "facts": {
   "doubles": 0,
   "easy_seconds": 0,
   "elapsed_days": 0,
-  "graded_through": "2026-08-23",
+  "graded_through": null,
   "long_run_miles": 0.0,
   "long_run_share": 0,
   "miles": 0.0,
@@ -52,12 +51,11 @@
    "why": "0 quality session(s) this week; the flag needs two to find two in a row"
   }
  ],
- "graded_through": null,
  "judged_facts": {
   "doubles": 0,
   "easy_seconds": 0,
   "elapsed_days": 0,
-  "graded_through": "2026-08-22",
+  "graded_through": null,
   "long_run_miles": 0.0,
   "long_run_share": 0,
   "miles": 0.0,
@@ -93,7 +91,6 @@
   "walk_recovery_runs": 0,
   "walk_recovery_seconds": 0
  },
- "phase": "General Prep",
  "planned": [
   {
    "cadence": null,
@@ -120,6 +117,7 @@
      576
     ],
     "ceiling": "130",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -140,7 +138,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "30 min recovery",
    "prescribed_denominator": 1800.0,
    "prescribed_denominator_source": "prescribed",
    "role": "recovery",
@@ -175,6 +172,7 @@
      576
     ],
     "ceiling": "130",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -195,7 +193,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "AM: 30 min recovery",
    "prescribed_denominator": 1800.0,
    "prescribed_denominator_source": "prescribed",
    "role": "recovery",
@@ -229,6 +226,7 @@
     "band_is_reference": false,
     "band_sec_per_mi": null,
     "ceiling": "162/166",
+    "ceiling_kind": "hr",
     "ceiling_tiers": null,
     "chart_confirmed": false,
     "chart_is_carried_forward": true,
@@ -248,6 +246,7 @@
       "band_how": "named",
       "band_sec_per_mi": null,
       "ceiling": "162/166",
+      "ceiling_kind": "hr",
       "float_distance_m": 200,
       "float_mode": null,
       "float_seconds": null,
@@ -288,7 +287,6 @@
     ],
     "target_tolerance_seconds": null
    },
-   "prescribed": "PM: 5x800m w/ 200m jog at Sub-T",
    "prescribed_denominator": null,
    "prescribed_denominator_source": null,
    "role": "subt",
@@ -323,6 +321,7 @@
      530
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -346,7 +345,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "60-70 min easy",
    "prescribed_denominator": 3600.0,
    "prescribed_denominator_source": "prescribed",
    "role": "easy",
@@ -381,6 +379,7 @@
      530
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -404,7 +403,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "60-70 min easy",
    "prescribed_denominator": 3600.0,
    "prescribed_denominator_source": "prescribed",
    "role": "easy",
@@ -439,6 +437,7 @@
      576
     ],
     "ceiling": "130",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -459,7 +458,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "AM: 30 min recovery",
    "prescribed_denominator": 1800.0,
    "prescribed_denominator_source": "prescribed",
    "role": "recovery",
@@ -496,6 +494,7 @@
      375
     ],
     "ceiling": "162/166",
+    "ceiling_kind": "hr",
     "ceiling_tiers": null,
     "chart_confirmed": false,
     "chart_is_carried_forward": true,
@@ -518,6 +517,7 @@
        375
       ],
       "ceiling": "162/166",
+      "ceiling_kind": "hr",
       "float_distance_m": null,
       "float_mode": null,
       "float_seconds": 120,
@@ -546,7 +546,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "PM: 3x3:00 w/ 2:00 jog at Target Half Pace",
    "prescribed_denominator": 900.0,
    "prescribed_denominator_source": "structure",
    "role": "subt",
@@ -581,6 +580,7 @@
      576
     ],
     "ceiling": "130",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -601,7 +601,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "30 min recovery",
    "prescribed_denominator": 1800.0,
    "prescribed_denominator_source": "prescribed",
    "role": "recovery",
@@ -638,6 +637,8 @@
      375
     ],
     "ceiling": "none (race)",
+    "ceiling_kind": "none",
+    "ceiling_role": "race",
     "ceiling_tiers": null,
     "chart_confirmed": false,
     "chart_is_carried_forward": true,
@@ -653,7 +654,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "Local Half Marathon",
    "prescribed_denominator": null,
    "prescribed_denominator_source": null,
    "role": "race",
@@ -696,13 +696,12 @@
   },
   "pct": null,
   "why": {
-   "long_run_share": "nothing this week prescribes has come due through 2026-08-22, so this check left the denominator",
-   "quality_days_met": "nothing this week prescribes has come due through 2026-08-22, so this check left the denominator",
-   "rest_days_met": "nothing this week prescribes has come due through 2026-08-22, so this check left the denominator",
-   "volume_vs_plan": "nothing this week prescribes has come due through 2026-08-22, so this check left the denominator"
+   "long_run_share": "no day of this week is over yet, so this check left the denominator",
+   "quality_days_met": "no day of this week is over yet, so this check left the denominator",
+   "rest_days_met": "the plan schedules no rest day, so this check does not apply and left the denominator",
+   "volume_vs_plan": "no day of this week is over yet, so this check left the denominator"
   }
  },
  "week_end": "2026-10-04",
- "week_start": "2026-09-28",
- "week_type": "Race"
+ "week_start": "2026-09-28"
 }

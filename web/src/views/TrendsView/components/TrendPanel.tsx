@@ -2,16 +2,15 @@
 
 import { useState } from "react";
 
-import { COLUMN_MARGIN, ColumnChart } from "@/lib/ux/charts/ColumnChart";
 import { LineChart, type Margin } from "@/lib/ux/charts/LineChart";
 import { MultiLineChart } from "@/lib/ux/charts/MultiLineChart";
 import { EmptyState } from "@/lib/ux/primitives/EmptyState";
-import { Legend } from "@/lib/ux/primitives/Legend";
-import { TipRow } from "@/lib/ux/tooltip/TipRow";
-import { num } from "@/lib/data/format";
-import { axisPoints } from "../data/axis";
-import { type Panel, type TrendPoint, stackTotal } from "../data/panels";
+import { num, shortDate } from "@/lib/data/format";
+import { axisPoints, slotAt } from "../data/axis";
+import type { Panel, TrendPoint } from "../data/panels";
 import { type Range, plotted, pointsIn, spanOf } from "../data/range";
+import { GroupPicker } from "./GroupPicker";
+import { MarksToggle } from "./MarksToggle";
 import { SeriesPicker } from "./SeriesPicker";
 import { UnitToggle } from "./UnitToggle";
 
@@ -28,12 +27,12 @@ const LINE_MARGIN: Margin = { t: 16, r: 70, b: 30, l: 76 };
  * what it draws, and the whole is what lets it say `31 of 76 points` rather than
  * a bare count.
  *
- * TWO FORMS, DECIDED IN `panels.ts` AND NOT HERE. A per-day impulse is a
- * quantity per bucket and gets stacked bars; everything else is a state sampled
- * over time and gets a line. The choice is data because it belongs beside the
- * series it describes.
+ * EVERY PANEL IS A LINE. The one stacked-bar panel -- Daily TRIMP -- merged
+ * into the multi-series fitness panel on 2026-08-27 at the athlete's
+ * instruction, and the columns branch went with it rather than surviving as a
+ * path no panel takes.
  *
- * `1000 x 320` RATHER THAN EITHER CHART'S DEFAULT. `.chart` is `width: 100%`
+ * `1000 x 320` RATHER THAN THE CHART'S DEFAULT. `.chart` is `width: 100%`
  * over a viewBox, so the whole drawing scales to the container: the line chart's
  * old 340-wide box stretched across a full card would render its 11px axis text
  * at something like 33. The line chart's margins go with it, because its y label
@@ -66,6 +65,18 @@ export function TrendPanel({
      across them would mean nothing. The `<WeekView key={selected}>` precedent. */
   const [off, setOff] = useState<Set<string>>(() => new Set());
   const [mode, setMode] = useState<string>(() => panel.modes?.[0]?.key ?? "");
+  /* THE GROUP SEEDS FROM `defaultGroup`, which names it. The panel own
+     `series`/`points` are that group too, so the dropdown and the plot agree on
+     the first paint -- and they agree by a stated key rather than by which array
+     object happens to be shared. */
+  const [group, setGroup] = useState<string>(
+    () => panel.defaultGroup ?? panel.groups?.[0]?.key ?? "",
+  );
+  /* WHETHER THE WORKOUT DOTS ARE DRAWN AT ALL -- panel-level, surviving a group
+     change, because marks are orthogonal to which series set is showing. Hiding
+     them passes `[]` to the chart, which also takes them out of the y scale:
+     a hidden measurement must not shape the axis. */
+  const [showMarks, setShowMarks] = useState(true);
 
   /* A MODE IS A DIFFERENT QUANTITY, SO IT IS A DIFFERENT POINT SET. Switching to
      min/mi does not reformat seconds -- it plots a different measurement on its
@@ -73,9 +84,16 @@ export function TrendPanel({
      re-windows rather than reusing `shown` because relying on that coincidence is
      how the two would silently drift apart. */
   const active = panel.modes?.find((m) => m.key === mode) ?? panel.modes?.[0];
-  const series = (panel.series ?? []).filter((s) => !off.has(s.key));
-  const source = active?.points ?? panel.points;
-  const slice = active ? pointsIn(active.points, range) : shown;
+  /* A GROUP SUPERSEDES the panel's own `series` and `points`; `modes` are the
+     other axis and no panel carries both -- see `PanelGroup`. */
+  const chosen = panel.groups?.find((g) => g.key === group) ?? panel.groups?.[0];
+  const series = (chosen?.series ?? panel.series ?? []).filter((s) => !off.has(s.key));
+  const source = active?.points ?? chosen?.points ?? panel.points;
+  const slice = active
+    ? pointsIn(active.points, range)
+    : chosen
+      ? pointsIn(chosen.points, range)
+      : shown;
   const format = active?.format ?? panel.format;
 
   const total = plotted(source);
@@ -83,19 +101,53 @@ export function TrendPanel({
   // `spanOf` rather than the first and last element: one definition of where a
   // series runs, and it does not assume the points arrived sorted.
   const span = spanOf([panel]);
-  const parts = panel.points.find((p) => p.parts)?.parts ?? [];
 
   /* THE SLICE IS COUNTED, THE AXIS IS DRAWN. `n of N` stays a count of
      MEASUREMENTS -- the slots `axisPoints` inserts for dates nobody measured are
      axis, not data, and counting them would inflate the caption with the very
      absence it exists to expose. */
-  const columns = panel.kind === "columns";
-  const margin = columns ? COLUMN_MARGIN : LINE_MARGIN;
   const drawn = axisPoints({
     points: slice,
     cadence: panel.cadence,
-    innerWidth: W - margin.l - margin.r,
+    innerWidth: W - LINE_MARGIN.l - LINE_MARGIN.r,
   });
+
+  /* WHAT WAS ACTUALLY RUN, placed on the grid the points just decided. A DATE
+     becomes a fractional slot index -- a Tuesday workout has no slot of its own
+     on a weekly axis, and `slotAt` is the one place that decision is written
+     down.
+
+     `slotAt` IS THE WINDOW TOO, and deliberately not `pointsIn` on top of it.
+     `drawn` runs from the first drawn point in the slice to the last, which is
+     always inside the range and usually narrower than it, so a range filter here
+     would be a no-op that reads as load-bearing. A mark `slotAt` refuses is one
+     whose week the window clipped: there is no pair of slots to place it
+     between, and extrapolating past the last would draw it outside the plot.
+
+     The tooltip's own line is the ISO date -- `ColumnChart`'s precedent -- since
+     "8/18" is shared by every year and a session is the one thing on this chart
+     a reader may want to go and look up. */
+  /* THE MODE LEADS, mirroring the `source`/`format` lookups above: a mode is a
+     different quantity, so its marks are different numbers for the same
+     observations, and falling through to `panel.marks` on a moded panel would
+     plot seconds on a min/mi scale silently. */
+  const placed = (active?.marks ?? chosen?.marks ?? panel.marks ?? []).flatMap(
+    (m) => {
+      const at = slotAt(m.date, drawn, panel.cadence);
+      if (at === null) return [];
+      return [
+        {
+          at,
+          key: m.key,
+          color: m.color,
+          name: m.name,
+          value: m.value,
+          label: m.date,
+          note: { k: m.kind ?? "workout", v: m.detail },
+        },
+      ];
+    },
+  );
 
   const toggle = (key: string) =>
     setOff((prev) => {
@@ -118,11 +170,35 @@ export function TrendPanel({
       </p>
       {panel.series ? (
         <div className="series-controls">
+          {panel.groups && panel.groups.length > 1 ? (
+            <GroupPicker
+              groups={panel.groups}
+              selected={chosen?.key ?? ""}
+              /* A DIFFERENT GROUP IS A DIFFERENT SERIES SET, so the ticks reset
+                 with it. Carrying `off` across would hide a zone in the new
+                 group that happens to share a key with one hidden in the old,
+                 and leave the reader hunting for a series they never unticked. */
+              onSelect={(k) => {
+                setGroup(k);
+                setOff(new Set());
+              }}
+            />
+          ) : null}
           <SeriesPicker
-            series={panel.series}
+            series={chosen?.series ?? panel.series}
             enabled={new Set(series.map((s) => s.key))}
             onToggle={toggle}
           />
+          {/* PANEL-LEVEL PRESENCE, so the control does not pop in and out as
+              the group dropdown moves between groups with and without marks. */}
+          {(panel.groups ?? []).some((g) => (g.marks ?? []).length > 0) ||
+          (panel.marks ?? []).length > 0 ? (
+            <MarksToggle
+              label={panel.marksLabel ?? "Workouts"}
+              checked={showMarks}
+              onToggle={() => setShowMarks((v) => !v)}
+            />
+          ) : null}
           {panel.modes && panel.modes.length > 1 ? (
             <UnitToggle
               modes={panel.modes}
@@ -141,7 +217,9 @@ export function TrendPanel({
               margin={LINE_MARGIN}
               label={panel.title}
               series={series}
+              marks={showMarks ? placed : []}
               places={panel.places}
+              reference={panel.reference}
               format={format}
               points={drawn.map((p) => ({
                 label: p.label,
@@ -149,9 +227,13 @@ export function TrendPanel({
                 values: p.values ?? {},
                 /* THE NUMBER BOTH PANELS DERIVE FROM, stated where the reader is
                    already looking. `lib/ux` is handed the wording rather than
-                   learning what the quantity is. */
-                note:
-                  typeof p.vo2max === "number"
+                   learning what the quantity is. A CARRIED point states its
+                   provenance instead -- the carried-forward rule: a chart
+                   restated under a later date must SAY so, and its VO2max is
+                   the source chart's measurement, not this Sunday's. */
+                note: p.carried
+                  ? { k: "chart", v: `carried from ${shortDate(p.carried)}` }
+                  : typeof p.vo2max === "number"
                     ? { k: "VO2max", v: num(p.vo2max, 2) }
                     : null,
               }))}
@@ -162,49 +244,6 @@ export function TrendPanel({
                which would send the reader off to fix a window that is fine. */
             <EmptyState>No series selected.</EmptyState>
           )
-        ) : columns ? (
-          <>
-            <Legend items={parts.map((p) => ({ color: p.color, label: p.label }))} />
-            <ColumnChart
-              width={W}
-              height={H}
-              label={panel.title}
-              columns={drawn.map((p) => ({
-                label: p.label,
-                tick: p.tick,
-                parts: (p.parts ?? []).map((part) => ({
-                  // `|| 0` so a component nobody measured contributes no height
-                  // rather than dropping a day that WAS measured. The tooltip is
-                  // where that absence is stated.
-                  value: part.value || 0,
-                  color: part.color,
-                })),
-                tip: () => (
-                  <>
-                    <b>{p.date}</b>
-                    {(p.parts ?? []).map((part) => (
-                      <TipRow
-                        key={part.label}
-                        k={part.label}
-                        v={part.value === null ? "--" : panel.format(part.value)}
-                      />
-                    ))}
-                    {/* A TOTAL IS ONLY A TOTAL WHEN EVERY COMPONENT WAS
-                        MEASURED; `stackTotal` withholds rather than summing
-                        what is present. */}
-                    <TipRow
-                      k="total"
-                      v={
-                        stackTotal(p) === null
-                          ? "--"
-                          : panel.format(stackTotal(p)!)
-                      }
-                    />
-                  </>
-                ),
-              }))}
-            />
-          </>
         ) : (
           <LineChart
             points={drawn}

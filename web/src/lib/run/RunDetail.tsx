@@ -69,7 +69,7 @@ export function RunDetail({
   const points = repLaps.length ? repLaps : laps;
   const hiddenLaps = laps.length - points.length;
   // `ceiling_tiers` is [[through_seconds, bpm], ...]; only the bpm is a rule.
-  const ceilings = (run.ceiling_tiers ?? [])
+  const ceilings = (run.planned?.ceiling_tiers ?? [])
     .map((t) => t?.[1])
     .filter((v): v is number => typeof v === "number");
 
@@ -121,7 +121,7 @@ export function RunDetail({
                   band={referenceBand}
                   bandDisplay={planned?.band_display ?? undefined}
                   hrCeilings={ceilings}
-                  ceilingLabel={run.ceiling}
+                  ceilingLabel={run.planned?.ceiling}
                   unit={repLaps.length ? "rep" : "lap"}
                   // NO PER-LAP VERDICT EXISTS, and claiming otherwise was a real
                   // defect: every lap rendered "not judged", which reads as a

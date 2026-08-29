@@ -2,13 +2,13 @@
  "completeness": "full",
  "date": "2025-07-06",
  "export_completeness": "missing",
- "hrv": "72",
- "nonrun_steps": "3715",
- "resting_hr": "40",
+ "hrv": 72,
+ "nonrun_steps": 3715,
+ "resting_hr": 40,
  "run_step_source": "cadence-stream",
- "run_steps": "11758",
- "sleep_hours": "6.02",
- "sleep_score": "70",
+ "run_steps": 11758,
+ "sleep_hours": 6.02,
+ "sleep_score": 70,
  "source": "garmin",
- "total_steps": "15473"
+ "total_steps": 15473
 }

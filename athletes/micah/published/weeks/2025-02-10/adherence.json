@@ -1,5 +1,4 @@
 {
- "csv": "2025-02-10,Intensity,Return of Doubles,40.0,56,,56,none",
  "facts": {
   "doubles": 2,
   "easy_seconds": 20994,
@@ -44,7 +43,6 @@
    "why": "0 quality session(s) this week; the flag needs two to find two in a row"
   }
  ],
- "graded_through": "2025-02-16",
  "judged_facts": {
   "doubles": 2,
   "easy_seconds": 20994,
@@ -77,7 +75,6 @@
   "walk_recovery_runs": 0,
   "walk_recovery_seconds": 0
  },
- "phase": "Return of Doubles",
  "planned": [
   {
    "cadence": null,
@@ -106,6 +103,7 @@
      337.04672
     ],
     "ceiling": "800m-3000m pace",
+    "ceiling_kind": "pace",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": false,
@@ -125,6 +123,7 @@
        337.04672
       ],
       "ceiling": "800m-3000m pace",
+      "ceiling_kind": "pace",
       "float_distance_m": 200,
       "float_mode": "walk",
       "float_seconds": null,
@@ -157,7 +156,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "600m, 500m, 400m, 300m, 200m, 100m w/ 200m walk rest",
    "prescribed_denominator": null,
    "prescribed_denominator_source": null,
    "role": "repetition",
@@ -192,6 +190,7 @@
      525
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -212,7 +211,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "Easy 75 min",
    "prescribed_denominator": 4500.0,
    "prescribed_denominator_source": "prescribed",
    "role": "easy",
@@ -226,13 +224,6 @@
  "results": [
   {
    "cadence": 175,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2025-02-10",
    "detail": {
     "laps": [
@@ -324,6 +315,7 @@
      525
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -344,8 +336,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "A - Easy 30 min",
-   "prescribed_seconds": 1800,
    "role": "easy",
    "runalyze_id": 122962164,
    "score_bucket": "easy",
@@ -360,13 +350,6 @@
   },
   {
    "cadence": 174,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2025-02-10",
    "detail": {
     "laps": [
@@ -458,6 +441,7 @@
      525
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -478,8 +462,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "B - Easy 30 min",
-   "prescribed_seconds": 1800,
    "role": "easy",
    "runalyze_id": 122994065,
    "score_bucket": "easy",
@@ -494,13 +476,6 @@
   },
   {
    "cadence": 174,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2025-02-13",
    "detail": {
     "laps": [
@@ -614,6 +589,7 @@
      525
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -634,8 +610,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "A - Easy 45 min",
-   "prescribed_seconds": 2700,
    "role": "easy",
    "runalyze_id": 123306043,
    "score_bucket": "easy",
@@ -650,13 +624,6 @@
   },
   {
    "cadence": 171,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2025-02-13",
    "detail": {
     "laps": [
@@ -748,6 +715,7 @@
      525
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -768,8 +736,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "B - Easy 30 min",
-   "prescribed_seconds": 1800,
    "role": "easy",
    "runalyze_id": 123262871,
    "score_bucket": "easy",
@@ -784,7 +750,6 @@
   },
   {
    "cadence": 173,
-   "ceiling": "none (hill repeats)",
    "compromised": true,
    "date": "2025-02-14",
    "detail": {
@@ -897,6 +862,8 @@
     "band_is_reference": false,
     "band_sec_per_mi": null,
     "ceiling": "none (hill repeats)",
+    "ceiling_kind": "none",
+    "ceiling_role": "hill_repeats",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": false,
@@ -912,7 +879,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "5xMile w/ 200m jog -> substituted: cutter hills (icy, track closed)",
    "role": "hill_repeats",
    "runalyze_id": 123372104,
    "score_bucket": null,
@@ -927,13 +893,6 @@
   },
   {
    "cadence": 172,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2025-02-15",
    "detail": {
     "laps": [
@@ -1047,6 +1006,7 @@
      525
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -1067,8 +1027,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "Easy 60 min",
-   "prescribed_seconds": 3600,
    "role": "easy",
    "runalyze_id": 123496849,
    "score_bucket": "easy",
@@ -1083,21 +1041,6 @@
   },
   {
    "cadence": 175,
-   "ceiling": "137/140/143",
-   "ceiling_tiers": [
-    [
-     3600,
-     137
-    ],
-    [
-     7200,
-     140
-    ],
-    [
-     null,
-     143
-    ]
-   ],
    "date": "2025-02-16",
    "detail": {
     "laps": [
@@ -1292,6 +1235,7 @@
      487
     ],
     "ceiling": "137/140/143",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       3600,
@@ -1320,8 +1264,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "Easy 90 min",
-   "prescribed_seconds": 5400,
    "role": "long",
    "runalyze_id": 123596675,
    "score_bucket": "easy",
@@ -1368,11 +1310,10 @@
   "why": {
    "long_run_share": "the long run was 30.0% of the running distance, against a 25% ceiling",
    "quality_days_met": "0 quality day(s) against the 1 the plan has asked for so far, which is what an Intensity week asks for",
-   "rest_days_met": "Intensity weeks state no rest-day requirement, so this check does not apply and left the denominator",
+   "rest_days_met": "the plan schedules no rest day, so this check does not apply and left the denominator",
    "volume_vs_plan": "5:49:54 run against a plan of 8:00:00, tolerance 5%"
   }
  },
  "week_end": "2025-02-16",
- "week_start": "2025-02-10",
- "week_type": "Intensity"
+ "week_start": "2025-02-10"
 }

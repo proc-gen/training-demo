@@ -1,5 +1,4 @@
 {
- "csv": "2025-11-03,Race,Race,19.6,22,,22,none",
  "facts": {
   "doubles": 0,
   "easy_seconds": 3121,
@@ -38,7 +37,6 @@
    "why": "0 quality session(s) this week; the flag needs two to find two in a row"
   }
  ],
- "graded_through": "2025-11-09",
  "judged_facts": {
   "doubles": 0,
   "easy_seconds": 3121,
@@ -65,18 +63,10 @@
   "walk_recovery_runs": 0,
   "walk_recovery_seconds": 0
  },
- "phase": "Race",
  "planned": [],
  "results": [
   {
    "cadence": 170,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2025-11-04",
    "detail": {
     "laps": [
@@ -159,6 +149,7 @@
      525
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -179,7 +170,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- race-week easy run (30 min)",
    "role": "easy",
    "runalyze_id": 154171396,
    "score_bucket": "easy",
@@ -194,13 +184,6 @@
   },
   {
    "cadence": 174,
-   "ceiling": "137",
-   "ceiling_tiers": [
-    [
-     null,
-     137
-    ]
-   ],
    "date": "2025-11-06",
    "detail": {
     "laps": [
@@ -272,6 +255,7 @@
      525
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -292,7 +276,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "unplanned -- race-week easy run (22 min, travelling)",
    "role": "easy",
    "runalyze_id": 154420258,
    "score_bucket": "easy",
@@ -307,7 +290,6 @@
   },
   {
    "cadence": 175,
-   "ceiling": "none (race)",
    "date": "2025-11-08",
    "detail": {
     "race": {
@@ -443,6 +425,8 @@
      371
     ],
     "ceiling": "none (race)",
+    "ceiling_kind": "none",
+    "ceiling_role": "race",
     "ceiling_tiers": null,
     "chart_confirmed": true,
     "chart_is_carried_forward": false,
@@ -458,7 +442,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "Fall Half Marathon",
    "role": "race",
    "runalyze_id": 154628070,
    "score_bucket": null,
@@ -498,18 +481,17 @@
   "checks": {
    "long_run_share": true,
    "quality_days_met": true,
-   "rest_days_met": true,
+   "rest_days_met": null,
    "volume_vs_plan": null
   },
   "pct": 100.0,
   "why": {
    "long_run_share": "the long run was 0.0% of the running distance, against a 25% ceiling",
    "quality_days_met": "1 quality day(s) against the 1 the plan has asked for so far, which is what a Race week asks for",
-   "rest_days_met": "4 rest day(s) against the 2 a Race week asks for",
+   "rest_days_met": "the plan schedules no rest day, so this check does not apply and left the denominator",
    "volume_vs_plan": "the manifest states no planned_time_seconds, so there is nothing to compare the week's running time against"
   }
  },
  "week_end": "2025-11-09",
- "week_start": "2025-11-03",
- "week_type": "Race"
+ "week_start": "2025-11-03"
 }

@@ -99,8 +99,14 @@ describe("against the committed payload", () => {
     let sawSettledMiss = false;
     for (const w of Object.values(PUBLISHED.weeks)) {
       const a = w.adherence;
-      if (!a?.graded_through || !a?.week_end) continue;
-      if (a.graded_through < a.week_end) continue;
+      /* `graded_through` LIVES ON `judged_facts` since 2026-08-29 -- that
+         block is by definition the one computed through it. Reading the old
+         top-level field here made every week `continue`, and it was the
+         non-vacuity assertion at the bottom that said so rather than a green
+         pass over nothing. */
+      const through = a?.judged_facts?.graded_through;
+      if (!through || !a?.week_end) continue;
+      if (through < a.week_end) continue;
       for (const r of a.planned ?? []) {
         expect(runStatus(r)).toBe("missed");
         sawSettledMiss = true;
@@ -125,7 +131,8 @@ describe("against the committed payload", () => {
     for (const w of Object.values(PUBLISHED.weeks)) {
       const a = w.adherence;
       if (!a?.week_end) continue;
-      if (a.graded_through && a.graded_through >= a.week_end) continue;
+      const through = a.judged_facts?.graded_through;
+      if (through && through >= a.week_end) continue;
       for (const r of a.planned) {
         seen += 1;
         expect(["missed", "pending"]).toContain(runStatus(r));
@@ -142,10 +149,11 @@ describe("against the committed payload", () => {
     if (!PUBLISHED) return;
     for (const w of Object.values(PUBLISHED.weeks)) {
       const a = w.adherence;
-      if (!a?.graded_through) continue;
+      const through = a?.judged_facts?.graded_through;
+      if (!through) continue;
       for (const r of a.planned) {
-        const want = (r.date ?? "") <= a.graded_through ? "missed" : "pending";
-        expect(runStatus(r), `${r.date} vs ${a.graded_through}`).toBe(want);
+        const want = (r.date ?? "") <= through ? "missed" : "pending";
+        expect(runStatus(r), `${r.date} vs ${through}`).toBe(want);
       }
     }
   });

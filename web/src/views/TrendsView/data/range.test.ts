@@ -127,6 +127,28 @@ describe("spanOf", () => {
     };
     expect(spanOf([panel])).toBeNull();
   });
+
+  it("A CARRIED POINT NEVER ANCHORS A WINDOW", () => {
+    /* It restates the newest pace chart under a Sunday still ahead; anchoring
+       To on it would be the forward-authored-week defect above wearing a new
+       date. */
+    const panel = {
+      points: [
+        { date: "2026-08-23", label: "8/23", value: 1 },
+        { date: "2026-08-30", label: "8/30", value: 1, carried: "2026-08-23" },
+      ] as TrendPoint[],
+    };
+    expect(spanOf([panel])).toEqual({ from: "2026-08-23", to: "2026-08-23" });
+  });
+
+  it("is null when only carried points exist", () => {
+    const panel = {
+      points: [
+        { date: "2026-08-30", label: "8/30", value: 1, carried: "2026-08-23" },
+      ] as TrendPoint[],
+    };
+    expect(spanOf([panel])).toBeNull();
+  });
 });
 
 describe("presetRange", () => {
@@ -215,6 +237,41 @@ describe("pointsIn", () => {
     const weeks = P("2026-07-13", "2026-07-20").points;
     expect(pointsIn(weeks, { from: "2026-07-15", to: "2026-08-15" })).toHaveLength(1);
   });
+
+  it("KEEPS a carried point while the week it closes overlaps the window", () => {
+    /* Its own date is a Sunday still ahead of the newest measurement, so
+       filtering on it would drop the live week the point exists to draw --
+       the Calendar's whole-weeks rule. */
+    const carried: TrendPoint = {
+      date: "2026-08-30",
+      label: "8/30",
+      value: 1,
+      carried: "2026-08-23",
+    };
+    const kept = pointsIn([carried], { from: "2026-07-26", to: "2026-08-26" });
+    expect(kept).toHaveLength(1);
+    // The Monday of the week it closes is the boundary, both sides of it.
+    expect(pointsIn([carried], { from: "2026-07-26", to: "2026-08-24" })).toHaveLength(1);
+    expect(pointsIn([carried], { from: "2026-07-26", to: "2026-08-23" })).toHaveLength(0);
+  });
+
+  it("still drops a carried point on the FROM side by its own date", () => {
+    // Stepping the window back past the live week must not drag it along.
+    const carried: TrendPoint = {
+      date: "2026-08-30",
+      label: "8/30",
+      value: 1,
+      carried: "2026-08-23",
+    };
+    expect(pointsIn([carried], { from: "2026-09-01", to: "2026-09-30" })).toHaveLength(0);
+  });
+
+  it("leaves a normal point's TO comparison alone", () => {
+    // Only a carried point earns the overlap rule; a measured Sunday past the
+    // window stays out.
+    const normal = P("2026-08-30").points;
+    expect(pointsIn(normal, { from: "2026-07-26", to: "2026-08-26" })).toHaveLength(0);
+  });
 });
 
 describe("plotted", () => {
@@ -230,6 +287,14 @@ describe("plotted", () => {
 
   it("is zero for nothing", () => {
     expect(plotted([])).toBe(0);
+  });
+
+  it("does not count a carried point -- axis reach, not a measurement", () => {
+    const pts: TrendPoint[] = [
+      { date: "2026-08-23", label: "8/23", value: 1 },
+      { date: "2026-08-30", label: "8/30", value: 1, carried: "2026-08-23" },
+    ];
+    expect(plotted(pts)).toBe(1);
   });
 });
 

@@ -54,9 +54,15 @@ export function RunTotals({
             // NAME THE WINDOW WHENEVER IT IS SHORT OF THE WEEK. A target that
             // does not announce what it covers is indistinguishable from a
             // wrong one, and a reader who cannot see the split cannot check it.
+            // A null `graded_through` is a window that has not opened -- the
+            // grader clamps it on a week whose Monday is still ahead -- so
+            // there is no date to name and "run through null" is what this
+            // branch used to render there.
             (partial
-              ? ` — ${clock(judged.seconds)} run through ${judged.graded_through} plus ` +
-                `${clock(judged.remaining_planned_seconds ?? 0)} still prescribed`
+              ? judged.graded_through
+                ? ` — ${clock(judged.seconds)} run through ${judged.graded_through} plus ` +
+                  `${clock(judged.remaining_planned_seconds ?? 0)} still prescribed`
+                : ` — nothing run yet; ${clock(judged.remaining_planned_seconds ?? 0)} still prescribed`
               : "")
           }
         />

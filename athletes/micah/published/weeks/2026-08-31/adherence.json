@@ -1,10 +1,9 @@
 {
- "csv": "2026-08-31,Intensity,General Prep,0.0,,,,none",
  "facts": {
   "doubles": 0,
   "easy_seconds": 0,
   "elapsed_days": 0,
-  "graded_through": "2026-08-23",
+  "graded_through": null,
   "long_run_miles": 0.0,
   "long_run_share": 0,
   "miles": 0.0,
@@ -47,12 +46,11 @@
    "why": "0 quality session(s) this week; the flag needs two to find two in a row"
   }
  ],
- "graded_through": null,
  "judged_facts": {
   "doubles": 0,
   "easy_seconds": 0,
   "elapsed_days": 0,
-  "graded_through": "2026-08-22",
+  "graded_through": null,
   "long_run_miles": 0.0,
   "long_run_share": 0,
   "miles": 0.0,
@@ -83,7 +81,6 @@
   "walk_recovery_runs": 0,
   "walk_recovery_seconds": 0
  },
- "phase": "General Prep",
  "planned": [
   {
    "cadence": null,
@@ -110,6 +107,7 @@
      576
     ],
     "ceiling": "130",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -130,7 +128,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "30 min recovery",
    "prescribed_denominator": 1800.0,
    "prescribed_denominator_source": "prescribed",
    "role": "recovery",
@@ -165,6 +162,7 @@
      576
     ],
     "ceiling": "130",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -185,7 +183,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "AM: 30 min recovery",
    "prescribed_denominator": 1800.0,
    "prescribed_denominator_source": "prescribed",
    "role": "recovery",
@@ -222,6 +219,7 @@
      340.04672
     ],
     "ceiling": "800m-3000m pace",
+    "ceiling_kind": "pace",
     "ceiling_tiers": null,
     "chart_confirmed": false,
     "chart_is_carried_forward": true,
@@ -241,6 +239,7 @@
        340.04672
       ],
       "ceiling": "800m-3000m pace",
+      "ceiling_kind": "pace",
       "float_distance_m": 200,
       "float_mode": null,
       "float_seconds": null,
@@ -278,7 +277,6 @@
     ],
     "target_tolerance_seconds": 1
    },
-   "prescribed": "PM: 4x3x200m w/ 200m jog between reps and 400m between sets",
    "prescribed_denominator": null,
    "prescribed_denominator_source": null,
    "role": "repetition",
@@ -313,6 +311,7 @@
      530
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -336,7 +335,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "60-70 min easy",
    "prescribed_denominator": 3600.0,
    "prescribed_denominator_source": "prescribed",
    "role": "easy",
@@ -371,6 +369,7 @@
      530
     ],
     "ceiling": "137",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -394,7 +393,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "60-70 min easy",
    "prescribed_denominator": 3600.0,
    "prescribed_denominator_source": "prescribed",
    "role": "easy",
@@ -429,6 +427,7 @@
      576
     ],
     "ceiling": "130",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -449,7 +448,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "AM: 30 min recovery",
    "prescribed_denominator": 1800.0,
    "prescribed_denominator_source": "prescribed",
    "role": "recovery",
@@ -482,7 +480,8 @@
     "band_display": null,
     "band_is_reference": false,
     "band_sec_per_mi": null,
-    "ceiling": null,
+    "ceiling": "none + 162/166",
+    "ceiling_kind": "mixed",
     "ceiling_tiers": null,
     "chart_confirmed": false,
     "chart_is_carried_forward": true,
@@ -499,6 +498,7 @@
       "band_how": "neuromuscular",
       "band_sec_per_mi": null,
       "ceiling": "none",
+      "ceiling_kind": "none",
       "float_distance_m": null,
       "float_mode": "walk",
       "float_seconds": [
@@ -527,6 +527,7 @@
       "band_how": "named",
       "band_sec_per_mi": null,
       "ceiling": "162/166",
+      "ceiling_kind": "hr",
       "float_distance_m": null,
       "float_mode": null,
       "float_seconds": 120,
@@ -555,7 +556,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "PM: 4x6s hill sprints w/ 2-3 min walking recovery, then 2x12:00 w/ 2:00 jog at Sub-T",
    "prescribed_denominator": 1704.0,
    "prescribed_denominator_source": "structure",
    "role": "mixed",
@@ -590,6 +590,7 @@
      576
     ],
     "ceiling": "130",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       null,
@@ -610,7 +611,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "30 min recovery",
    "prescribed_denominator": 1800.0,
    "prescribed_denominator_source": "prescribed",
    "role": "recovery",
@@ -647,6 +647,7 @@
      491
     ],
     "ceiling": "137/140/143",
+    "ceiling_kind": "hr",
     "ceiling_tiers": [
      [
       3600,
@@ -675,7 +676,6 @@
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "prescribed": "105 min easy/long",
    "prescribed_denominator": 6300.0,
    "prescribed_denominator_source": "prescribed",
    "role": "long",
@@ -718,13 +718,12 @@
   },
   "pct": null,
   "why": {
-   "long_run_share": "nothing this week prescribes has come due through 2026-08-22, so this check left the denominator",
-   "quality_days_met": "nothing this week prescribes has come due through 2026-08-22, so this check left the denominator",
-   "rest_days_met": "nothing this week prescribes has come due through 2026-08-22, so this check left the denominator",
-   "volume_vs_plan": "nothing this week prescribes has come due through 2026-08-22, so this check left the denominator"
+   "long_run_share": "no day of this week is over yet, so this check left the denominator",
+   "quality_days_met": "no day of this week is over yet, so this check left the denominator",
+   "rest_days_met": "the plan schedules no rest day, so this check does not apply and left the denominator",
+   "volume_vs_plan": "no day of this week is over yet, so this check left the denominator"
   }
  },
  "week_end": "2026-09-06",
- "week_start": "2026-08-31",
- "week_type": "Intensity"
+ "week_start": "2026-08-31"
 }

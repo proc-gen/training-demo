@@ -83,6 +83,28 @@ describe("RunTotals", () => {
     expect(rows(container)[1]).toContain("of 7:30:00 planned");
   });
 
+  it("names NO DATE when the judged window has not opened", () => {
+    /* A forward-authored week: the grader clamps `graded_through` to null
+     * because a cutoff before the week's own Monday names no window inside it
+     * (2026-08-28 -- the unclamped date rewrote fifteen future records on
+     * every publish). The row must not render the null as a word. */
+    const future = () =>
+      facts({
+        seconds: 0,
+        remaining_planned_seconds: 27000,
+        projected_seconds: 27000,
+        volume_vs_plan: 1.0,
+        graded_through: null,
+        prescribed_dates: 7,
+        prescribed_dates_due: 0,
+      });
+    const { container } = wrap(<RunTotals facts={future()} judged={future()} />);
+    expect(rows(container)[1]).toContain("nothing run yet");
+    expect(rows(container)[1]).toContain("7:30:00 still prescribed");
+    expect(rows(container)[1]).not.toContain("null");
+    expect(rows(container)[1]).not.toContain("run through");
+  });
+
   it("falls back to `seconds` on a record written before the projection", () => {
     /* `projected_seconds` landed 2026-08-15. An older record carries neither it
      * nor `remaining_planned_seconds`, and the row must still show what it

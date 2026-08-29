@@ -164,7 +164,8 @@ describe("RunRow", () => {
 
   it("expands a plain run to its score explanation", () => {
     const { container } = inTable(
-      <RunRow r={run({ hr_pct: 96, ceiling: "137", earned: 2600, total: 2700 })}
+      <RunRow r={run({ hr_pct: 96, planned: { ceiling: "137", ceiling_kind: "hr" },
+                 earned: 2600, total: 2700 })}
               prescribed="" chart={null} showDay  />,
     );
     fireEvent.click(row(container));
@@ -274,7 +275,7 @@ describe("RunRow", () => {
     // that and this row prints what it is given.
     const { container } = inTable(
       <RunRow
-        r={run({ prescribed: "grader's copy" })}
+        r={run({ planned: { prescribed: "grader's copy" } })}
         prescribed="manifest's copy"
         chart={null}
         showDay  />,

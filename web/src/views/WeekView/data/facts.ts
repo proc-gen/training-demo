@@ -47,7 +47,10 @@ export type WeekFacts = {
    *  indistinguishable from a wrong one. */
   prescribed_dates?: number;
   prescribed_dates_due?: number;
-  graded_through?: string;
+  /** Null when the block's cutoff falls before the week's own Monday -- a
+   *  forward-authored week has no window to name, and the grader clamps it
+   *  rather than stamping the day it happened to run. */
+  graded_through?: string | null;
   /* `surface_miles` and `surface_share` were here until 2026-08-10. The graders
    * no longer emit them and no component reads them; see grade_week.py's
    * `monotony` tombstone for why the whole of `surface` went. */

@@ -31,7 +31,76 @@
  * silent gap. When in doubt, add the field.
  */
 
-import type { Payload, RunResult, Week } from "@/lib/data/payload";
+import { distUnit } from "@/lib/data/format";
+import type { Lap, Payload, PlannedSet, RunResult, Week } from "@/lib/data/payload";
+
+/** Present-vs-absent, which is what a component branches on. A VALUE would key
+ *  on the athlete's numbers and put us back where we started. */
+const has = (v: unknown) => v !== null && v !== undefined;
+/** Scalar, range or absent -- `reps`, `rep_seconds` and their float siblings
+ *  are each all three, and `PlannedReadout` formats a range differently. */
+const arity = (v: unknown) =>
+  !has(v) ? "none" : Array.isArray(v) ? "range" : "scalar";
+
+/** What `LapTable` branches on, over the whole lap array.
+ *
+ * `hasLaps` alone is NOT enough: the component grows a whole extra column when
+ * any lap declares `work`, picks ONE distance unit for the column from every
+ * lap's `dist_km`, and prints `--` per cell for an absent pace, cadence or HR.
+ * Keying on the boolean would have deduped a declared, rep-numbered table onto
+ * an undeclared one -- a silent gap, which is the failure this file exists to
+ * avoid. */
+function lapShape(laps: Lap[]) {
+  const some = (f: (l: Lap) => unknown) => laps.some((l) => has(f(l)));
+  return {
+    any: laps.length > 0,
+    declared: laps.some((l) => l.work),
+    unit: laps.length ? distUnit(laps.map((l) => l.dist_km)) : null,
+    // Both polarities: a table where SOME lap lacks a pace renders a `--` cell
+    // that a table where every lap has one never reaches.
+    index: [some((l) => l.index), laps.some((l) => !has(l.index))],
+    kind: [some((l) => l.declared), laps.some((l) => !has(l.declared))],
+    pace: [some((l) => l.pace), laps.some((l) => !has(l.pace))],
+    cad: [some((l) => l.cad), laps.some((l) => !has(l.cad))],
+    hr: [some((l) => l.hr_avg), laps.some((l) => !has(l.hr_avg))],
+    hrMax: [some((l) => l.hr_max), laps.some((l) => !has(l.hr_max))],
+  };
+}
+
+/** What `PlannedReadout` branches on. Same reasoning as `lapShape`: `hasPlanned`
+ *  is one boolean over 728 blocks that render a dozen different tables. */
+function plannedShape(p: NonNullable<RunResult["planned"]>) {
+  const sets: PlannedSet[] = p.sets ?? [];
+  const uniq = <T,>(xs: T[]) => [...new Set(xs.map((x) => JSON.stringify(x)))].sort();
+  return {
+    prescribed: has(p.prescribed),
+    target: has(p.target_display),
+    band: has(p.band_display),
+    ceiling: has(p.ceiling),
+    criterion: p.criterion ?? null,
+    seconds: arity(p.prescribed_seconds),
+    reference: p.band_is_reference ?? null,
+    chartUnconfirmed: p.chart_confirmed === false,
+    carried: !!p.chart_is_carried_forward,
+    // Capped exactly as the run-level `sets` is, and for the same reason.
+    nSets: Math.min(sets.length, 3),
+    setShapes: uniq(
+      sets.map((s) => ({
+        mode: s.mode ?? null,
+        band: has(s.band_display),
+        reps: arity(s.reps),
+        repSec: arity(s.rep_seconds),
+        repDist: arity(s.rep_distance_m),
+        floatSec: arity(s.float_seconds),
+        floatDist: has(s.float_distance_m),
+        floatMode: s.float_mode ?? null,
+        groups: has(s.groups),
+        groupSec: arity(s.group_float_seconds),
+        groupDist: has(s.group_float_distance_m),
+      })),
+    ),
+  };
+}
 
 /** Everything about a run that could send its subtree down a different path. */
 function shapeOf(r: RunResult): string {
@@ -39,10 +108,12 @@ function shapeOf(r: RunResult): string {
   const sets = det?.sets ?? [];
   const uniq = <T,>(xs: T[]) => [...new Set(xs)].sort();
   return JSON.stringify({
+    laps: lapShape(det?.laps ?? []),
+    plannedShape: r.planned ? plannedShape(r.planned) : null,
     status: r.status,
     role: r.role,
     bucket: r.score_bucket ?? null,
-    ceiling: r.ceiling ?? null,
+    ceiling: r.planned?.ceiling ?? null,
     distanceSource: r.distance_source ?? null,
     emphasis: [...(r.emphasis ?? [])].sort(),
     // PRESENCE, not value: a component branches on whether a number is there,
@@ -54,7 +125,7 @@ function shapeOf(r: RunResult): string {
     hasDetail: det !== null,
     hasLaps: (det?.laps ?? []).length > 0,
     hasPlanned: !!r.planned,
-    hasTiers: !!r.ceiling_tiers,
+    hasTiers: !!r.planned?.ceiling_tiers,
     hasWhy: !!r.why,
     // Capped: one set, two sets and three behave differently; three and nine
     // do not, and uncapped this would key on the athlete's rep counts.

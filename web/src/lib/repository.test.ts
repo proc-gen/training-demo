@@ -169,6 +169,19 @@ describe("readWeek is a PORT of unpublish(), so it must carry what it carries", 
    * half of the same contract, and it is the half that had no check at all. */
   const slugs = athleteSlugs();
 
+  /* The one key `week.json` states that is RESOLVED rather than copied.
+   *
+   * The chart became a table on 2026-08-29, so the week record stores a
+   * foreign key and `readWeek` reads the row it names. Pinning it here rather
+   * than loosening the check is deliberate: a join is the one honest reason a
+   * stored key may be absent from the assembled object, and every OTHER
+   * absence is the `pace_chart_is_carried_forward` defect again. The
+   * resolution itself is asserted below, so nothing about the chart is
+   * unchecked -- it is checked differently. */
+  const RESOLVED: Record<string, string> = {
+    pace_chart_week_ending: "pace_chart",
+  };
+
   it("copies every key the record on disk states", () => {
     if (!slugs.length) return;
     const slug = slugs[0];
@@ -191,8 +204,63 @@ describe("readWeek is a PORT of unpublish(), so it must carry what it carries", 
       ) as Record<string, unknown>;
       const week = weeks[start] as Record<string, unknown>;
       for (const k of Object.keys(raw)) {
-        expect(Object.keys(week), `${start}/week.json key \`${k}\``).toContain(k);
+        const want = RESOLVED[k] ?? k;
+        expect(
+          Object.keys(week),
+          `${start}/week.json key \`${k}\``,
+        ).toContain(want);
       }
     }
+  });
+
+  it("resolves the chart key into the chart itself", () => {
+    if (!slugs.length) return;
+    const slug = slugs[0];
+    const got = assemble();
+    if (!got.ok) throw new Error(got.error);
+    const weeks = (got.payload as { weeks: Record<string, unknown> }).weeks;
+    let joined = 0;
+    for (const [start, w] of Object.entries(weeks)) {
+      const raw = JSON.parse(
+        fs.readFileSync(
+          path.join(publishedDir(slug), "weeks", start, "week.json"),
+          "utf-8",
+        ),
+      ) as { pace_chart_week_ending?: string | null };
+      const chart = (w as { pace_chart?: { week_ending?: string } | null })
+        .pace_chart;
+      if (raw.pace_chart_week_ending == null) {
+        expect(chart, `${start} stores no chart key`).toBeNull();
+        continue;
+      }
+      /* The row that comes back must be the row the key NAMES -- not merely
+       * some chart. A lookup that silently returned a neighbour would be the
+       * `snapshot_date` / `week_end` defect wearing new clothes. */
+      expect(chart?.week_ending, start).toBe(raw.pace_chart_week_ending);
+      joined++;
+    }
+    expect(joined, "no week joined a chart -- the case asserted nothing")
+      .toBeGreaterThan(0);
+  });
+
+  it("resolves the current-chart pointer too", () => {
+    if (!slugs.length) return;
+    const slug = slugs[0];
+    const pointer = JSON.parse(
+      fs.readFileSync(
+        path.join(publishedDir(slug), "pace-chart-current.json"),
+        "utf-8",
+      ),
+    ) as { week_ending?: string } | null;
+    const got = assemble();
+    if (!got.ok) throw new Error(got.error);
+    const cur = (got.payload as {
+      pace_chart_current?: { week_ending?: string } | null;
+    }).pace_chart_current;
+    if (pointer == null) {
+      expect(cur).toBeNull();
+      return;
+    }
+    expect(cur?.week_ending).toBe(pointer.week_ending);
   });
 });

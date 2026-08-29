@@ -68,7 +68,7 @@ export function DayCard({
               <RunRow
                 key={r.key ?? i}
                 r={r}
-                prescribed={(r.key ? byKey.get(r.key) : "") || r.prescribed || ""}
+                prescribed={(r.key ? byKey.get(r.key) : "") || r.planned?.prescribed || ""}
                 chart={week?.pace_chart}
                 // ALWAYS SHOWN. `showDay` blanks a repeated date in the week's
                 // table, where several dates sit under one header; here every

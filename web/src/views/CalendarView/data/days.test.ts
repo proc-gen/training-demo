@@ -12,7 +12,7 @@ import {
   weekFor,
 } from "./days";
 
-const day = (over: Partial<Record<string, string>>): Day =>
+const day = (over: Partial<Day>): Day =>
   ({ date: "2026-07-27", ...over }) as Day;
 
 const payload = (over: Partial<Payload>): Payload =>
@@ -21,7 +21,7 @@ const payload = (over: Partial<Payload>): Payload =>
 describe("calendarDays", () => {
   it("drops a row with no date rather than rendering a cell for it", () => {
     const p = payload({
-      days: [day({}), { total_steps: "100" } as Day],
+      days: [day({}), { total_steps: 100 } as unknown as Day],
     });
     expect(calendarDays(p)).toHaveLength(1);
   });
@@ -87,19 +87,19 @@ describe("dayByDate", () => {
 describe("maxSteps", () => {
   it("is the busiest day on record", () => {
     expect(
-      maxSteps([day({ total_steps: "15258" }), day({ total_steps: "22000" })]),
+      maxSteps([day({ total_steps: 15258 }), day({ total_steps: 22000 })]),
     ).toBe(22000);
   });
 
   it("floors at 1 so the bar ratio cannot divide by zero", () => {
     expect(maxSteps([])).toBe(1);
-    expect(maxSteps([day({ total_steps: "" })])).toBe(1);
-    expect(maxSteps([day({ total_steps: "0" })])).toBe(1);
+    expect(maxSteps([day({ total_steps: null })])).toBe(1);
+    expect(maxSteps([day({ total_steps: 0 })])).toBe(1);
   });
 
   it("ignores a day with no measurement rather than reading it as zero", () => {
     expect(
-      maxSteps([day({ total_steps: "" }), day({ total_steps: "9000" })]),
+      maxSteps([day({ total_steps: null }), day({ total_steps: 9000 })]),
     ).toBe(9000);
   });
 
@@ -108,7 +108,7 @@ describe("maxSteps", () => {
      * graded days in SE and the rest in steps -- which is what this first did
      * -- puts two units on one length: an 18,000-step ungraded day drew SHORTER
      * than a 15,258-SE graded day with fewer actual steps. */
-    const days = [day({ total_steps: "18000" }), day({ total_steps: "12000" })];
+    const days = [day({ total_steps: 18000 }), day({ total_steps: 12000 })];
     expect(maxSteps(days)).toBe(18000);
   });
 
