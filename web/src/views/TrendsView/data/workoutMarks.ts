@@ -255,9 +255,9 @@ export function workoutMarks(
         if (!paces.length) return;
 
         const band = typeof set.band === "string" ? set.band : null;
-        // ` ` cannot occur in either part, so the key is unambiguous
+        // `\0` cannot occur in either part, so the key is unambiguous
         // where a `-` would let `rep_3` + `min` collide with `rep` + `3min`.
-        const at = `${mode} ${band ?? ""}`;
+        const at = `${mode}\0${band ?? ""}`;
         const group = groups.get(at);
         if (group) {
           /* EVERY PACE JOINS ONE POOL, so the mean is over all the reps and

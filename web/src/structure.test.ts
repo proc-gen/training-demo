@@ -575,17 +575,61 @@ describe("the routes stay statically exportable", () => {
 
   const routes = SOURCES.filter((f) => /^app\/.*page\.tsx$/.test(f.rel));
 
+  /** Every file the export patches: the four pages and the bundle handler. */
+  const patched = SOURCES.filter((f) =>
+    /^app\/.*(page\.tsx|route\.ts)$/.test(f.rel),
+  );
+
   it("finds the routes at all", () => {
     expect(routes.length).toBeGreaterThan(3);
+    expect(patched.length).toBeGreaterThan(routes.length);
   });
 
-  it("declares force-dynamic on every page", () => {
-    // The patch has to have something to replace, once, per route -- and
-    // `export_demo.py` fails naming the file if it does not match exactly once.
-    const missing = routes
-      .filter((f) => !/export const dynamic = "force-dynamic"/.test(f.text))
-      .map((f) => f.rel);
-    expect(missing).toEqual([]);
+  it("declares the caching mode EXACTLY ONCE on every route file", () => {
+    /* THIS FILE IS COPIED VERBATIM TO THE MIRROR, so it can only assert what is
+     * true in BOTH repos -- and the two differ here by construction: the
+     * private app declares `force-dynamic` and `export_demo.py` patches every
+     * one to `force-static`.
+     *
+     * IT ASSERTED `force-dynamic` UNTIL 2026-08-29 AND THAT BROKE THE DEMO'S
+     * CI. The mirror runs `npm run check` on the patched copy, so the case
+     * failed there naming all four pages -- the first thing the demo's own
+     * pipeline had to say about a build that was otherwise fine. It had been
+     * latently wrong since the routes landed and only surfaced now because the
+     * demo had not been rebuilt since.
+     *
+     * EXACTLY ONCE is the half worth keeping: `export_demo.py` requires each
+     * patch to match once and fails naming the file otherwise, so a route that
+     * declared neither -- or declared one twice -- would fail the EXPORT rather
+     * than anything here. WHICH of the two a route declares is asserted by the
+     * route's own test, which the exporter patches in step with the source. */
+    const wrong = patched
+      .map((f) => ({
+        rel: f.rel,
+        n: (f.text.match(/export const dynamic = "force-(dynamic|static)";/g) ?? [])
+          .length,
+      }))
+      .filter((f) => f.n !== 1);
+    expect(wrong).toEqual([]);
+  });
+
+  it("declares the SAME mode in every route file, never a mixture", () => {
+    /* A half-applied patch is the failure this catches: four routes prerendered
+     * and one still asking for a server is a build that fails in CI with a
+     * message about the one file, three repositories from the edit.
+     *
+     * IT MATCHES THE DECLARATION, NOT THE WORD, and it caught itself doing the
+     * wrong thing first: `/force-(dynamic|static)/` on the whole text finds the
+     * COMMENT the export writes above the patched line — *"The private repo
+     * declares `force-dynamic` here"* — so every mirrored route read as both.
+     * Prose is not a declaration, which is the third time this file has had to
+     * say so. */
+    const modes = new Set(
+      patched.map(
+        (f) => /export const dynamic = "force-(dynamic|static)";/.exec(f.text)?.[1],
+      ),
+    );
+    expect([...modes]).toHaveLength(1);
   });
 
   it("uses NO redirect", () => {
@@ -594,7 +638,7 @@ describe("the routes stay statically exportable", () => {
      * would need a client bounce or a meta-refresh, which is a visible flash on
      * the one URL every reader arrives at. */
     const wrong = routes
-      .filter((f) => /redirect\s*\(/.test(f.text))
+      .filter((f) => /\bredirect\s*\(/.test(f.text))
       .map((f) => f.rel);
     expect(wrong).toEqual([]);
   });
@@ -611,13 +655,62 @@ describe("the routes stay statically exportable", () => {
     expect(missing).toEqual([]);
   });
 
-  it("reads no searchParams", () => {
-    /* A query string forces dynamic rendering, which a static export cannot do
-     * -- so the calendar's window anchor is a SEGMENT rather than `?end=`. */
+  it("never AWAITS searchParams before the static branch returns", () => {
+    /* READING a query string in a server component forces dynamic rendering,
+     * which `output: export` cannot do. The calendar's anchor is `?end=` since
+     * 2026-08-29, so this rule had to change from "nobody may name it" to the
+     * narrower thing that is actually true: the STATIC branch must return
+     * first, and in that build the parameter is read in the browser instead.
+     *
+     * ORDER IS THE WHOLE CHECK. `await searchParams` above the branch would
+     * fail the demo build; below it, Next prerenders the route — verified, it
+     * emits `/calendar` as static. So this compares positions in the text, and
+     * a page naming `searchParams` with NO static branch at all fails too,
+     * `indexOf` returning -1 for the branch it does not have.
+     *
+     * IT READ `/\bsearchParams\b/` AND MATCHED NOTHING FOR MONTHS. The `\b`
+     * escapes were literal BACKSPACE bytes in the committed file — the same
+     * class of damage `CLAUDE.md` records for `Get-Content | Set-Content`, one
+     * tool over — so the rule passed while `app/api/data/route.ts` plainly read
+     * the request. `tests/test_athlete_paths.py` now fails any control
+     * character in a tracked file, which is what stops that recurring. */
     const wrong = SOURCES.filter((f) => f.rel.startsWith("app/"))
-      .filter((f) => /searchParams/.test(f.text))
+      .filter((f) => !f.rel.startsWith("app/api/"))
+      .filter((f) => /await\s+searchParams/.test(f.text))
+      .filter((f) => {
+        const branch = f.text.indexOf("STATIC_DATA");
+        const read = f.text.search(/await\s+searchParams/);
+        return branch === -1 || branch > read;
+      })
       .map((f) => f.rel);
     expect(wrong).toEqual([]);
+  });
+
+  it("finds the page that DOES read searchParams, so the rule is not vacuous", () => {
+    /* The rule above passes trivially over an app where nobody reads a query
+     * string, which is exactly what it looked like while the regex was
+     * corrupted. */
+    const readers = SOURCES.filter((f) => f.rel.startsWith("app/"))
+      .filter((f) => /await\s+searchParams/.test(f.text))
+      .map((f) => f.rel);
+    expect(readers).toContain("app/calendar/page.tsx");
+  });
+
+  it("exempts app/api/ only because the export DROPS it whole", () => {
+    /* `app/api/data/route.ts` reads `?athlete=` off the request, which cannot
+     * be statically exported at all -- so it is not patched, it is removed.
+     * `tests/test_export_demo.py::test_the_request_reading_route_is_dropped`
+     * is the other half of this, and without that the exemption above would be
+     * a hole rather than a division of labour.
+     *
+     * TWO ANSWERS, BECAUSE THIS FILE RUNS IN BOTH REPOS. In the private app the
+     * directory is there and reads the request, which is WHY it is dropped; in
+     * the mirror it is absent, which is the drop having happened. Asserting the
+     * first alone is how a case passes here and fails the demo's own CI -- the
+     * mistake this whole block was just fixed for. */
+    const api = SOURCES.filter((f) => f.rel.startsWith("app/api/"));
+    if (api.length === 0) return; // the mirror: dropped, nothing to exempt
+    expect(api.some((f) => /searchParams/.test(f.text))).toBe(true);
   });
 });
 
