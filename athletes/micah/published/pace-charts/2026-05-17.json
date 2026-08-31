@@ -1,75 +1,35 @@
 {
  "bands": {
   "easy": {
-   "display": "8:29-9:09/mi",
    "fast_sec_per_mi": 509,
-   "pct": [
-    0.63,
-    0.68
-   ],
    "slow_sec_per_mi": 549
   },
   "long": {
-   "display": "8:00-8:29/mi",
    "fast_sec_per_mi": 480,
-   "pct": [
-    0.68,
-    0.72
-   ],
    "slow_sec_per_mi": 509
   },
   "recovery": {
-   "display": "9:09-9:56/mi",
    "fast_sec_per_mi": 549,
-   "pct": [
-    0.58,
-    0.63
-   ],
    "slow_sec_per_mi": 596
   },
   "rep_10min": {
-   "display": "7:02-7:18/mi",
    "fast_sec_per_mi": 422,
-   "pct": [
-    0.79,
-    0.82
-   ],
    "slow_sec_per_mi": 438
   },
   "rep_15min": {
-   "display": "7:12-7:29/mi",
    "fast_sec_per_mi": 432,
-   "pct": [
-    0.77,
-    0.8
-   ],
    "slow_sec_per_mi": 449
   },
   "rep_1min": {
-   "display": "6:33-6:47/mi",
    "fast_sec_per_mi": 393,
-   "pct": [
-    0.85,
-    0.88
-   ],
    "slow_sec_per_mi": 407
   },
   "rep_3min": {
-   "display": "6:42-6:57/mi",
    "fast_sec_per_mi": 402,
-   "pct": [
-    0.83,
-    0.86
-   ],
    "slow_sec_per_mi": 417
   },
   "rep_6min": {
-   "display": "6:52-7:07/mi",
    "fast_sec_per_mi": 412,
-   "pct": [
-    0.81,
-    0.84
-   ],
    "slow_sec_per_mi": 427
   }
  },
@@ -77,43 +37,34 @@
  "effective_vo2max": 54.4,
  "race_paces": {
   "10000m": {
-   "display": "38:27 @ 6:11/mi",
    "sec_per_mi": 371,
    "seconds": 2307
   },
   "1500m": {
-   "display": "5:00 @ 5:22/mi",
    "sec_per_mi": 322,
    "seconds": 300
   },
   "21097m": {
-   "display": "1:25:04 @ 6:29/mi",
    "sec_per_mi": 389,
    "seconds": 5104
   },
   "3000m": {
-   "display": "10:43 @ 5:45/mi",
    "sec_per_mi": 345,
    "seconds": 643
   },
   "42195m": {
-   "display": "2:57:33 @ 6:46/mi",
    "sec_per_mi": 406,
    "seconds": 10653
   },
   "5000m": {
-   "display": "18:33 @ 5:58/mi",
    "sec_per_mi": 358,
    "seconds": 1113
   },
   "800m": {
-   "display": "2:32 @ 5:05/mi",
    "sec_per_mi": 305,
    "seconds": 152
   },
   "tempo": {
-   "basis": "60-80 minute race pace, the Daniels threshold definition, from the model's duration prognosis.",
-   "display": "6:21-6:28/mi",
    "fast_sec_per_mi": 381,
    "slow_sec_per_mi": 388
   }

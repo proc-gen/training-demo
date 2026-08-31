@@ -29,6 +29,12 @@ export type Index = {
   /** The chart table's keys. `assembleFromRecords()` reaches charts through
    *  the weeks that name them; the index builder loads the table whole. */
   pace_charts: string[];
+  /** The stream table's activity ids -- the ONE catalog the SQLite index does
+   *  not load. Those records are 18.6 MB and are fetched one at a time; this
+   *  list exists so the static export can enumerate the routes and so nothing
+   *  has to list a directory. Optional, because a tree published before
+   *  2026-08-30 carries no such key and must still read. */
+  streams?: number[];
 };
 
 /** How stale an already-built index is allowed to be.

@@ -1,75 +1,35 @@
 {
  "bands": {
   "easy": {
-   "display": "8:38-9:19/mi",
    "fast_sec_per_mi": 518,
-   "pct": [
-    0.63,
-    0.68
-   ],
    "slow_sec_per_mi": 559
   },
   "long": {
-   "display": "8:09-8:38/mi",
    "fast_sec_per_mi": 489,
-   "pct": [
-    0.68,
-    0.72
-   ],
    "slow_sec_per_mi": 518
   },
   "recovery": {
-   "display": "9:19-10:07/mi",
    "fast_sec_per_mi": 559,
-   "pct": [
-    0.58,
-    0.63
-   ],
    "slow_sec_per_mi": 607
   },
   "rep_10min": {
-   "display": "7:09-7:25/mi",
    "fast_sec_per_mi": 429,
-   "pct": [
-    0.79,
-    0.82
-   ],
    "slow_sec_per_mi": 445
   },
   "rep_15min": {
-   "display": "7:20-7:37/mi",
    "fast_sec_per_mi": 440,
-   "pct": [
-    0.77,
-    0.8
-   ],
    "slow_sec_per_mi": 457
   },
   "rep_1min": {
-   "display": "6:40-6:54/mi",
    "fast_sec_per_mi": 400,
-   "pct": [
-    0.85,
-    0.88
-   ],
    "slow_sec_per_mi": 414
   },
   "rep_3min": {
-   "display": "6:49-7:04/mi",
    "fast_sec_per_mi": 409,
-   "pct": [
-    0.83,
-    0.86
-   ],
    "slow_sec_per_mi": 424
   },
   "rep_6min": {
-   "display": "6:59-7:14/mi",
    "fast_sec_per_mi": 419,
-   "pct": [
-    0.81,
-    0.84
-   ],
    "slow_sec_per_mi": 434
   }
  },
@@ -77,43 +37,34 @@
  "effective_vo2max": 53.24,
  "race_paces": {
   "10000m": {
-   "display": "39:10 @ 6:18/mi",
    "sec_per_mi": 378,
    "seconds": 2350
   },
   "1500m": {
-   "display": "5:06 @ 5:28/mi",
    "sec_per_mi": 328,
    "seconds": 306
   },
   "21097m": {
-   "display": "1:26:41 @ 6:37/mi",
    "sec_per_mi": 397,
    "seconds": 5201
   },
   "3000m": {
-   "display": "10:55 @ 5:52/mi",
    "sec_per_mi": 352,
    "seconds": 655
   },
   "42195m": {
-   "display": "3:00:49 @ 6:54/mi",
    "sec_per_mi": 414,
    "seconds": 10849
   },
   "5000m": {
-   "display": "18:53 @ 6:05/mi",
    "sec_per_mi": 365,
    "seconds": 1133
   },
   "800m": {
-   "display": "2:35 @ 5:11/mi",
    "sec_per_mi": 311,
    "seconds": 155
   },
   "tempo": {
-   "basis": "60-80 minute race pace, the Daniels threshold definition, from the model's duration prognosis.",
-   "display": "6:27-6:35/mi",
    "fast_sec_per_mi": 387,
    "slow_sec_per_mi": 395
   }

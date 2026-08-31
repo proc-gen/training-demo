@@ -1,7 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import type { PaceChart, PaceModelsCurrent, Week } from "@/lib/data/payload";
+import { useMemo, useState } from "react";
+import type { PaceChart, Week } from "@/lib/data/payload";
+import { chartVo2max } from "@/lib/data/paceRows";
+import { MODEL_NAMES } from "@/lib/pacemodels/registry";
+import { modelsAt } from "@/lib/pacemodels/tables";
 import { PaceBandTable } from "./PaceBandTable";
 import { RacePaceTable } from "./RacePaceTable";
 
@@ -27,48 +30,58 @@ import { RacePaceTable } from "./RacePaceTable";
  * more expected state on a page that just had three of them removed.
  *
  * **THE MODEL DROPDOWN SWAPS THE RACE TABLE'S CURRENT COLUMN AND NOTHING
- * ELSE.** `pace_models_current` carries every registered model's race table at
- * the newest chart's own anchor; picking one shows an alternate model's
- * projections under that model's own name in the column heading, so a
- * projection never wears the confirmed chart's label. The BAND table always
- * renders the confirmed chart -- a training band is a percentage of vVO2max
- * and the alternate models have none to state -- and the week column is
- * untouched: it is the record the week was graded against, not a playground.
- * When the record is null (pace-models not installed) the control does not
- * render. `autoComplete="off"` for the same restore-across-reload reason the
- * week picker carries it.
+ * ELSE.** Picking one shows an alternate model's projections under that model's
+ * own name in the column heading, so a projection never wears the confirmed
+ * chart's label. The BAND table always renders the confirmed chart -- a
+ * training band is a percentage of vVO2max and the alternate models have none
+ * to state -- and the week column is untouched: it is the record the week was
+ * graded against, not a playground. `autoComplete="off"` for the same
+ * restore-across-reload reason the week picker carries it.
+ *
+ * **THE TABLES ARE COMPUTED HERE SINCE 2026-08-30, NOT PUBLISHED.** They were
+ * `published/pace-models-current.json`, which a `propose_chart.py` subprocess
+ * rebuilt on every publish and rewrote whole each time a confirmed chart moved
+ * the anchor. They are a pure function of that one anchor, so
+ * `lib/pacemodels/` computes them from the chart this component already has
+ * and the record is gone. The gate is now the honest one -- is there a current
+ * chart stating an effective VO2max -- and it is the same condition that
+ * blanks the rail entirely.
  *
  * `RunDetail`'s planned readout still says which chart a SESSION's targets came
  * from, which is a different question -- a target is a number to act on, and
  * where it came from qualifies it.
  */
-/** Dropdown order: the scored model first, cross-checks after. A constant
- * here because `publish.py`'s `sort_keys` alphabetises the record's keys --
- * the paces-rail row-order rule, and the same `FLAG_COMPONENT` /
- * `unmappedFlags()` shape: a token this list does not know is APPENDED,
- * never dropped, so a new model renders before anyone teaches the page
- * its name. */
-const MODEL_ORDER = ["daniels_gilbert", "riegel", "cameron", "critical_speed"];
-
+/** Dropdown order: the scored model first, cross-checks after.
+ *
+ * `MODEL_NAMES` IS THE REGISTRY'S OWN, not a copy. This component carried its
+ * own list while the order came off a record written with `sort_keys`; the
+ * models are the app's arithmetic now, so the order lives once at its source.
+ * The `FLAG_COMPONENT` / `unmappedFlags()` shape is kept: a token this list
+ * does not know is APPENDED, never dropped, so a new model renders before
+ * anyone teaches the page its name.
+ */
 export function modelOrder(tokens: string[]): string[] {
-  const known = MODEL_ORDER.filter((t) => tokens.includes(t));
-  const unknown = tokens.filter((t) => !MODEL_ORDER.includes(t)).sort();
+  const known = MODEL_NAMES.filter((t) => tokens.includes(t)) as string[];
+  const unknown = tokens.filter((t) => !MODEL_NAMES.includes(t as never)).sort();
   return [...known, ...unknown];
 }
 
 export function PaceRail({
   week,
   current,
-  models,
 }: {
   week: Week;
   current?: PaceChart | null;
-  models?: PaceModelsCurrent | null;
 }) {
   const [model, setModel] = useState("");
   const chart = week.pace_chart;
   const carried = week.pace_chart_is_carried_forward === true;
   const showWeek = !!chart && !carried;
+  /* MEMOISED ON THE ANCHOR, not on the chart object. Four models over seven
+     distances is ~1 ms of bisection, and a chart re-parsed per render would
+     otherwise redo it on every keystroke in the dropdown. */
+  const anchor = chartVo2max(current);
+  const models = useMemo(() => modelsAt(anchor), [anchor]);
   if (!chart && !current) return null;
 
   const tables = models?.models ?? {};

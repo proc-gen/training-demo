@@ -1,205 +1,79 @@
 {
  "bands": {
   "easy": {
-   "derived_check": {
-    "fast": "8:20",
-    "residual_sec": [
-     1.1,
-     -0.5
-    ],
-    "slow": "9:00"
-   },
-   "display": "8:21-8:59/mi",
    "fast_sec_per_mi": 501,
-   "pct": [
-    0.63,
-    0.68
-   ],
    "slow_sec_per_mi": 539
   },
   "long": {
-   "derived_check": {
-    "fast": "7:52",
-    "residual_sec": [
-     -0.1,
-     1.1
-    ],
-    "slow": "8:20"
-   },
-   "display": "7:52-8:21/mi",
    "fast_sec_per_mi": 472,
-   "pct": [
-    0.68,
-    0.72
-   ],
    "slow_sec_per_mi": 501
   },
   "recovery": {
-   "derived_check": {
-    "fast": "9:00",
-    "residual_sec": [
-     -0.5,
-     -0.0
-    ],
-    "slow": "9:46"
-   },
-   "display": "8:59-9:46/mi",
    "fast_sec_per_mi": 539,
-   "pct": [
-    0.58,
-    0.63
-   ],
    "slow_sec_per_mi": 586
   },
   "rep_10min": {
-   "derived_check": {
-    "fast": "6:55",
-    "residual_sec": [
-     0.5,
-     -0.3
-    ],
-    "slow": "7:10"
-   },
-   "display": "6:55-7:10/mi",
    "fast_sec_per_mi": 415,
-   "pct": [
-    0.79,
-    0.82
-   ],
    "slow_sec_per_mi": 430
   },
   "rep_15min": {
-   "derived_check": {
-    "fast": "7:05",
-    "residual_sec": [
-     0.1,
-     -0.4
-    ],
-    "slow": "7:21"
-   },
-   "display": "7:05-7:21/mi",
    "fast_sec_per_mi": 425,
-   "pct": [
-    0.77,
-    0.8
-   ],
    "slow_sec_per_mi": 441
   },
   "rep_1min": {
-   "derived_check": {
-    "fast": "6:26",
-    "residual_sec": [
-     -0.2,
-     -0.9
-    ],
-    "slow": "6:40"
-   },
-   "display": "6:26-6:39/mi",
    "fast_sec_per_mi": 386,
-   "pct": [
-    0.85,
-    0.88
-   ],
    "slow_sec_per_mi": 399
   },
   "rep_3min": {
-   "derived_check": {
-    "fast": "6:35",
-    "residual_sec": [
-     0.8,
-     -0.5
-    ],
-    "slow": "6:50"
-   },
-   "display": "6:36-6:49/mi",
    "fast_sec_per_mi": 396,
-   "pct": [
-    0.83,
-    0.86
-   ],
    "slow_sec_per_mi": 409
   },
   "rep_6min": {
-   "derived_check": {
-    "fast": "6:45",
-    "residual_sec": [
-     -0.6,
-     0.4
-    ],
-    "slow": "7:00"
-   },
-   "display": "6:44-7:00/mi",
    "fast_sec_per_mi": 404,
-   "pct": [
-    0.81,
-    0.84
-   ],
    "slow_sec_per_mi": 420
   }
  },
- "captured": "2026-08-04",
  "confirmed_by_athlete": true,
  "gap_zone": {
-  "derivation": "fast end of long -> slow end of rep_15min",
-  "display": "7:52-7:21/mi",
   "fast_sec_per_mi": 472,
   "slow_sec_per_mi": 441
  },
- "max_derivation_residual_sec": 1.1,
- "provenance": "Runalyze Training paces table, supplied by the athlete and confirmed. Observed values are authoritative; derived_check shows what pct x vVO2max reproduces, for validation only.",
  "race_paces": {
   "10000m": {
-   "display": "37:44 @ 6:04/mi",
    "sec_per_mi": 364,
    "seconds": 2264
   },
   "1500m": {
-   "display": "4:54 @ 5:15/mi",
    "sec_per_mi": 315,
    "seconds": 294
   },
   "21097m": {
-   "display": "1:23:29 @ 6:22/mi",
    "sec_per_mi": 382,
    "seconds": 5009
   },
   "3000m": {
-   "display": "10:31 @ 5:38/mi",
    "sec_per_mi": 338,
    "seconds": 631
   },
   "42195m": {
-   "display": "2:54:19 @ 6:38/mi",
    "sec_per_mi": 398,
    "seconds": 10459
   },
   "5000m": {
-   "display": "18:11 @ 5:51/mi",
    "sec_per_mi": 351,
    "seconds": 1091
   },
   "800m": {
-   "display": "2:28 @ 4:59/mi",
    "sec_per_mi": 299,
    "seconds": 148
   },
   "tempo": {
-   "basis": "60-80 minute race pace, the Daniels threshold definition. From the 2026-08-15 calculator run: 9.6 mi in 1:00:00 at 6:14/mi, 12.6 mi in 1:20:00 at 6:21/mi.",
-   "display": "6:14-6:21/mi",
    "fast_sec_per_mi": 374,
    "slow_sec_per_mi": 381
   }
  },
  "source": {
-  "effective_vo2max": 55.57,
-  "prognosis_seconds": {
-   "10km": 2265,
-   "3km": 631,
-   "5km": 1092,
-   "half": 5183,
-   "marathon": 13575
-  },
-  "vvo2max_pace_sec_per_mi": 339.9
+  "effective_vo2max": 55.57
  },
  "week_ending": "2026-08-02"
 }

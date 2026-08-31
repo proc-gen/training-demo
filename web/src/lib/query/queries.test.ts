@@ -101,28 +101,44 @@ describe("a broken index reports rather than guesses", () => {
   const EMPTY_INDEX = { schema: 2, athlete: {}, banners: [] };
 
   it("throws when a chart key names no row", () => {
-    /* Not an absent chart -- a BROKEN one. The pointer stating a key is a
-     * promise that the row exists, and swallowing the miss would take the
-     * paces rail off the page with nothing saying why. Null-in-null-out is
-     * the ONLY absence this join tolerates, and it is asserted below. */
+    /* Not an absent chart -- a BROKEN one. A week STATING a key is a promise
+     * that the row exists, and swallowing the miss would take that week's
+     * bands off the page with nothing saying why. Null-in-null-out is the ONLY
+     * absence this join tolerates, and it is asserted below.
+     *
+     * IT IS REACHED THROUGH A WEEK NOW, not through the current-chart pointer:
+     * that record is gone and the current chart is `max(week_ending)` over the
+     * table itself, which cannot name a row that is not there. A STORED key is
+     * the one remaining way a key can be wrong -- `_drop` leaves one behind
+     * wherever the derivation did not reproduce it. */
     const db = stub({
-      index: EMPTY_INDEX,
+      index: { ...EMPTY_INDEX, weeks: ["2026-01-05"] },
       history: {},
+      vo2max: [],
       thresholds: {},
-      pace_models_current: null,
-      pace_chart_current: { week_ending: "1999-01-03" },
+      load_model: {},
     });
+    db.prepare(
+      `insert into week (week_start, ordinal, week_json, trimp_json)
+       values (?, 0, ?, '[]')`,
+    ).run(
+      "2026-01-05",
+      JSON.stringify({
+        week_start: "2026-01-05",
+        pace_chart_week_ending: "1999-01-03",
+      }),
+    );
     expect(() => assemblePayload(db)).toThrow(/1999-01-03/);
     db.close();
   });
 
-  it("reads a null pointer as no chart, not as a broken one", () => {
+  it("reads an empty chart table as no current chart", () => {
     const db = stub({
       index: EMPTY_INDEX,
       history: {},
+      vo2max: [],
       thresholds: {},
-      pace_models_current: null,
-      pace_chart_current: null,
+      load_model: {},
     });
     expect(
       (assemblePayload(db) as { pace_chart_current: unknown }).pace_chart_current,
@@ -135,8 +151,8 @@ describe("a broken index reports rather than guesses", () => {
     const db = stub({
       index: EMPTY_INDEX,
       thresholds: {},
-      pace_models_current: null,
-      pace_chart_current: null,
+      load_model: {},
+      vo2max: [],
     });
     expect(() => assemblePayload(db)).toThrow(/history/);
     db.close();

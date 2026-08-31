@@ -136,33 +136,74 @@ describe("the carried live-week extension", () => {
     }
   });
 
-  has(P)("EXTENDS RACE-TIMES BY THE SAME CARRIED SUNDAYS as target-paces", () => {
-    /* It deliberately did not until 2026-08-26 -- with no marks its carried
-       segment was the restated flat step the dedup rule forbids -- but a race
-       dot can land there now, and an axis cut at the newest confirmed Sunday
-       hides a race run today. What survives of the old rule is asserted below:
-       the extension stays out of `charts()` and `raceKeys`. */
-    const newest = all[all.length - 1];
+  /* RACE-TIMES LEFT THIS MECHANISM ENTIRELY ON 2026-08-29, and the two cases
+   * that used to sit here went with it. It carried the same weekly Sundays as
+   * target-paces from 2026-08-26 so a race dot run after the newest confirmed
+   * chart still had a slot to land on. It is DAILY now -- one point per
+   * calendar day, priced by the model at that day's own effective VO2max --
+   * so it reaches the newest activity by construction and there is nothing
+   * left to carry. The cases below are the replacement contract.
+   *
+   * TARGET-PACES KEEPS THE CARRIED EXTENSION, which is the athlete's own
+   * instruction and is asserted above: a band is what a session was GRADED
+   * against, so it may only ever restate a confirmed chart. */
+  has(P)("draws race times DAILY, one point per calendar day", () => {
     for (const mode of race!.modes!) {
-      expect(mode.points.slice(0, all.length).map((p) => p.date)).toEqual(
-        all.map((c) => c.date),
-      );
-      mode.points.slice(all.length).forEach((p, i) => {
-        expect(p.date).toBe(addDays(newest.date, 7 * (i + 1)));
-        expect(p.carried).toBe(newest.date);
-      });
-      // The same tail as target-paces -- one live-week rule, two panels.
-      expect(mode.points.slice(all.length).map((p) => p.date)).toEqual(
-        groups[0].points.slice(all.length).map((p) => p.date),
-      );
+      const dates = mode.points.map((p) => p.date);
+      expect(dates.length).toBeGreaterThan(600);
+      for (let i = 1; i < dates.length; i++) {
+        expect(dates[i]).toBe(addDays(dates[i - 1], 1));
+      }
+    }
+    expect(race!.cadence).toBe("day");
+  });
+
+  has(P)("carries nothing, because every day states its own fitness", () => {
+    for (const mode of race!.modes!) {
+      expect(mode.points.filter((p) => p.carried)).toEqual([]);
     }
   });
 
-  has(P)("restates the newest chart's race values verbatim on every carried point", () => {
+  has(P)("reaches past the newest CHART, to the newest activity", () => {
+    /* The reason the carried extension existed at all: a race run after the
+       last confirmed Sunday needed a slot. The curve provides one for every
+       date up to the newest logged activity, which is at or past the newest
+       chart on every tree state. */
+    const newestChart = all[all.length - 1].date;
     for (const mode of race!.modes!) {
-      const confirmed = mode.points[all.length - 1];
-      for (const p of mode.points.slice(all.length)) {
-        expect(p.values).toEqual(confirmed.values);
+      const last = mode.points[mode.points.length - 1].date;
+      expect(last >= newestChart).toBe(true);
+    }
+  });
+
+  has(P)("puts the day's own anchor on every point", () => {
+    /* `vo2max` is the tooltip's provenance field and it is the number the whole
+       point is derived from here, rather than a chart's recorded anchor. Never
+       null on a drawn point: a point exists exactly when the window held
+       something. */
+    for (const mode of race!.modes!) {
+      for (const p of mode.points) {
+        expect(typeof p.vo2max).toBe("number");
+        expect(p.vo2max!).toBeGreaterThan(20);
+        expect(p.vo2max!).toBeLessThan(90);
+      }
+    }
+  });
+
+  has(P)("prices every distance on every day, monotonically in distance", () => {
+    /* A longer race is always slower, at any fitness -- so a values map that
+       is not increasing in distance means a key was priced at the wrong
+       metres, which `metresOf` returning null would do silently. */
+    const order = ["800m", "1500m", "3000m", "5000m", "10000m"];
+    const time = race!.modes!.find((m) => m.key === "time")!;
+    const drawn = race!.series ?? [];
+    const keys = order.filter((k) => drawn.some((s) => s.key === k));
+    expect(keys.length).toBeGreaterThan(2);
+    for (const p of time.points) {
+      const got = keys.map((k) => p.values![k] as number);
+      for (const v of got) expect(typeof v).toBe("number");
+      for (let i = 1; i < got.length; i++) {
+        expect(got[i]).toBeGreaterThan(got[i - 1]);
       }
     }
   });
@@ -536,9 +577,33 @@ describe("both panels reach the graph list", () => {
     expect(bands!.title).toBe("Target paces");
   });
 
-  has(P)("plots them weekly, so the axis densifies on the right step", () => {
-    expect(race!.cadence).toBe("week");
+  has(P)("plots race times DAILY and target paces WEEKLY", () => {
+    /* THE ATHLETE'S OWN SPLIT, 2026-08-29: *"make sure that I can view the
+     * daily values in the graphs for projected race times. projected training
+     * paces should still be locked to what was calculated at the end of the
+     * previous week."*
+     *
+     * It is also the correctness rule, which is why it is asserted rather than
+     * merely followed. `race_paces` is a PROJECTION and nothing is graded
+     * against one, so evaluating it per day costs nothing. `bands` is the
+     * CRITERION every continuous run and sub-T rep is scored against, so a
+     * target has to be the number the grader read -- the confirmed chart, at
+     * the end of the previous week. Making this panel daily would put a
+     * derived band under a rep dot that was judged by a different one. */
+    expect(race!.cadence).toBe("day");
     expect(bands!.cadence).toBe("week");
+  });
+
+  has(P)("draws target paces on the CONFIRMED charts and nothing else", () => {
+    /* The other half of that rule. Every target-paces point must be a chart's
+       own Sunday or a carried restatement of one -- never a date the model
+       invented. */
+    const chartDates = new Set(all.map((c) => c.date));
+    for (const grp of bands!.groups!) {
+      for (const p of grp.points) {
+        expect(chartDates.has(p.date) || Boolean(p.carried)).toBe(true);
+      }
+    }
   });
 
   has(P)("offers a unit choice on race times and NONE on target paces", () => {

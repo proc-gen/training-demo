@@ -4,9 +4,12 @@ import { useId, useState } from "react";
 
 import { paceChartBand, type PaceChart, type RunResult } from "@/lib/data/payload";
 import { Tabs } from "@/lib/ux/primitives/Tabs";
+import { CustomLapsButton } from "./CustomLapsButton";
+import { raceChartPoints } from "./data/raceSplits";
 import { isPlanned } from "./data/runStatus";
 import { LapTable } from "./LapTable";
 import { PlannedReadout } from "./PlannedReadout";
+import { RaceSplitTable } from "./RaceSplitTable";
 import { RepChartPanel } from "./RepChartPanel";
 import { RunScoreWhy } from "./RunScoreWhy";
 import { SessionDetail } from "./SessionDetail";
@@ -18,11 +21,24 @@ import { SessionDetail } from "./SessionDetail";
  * lap-by-lap second; the reverse makes them scroll past a table to find out what
  * they are looking at.
  *
- * A run shows EITHER its judged sets or its raw laps, never both, because the
- * grader publishes only one -- a session with `rep_rows` has been
- * warmup-stripped, rep-detected and judged, which is strictly more than a lap
- * table knows, and a race publishes per-mile splits cut from the distance
- * stream. Two segment tables for one run is a reader deciding which to believe.
+ * A run shows EXACTLY ONE segment table, because the grader publishes exactly
+ * one. Three kinds, and which arrives says what the run was:
+ *
+ *   - a session with `rep_rows` has been warmup-stripped, rep-detected and
+ *     JUDGED, which is strictly more than a lap table knows;
+ *   - a RACE publishes per-mile splits cut from the distance stream, because it
+ *     is rarely lapped on the mile marks -- `attach_laps()` withholds the device
+ *     laps for exactly that reason;
+ *   - everything else gets the laps the watch recorded.
+ *
+ * Two segment tables for one run is a reader deciding which to believe.
+ *
+ * THE RACE ARM WAS DESCRIBED HERE AND NEVER BUILT, and this comment is where the
+ * gap hid: it explained why a race gets splits rather than laps while the branch
+ * below had two arms, so a race matched neither and fell through to `null`. The
+ * athlete found it by opening the Local 5k and asking why laps never show
+ * for races. Eleven completed races had been publishing their splits the whole
+ * time.
  *
  * A CONTINUOUS RUN GETS A CHART TOO. Its laps carry heart rate and its
  * `ceiling_tiers` carry the rule that scored it, which is the same pairing a
@@ -55,6 +71,10 @@ export function RunDetail({
 
   const sets = run.detail?.sets ?? [];
   const hasReps = sets.some((s) => (s.rep_rows ?? []).length);
+  // Present ONLY on a completed race, and null on one whose file carried no
+  // distance stream -- `race_report()` returns None there rather than guessing
+  // splits, so such a race falls on to the laps arm like any other run.
+  const race = run.detail?.race;
   const laps = run.detail?.laps ?? [];
   // WHERE THE FILE DECLARES ITS REPS, THE CHART PLOTS THOSE ALONE. The table
   // below still lists every lap. This is `RepSetPanel`'s own rule --
@@ -84,6 +104,22 @@ export function RunDetail({
     ? paceChartBand(chart, planned.band)
     : null;
 
+  /* CUSTOM LAPS SITS DIRECTLY UNDER THE TABLE, which is the athlete's own
+   * placement: it shipped after the whole branch below, so it landed under the
+   * chart AND under the chart's footnote, where it read as an afterthought.
+   *
+   * ONE `const`, THREE POSITIONS. The branch is an if/else chain, so exactly
+   * one of them renders and this is one element in one place at runtime --
+   * while writing the call out three times would be three things free to drift
+   * in what they pass.
+   *
+   * A PLANNED run never reaches any of them; it is on the other side of
+   * `showPlanned`, which is right, because a session nobody has run has no
+   * samples to cut. */
+  const customLaps = run.runalyze_id ? (
+    <CustomLapsButton activityId={Number(run.runalyze_id)} />
+  ) : null;
+
   return (
     <div className="run-detail">
       {showTabs ? (
@@ -108,10 +144,46 @@ export function RunDetail({
             <RunScoreWhy run={run} />
 
             {hasReps ? (
-              <SessionDetail sets={sets} chart={chart} />
+              <>
+                <SessionDetail sets={sets} chart={chart} />
+                {/* AFTER THE WHOLE SESSION, and that is the honest answer here
+                    rather than an oversight. This arm has no single laps table:
+                    `SessionDetail` renders a `RepSetPanel` per set, each with
+                    its own table and its own chart, so "under the laps table"
+                    has no referent inside it. */}
+                {customLaps}
+              </>
+            ) : race ? (
+              <>
+                <RaceSplitTable race={race} />
+                {customLaps}
+                <RepChartPanel
+                  points={raceChartPoints(race)}
+                  // A race is read for its splits, so that is the view it opens
+                  // on -- and unlike every other run there is no alternative
+                  // criterion to defer to, because nothing scored it.
+                  scoredOn="pace"
+                  // NO BAND AND NO CEILING LINE. A race has no criterion at all:
+                  // `hr.race` does not exist and a prognosis is a projection,
+                  // not a rule the run was held to. Drawing either would put a
+                  // verdict under marks the grader deliberately did not judge.
+                  band={null}
+                  hrCeilings={[]}
+                  // Stronger here than on a continuous run, which at least has a
+                  // whole-run ceiling: a race is scored by NOTHING, so no mark
+                  // can pass or fail and none may render as though it could.
+                  judged={false}
+                  unit="split"
+                  // No note on either view. `RunScoreWhy` states "Reported,
+                  // never scored" immediately above, and repeating it under the
+                  // chart is the page-prose the athlete has asked to remove
+                  // three times over.
+                />
+              </>
             ) : laps.length ? (
               <>
                 <LapTable laps={laps} />
+                {customLaps}
                 <RepChartPanel
                   points={points}
                   // A continuous run is scored on time under a heart-rate

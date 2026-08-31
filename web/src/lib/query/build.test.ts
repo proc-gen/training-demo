@@ -91,9 +91,19 @@ describe.skipIf(!slug)("loading every record", () => {
     expect(keys).toEqual([
       "history",
       "index",
-      "pace_chart_current",
-      "pace_models_current",
+      // The load model's flag constants, hoisted out of the 102 week records
+      // on 2026-08-30: athlete-agnostic and frozen, so one row rather than 102
+      // identical copies -- the N:1 the pace chart makes one tier up.
+      "load_model",
+      // TWO WENT ON 2026-08-30 and neither was really a record.
+      // `pace_chart_current` held a POINTER at the newest chart, which is
+      // max(week_ending) over the `pace_chart` table this same builder fills;
+      // `pace_models_current` held a table the app computes from that chart's
+      // own anchor.
       "thresholds",
+      // The fitness series, added 2026-08-29. Stored as its own document and
+      // read as rows through the `vo2max_row` view.
+      "vo2max",
     ]);
   });
 });

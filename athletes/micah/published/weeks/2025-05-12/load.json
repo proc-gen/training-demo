@@ -1,8 +1,6 @@
 {
  "acwr_mech": 0.2567432461499016,
  "acwr_mech_on": "2025-05-18",
- "acwr_run": 0.1913580094886407,
- "bg_trimp": 127.78702650622296,
  "ceiling_inputs": {
   "background_source": "baseline",
   "background_steps": 2544.0,
@@ -23,20 +21,12 @@
    "completeness": "full",
    "ctl": 89.46740623500332,
    "date": "2025-05-12",
-   "nonrun_se": 5285.0,
-   "nonrun_steps": 5285,
    "pct": null,
    "prescribed_run_seconds": null,
    "prescribed_run_steps": null,
    "role": null,
-   "run_se": 0.0,
-   "run_step_source": "none",
-   "run_steps": 0,
    "scored": false,
-   "se": 5285.0,
-   "total_steps": 5285,
-   "trimp": 0.0,
-   "tsb": 17.18438142250207
+   "trimp": 0.0
   },
   {
    "atl": 54.21226860937594,
@@ -47,20 +37,12 @@
    "completeness": "full",
    "ctl": 85.30613152639852,
    "date": "2025-05-13",
-   "nonrun_se": 8867.0,
-   "nonrun_steps": 8867,
    "pct": null,
    "prescribed_run_seconds": null,
    "prescribed_run_steps": null,
    "role": null,
-   "run_se": 0.0,
-   "run_step_source": "none",
-   "run_steps": 0,
    "scored": false,
-   "se": 8867.0,
-   "total_steps": 8867,
-   "trimp": 0.0,
-   "tsb": 31.093862917022577
+   "trimp": 0.0
   },
   {
    "atl": 40.659201457031955,
@@ -71,20 +53,12 @@
    "completeness": "full",
    "ctl": 81.33840447865906,
    "date": "2025-05-14",
-   "nonrun_se": 5888.0,
-   "nonrun_steps": 5888,
    "pct": null,
    "prescribed_run_seconds": null,
    "prescribed_run_steps": null,
    "role": null,
-   "run_se": 0.0,
-   "run_step_source": "none",
-   "run_steps": 0,
    "scored": false,
-   "se": 5888.0,
-   "total_steps": 5888,
-   "trimp": 0.0,
-   "tsb": 40.6792030216271
+   "trimp": 0.0
   },
   {
    "atl": 30.494401092773966,
@@ -95,20 +69,12 @@
    "completeness": "full",
    "ctl": 77.5552228750005,
    "date": "2025-05-15",
-   "nonrun_se": 4390.0,
-   "nonrun_steps": 4390,
    "pct": null,
    "prescribed_run_seconds": null,
    "prescribed_run_steps": null,
    "role": null,
-   "run_se": 0.0,
-   "run_step_source": "none",
-   "run_steps": 0,
    "scored": false,
-   "se": 4390.0,
-   "total_steps": 4390,
-   "trimp": 0.0,
-   "tsb": 47.060821782226526
+   "trimp": 0.0
   },
   {
    "atl": 22.870800819580474,
@@ -119,20 +85,12 @@
    "completeness": "full",
    "ctl": 73.94800320639582,
    "date": "2025-05-16",
-   "nonrun_se": 4478.0,
-   "nonrun_steps": 4478,
    "pct": null,
    "prescribed_run_seconds": null,
    "prescribed_run_steps": null,
    "role": null,
-   "run_se": 0.0,
-   "run_step_source": "none",
-   "run_steps": 0,
    "scored": false,
-   "se": 4478.0,
-   "total_steps": 4478,
-   "trimp": 0.0,
-   "tsb": 51.07720238681535
+   "trimp": 0.0
   },
   {
    "atl": 17.153100614685357,
@@ -143,20 +101,12 @@
    "completeness": "full",
    "ctl": 70.50856119679602,
    "date": "2025-05-17",
-   "nonrun_se": 5921.0,
-   "nonrun_steps": 5921,
    "pct": null,
    "prescribed_run_seconds": null,
    "prescribed_run_steps": null,
    "role": null,
-   "run_se": 0.0,
-   "run_step_source": "none",
-   "run_steps": 0,
    "scored": false,
-   "se": 5921.0,
-   "total_steps": 5921,
-   "trimp": 0.0,
-   "tsb": 53.355460582110666
+   "trimp": 0.0
   },
   {
    "atl": 12.864825461014018,
@@ -167,28 +117,17 @@
    "completeness": "full",
    "ctl": 67.22909323415435,
    "date": "2025-05-18",
-   "nonrun_se": 6245.0,
-   "nonrun_steps": 6245,
    "pct": null,
    "prescribed_run_seconds": null,
    "prescribed_run_steps": null,
    "role": null,
-   "run_se": 0.0,
-   "run_step_source": "none",
-   "run_steps": 0,
    "scored": false,
-   "se": 6245.0,
-   "total_steps": 6245,
-   "trimp": 0.0,
-   "tsb": 54.36426777314033
+   "trimp": 0.0
   }
  ],
  "fitness": {
   "activities": 0,
-  "acwr_run": 0.1913580094886407,
-  "atl": 12.864825461014018,
   "atl_converged": true,
-  "ctl": 67.22909323415435,
   "ctl_converged": true,
   "ctl_warmup_days": 126,
   "days_covered": 7,
@@ -197,21 +136,17 @@
   "on_date": "2025-05-18",
   "seed_date": "2024-08-01",
   "stream_share": null,
-  "trimp": 0.0,
   "trimp_source": "none",
-  "tsb": 54.36426777314033,
   "unpriced": 0
  },
  "flags": [
   {
    "status": "clear",
-   "token": "steps-data-incomplete",
-   "why": "all 7 days covered by the export"
+   "token": "steps-data-incomplete"
   },
   {
    "status": "not-evaluable",
-   "token": "recovery-day-not-recovering",
-   "why": "no fully-covered rest or recovery day this week"
+   "token": "recovery-day-not-recovering"
   },
   {
    "status": "not-evaluable",
@@ -225,8 +160,7 @@
   },
   {
    "status": "clear",
-   "token": "load-monotony",
-   "why": "day-to-day SE coefficient of variation 0.24 (fires below 0.15)"
+   "token": "load-monotony"
   },
   {
    "status": "clear",
@@ -235,13 +169,11 @@
   },
   {
    "status": "clear",
-   "token": "hrv-suppressed",
-   "why": "longest run of 1 day(s) below 59.4 (90% of a 66.0 baseline); fires at 3"
+   "token": "hrv-suppressed"
   },
   {
    "status": "clear",
-   "token": "sleep-debt",
-   "why": "mean 7.4 h over 7 night(s) (fires below 6.5)"
+   "token": "sleep-debt"
   },
   {
    "status": "clear",
@@ -265,7 +197,6 @@
    "2025-05-17",
    "2025-05-18"
   ],
-  "pct": null,
   "scored_days": 0,
   "total": 0
  },
@@ -275,8 +206,6 @@
   "available": 21,
   "hrv_baseline": 66,
   "hrv_baseline_source": "snapshot",
-  "passed": 18,
-  "pct": 85.71428571428571,
   "per_day": [
    {
     "checks": {

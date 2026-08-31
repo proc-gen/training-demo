@@ -75,19 +75,11 @@
    "hr_max": null,
    "key": "2026-11-30",
    "km": null,
-   "miles": null,
    "miss_forgiven": false,
    "ordinal": 0,
-   "pace": null,
-   "pct": null,
    "planned": {
     "band": "recovery",
-    "band_display": "8:50-9:36/mi",
     "band_is_reference": true,
-    "band_sec_per_mi": [
-     530,
-     576
-    ],
     "ceiling": "130",
     "ceiling_kind": "hr",
     "ceiling_tiers": [
@@ -96,9 +88,6 @@
       130
      ]
     ],
-    "chart_confirmed": false,
-    "chart_is_carried_forward": true,
-    "chart_week_ending": "2026-08-23",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "30 min recovery",
@@ -124,22 +113,18 @@
  "scores": {
   "easy": {
    "earned": 0,
-   "pct": null,
    "total": 0
   },
   "recorded": {
    "earned": 0,
-   "pct": null,
    "total": 0
   },
   "week": {
    "earned": 0,
-   "pct": null,
    "total": 0
   },
   "workout": {
    "earned": 0,
-   "pct": null,
    "total": 0
   }
  },

@@ -63,10 +63,11 @@ export function WeekRoute({
       week={week}
       banners={loaded.payload.banners ?? []}
       /* The CHART, not the payload. `WeekView` needs one record and handing it
-         the whole payload would give it reach into every other week. The models
-         singleton rides beside it under the same rule. */
+         the whole payload would give it reach into every other week.
+         `paceModels` rode beside it until 2026-08-30; the rail derives every
+         model's table from this chart's own anchor now, so there is nothing
+         left to pass. */
       paceChartCurrent={loaded.payload.pace_chart_current}
-      paceModels={loaded.payload.pace_models_current}
     />
   );
 }

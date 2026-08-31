@@ -30,17 +30,31 @@ import { SCHEMA_SQL, SCHEMA_VERSION } from "./schema";
 
 /** Every singleton record, by the key `assemblePayload()` will ask for.
  *
- * `pace_chart_current` is the POINTER record -- `{"week_ending": ...}` or null
- * -- and NOT a chart. It stays a pointer here for the same reason it is one on
- * disk: the chart it names is a row in `pace_chart`, and storing the chart
- * beside the pointer would be the 88th copy the schema-2 normalisation
- * deleted.
+ * `pace_models_current` WAS ONE AND IS GONE (2026-08-30). Every model's race
+ * table is a pure function of the newest chart's anchor, so the app computes
+ * it -- see `lib/pacemodels/tables.ts` -- and no record is stored or indexed.
+ *
+ * `pace_chart_current` went the same day. It held a POINTER --
+ * `{"week_ending": ...}` -- at the newest chart, which is `max(week_ending)`
+ * over the `pace_chart` table this same builder fills. A stored pointer at a
+ * value the table already states is the schema-2 normalisation not carried far
+ * enough, and it was the one record that changed every time a chart was
+ * confirmed.
  */
 const SINGLETON_FILES: ReadonlyArray<[string, string]> = [
   ["history", "history.json"],
+  // THE FITNESS SERIES, stored as its own document and read as ROWS through
+  // the `vo2max_row` view. A singleton rather than a table because that is
+  // what it is on disk -- one file, one array -- and because storing it
+  // shredded would be a second copy of the bytes `assemblePayload()` has to
+  // hand back verbatim.
+  ["vo2max", "vo2max.json"],
   ["thresholds", "thresholds.json"],
-  ["pace_chart_current", "pace-chart-current.json"],
-  ["pace_models_current", "pace-models-current.json"],
+  // THE LOAD MODEL'S FLAG CONSTANTS, hoisted out of the 102 week records on
+  // 2026-08-30. Athlete-agnostic and frozen, so one row rather than 102 copies
+  // -- the same N:1 the pace chart makes one tier up -- and the five derived
+  // `why` sentences are composed from it.
+  ["load_model", "load-model.json"],
 ];
 
 /** The four files a week directory may hold, beyond the two that must exist. */

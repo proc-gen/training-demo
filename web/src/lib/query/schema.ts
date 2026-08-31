@@ -38,7 +38,7 @@
  * be reused with columns that no longer exist. This is the one invalidation the
  * mtime check cannot do on its own.
  */
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 
 /** The whole schema, executed in one `exec()` on a fresh database. */
 export const SCHEMA_SQL = `
@@ -63,8 +63,14 @@ create table week (
   notes_load_html      text,
 
   -- Reached by a shorter name, not copied. All VIRTUAL.
-  pace_chart_week_ending text generated always as
-    (json_extract(week_json, '$.pace_chart_week_ending')) virtual,
+  --
+  -- pace_chart_week_ending LEFT THIS LIST ON 2026-08-30, with the stored field
+  -- behind it. The key is max(week_ending) <= week_start - 1 over pace_chart,
+  -- so storing it rewrote every forward week's record whenever a chart was
+  -- confirmed; a generated column cannot take a subquery, and
+  -- queries.chartJoin resolves it off the parsed document instead -- which it
+  -- must, because json_extract cannot tell an absent key from a null one and
+  -- that distinction is what preserves a week the formula did not explain.
   week_end        text generated always as
     (json_extract(adherence_json, '$.week_end')) virtual,
   -- hasRuns() in lib/data/weeks.ts: at least one MEASURED run. A week authored
@@ -115,8 +121,10 @@ create table pace_chart (
   doc         text not null
 ) without rowid;
 
--- The top-level records: athlete, banners, history, thresholds,
--- pace_models_current, and pace_chart_current's POINTER (a key, not a chart).
+-- The top-level records: the catalog, history, thresholds and the vo2max
+-- series. TWO LEFT ON 2026-08-30 and neither was really a record:
+-- pace_chart_current was a POINTER at max(week_ending) over pace_chart, and
+-- pace_models_current was a table the app computes from that chart's anchor.
 create table singleton (
   key text primary key,
   doc text not null
@@ -138,6 +146,32 @@ create view run as
     r.value                                   as doc
   from week w, json_each(w.adherence_json, '$.results') r
   where w.adherence_json is not null;
+
+-- THE FITNESS SERIES, one row per activity. A VIEW over the singleton's own
+-- document, like run and load_day above -- the array is stored once, as the
+-- bytes assemblePayload() hands back, and this is the same bytes under column
+-- names.
+--
+-- (No backticks anywhere in this string: it is a JS template literal, and one
+-- would end it. The failure is a parse error pointing at the SQL, which reads
+-- as a broken query rather than as a quoting mistake.)
+--
+-- WHAT IT IS FOR: effective VO2max on any DATE, as a trailing distance-weighted
+-- mean over vo2max.shape_window_days. That number was previously reachable only
+-- at the 87 dates a pace chart was confirmed on, because the chart was the only
+-- place it was written down. It is a QUERY over a published measurement, not a
+-- second estimator: estimate_vo2max.py prices each activity and this shapes
+-- them, which is exactly the split effective_vo2max.shape() already draws on
+-- the Python side.
+create view vo2max_row as
+  select
+    json_extract(v.value, '$.date')            as date,
+    json_extract(v.value, '$.vo2max')          as vo2max,
+    json_extract(v.value, '$.distance_km')     as distance_km,
+    json_extract(v.value, '$.estimate_source') as estimate_source,
+    json_extract(v.value, '$.activity_id')     as activity_id
+  from singleton s, json_each(s.doc) v
+  where s.key = 'vo2max';
 
 -- Per-day load rows, same treatment. fitnessSeries() reads six scalars per day
 -- across every week and dedupes on date, because weeks overlap at a boundary.

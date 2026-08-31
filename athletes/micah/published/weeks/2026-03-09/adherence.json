@@ -74,44 +74,36 @@
       "cad": 177,
       "dist_km": 1.609,
       "dur": 545,
-      "end": 545,
       "hr_avg": 116,
       "hr_max": 126,
       "index": 1,
-      "pace": 545.1165195773773,
       "start": 0
      },
      {
       "cad": 177,
       "dist_km": 1.609,
       "dur": 518,
-      "end": 1063,
       "hr_avg": 125,
       "hr_max": 130,
       "index": 2,
-      "pace": 518.1107470478559,
       "start": 545
      },
      {
       "cad": 176,
       "dist_km": 1.609,
       "dur": 509,
-      "end": 1572,
       "hr_avg": 125,
       "hr_max": 129,
       "index": 3,
-      "pace": 509.1088228713487,
       "start": 1063
      },
      {
       "cad": 178,
       "dist_km": 0.731,
       "dur": 229,
-      "end": 1801,
       "hr_avg": 126,
       "hr_max": 130,
       "index": 4,
-      "pace": 504.1583803009576,
       "start": 1572
      }
     ]
@@ -136,18 +128,10 @@
    "hr_pct": 100.0,
    "key": "2026-03-09",
    "km": 5.56,
-   "miles": 3.4548238288395763,
    "ordinal": 0,
-   "pace": 521.3000978417267,
-   "pct": 100.0,
    "planned": {
     "band": "easy",
-    "band_display": "7:54-8:31/mi",
     "band_is_reference": true,
-    "band_sec_per_mi": [
-     474,
-     511
-    ],
     "ceiling": "137",
     "ceiling_kind": "hr",
     "ceiling_tiers": [
@@ -156,9 +140,6 @@
       137
      ]
     ],
-    "chart_confirmed": true,
-    "chart_is_carried_forward": false,
-    "chart_week_ending": "2026-03-08",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "unplanned -- injury-window easy run (30 min)",
@@ -178,7 +159,6 @@
    "status": "completed",
    "total": 1801,
    "volume_km": 5.56,
-   "volume_miles": 3.4548238288395763,
    "volume_seconds": 1801,
    "volume_source": "file"
   },
@@ -224,88 +204,72 @@
       "cad": 177,
       "dist_km": 1.609,
       "dur": 548,
-      "end": 548,
       "hr_avg": 131,
       "hr_max": 142,
       "index": 1,
-      "pace": 548.1171609695464,
       "start": 0
      },
      {
       "cad": 177,
       "dist_km": 1.054,
       "dur": 352,
-      "end": 900,
       "hr_avg": 137,
       "hr_max": 146,
       "index": 2,
-      "pace": 537.4659278937381,
       "start": 548
      },
      {
       "cad": 182,
       "dist_km": 1.609,
       "dur": 442,
-      "end": 1342,
       "hr_avg": 156,
       "hr_max": 161,
       "index": 3,
-      "pace": 442.0944984462399,
       "start": 900
      },
      {
       "cad": 183,
       "dist_km": 1.609,
       "dur": 442,
-      "end": 1784,
       "hr_avg": 162,
       "hr_max": 167,
       "index": 4,
-      "pace": 442.0944984462399,
       "start": 1342
      },
      {
       "cad": 183,
       "dist_km": 0.274,
       "dur": 76,
-      "end": 1860,
       "hr_avg": 166,
       "hr_max": 168,
       "index": 5,
-      "pace": 446.3873868613138,
       "start": 1784
      },
      {
       "cad": 174,
       "dist_km": 0.509,
       "dur": 180,
-      "end": 2040,
       "hr_avg": 156,
       "hr_max": 169,
       "index": 6,
-      "pace": 569.1196856581532,
       "start": 1860
      },
      {
       "cad": 181,
       "dist_km": 1.609,
       "dur": 450,
-      "end": 2490,
       "hr_avg": 157,
       "hr_max": 163,
       "index": 7,
-      "pace": 450.0962088253574,
       "start": 2040
      },
      {
       "cad": 182,
       "dist_km": 0.819,
       "dur": 226,
-      "end": 2716,
       "hr_avg": 160,
       "hr_max": 163,
       "index": 8,
-      "pace": 444.0924835164835,
       "start": 2490
      }
     ],
@@ -383,21 +347,13 @@
    "hr_max": 169,
    "key": "2026-03-10",
    "km": 9.09,
-   "miles": 5.648264137437366,
    "ordinal": 0,
-   "pace": 480.855699009901,
-   "pct": null,
    "planned": {
     "band": null,
-    "band_display": null,
     "band_is_reference": false,
-    "band_sec_per_mi": null,
     "ceiling": "162/166",
     "ceiling_kind": "hr",
     "ceiling_tiers": null,
-    "chart_confirmed": true,
-    "chart_is_carried_forward": false,
-    "chart_week_ending": "2026-03-08",
     "criterion": "hr",
     "hr_ceiling": [
      162,
@@ -409,9 +365,7 @@
     "sets": [
      {
       "band": null,
-      "band_display": null,
       "band_how": "ambiguous",
-      "band_sec_per_mi": null,
       "ceiling": "162/166",
       "ceiling_kind": "hr",
       "float_distance_m": null,
@@ -450,7 +404,6 @@
    "status": "completed",
    "total": null,
    "volume_km": 9.09,
-   "volume_miles": 5.648264137437366,
    "volume_seconds": 2716,
    "volume_source": "file"
   },
@@ -463,22 +416,18 @@
       "cad": 175,
       "dist_km": 1.609,
       "dur": 553,
-      "end": 553,
       "hr_avg": 121,
       "hr_max": 131,
       "index": 1,
-      "pace": 553.1182299564947,
       "start": 0
      },
      {
       "cad": 173,
       "dist_km": 0.139,
       "dur": 48,
-      "end": 601,
       "hr_avg": 127,
       "hr_max": 129,
       "index": 2,
-      "pace": 555.744690647482,
       "start": 553
      }
     ]
@@ -503,18 +452,10 @@
    "hr_pct": 100.0,
    "key": "2026-03-14",
    "km": 1.63,
-   "miles": 1.0128350433468543,
    "ordinal": 0,
-   "pace": 594.3712196319019,
-   "pct": 100.0,
    "planned": {
     "band": "easy",
-    "band_display": "7:54-8:31/mi",
     "band_is_reference": true,
-    "band_sec_per_mi": [
-     474,
-     511
-    ],
     "ceiling": "137",
     "ceiling_kind": "hr",
     "ceiling_tiers": [
@@ -523,9 +464,6 @@
       137
      ]
     ],
-    "chart_confirmed": true,
-    "chart_is_carried_forward": false,
-    "chart_week_ending": "2026-03-08",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "unplanned -- ten-minute treadmill test of the glute",
@@ -545,7 +483,6 @@
    "status": "completed",
    "total": 602,
    "volume_km": 1.63,
-   "volume_miles": 1.0128350433468543,
    "volume_seconds": 602,
    "volume_source": "file"
   }
@@ -553,22 +490,18 @@
  "scores": {
   "easy": {
    "earned": 2403.0,
-   "pct": 100.0,
    "total": 2403
   },
   "recorded": {
    "earned": 2403.0,
-   "pct": 100.0,
    "total": 2403
   },
   "week": {
    "earned": 2403.0,
-   "pct": 100.0,
    "total": 2403
   },
   "workout": {
    "earned": 0,
-   "pct": null,
    "total": 0
   }
  },

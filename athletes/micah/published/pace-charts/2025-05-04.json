@@ -1,75 +1,35 @@
 {
  "bands": {
   "easy": {
-   "display": "7:35-8:11/mi",
    "fast_sec_per_mi": 455,
-   "pct": [
-    0.63,
-    0.68
-   ],
    "slow_sec_per_mi": 491
   },
   "long": {
-   "display": "7:10-7:35/mi",
    "fast_sec_per_mi": 430,
-   "pct": [
-    0.68,
-    0.72
-   ],
    "slow_sec_per_mi": 455
   },
   "recovery": {
-   "display": "8:11-8:53/mi",
    "fast_sec_per_mi": 491,
-   "pct": [
-    0.58,
-    0.63
-   ],
    "slow_sec_per_mi": 533
   },
   "rep_10min": {
-   "display": "6:17-6:32/mi",
    "fast_sec_per_mi": 377,
-   "pct": [
-    0.79,
-    0.82
-   ],
    "slow_sec_per_mi": 392
   },
   "rep_15min": {
-   "display": "6:27-6:42/mi",
    "fast_sec_per_mi": 387,
-   "pct": [
-    0.77,
-    0.8
-   ],
    "slow_sec_per_mi": 402
   },
   "rep_1min": {
-   "display": "5:52-6:04/mi",
    "fast_sec_per_mi": 352,
-   "pct": [
-    0.85,
-    0.88
-   ],
    "slow_sec_per_mi": 364
   },
   "rep_3min": {
-   "display": "6:00-6:13/mi",
    "fast_sec_per_mi": 360,
-   "pct": [
-    0.83,
-    0.86
-   ],
    "slow_sec_per_mi": 373
   },
   "rep_6min": {
-   "display": "6:08-6:22/mi",
    "fast_sec_per_mi": 368,
-   "pct": [
-    0.81,
-    0.84
-   ],
    "slow_sec_per_mi": 382
   }
  },
@@ -77,48 +37,38 @@
  "effective_vo2max": 62.41,
  "race_paces": {
   "10000m": {
-   "display": "34:12 @ 5:30/mi",
    "sec_per_mi": 330,
    "seconds": 2052
   },
   "15000m": {
-   "display": "52:29 @ 5:38/mi",
    "sec_per_mi": 338,
    "seconds": 3149
   },
   "1500m": {
-   "display": "4:26 @ 4:45/mi",
    "sec_per_mi": 285,
    "seconds": 266
   },
   "21097m": {
-   "display": "1:15:31 @ 5:46/mi",
    "sec_per_mi": 346,
    "seconds": 4531
   },
   "3000m": {
-   "display": "9:30 @ 5:06/mi",
    "sec_per_mi": 306,
    "seconds": 570
   },
   "42195m": {
-   "display": "2:37:59 @ 6:02/mi",
    "sec_per_mi": 362,
    "seconds": 9479
   },
   "5000m": {
-   "display": "16:29 @ 5:18/mi",
    "sec_per_mi": 318,
    "seconds": 989
   },
   "800m": {
-   "display": "2:15 @ 4:31/mi",
    "sec_per_mi": 271,
    "seconds": 135
   },
   "tempo": {
-   "basis": "60-80 minute race pace, the Daniels threshold definition, from the model's duration prognosis.",
-   "display": "5:41-5:47/mi",
    "fast_sec_per_mi": 341,
    "slow_sec_per_mi": 347
   }

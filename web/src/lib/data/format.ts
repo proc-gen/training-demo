@@ -74,13 +74,20 @@ export function distUnit(kms: (number | null | undefined)[]): "m" | "mi" {
     : "m";
 }
 
-/** One distance in an already-chosen unit. */
+/** One distance in an already-chosen unit.
+ *
+ * `km` JOINED "m" AND "mi" FOR THE CUSTOM LAPS TABLE (2026-08-30), where the
+ * unit is the READER's -- they typed `1` and `km` into the form, and answering
+ * in miles would make them convert their own question back. `distUnit()` still
+ * chooses for every table that is not being cut to order.
+ */
 export function distIn(
   km: number | null | undefined,
-  unit: "m" | "mi",
+  unit: "m" | "mi" | "km",
 ): string {
   if (km === null || km === undefined || !isFinite(km)) return "--";
   if (unit === "m") return Math.round(km * 1000) + "m";
+  if (unit === "km") return km.toFixed(2) + " km";
   return (km * 0.621371).toFixed(2) + " mi";
 }
 

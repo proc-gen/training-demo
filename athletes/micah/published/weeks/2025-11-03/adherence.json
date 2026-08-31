@@ -74,44 +74,36 @@
       "cad": 171,
       "dist_km": 1.609,
       "dur": 501,
-      "end": 501,
       "hr_avg": 129,
       "hr_max": 142,
       "index": 1,
-      "pace": 501.10711249223124,
       "start": 0
      },
      {
       "cad": 171,
       "dist_km": 1.609,
       "dur": 488,
-      "end": 989,
       "hr_avg": 144,
       "hr_max": 147,
       "index": 2,
-      "pace": 488.10433312616533,
       "start": 501
      },
      {
       "cad": 170,
       "dist_km": 1.609,
       "dur": 490,
-      "end": 1479,
       "hr_avg": 148,
       "hr_max": 153,
       "index": 3,
-      "pace": 490.10476072094474,
       "start": 989
      },
      {
       "cad": 170,
       "dist_km": 1.051,
       "dur": 321,
-      "end": 1800,
       "hr_avg": 153,
       "hr_max": 156,
       "index": 4,
-      "pace": 491.5313263558516,
       "start": 1479
      }
     ]
@@ -136,18 +128,10 @@
    "hr_pct": 21.666666666666668,
    "key": "2025-11-04",
    "km": 5.75,
-   "miles": 3.5728843553646703,
    "ordinal": 0,
-   "pace": 504.07452939130434,
-   "pct": 21.666666666666668,
    "planned": {
     "band": "easy",
-    "band_display": "8:06-8:45/mi",
     "band_is_reference": true,
-    "band_sec_per_mi": [
-     486,
-     525
-    ],
     "ceiling": "137",
     "ceiling_kind": "hr",
     "ceiling_tiers": [
@@ -156,9 +140,6 @@
       137
      ]
     ],
-    "chart_confirmed": true,
-    "chart_is_carried_forward": false,
-    "chart_week_ending": "2025-11-02",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "unplanned -- race-week easy run (30 min)",
@@ -178,7 +159,6 @@
    "status": "completed",
    "total": 1800,
    "volume_km": 5.75,
-   "volume_miles": 3.5728843553646703,
    "volume_seconds": 1801,
    "volume_source": "file"
   },
@@ -191,33 +171,27 @@
       "cad": 174,
       "dist_km": 1.609,
       "dur": 503,
-      "end": 503,
       "hr_avg": 135,
       "hr_max": 146,
       "index": 1,
-      "pace": 503.1075400870106,
       "start": 0
      },
      {
       "cad": 174,
       "dist_km": 1.609,
       "dur": 483,
-      "end": 986,
       "hr_avg": 147,
       "hr_max": 153,
       "index": 2,
-      "pace": 483.10326413921695,
       "start": 503
      },
      {
       "cad": 175,
       "dist_km": 1.157,
       "dur": 335,
-      "end": 1321,
       "hr_avg": 152,
       "hr_max": 154,
       "index": 3,
-      "pace": 465.97254969749355,
       "start": 986
      }
     ]
@@ -242,18 +216,10 @@
    "hr_pct": 22.272727272727273,
    "key": "2025-11-06",
    "km": 4.38,
-   "miles": 2.7216058219995225,
    "ordinal": 0,
-   "pace": 485.00778082191783,
-   "pct": 22.272727272727273,
    "planned": {
     "band": "easy",
-    "band_display": "8:06-8:45/mi",
     "band_is_reference": true,
-    "band_sec_per_mi": [
-     486,
-     525
-    ],
     "ceiling": "137",
     "ceiling_kind": "hr",
     "ceiling_tiers": [
@@ -262,9 +228,6 @@
       137
      ]
     ],
-    "chart_confirmed": true,
-    "chart_is_carried_forward": false,
-    "chart_week_ending": "2025-11-02",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "unplanned -- race-week easy run (22 min, travelling)",
@@ -284,7 +247,6 @@
    "status": "completed",
    "total": 1320,
    "volume_km": 4.38,
-   "volume_miles": 2.7216058219995225,
    "volume_seconds": 1320,
    "volume_source": "file"
   },
@@ -412,25 +374,15 @@
    "hr_max": 174,
    "key": "2025-11-08",
    "km": 21.35,
-   "miles": 13.26627495426708,
    "ordinal": 0,
-   "pace": 461.01863718969554,
-   "pct": null,
    "planned": {
     "band": "21097m",
     "band_display": "1:21:07 @ 6:11/mi",
     "band_is_reference": true,
-    "band_sec_per_mi": [
-     371,
-     371
-    ],
     "ceiling": "none (race)",
     "ceiling_kind": "none",
     "ceiling_role": "race",
     "ceiling_tiers": null,
-    "chart_confirmed": true,
-    "chart_is_carried_forward": false,
-    "chart_week_ending": "2025-11-02",
     "criterion": null,
     "hr_ceiling": null,
     "prescribed": "Fall Half Marathon",
@@ -450,7 +402,6 @@
    "status": "completed",
    "total": null,
    "volume_km": 21.35,
-   "volume_miles": 13.26627495426708,
    "volume_seconds": 6116,
    "volume_source": "file"
   }
@@ -458,22 +409,18 @@
  "scores": {
   "easy": {
    "earned": 684.0,
-   "pct": 21.923076923076923,
    "total": 3120
   },
   "recorded": {
    "earned": 684.0,
-   "pct": 21.923076923076923,
    "total": 3120
   },
   "week": {
    "earned": 684.0,
-   "pct": 21.923076923076923,
    "total": 3120
   },
   "workout": {
    "earned": 0,
-   "pct": null,
    "total": 0
   }
  },

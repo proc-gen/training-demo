@@ -1,75 +1,35 @@
 {
  "bands": {
   "easy": {
-   "display": "8:28-9:08/mi",
    "fast_sec_per_mi": 508,
-   "pct": [
-    0.63,
-    0.68
-   ],
    "slow_sec_per_mi": 548
   },
   "long": {
-   "display": "7:59-8:28/mi",
    "fast_sec_per_mi": 479,
-   "pct": [
-    0.68,
-    0.72
-   ],
    "slow_sec_per_mi": 508
   },
   "recovery": {
-   "display": "9:08-9:55/mi",
    "fast_sec_per_mi": 548,
-   "pct": [
-    0.58,
-    0.63
-   ],
    "slow_sec_per_mi": 595
   },
   "rep_10min": {
-   "display": "7:01-7:17/mi",
    "fast_sec_per_mi": 421,
-   "pct": [
-    0.79,
-    0.82
-   ],
    "slow_sec_per_mi": 437
   },
   "rep_15min": {
-   "display": "7:11-7:28/mi",
    "fast_sec_per_mi": 431,
-   "pct": [
-    0.77,
-    0.8
-   ],
    "slow_sec_per_mi": 448
   },
   "rep_1min": {
-   "display": "6:32-6:46/mi",
    "fast_sec_per_mi": 392,
-   "pct": [
-    0.85,
-    0.88
-   ],
    "slow_sec_per_mi": 406
   },
   "rep_3min": {
-   "display": "6:41-6:56/mi",
    "fast_sec_per_mi": 401,
-   "pct": [
-    0.83,
-    0.86
-   ],
    "slow_sec_per_mi": 416
   },
   "rep_6min": {
-   "display": "6:51-7:06/mi",
    "fast_sec_per_mi": 411,
-   "pct": [
-    0.81,
-    0.84
-   ],
    "slow_sec_per_mi": 426
   }
  },
@@ -77,43 +37,34 @@
  "effective_vo2max": 54.52,
  "race_paces": {
   "10000m": {
-   "display": "38:23 @ 6:11/mi",
    "sec_per_mi": 371,
    "seconds": 2303
   },
   "1500m": {
-   "display": "5:00 @ 5:22/mi",
    "sec_per_mi": 322,
    "seconds": 300
   },
   "21097m": {
-   "display": "1:24:55 @ 6:29/mi",
    "sec_per_mi": 389,
    "seconds": 5095
   },
   "3000m": {
-   "display": "10:42 @ 5:44/mi",
    "sec_per_mi": 344,
    "seconds": 642
   },
   "42195m": {
-   "display": "2:57:13 @ 6:46/mi",
    "sec_per_mi": 406,
    "seconds": 10633
   },
   "5000m": {
-   "display": "18:31 @ 5:57/mi",
    "sec_per_mi": 357,
    "seconds": 1111
   },
   "800m": {
-   "display": "2:31 @ 5:05/mi",
    "sec_per_mi": 305,
    "seconds": 151
   },
   "tempo": {
-   "basis": "60-80 minute race pace, the Daniels threshold definition, from the model's duration prognosis.",
-   "display": "6:20-6:27/mi",
    "fast_sec_per_mi": 380,
    "slow_sec_per_mi": 387
   }

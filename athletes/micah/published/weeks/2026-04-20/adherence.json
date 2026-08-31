@@ -74,22 +74,18 @@
       "cad": 169,
       "dist_km": 1.609,
       "dur": 514,
-      "end": 514,
       "hr_avg": 126,
       "hr_max": 139,
       "index": 1,
-      "pace": 514.1098918582971,
       "start": 0
      },
      {
       "cad": 170,
       "dist_km": 0.286,
       "dur": 86,
-      "end": 600,
       "hr_avg": 137,
       "hr_max": 139,
       "index": 2,
-      "pace": 483.92861538461545,
       "start": 514
      }
     ]
@@ -114,18 +110,10 @@
    "hr_pct": 92.33333333333333,
    "key": "2026-04-21",
    "km": 1.85,
-   "miles": 1.149536705639068,
    "ordinal": 0,
-   "pace": 522.8193210810811,
-   "pct": 92.33333333333333,
    "planned": {
     "band": "easy",
-    "band_display": "8:35-9:16/mi",
     "band_is_reference": true,
-    "band_sec_per_mi": [
-     515,
-     556
-    ],
     "ceiling": "137",
     "ceiling_kind": "hr",
     "ceiling_tiers": [
@@ -134,9 +122,6 @@
       137
      ]
     ],
-    "chart_confirmed": true,
-    "chart_is_carried_forward": false,
-    "chart_week_ending": "2026-04-19",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "unplanned -- ten-minute return jog",
@@ -156,7 +141,6 @@
    "status": "completed",
    "total": 600,
    "volume_km": 1.85,
-   "volume_miles": 1.149536705639068,
    "volume_seconds": 601,
    "volume_source": "file"
   },
@@ -169,22 +153,18 @@
       "cad": 173,
       "dist_km": 1.609,
       "dur": 519,
-      "end": 519,
       "hr_avg": 129,
       "hr_max": 142,
       "index": 1,
-      "pace": 519.1109608452456,
       "start": 0
      },
      {
       "cad": 171,
       "dist_km": 0.742,
       "dur": 232,
-      "end": 751,
       "hr_avg": 136,
       "hr_max": 139,
       "index": 2,
-      "pace": 503.19111590296495,
       "start": 519
      }
     ]
@@ -209,18 +189,10 @@
    "hr_pct": 76.59574468085107,
    "key": "2026-04-23",
    "km": 2.35,
-   "miles": 1.460222301757735,
    "ordinal": 0,
-   "pace": 514.3052527659574,
-   "pct": 76.59574468085107,
    "planned": {
     "band": "easy",
-    "band_display": "8:35-9:16/mi",
     "band_is_reference": true,
-    "band_sec_per_mi": [
-     515,
-     556
-    ],
     "ceiling": "137",
     "ceiling_kind": "hr",
     "ceiling_tiers": [
@@ -229,9 +201,6 @@
       137
      ]
     ],
-    "chart_confirmed": true,
-    "chart_is_carried_forward": false,
-    "chart_week_ending": "2026-04-19",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "unplanned -- return jog (13 min)",
@@ -251,7 +220,6 @@
    "status": "completed",
    "total": 752,
    "volume_km": 2.35,
-   "volume_miles": 1.460222301757735,
    "volume_seconds": 751,
    "volume_source": "file"
   },
@@ -264,22 +232,18 @@
       "cad": 169,
       "dist_km": 1.609,
       "dur": 646,
-      "end": 646,
       "hr_avg": 115,
       "hr_max": 132,
       "index": 1,
-      "pace": 646.1381131137352,
       "start": 0
      },
      {
       "cad": 168,
       "dist_km": 0.714,
       "dur": 255,
-      "end": 901,
       "hr_avg": 121,
       "hr_max": 130,
       "index": 2,
-      "pace": 574.7657142857144,
       "start": 646
      }
     ]
@@ -304,18 +268,10 @@
    "hr_pct": 100.0,
    "key": "2026-04-25",
    "km": 2.32,
-   "miles": 1.4415811659906146,
    "ordinal": 0,
-   "pace": 625.0081655172414,
-   "pct": 100.0,
    "planned": {
     "band": "easy",
-    "band_display": "8:35-9:16/mi",
     "band_is_reference": true,
-    "band_sec_per_mi": [
-     515,
-     556
-    ],
     "ceiling": "137",
     "ceiling_kind": "hr",
     "ceiling_tiers": [
@@ -324,9 +280,6 @@
       137
      ]
     ],
-    "chart_confirmed": true,
-    "chart_is_carried_forward": false,
-    "chart_week_ending": "2026-04-19",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "unplanned -- easy 15 min on the Local trip",
@@ -346,7 +299,6 @@
    "status": "completed",
    "total": 900,
    "volume_km": 2.32,
-   "volume_miles": 1.4415811659906146,
    "volume_seconds": 901,
    "volume_source": "file"
   }
@@ -354,22 +306,18 @@
  "scores": {
   "easy": {
    "earned": 2030.0,
-   "pct": 90.14209591474246,
    "total": 2252
   },
   "recorded": {
    "earned": 2030.0,
-   "pct": 90.14209591474246,
    "total": 2252
   },
   "week": {
    "earned": 2030.0,
-   "pct": 90.14209591474246,
    "total": 2252
   },
   "workout": {
    "earned": 0,
-   "pct": null,
    "total": 0
   }
  },

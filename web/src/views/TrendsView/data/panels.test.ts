@@ -446,17 +446,20 @@ describe("over the committed payload", () => {
      * gets six empty slots between every pair of points. Asserted both ways
      * over the real tree, so the list cannot go stale in either direction. */
     if (!PUBLISHED) return;
-    /* The pace panels are weekly too, and land on the SUNDAY rather than the
-       Monday every other weekly series uses -- a chart is confirmed as its week
+    /* `target-paces` is weekly and lands on the SUNDAY rather than the Monday
+       every other weekly series uses -- a chart is confirmed as its week
        closes, so that is the date the measurement was made. Same 7-day step,
-       which is all `densify` asks. */
+       which is all `densify` asks.
+       `race-times` LEFT THIS SET ON 2026-08-29 and is daily now: it is priced
+       by the model at each day's own effective VO2max rather than restated
+       from a confirmed chart. Its sibling stays weekly on purpose -- a band is
+       the criterion a session was graded against. */
     const weekly = new Set([
       "volume",
       "adherence",
       "quality",
       "load",
       "acwr",
-      "race-times",
       "target-paces",
     ]);
     const seen = new Set<string>();

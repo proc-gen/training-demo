@@ -124,6 +124,31 @@ function shapeOf(r: RunResult): string {
     hasCadence: r.cadence !== null && r.cadence !== undefined,
     hasDetail: det !== null,
     hasLaps: (det?.laps ?? []).length > 0,
+    // A RACE'S OWN SEGMENT TABLE, which `role: "race"` alone does not describe.
+    // `RaceSplitTable` and `raceChartPoints` branch on each of these, and until
+    // 2026-08-30 nothing rendered `detail.race` at all -- so one race reached
+    // the corpus sweeps and every variety inside it collapsed onto that one.
+    // Keying on more than the components read costs a render; keying on less is
+    // a silent gap.
+    race: det?.race
+      ? {
+          // Capped like `sets`: 1, 2 and 3+ splits take different paths (the
+          // 2025-02-23 indoor mile has ONE, where the chart drops both views and
+          // the halves line is the whole reading). 4 and 14 do not differ, and
+          // uncapped this would key on how far the athlete raced.
+          splits: Math.min((det.race.splits ?? []).length, 3),
+          partial: (det.race.splits ?? []).some((s) => !!s.partial),
+          // "--" vs a number is a real branch in the HR cell.
+          nullHr: (det.race.splits ?? []).some(
+            (s) => s.hr_avg === null || s.hr_avg === undefined,
+          ),
+          // Null `delta_pct` withholds the shape word entirely.
+          delta:
+            det.race.halves?.delta_pct !== null &&
+            det.race.halves?.delta_pct !== undefined,
+          halves: !!det.race.halves,
+        }
+      : null,
     hasPlanned: !!r.planned,
     hasTiers: !!r.planned?.ceiling_tiers,
     hasWhy: !!r.why,

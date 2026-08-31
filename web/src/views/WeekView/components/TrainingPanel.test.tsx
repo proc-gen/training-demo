@@ -288,12 +288,26 @@ describe("the open week, end to end", () => {
        What the case is about is that a run which has NOT happened opens onto
        the two numbers the plan states for it. So both are read off the payload
        for whichever runs are currently pending, and the case cannot go stale
-       on the calendar again. */
+       on the calendar again.
+
+       AND ASK FOR THE PACE THE COMPONENT PUBLISHES, WHICH IS NOT ALWAYS
+       `band_display`. A set that names a target renders `target_display` --
+       the UNTOLERATED target pair, `0:36-0:41 ±1s · 4:53-5:31/mi` -- where
+       `band_display` is the TOLERATED EDGES, `4:45-5:39/mi`. Printing the
+       edges under the word Target is the display half of the defect the
+       2026-08-13 scoring fix corrected, so the component is right and this
+       assertion was too strong. It survived only because no pending
+       REPETITION run had ever been the fixture: this case reads whichever
+       week is open, and the first one carrying a `4x3x200m` was 2026-08-31,
+       which became the fixture on 2026-08-30 when the week of 08-24 was fully
+       reconciled and stopped being the open week at all. */
     const { container } = wrap(<TrainingPanel week={OPEN!} />);
     const a = OPEN!.adherence!;
     const withTargets = a.planned.filter(
       (r) => r.status === "pending" && r.planned?.band_display && r.planned?.ceiling,
     );
+    const paceShown = (r: (typeof withTargets)[number]) =>
+      r.planned!.target_display ?? r.planned!.band_display!;
     expect(
       withTargets.length,
       "a pending run states both a band and a ceiling",
@@ -308,7 +322,7 @@ describe("the open week, end to end", () => {
     }
     const text = container.textContent!;
     for (const run of withTargets) {
-      expect(text, `${run.key} band`).toContain(run.planned!.band_display!);
+      expect(text, `${run.key} band`).toContain(paceShown(run));
       expect(text, `${run.key} ceiling`).toContain(run.planned!.ceiling!);
     }
     // The band is still a pace range, which is the shape the athlete asked for.

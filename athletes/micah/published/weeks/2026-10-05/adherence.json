@@ -87,19 +87,11 @@
    "hr_max": null,
    "key": "2026-10-05",
    "km": null,
-   "miles": null,
    "miss_forgiven": false,
    "ordinal": 0,
-   "pace": null,
-   "pct": null,
    "planned": {
     "band": "recovery",
-    "band_display": "8:50-9:36/mi",
     "band_is_reference": true,
-    "band_sec_per_mi": [
-     530,
-     576
-    ],
     "ceiling": "130",
     "ceiling_kind": "hr",
     "ceiling_tiers": [
@@ -108,9 +100,6 @@
       130
      ]
     ],
-    "chart_confirmed": false,
-    "chart_is_carried_forward": true,
-    "chart_week_ending": "2026-08-23",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "30 min recovery",
@@ -142,19 +131,11 @@
    "hr_max": null,
    "key": "2026-10-06-am",
    "km": null,
-   "miles": null,
    "miss_forgiven": false,
    "ordinal": 0,
-   "pace": null,
-   "pct": null,
    "planned": {
     "band": "recovery",
-    "band_display": "8:50-9:36/mi",
     "band_is_reference": true,
-    "band_sec_per_mi": [
-     530,
-     576
-    ],
     "ceiling": "130",
     "ceiling_kind": "hr",
     "ceiling_tiers": [
@@ -163,9 +144,6 @@
       130
      ]
     ],
-    "chart_confirmed": false,
-    "chart_is_carried_forward": true,
-    "chart_week_ending": "2026-08-23",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "AM: 30 min recovery",
@@ -197,19 +175,11 @@
    "hr_max": null,
    "key": "2026-10-06-pm",
    "km": null,
-   "miles": null,
    "miss_forgiven": false,
    "ordinal": 1,
-   "pace": null,
-   "pct": null,
    "planned": {
     "band": "recovery",
-    "band_display": "8:50-9:36/mi",
     "band_is_reference": true,
-    "band_sec_per_mi": [
-     530,
-     576
-    ],
     "ceiling": "130",
     "ceiling_kind": "hr",
     "ceiling_tiers": [
@@ -218,9 +188,6 @@
       130
      ]
     ],
-    "chart_confirmed": false,
-    "chart_is_carried_forward": true,
-    "chart_week_ending": "2026-08-23",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "PM: 60 min recovery",
@@ -252,19 +219,11 @@
    "hr_max": null,
    "key": "2026-10-07",
    "km": null,
-   "miles": null,
    "miss_forgiven": false,
    "ordinal": 0,
-   "pace": null,
-   "pct": null,
    "planned": {
     "band": "easy",
-    "band_display": "8:11-8:50/mi",
     "band_is_reference": true,
-    "band_sec_per_mi": [
-     491,
-     530
-    ],
     "ceiling": "137",
     "ceiling_kind": "hr",
     "ceiling_tiers": [
@@ -273,9 +232,6 @@
       137
      ]
     ],
-    "chart_confirmed": false,
-    "chart_is_carried_forward": true,
-    "chart_week_ending": "2026-08-23",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "60-70 min easy",
@@ -310,19 +266,11 @@
    "hr_max": null,
    "key": "2026-10-08",
    "km": null,
-   "miles": null,
    "miss_forgiven": false,
    "ordinal": 0,
-   "pace": null,
-   "pct": null,
    "planned": {
     "band": "easy",
-    "band_display": "8:11-8:50/mi",
     "band_is_reference": true,
-    "band_sec_per_mi": [
-     491,
-     530
-    ],
     "ceiling": "137",
     "ceiling_kind": "hr",
     "ceiling_tiers": [
@@ -331,9 +279,6 @@
       137
      ]
     ],
-    "chart_confirmed": false,
-    "chart_is_carried_forward": true,
-    "chart_week_ending": "2026-08-23",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "60-70 min easy",
@@ -368,19 +313,11 @@
    "hr_max": null,
    "key": "2026-10-09-am",
    "km": null,
-   "miles": null,
    "miss_forgiven": false,
    "ordinal": 0,
-   "pace": null,
-   "pct": null,
    "planned": {
     "band": "recovery",
-    "band_display": "8:50-9:36/mi",
     "band_is_reference": true,
-    "band_sec_per_mi": [
-     530,
-     576
-    ],
     "ceiling": "130",
     "ceiling_kind": "hr",
     "ceiling_tiers": [
@@ -389,9 +326,6 @@
       130
      ]
     ],
-    "chart_confirmed": false,
-    "chart_is_carried_forward": true,
-    "chart_week_ending": "2026-08-23",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "AM: 30 min recovery",
@@ -423,19 +357,11 @@
    "hr_max": null,
    "key": "2026-10-09-pm",
    "km": null,
-   "miles": null,
    "miss_forgiven": false,
    "ordinal": 1,
-   "pace": null,
-   "pct": null,
    "planned": {
     "band": "recovery",
-    "band_display": "8:50-9:36/mi",
     "band_is_reference": true,
-    "band_sec_per_mi": [
-     530,
-     576
-    ],
     "ceiling": "130",
     "ceiling_kind": "hr",
     "ceiling_tiers": [
@@ -444,9 +370,6 @@
       130
      ]
     ],
-    "chart_confirmed": false,
-    "chart_is_carried_forward": true,
-    "chart_week_ending": "2026-08-23",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "PM: 60 min recovery",
@@ -478,19 +401,11 @@
    "hr_max": null,
    "key": "2026-10-10",
    "km": null,
-   "miles": null,
    "miss_forgiven": false,
    "ordinal": 0,
-   "pace": null,
-   "pct": null,
    "planned": {
     "band": "recovery",
-    "band_display": "8:50-9:36/mi",
     "band_is_reference": true,
-    "band_sec_per_mi": [
-     530,
-     576
-    ],
     "ceiling": "130",
     "ceiling_kind": "hr",
     "ceiling_tiers": [
@@ -499,9 +414,6 @@
       130
      ]
     ],
-    "chart_confirmed": false,
-    "chart_is_carried_forward": true,
-    "chart_week_ending": "2026-08-23",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "30 min recovery",
@@ -535,19 +447,11 @@
    "hr_max": null,
    "key": "2026-10-11",
    "km": null,
-   "miles": null,
    "miss_forgiven": false,
    "ordinal": 0,
-   "pace": null,
-   "pct": null,
    "planned": {
     "band": "long",
-    "band_display": "7:44-8:11/mi",
     "band_is_reference": true,
-    "band_sec_per_mi": [
-     464,
-     491
-    ],
     "ceiling": "137/140/143",
     "ceiling_kind": "hr",
     "ceiling_tiers": [
@@ -564,9 +468,6 @@
       143
      ]
     ],
-    "chart_confirmed": false,
-    "chart_is_carried_forward": true,
-    "chart_week_ending": "2026-08-23",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "90 min easy/long",
@@ -592,22 +493,18 @@
  "scores": {
   "easy": {
    "earned": 0,
-   "pct": null,
    "total": 0
   },
   "recorded": {
    "earned": 0,
-   "pct": null,
    "total": 0
   },
   "week": {
    "earned": 0,
-   "pct": null,
    "total": 0
   },
   "workout": {
    "earned": 0,
-   "pct": null,
    "total": 0
   }
  },

@@ -1,14 +1,14 @@
 {
- "completeness": "partial-gap",
+ "completeness": "full",
  "date": "2026-08-28",
- "export_completeness": "partial-gap",
+ "export_completeness": "full",
  "hrv": 66,
- "nonrun_steps": null,
+ "nonrun_steps": 1148,
  "resting_hr": 43,
- "run_step_source": null,
- "run_steps": null,
+ "run_step_source": "step-stream-window",
+ "run_steps": 14143,
  "sleep_hours": 7.75,
  "sleep_score": 89,
  "source": "health-sync",
- "total_steps": null
+ "total_steps": 15291
 }

@@ -177,10 +177,28 @@ describe("readWeek is a PORT of unpublish(), so it must carry what it carries", 
    * stored key may be absent from the assembled object, and every OTHER
    * absence is the `pace_chart_is_carried_forward` defect again. The
    * resolution itself is asserted below, so nothing about the chart is
-   * unchecked -- it is checked differently. */
+   * unchecked -- it is checked differently.
+   *
+   * SINCE 2026-08-30 THE KEY IS USUALLY NOT STATED AT ALL -- it is derived from
+   * `week_start` and the catalog -- so this mapping applies only to a week
+   * where `_drop` refused and the grader's own key survived. It is kept rather
+   * than deleted because that case is real, and the two derived keys are
+   * asserted directly in the next case instead. */
   const RESOLVED: Record<string, string> = {
     pace_chart_week_ending: "pace_chart",
   };
+
+  /** `week_start - 1`, spelled independently of the app's own helper.
+   *
+   * A test that reuses the implementation's arithmetic cannot catch that
+   * arithmetic being wrong. This is the one date rule the whole chart join
+   * turns on, so it is written out here rather than imported. */
+  function dayBefore(iso: string): string {
+    const [y, m, d] = iso.split("-").map(Number);
+    const t = new Date(Date.UTC(y, m - 1, d - 1));
+    const p = (n: number) => String(n).padStart(2, "0");
+    return `${t.getUTCFullYear()}-${p(t.getUTCMonth() + 1)}-${p(t.getUTCDate())}`;
+  }
 
   it("copies every key the record on disk states", () => {
     if (!slugs.length) return;
@@ -216,6 +234,9 @@ describe("readWeek is a PORT of unpublish(), so it must carry what it carries", 
   it("resolves the chart key into the chart itself", () => {
     if (!slugs.length) return;
     const slug = slugs[0];
+    const index = JSON.parse(
+      fs.readFileSync(path.join(publishedDir(slug), "index.json"), "utf-8"),
+    ) as { pace_charts: string[] };
     const got = assemble();
     if (!got.ok) throw new Error(got.error);
     const weeks = (got.payload as { weeks: Record<string, unknown> }).weeks;
@@ -229,38 +250,63 @@ describe("readWeek is a PORT of unpublish(), so it must carry what it carries", 
       ) as { pace_chart_week_ending?: string | null };
       const chart = (w as { pace_chart?: { week_ending?: string } | null })
         .pace_chart;
-      if (raw.pace_chart_week_ending == null) {
-        expect(chart, `${start} stores no chart key`).toBeNull();
+      /* THE KEY IS DERIVED UNLESS THE RECORD STATES ONE (2026-08-30). It is
+       * the newest catalog entry at or before `week_start - 1`, and `_drop`
+       * removes it only where that formula reproduced what the grader wrote --
+       * so a stored key still wins outright and is still checked here. */
+      const want =
+        "pace_chart_week_ending" in raw
+          ? raw.pace_chart_week_ending
+          : (index.pace_charts.filter((k) => k < start).pop() ?? null);
+      if (want == null) {
+        expect(chart, `${start} resolves to no chart`).toBeNull();
         continue;
       }
       /* The row that comes back must be the row the key NAMES -- not merely
        * some chart. A lookup that silently returned a neighbour would be the
        * `snapshot_date` / `week_end` defect wearing new clothes. */
-      expect(chart?.week_ending, start).toBe(raw.pace_chart_week_ending);
+      expect(chart?.week_ending, start).toBe(want);
+      /* THE FLAG THIS BLOCK EXISTS FOR, asserted directly now that it is
+       * derived rather than copied. `undefined` reads as "this week has a
+       * chart of its own", which is the exact opposite of the truth for a week
+       * authored two Mondays ahead -- the 2026-08-14 defect, which cost no
+       * failure because both cases keyed on the field and SKIPPED. */
+      const carried = (w as { pace_chart_is_carried_forward?: unknown })
+        .pace_chart_is_carried_forward;
+      expect(typeof carried, `${start} carried-forward flag`).toBe("boolean");
+      expect(carried, start).toBe(want !== dayBefore(start));
       joined++;
     }
     expect(joined, "no week joined a chart -- the case asserted nothing")
       .toBeGreaterThan(0);
   });
 
-  it("resolves the current-chart pointer too", () => {
+  /* `pace-chart-current.json` WAS A POINTER RECORD AND IS GONE (2026-08-30).
+   * It named the newest chart, which is the last entry of a catalog assembled
+   * from those very filenames -- so it was a stored copy of a value
+   * `index.json` already states, and the one record in the tree that changed
+   * on every confirmed chart by construction. */
+  it("takes the current chart as the newest in the table", () => {
     if (!slugs.length) return;
     const slug = slugs[0];
-    const pointer = JSON.parse(
-      fs.readFileSync(
-        path.join(publishedDir(slug), "pace-chart-current.json"),
-        "utf-8",
-      ),
-    ) as { week_ending?: string } | null;
+    expect(
+      fs.existsSync(path.join(publishedDir(slug), "pace-chart-current.json")),
+      "the pointer record is not published any more",
+    ).toBe(false);
+    const index = JSON.parse(
+      fs.readFileSync(path.join(publishedDir(slug), "index.json"), "utf-8"),
+    ) as { pace_charts: string[] };
     const got = assemble();
     if (!got.ok) throw new Error(got.error);
     const cur = (got.payload as {
       pace_chart_current?: { week_ending?: string } | null;
     }).pace_chart_current;
-    if (pointer == null) {
+    if (!index.pace_charts.length) {
       expect(cur).toBeNull();
       return;
     }
-    expect(cur?.week_ending).toBe(pointer.week_ending);
+    expect(cur?.week_ending).toBe(
+      index.pace_charts[index.pace_charts.length - 1],
+    );
   });
 });

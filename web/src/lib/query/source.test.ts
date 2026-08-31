@@ -64,8 +64,6 @@ describe.skipIf(!slug)("the file source and the bundle source agree", () => {
     for (const rel of [
       "history.json",
       "thresholds.json",
-      "pace-chart-current.json",
-      "pace-models-current.json",
     ]) {
       expect(bundle, rel).toHaveProperty([rel]);
     }

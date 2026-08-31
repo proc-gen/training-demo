@@ -5,7 +5,7 @@
  "bg_trimp": null,
  "ceiling_inputs": {
   "background_source": "baseline",
-  "background_steps": 1665.0,
+  "background_steps": 1699.0,
   "background_window_days": 28,
   "cadence_source": "measured",
   "cadence_spm": 175.0,
@@ -18,13 +18,11 @@
  "flags": [
   {
    "status": "clear",
-   "token": "steps-data-incomplete",
-   "why": "all 0 days covered by the export"
+   "token": "steps-data-incomplete"
   },
   {
    "status": "not-evaluable",
-   "token": "recovery-day-not-recovering",
-   "why": "no fully-covered rest or recovery day this week"
+   "token": "recovery-day-not-recovering"
   },
   {
    "status": "not-evaluable",
@@ -38,23 +36,20 @@
   },
   {
    "status": "not-evaluable",
-   "token": "load-monotony",
-   "why": "needs every day of the week covered; 0 of 0 have a measurement. A short week's spread is not the week's spread"
+   "token": "load-monotony"
   },
   {
    "status": "clear",
    "token": "resting-hr-rise",
-   "why": "trailing resting-HR mean -0.4 bpm (fires at +5)"
+   "why": "trailing resting-HR mean -0.3 bpm (fires at +5)"
   },
   {
    "status": "clear",
-   "token": "hrv-suppressed",
-   "why": "longest run of 0 day(s) below 63.0 (90% of a 70.0 baseline); fires at 3"
+   "token": "hrv-suppressed"
   },
   {
    "status": "not-evaluable",
-   "token": "sleep-debt",
-   "why": "no sleep data for the week"
+   "token": "sleep-debt"
   },
   {
    "status": "not-evaluable",
@@ -70,7 +65,6 @@
  "integrity": {
   "earned": 0,
   "excluded": [],
-  "pct": null,
   "scored_days": 0,
   "total": 0
  },
@@ -78,10 +72,8 @@
  "overall": null,
  "readiness": {
   "available": 0,
-  "hrv_baseline": 70,
+  "hrv_baseline": 65,
   "hrv_baseline_source": "snapshot",
-  "passed": 0,
-  "pct": null,
   "per_day": [],
   "resting_hr_ceiling": 47
  },

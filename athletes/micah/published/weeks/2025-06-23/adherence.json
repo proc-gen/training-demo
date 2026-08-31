@@ -86,44 +86,36 @@
       "cad": 181,
       "dist_km": 1.609,
       "dur": 448,
-      "end": 448,
       "hr_avg": 120,
       "hr_max": 131,
       "index": 1,
-      "pace": 448.09578123057804,
       "start": 0
      },
      {
       "cad": 179,
       "dist_km": 1.609,
       "dur": 466,
-      "end": 914,
       "hr_avg": 131,
       "hr_max": 134,
       "index": 2,
-      "pace": 466.09962958359233,
       "start": 448
      },
      {
       "cad": 178,
       "dist_km": 1.609,
       "dur": 466,
-      "end": 1380,
       "hr_avg": 135,
       "hr_max": 139,
       "index": 3,
-      "pace": 466.09962958359233,
       "start": 914
      },
      {
       "cad": 177,
       "dist_km": 1.447,
       "dur": 420,
-      "end": 1800,
       "hr_avg": 140,
       "hr_max": 143,
       "index": 4,
-      "pace": 467.12127159640636,
       "start": 1380
      }
     ]
@@ -157,18 +149,10 @@
    "hr_pct": 75.45807884508606,
    "key": "2025-06-23-a",
    "km": 6.02,
-   "miles": 3.7406545772687503,
    "ordinal": 0,
-   "pace": 481.19920265780735,
-   "pct": 75.45807884508606,
    "planned": {
     "band": "easy",
-    "band_display": "7:48-8:25/mi",
     "band_is_reference": true,
-    "band_sec_per_mi": [
-     468,
-     505
-    ],
     "ceiling": "137",
     "ceiling_kind": "hr",
     "ceiling_tiers": [
@@ -177,9 +161,6 @@
       137
      ]
     ],
-    "chart_confirmed": true,
-    "chart_is_carried_forward": false,
-    "chart_week_ending": "2025-06-22",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "A - Easy 30 min",
@@ -199,7 +180,6 @@
    "status": "completed",
    "total": 1801,
    "volume_km": 6.02,
-   "volume_miles": 3.7406545772687503,
    "volume_seconds": 1800,
    "volume_source": "file"
   },
@@ -212,44 +192,36 @@
       "cad": 177,
       "dist_km": 1.609,
       "dur": 497,
-      "end": 497,
       "hr_avg": 125,
       "hr_max": 136,
       "index": 1,
-      "pace": 497.10625730267253,
       "start": 0
      },
      {
       "cad": 178,
       "dist_km": 1.609,
       "dur": 449,
-      "end": 946,
       "hr_avg": 134,
       "hr_max": 141,
       "index": 2,
-      "pace": 449.0959950279677,
       "start": 497
      },
      {
       "cad": 177,
       "dist_km": 1.609,
       "dur": 457,
-      "end": 1403,
       "hr_avg": 138,
       "hr_max": 145,
       "index": 3,
-      "pace": 457.0977054070852,
       "start": 946
      },
      {
       "cad": 179,
       "dist_km": 1.441,
       "dur": 397,
-      "end": 1800,
       "hr_avg": 143,
       "hr_max": 146,
       "index": 4,
-      "pace": 443.37929770992366,
       "start": 1403
      }
     ]
@@ -283,18 +255,10 @@
    "hr_pct": 51.58245419211549,
    "key": "2025-06-23-b",
    "km": 6.27,
-   "miles": 3.8959973753280837,
    "ordinal": 1,
-   "pace": 462.26930526315795,
-   "pct": 51.58245419211549,
    "planned": {
     "band": "easy",
-    "band_display": "7:48-8:25/mi",
     "band_is_reference": true,
-    "band_sec_per_mi": [
-     468,
-     505
-    ],
     "ceiling": "137",
     "ceiling_kind": "hr",
     "ceiling_tiers": [
@@ -303,9 +267,6 @@
       137
      ]
     ],
-    "chart_confirmed": true,
-    "chart_is_carried_forward": false,
-    "chart_week_ending": "2025-06-22",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "B - Easy 30 min",
@@ -325,7 +286,6 @@
    "status": "completed",
    "total": 1801,
    "volume_km": 6.27,
-   "volume_miles": 3.8959973753280837,
    "volume_seconds": 1801,
    "volume_source": "file"
   },
@@ -340,55 +300,45 @@
       "cad": 185,
       "dist_km": 1.609,
       "dur": 461,
-      "end": 461,
       "hr_avg": 120,
       "hr_max": 131,
       "index": 1,
-      "pace": 461.0985605966439,
       "start": 0
      },
      {
       "cad": 182,
       "dist_km": 1.609,
       "dur": 454,
-      "end": 915,
       "hr_avg": 135,
       "hr_max": 142,
       "index": 2,
-      "pace": 454.09706401491616,
       "start": 461
      },
      {
       "cad": 183,
       "dist_km": 1.609,
       "dur": 446,
-      "end": 1361,
       "hr_avg": 146,
       "hr_max": 157,
       "index": 3,
-      "pace": 446.0953536357987,
       "start": 915
      },
      {
       "cad": 182,
       "dist_km": 1.609,
       "dur": 434,
-      "end": 1795,
       "hr_avg": 162,
       "hr_max": 166,
       "index": 4,
-      "pace": 434.09278806712246,
       "start": 1361
      },
      {
       "cad": 180,
       "dist_km": 0.024,
       "dur": 6,
-      "end": 1801,
       "hr_avg": 166,
       "hr_max": 166,
       "index": 5,
-      "pace": 402.336,
       "start": 1795
      }
     ],
@@ -481,21 +431,13 @@
    "hr_max": 166,
    "key": "2025-06-24-a",
    "km": 6.58,
-   "miles": 4.088622444921658,
    "ordinal": 0,
-   "pace": 440.2460790273556,
-   "pct": 100.0,
    "planned": {
     "band": null,
-    "band_display": null,
     "band_is_reference": true,
-    "band_sec_per_mi": null,
     "ceiling": "monotonic",
     "ceiling_kind": "monotonic",
     "ceiling_tiers": null,
-    "chart_confirmed": true,
-    "chart_is_carried_forward": false,
-    "chart_week_ending": "2025-06-22",
     "criterion": null,
     "hr_ceiling": null,
     "prescribed": "A - 30 min thirds -> 7.2, 8.1, 9.1 mph",
@@ -520,7 +462,6 @@
    "status": "completed",
    "total": 1200,
    "volume_km": 6.58,
-   "volume_miles": 4.088622444921658,
    "volume_seconds": 1800,
    "volume_source": "file"
   },
@@ -533,22 +474,18 @@
       "cad": 178,
       "dist_km": 1.609,
       "dur": 482,
-      "end": 482,
       "hr_avg": 136,
       "hr_max": 151,
       "index": 1,
-      "pace": 482.10305034182727,
       "start": 0
      },
      {
       "cad": 177,
       "dist_km": 1.493,
       "dur": 428,
-      "end": 910,
       "hr_avg": 148,
       "hr_max": 153,
       "index": 2,
-      "pace": 461.3524661754856,
       "start": 482
      }
     ]
@@ -559,22 +496,14 @@
    "hr_max": 153,
    "key": "2025-06-24-wu",
    "km": 3.1,
-   "miles": 1.9262506959357353,
    "ordinal": 1,
-   "pace": 472.420335483871,
-   "pct": null,
    "planned": {
     "band": null,
-    "band_display": null,
     "band_is_reference": false,
-    "band_sec_per_mi": null,
     "ceiling": "none (volume_only)",
     "ceiling_kind": "none",
     "ceiling_role": "volume_only",
     "ceiling_tiers": null,
-    "chart_confirmed": true,
-    "chart_is_carried_forward": false,
-    "chart_week_ending": "2025-06-22",
     "criterion": null,
     "hr_ceiling": null,
     "prescribed": "warmup",
@@ -594,7 +523,6 @@
    "status": "completed",
    "total": null,
    "volume_km": 3.1,
-   "volume_miles": 1.9262506959357353,
    "volume_seconds": 910,
    "volume_source": "file"
   },
@@ -775,21 +703,14 @@
    "hr_max": 177,
    "key": "2025-06-24-b",
    "km": 4.64,
-   "miles": 2.883162331981229,
    "ordinal": 2,
-   "pace": 389.5028689655173,
-   "pct": 11.665182546749778,
    "planned": {
     "band": "rep_3min",
-    "band_display": "6:10-6:24/mi",
     "band_is_reference": false,
     "band_sec_per_mi": null,
     "ceiling": "162/166",
     "ceiling_kind": "hr",
     "ceiling_tiers": null,
-    "chart_confirmed": true,
-    "chart_is_carried_forward": false,
-    "chart_week_ending": "2025-06-22",
     "criterion": "hr",
     "hr_ceiling": [
      162,
@@ -801,7 +722,6 @@
     "sets": [
      {
       "band": "rep_3min",
-      "band_display": "6:10-6:24/mi",
       "band_how": "named",
       "band_sec_per_mi": null,
       "ceiling": "162/166",
@@ -863,7 +783,6 @@
    "status": "completed",
    "total": 1123,
    "volume_km": 4.64,
-   "volume_miles": 2.883162331981229,
    "volume_seconds": 1123,
    "volume_source": "file"
   },
@@ -876,22 +795,18 @@
       "cad": 181,
       "dist_km": 1.609,
       "dur": 475,
-      "end": 475,
       "hr_avg": 145,
       "hr_max": 155,
       "index": 1,
-      "pace": 475.1015537600995,
       "start": 0
      },
      {
       "cad": 178,
       "dist_km": 1.443,
       "dur": 426,
-      "end": 901,
       "hr_avg": 153,
       "hr_max": 157,
       "index": 2,
-      "pace": 475.1077920997921,
       "start": 475
      }
     ]
@@ -902,22 +817,14 @@
    "hr_max": 157,
    "key": "2025-06-24-cd",
    "km": 3.05,
-   "miles": 1.8951821363238683,
    "ordinal": 3,
-   "pace": 474.888393442623,
-   "pct": null,
    "planned": {
     "band": null,
-    "band_display": null,
     "band_is_reference": false,
-    "band_sec_per_mi": null,
     "ceiling": "none (volume_only)",
     "ceiling_kind": "none",
     "ceiling_role": "volume_only",
     "ceiling_tiers": null,
-    "chart_confirmed": true,
-    "chart_is_carried_forward": false,
-    "chart_week_ending": "2025-06-22",
     "criterion": null,
     "hr_ceiling": null,
     "prescribed": "cooldown",
@@ -937,7 +844,6 @@
    "status": "completed",
    "total": null,
    "volume_km": 3.05,
-   "volume_miles": 1.8951821363238683,
    "volume_seconds": 900,
    "volume_source": "file"
   },
@@ -950,88 +856,72 @@
       "cad": 178,
       "dist_km": 1.609,
       "dur": 518,
-      "end": 518,
       "hr_avg": 125,
       "hr_max": 139,
       "index": 1,
-      "pace": 518.1107470478559,
       "start": 0
      },
      {
       "cad": 176,
       "dist_km": 1.609,
       "dur": 501,
-      "end": 1019,
       "hr_avg": 140,
       "hr_max": 151,
       "index": 2,
-      "pace": 501.10711249223124,
       "start": 518
      },
      {
       "cad": 176,
       "dist_km": 1.609,
       "dur": 490,
-      "end": 1509,
       "hr_avg": 147,
       "hr_max": 152,
       "index": 3,
-      "pace": 490.10476072094474,
       "start": 1019
      },
      {
       "cad": 176,
       "dist_km": 1.609,
       "dur": 481,
-      "end": 1990,
       "hr_avg": 143,
       "hr_max": 149,
       "index": 4,
-      "pace": 481.1028365444376,
       "start": 1509
      },
      {
       "cad": 176,
       "dist_km": 1.609,
       "dur": 496,
-      "end": 2486,
       "hr_avg": 149,
       "hr_max": 154,
       "index": 5,
-      "pace": 496.1060435052828,
       "start": 1990
      },
      {
       "cad": 177,
       "dist_km": 1.609,
       "dur": 466,
-      "end": 2952,
       "hr_avg": 150,
       "hr_max": 155,
       "index": 6,
-      "pace": 466.09962958359233,
       "start": 2486
      },
      {
       "cad": 177,
       "dist_km": 1.609,
       "dur": 476,
-      "end": 3428,
       "hr_avg": 152,
       "hr_max": 156,
       "index": 7,
-      "pace": 476.10176755748915,
       "start": 2952
      },
      {
       "cad": 178,
       "dist_km": 0.574,
       "dur": 165,
-      "end": 3593,
       "hr_avg": 152,
       "hr_max": 155,
       "index": 8,
-      "pace": 462.61630662020906,
       "start": 3428
      }
     ]
@@ -1065,18 +955,10 @@
    "hr_pct": 15.931919642857142,
    "key": "2025-06-25",
    "km": 11.84,
-   "miles": 7.357034916090034,
    "ordinal": 0,
-   "pace": 488.51202162162167,
-   "pct": 15.931919642857142,
    "planned": {
     "band": "easy",
-    "band_display": "7:48-8:25/mi",
     "band_is_reference": true,
-    "band_sec_per_mi": [
-     468,
-     505
-    ],
     "ceiling": "137",
     "ceiling_kind": "hr",
     "ceiling_tiers": [
@@ -1085,9 +967,6 @@
       137
      ]
     ],
-    "chart_confirmed": true,
-    "chart_is_carried_forward": false,
-    "chart_week_ending": "2025-06-22",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "Easy 60 min",
@@ -1107,7 +986,6 @@
    "status": "completed",
    "total": 3584,
    "volume_km": 11.84,
-   "volume_miles": 7.357034916090034,
    "volume_seconds": 3594,
    "volume_source": "file"
   },
@@ -1120,44 +998,36 @@
       "cad": 184,
       "dist_km": 1.609,
       "dur": 461,
-      "end": 461,
       "hr_avg": 117,
       "hr_max": 128,
       "index": 1,
-      "pace": 461.0985605966439,
       "start": 0
      },
      {
       "cad": 179,
       "dist_km": 1.609,
       "dur": 482,
-      "end": 943,
       "hr_avg": 132,
       "hr_max": 138,
       "index": 2,
-      "pace": 482.10305034182727,
       "start": 461
      },
      {
       "cad": 177,
       "dist_km": 1.609,
       "dur": 474,
-      "end": 1417,
       "hr_avg": 140,
       "hr_max": 144,
       "index": 3,
-      "pace": 474.1013399627098,
       "start": 943
      },
      {
       "cad": 177,
       "dist_km": 1.323,
       "dur": 384,
-      "end": 1801,
       "hr_avg": 146,
       "hr_max": 149,
       "index": 4,
-      "pace": 467.11118367346944,
       "start": 1417
      }
     ]
@@ -1191,18 +1061,10 @@
    "hr_pct": 54.08106607440311,
    "key": "2025-06-26-a",
    "km": 6.02,
-   "miles": 3.7406545772687503,
    "ordinal": 0,
-   "pace": 481.46653554817277,
-   "pct": 54.08106607440311,
    "planned": {
     "band": "easy",
-    "band_display": "7:48-8:25/mi",
     "band_is_reference": true,
-    "band_sec_per_mi": [
-     468,
-     505
-    ],
     "ceiling": "137",
     "ceiling_kind": "hr",
     "ceiling_tiers": [
@@ -1211,9 +1073,6 @@
       137
      ]
     ],
-    "chart_confirmed": true,
-    "chart_is_carried_forward": false,
-    "chart_week_ending": "2025-06-22",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "A - Easy 30 min",
@@ -1233,7 +1092,6 @@
    "status": "completed",
    "total": 1801,
    "volume_km": 6.02,
-   "volume_miles": 3.7406545772687503,
    "volume_seconds": 1801,
    "volume_source": "file"
   },
@@ -1246,66 +1104,54 @@
       "cad": 180,
       "dist_km": 1.609,
       "dur": 498,
-      "end": 498,
       "hr_avg": 118,
       "hr_max": 130,
       "index": 1,
-      "pace": 498.1064711000622,
       "start": 0
      },
      {
       "cad": 178,
       "dist_km": 1.609,
       "dur": 462,
-      "end": 960,
       "hr_avg": 130,
       "hr_max": 136,
       "index": 2,
-      "pace": 462.09877439403357,
       "start": 498
      },
      {
       "cad": 178,
       "dist_km": 1.609,
       "dur": 468,
-      "end": 1428,
       "hr_avg": 133,
       "hr_max": 140,
       "index": 3,
-      "pace": 468.1000571783717,
       "start": 960
      },
      {
       "cad": 178,
       "dist_km": 1.609,
       "dur": 455,
-      "end": 1883,
       "hr_avg": 136,
       "hr_max": 139,
       "index": 4,
-      "pace": 455.09727781230583,
       "start": 1428
      },
      {
       "cad": 178,
       "dist_km": 1.609,
       "dur": 450,
-      "end": 2333,
       "hr_avg": 138,
       "hr_max": 142,
       "index": 5,
-      "pace": 450.0962088253574,
       "start": 1883
      },
      {
       "cad": 179,
       "dist_km": 1.312,
       "dur": 368,
-      "end": 2701,
       "hr_avg": 139,
       "hr_max": 142,
       "index": 6,
-      "pace": 451.4013658536585,
       "start": 2333
      }
     ]
@@ -1339,18 +1185,10 @@
    "hr_pct": 68.96296296296296,
    "key": "2025-06-26-b",
    "km": 9.36,
-   "miles": 5.816034359341446,
    "ordinal": 1,
-   "pace": 464.2338461538462,
-   "pct": 68.96296296296296,
    "planned": {
     "band": "easy",
-    "band_display": "7:48-8:25/mi",
     "band_is_reference": true,
-    "band_sec_per_mi": [
-     468,
-     505
-    ],
     "ceiling": "137",
     "ceiling_kind": "hr",
     "ceiling_tiers": [
@@ -1359,9 +1197,6 @@
       137
      ]
     ],
-    "chart_confirmed": true,
-    "chart_is_carried_forward": false,
-    "chart_week_ending": "2025-06-22",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "B - Easy 45 min",
@@ -1381,7 +1216,6 @@
    "status": "completed",
    "total": 2700,
    "volume_km": 9.36,
-   "volume_miles": 5.816034359341446,
    "volume_seconds": 2700,
    "volume_source": "file"
   },
@@ -1396,44 +1230,36 @@
       "cad": 183,
       "dist_km": 1.609,
       "dur": 471,
-      "end": 471,
       "hr_avg": 119,
       "hr_max": 129,
       "index": 1,
-      "pace": 471.1006985705407,
       "start": 0
      },
      {
       "cad": 179,
       "dist_km": 1.609,
       "dur": 465,
-      "end": 936,
       "hr_avg": 137,
       "hr_max": 144,
       "index": 2,
-      "pace": 465.09941578620266,
       "start": 471
      },
      {
       "cad": 181,
       "dist_km": 1.609,
       "dur": 455,
-      "end": 1391,
       "hr_avg": 149,
       "hr_max": 159,
       "index": 3,
-      "pace": 455.09727781230583,
       "start": 936
      },
      {
       "cad": 182,
       "dist_km": 1.47,
       "dur": 409,
-      "end": 1800,
       "hr_avg": 162,
       "hr_max": 166,
       "index": 4,
-      "pace": 447.76986122448983,
       "start": 1391
      }
     ],
@@ -1526,21 +1352,13 @@
    "hr_max": 166,
    "key": "2025-06-27-a",
    "km": 6.58,
-   "miles": 4.088622444921658,
    "ordinal": 0,
-   "pace": 440.4906601823708,
-   "pct": 100.0,
    "planned": {
     "band": null,
-    "band_display": null,
     "band_is_reference": true,
-    "band_sec_per_mi": null,
     "ceiling": "monotonic",
     "ceiling_kind": "monotonic",
     "ceiling_tiers": null,
-    "chart_confirmed": true,
-    "chart_is_carried_forward": false,
-    "chart_week_ending": "2025-06-22",
     "criterion": null,
     "hr_ceiling": null,
     "prescribed": "A - 30 min thirds -> 7.2, 8.1, 9.1 mph",
@@ -1565,7 +1383,6 @@
    "status": "completed",
    "total": 1200,
    "volume_km": 6.58,
-   "volume_miles": 4.088622444921658,
    "volume_seconds": 1801,
    "volume_source": "file"
   },
@@ -1578,308 +1395,252 @@
       "cad": 179,
       "dist_km": 1.609,
       "dur": 500,
-      "end": 500,
       "hr_avg": 123,
       "hr_max": 137,
       "index": 1,
-      "pace": 500.10689869484156,
       "start": 0
      },
      {
       "cad": 177,
       "dist_km": 1.347,
       "dur": 401,
-      "end": 901,
       "hr_avg": 134,
       "hr_max": 141,
       "index": 2,
-      "pace": 479.09943875278395,
       "start": 500
      },
      {
       "cad": 186,
       "dist_km": 0.14,
       "dur": 29,
-      "end": 930,
       "hr_avg": 143,
       "hr_max": 149,
       "index": 3,
-      "pace": 333.36411428571427,
       "start": 901
      },
      {
       "cad": 176,
       "dist_km": 0.215,
       "dur": 60,
-      "end": 990,
       "hr_avg": 142,
       "hr_max": 150,
       "index": 4,
-      "pace": 449.1192558139535,
       "start": 930
      },
      {
       "cad": 185,
       "dist_km": 0.134,
       "dur": 31,
-      "end": 1021,
       "hr_avg": 138,
       "hr_max": 145,
       "index": 5,
-      "pace": 372.31092537313435,
       "start": 990
      },
      {
       "cad": 177,
       "dist_km": 0.213,
       "dur": 59,
-      "end": 1080,
       "hr_avg": 146,
       "hr_max": 148,
       "index": 6,
-      "pace": 445.7807323943662,
       "start": 1021
      },
      {
       "cad": 187,
       "dist_km": 0.14,
       "dur": 30,
-      "end": 1110,
       "hr_avg": 146,
       "hr_max": 151,
       "index": 7,
-      "pace": 344.85942857142857,
       "start": 1080
      },
      {
       "cad": 176,
       "dist_km": 0.209,
       "dur": 60,
-      "end": 1170,
       "hr_avg": 147,
       "hr_max": 153,
       "index": 8,
-      "pace": 462.0126315789474,
       "start": 1110
      },
      {
       "cad": 191,
       "dist_km": 0.152,
       "dur": 30,
-      "end": 1200,
       "hr_avg": 148,
       "hr_max": 158,
       "index": 9,
-      "pace": 317.6336842105263,
       "start": 1170
      },
      {
       "cad": 176,
       "dist_km": 0.208,
       "dur": 60,
-      "end": 1260,
       "hr_avg": 155,
       "hr_max": 160,
       "index": 10,
-      "pace": 464.2338461538462,
       "start": 1200
      },
      {
       "cad": 189,
       "dist_km": 0.142,
       "dur": 30,
-      "end": 1290,
       "hr_avg": 151,
       "hr_max": 157,
       "index": 11,
-      "pace": 340.0022535211268,
       "start": 1260
      },
      {
       "cad": 176,
       "dist_km": 0.208,
       "dur": 60,
-      "end": 1350,
       "hr_avg": 156,
       "hr_max": 160,
       "index": 12,
-      "pace": 464.2338461538462,
       "start": 1290
      },
      {
       "cad": 186,
       "dist_km": 0.144,
       "dur": 31,
-      "end": 1381,
       "hr_avg": 151,
       "hr_max": 155,
       "index": 13,
-      "pace": 346.4560000000001,
       "start": 1350
      },
      {
       "cad": 176,
       "dist_km": 0.215,
       "dur": 60,
-      "end": 1441,
       "hr_avg": 156,
       "hr_max": 158,
       "index": 14,
-      "pace": 449.1192558139535,
       "start": 1381
      },
      {
       "cad": 187,
       "dist_km": 0.145,
       "dur": 30,
-      "end": 1471,
       "hr_avg": 153,
       "hr_max": 157,
       "index": 15,
-      "pace": 332.9677241379311,
       "start": 1441
      },
      {
       "cad": 177,
       "dist_km": 0.221,
       "dur": 61,
-      "end": 1532,
       "hr_avg": 155,
       "hr_max": 160,
       "index": 16,
-      "pace": 444.2080723981901,
       "start": 1471
      },
      {
       "cad": 188,
       "dist_km": 0.144,
       "dur": 30,
-      "end": 1562,
       "hr_avg": 151,
       "hr_max": 157,
       "index": 17,
-      "pace": 335.28000000000003,
       "start": 1532
      },
      {
       "cad": 177,
       "dist_km": 0.215,
       "dur": 59,
-      "end": 1621,
       "hr_avg": 156,
       "hr_max": 160,
       "index": 18,
-      "pace": 441.63393488372094,
       "start": 1562
      },
      {
       "cad": 190,
       "dist_km": 0.147,
       "dur": 30,
-      "end": 1651,
       "hr_avg": 152,
       "hr_max": 158,
       "index": 19,
-      "pace": 328.4375510204082,
       "start": 1621
      },
      {
       "cad": 176,
       "dist_km": 0.216,
       "dur": 60,
-      "end": 1711,
       "hr_avg": 155,
       "hr_max": 160,
       "index": 20,
-      "pace": 447.0400000000001,
       "start": 1651
      },
      {
       "cad": 188,
       "dist_km": 0.14,
       "dur": 30,
-      "end": 1741,
       "hr_avg": 151,
       "hr_max": 156,
       "index": 21,
-      "pace": 344.85942857142857,
       "start": 1711
      },
      {
       "cad": 175,
       "dist_km": 0.212,
       "dur": 62,
-      "end": 1803,
       "hr_avg": 151,
       "hr_max": 157,
       "index": 22,
-      "pace": 470.65720754716983,
       "start": 1741
      },
      {
       "cad": 190,
       "dist_km": 0.149,
       "dur": 29,
-      "end": 1832,
       "hr_avg": 149,
       "hr_max": 157,
       "index": 23,
-      "pace": 313.2280268456376,
       "start": 1803
      },
      {
       "cad": 175,
       "dist_km": 0.208,
       "dur": 58,
-      "end": 1890,
       "hr_avg": 156,
       "hr_max": 160,
       "index": 24,
-      "pace": 448.75938461538465,
       "start": 1832
      },
      {
       "cad": 191,
       "dist_km": 0.137,
       "dur": 31,
-      "end": 1921,
       "hr_avg": 156,
       "hr_max": 164,
       "index": 25,
-      "pace": 364.15813138686127,
       "start": 1890
      },
      {
       "cad": 176,
       "dist_km": 0.212,
       "dur": 60,
-      "end": 1981,
       "hr_avg": 162,
       "hr_max": 165,
       "index": 26,
-      "pace": 455.47471698113213,
       "start": 1921
      },
      {
       "cad": 178,
       "dist_km": 1.609,
       "dur": 455,
-      "end": 2436,
       "hr_avg": 141,
       "hr_max": 156,
       "index": 27,
-      "pace": 455.09727781230583,
       "start": 1981
      },
      {
       "cad": 180,
       "dist_km": 1.576,
       "dur": 445,
-      "end": 2881,
       "hr_avg": 141,
       "hr_max": 145,
       "index": 28,
-      "pace": 454.41502538071063,
       "start": 2436
      }
     ]
@@ -1892,22 +1653,14 @@
    "hr_max": 165,
    "key": "2025-06-27-b",
    "km": 10.41,
-   "miles": 6.4684741111906465,
    "ordinal": 1,
-   "pace": 445.2363804034582,
-   "pct": null,
    "planned": {
     "band": null,
-    "band_display": null,
     "band_is_reference": false,
-    "band_sec_per_mi": null,
     "ceiling": "none (neuromuscular)",
     "ceiling_kind": "none",
     "ceiling_role": "neuromuscular",
     "ceiling_tiers": null,
-    "chart_confirmed": true,
-    "chart_is_carried_forward": false,
-    "chart_week_ending": "2025-06-22",
     "criterion": null,
     "hr_ceiling": null,
     "prescribed": "B - 8-12x30s w/ 1:00 jog -> Did 12",
@@ -1916,9 +1669,7 @@
     "sets": [
      {
       "band": null,
-      "band_display": null,
       "band_how": "neuromuscular",
-      "band_sec_per_mi": null,
       "ceiling": "none",
       "ceiling_kind": "none",
       "float_distance_m": null,
@@ -1954,7 +1705,6 @@
    "status": "completed",
    "total": null,
    "volume_km": 10.41,
-   "volume_miles": 6.4684741111906465,
    "volume_seconds": 2880,
    "volume_source": "file"
   },
@@ -1967,55 +1717,45 @@
       "cad": 185,
       "dist_km": 1.609,
       "dur": 519,
-      "end": 519,
       "hr_avg": 125,
       "hr_max": 138,
       "index": 1,
-      "pace": 519.1109608452456,
       "start": 0
      },
      {
       "cad": 182,
       "dist_km": 1.609,
       "dur": 488,
-      "end": 1007,
       "hr_avg": 131,
       "hr_max": 138,
       "index": 2,
-      "pace": 488.10433312616533,
       "start": 519
      },
      {
       "cad": 182,
       "dist_km": 1.609,
       "dur": 486,
-      "end": 1493,
       "hr_avg": 134,
       "hr_max": 144,
       "index": 3,
-      "pace": 486.103905531386,
       "start": 1007
      },
      {
       "cad": 181,
       "dist_km": 1.609,
       "dur": 490,
-      "end": 1983,
       "hr_avg": 133,
       "hr_max": 138,
       "index": 4,
-      "pace": 490.10476072094474,
       "start": 1493
      },
      {
       "cad": 183,
       "dist_km": 0.804,
       "dur": 236,
-      "end": 2219,
       "hr_avg": 133,
       "hr_max": 139,
       "index": 5,
-      "pace": 472.3945074626866,
       "start": 1983
      }
     ]
@@ -2049,18 +1789,10 @@
    "hr_pct": 93.60648356596128,
    "key": "2025-06-28",
    "km": 7.24,
-   "miles": 4.498727431798298,
    "ordinal": 0,
-   "pace": 493.47288397790055,
-   "pct": 67.0268647756266,
    "planned": {
     "band": "easy",
-    "band_display": "7:48-8:25/mi",
     "band_is_reference": true,
-    "band_sec_per_mi": [
-     468,
-     505
-    ],
     "ceiling": "137",
     "ceiling_kind": "hr",
     "ceiling_tiers": [
@@ -2069,9 +1801,6 @@
       137
      ]
     ],
-    "chart_confirmed": true,
-    "chart_is_carried_forward": false,
-    "chart_week_ending": "2025-06-22",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "Easy 45 min",
@@ -2091,7 +1820,6 @@
    "status": "completed",
    "total": 2221,
    "volume_km": 7.24,
-   "volume_miles": 4.498727431798298,
    "volume_seconds": 2220,
    "volume_source": "file"
   },
@@ -2104,143 +1832,117 @@
       "cad": 184,
       "dist_km": 1.609,
       "dur": 475,
-      "end": 475,
       "hr_avg": 123,
       "hr_max": 136,
       "index": 1,
-      "pace": 475.1015537600995,
       "start": 0
      },
      {
       "cad": 179,
       "dist_km": 1.609,
       "dur": 475,
-      "end": 950,
       "hr_avg": 133,
       "hr_max": 140,
       "index": 2,
-      "pace": 475.1015537600995,
       "start": 475
      },
      {
       "cad": 180,
       "dist_km": 1.609,
       "dur": 447,
-      "end": 1397,
       "hr_avg": 138,
       "hr_max": 146,
       "index": 3,
-      "pace": 447.09556743318836,
       "start": 950
      },
      {
       "cad": 181,
       "dist_km": 1.609,
       "dur": 447,
-      "end": 1844,
       "hr_avg": 140,
       "hr_max": 144,
       "index": 4,
-      "pace": 447.09556743318836,
       "start": 1397
      },
      {
       "cad": 179,
       "dist_km": 1.609,
       "dur": 454,
-      "end": 2298,
       "hr_avg": 141,
       "hr_max": 144,
       "index": 5,
-      "pace": 454.09706401491616,
       "start": 1844
      },
      {
       "cad": 181,
       "dist_km": 1.609,
       "dur": 457,
-      "end": 2755,
       "hr_avg": 140,
       "hr_max": 145,
       "index": 6,
-      "pace": 457.0977054070852,
       "start": 2298
      },
      {
       "cad": 182,
       "dist_km": 1.609,
       "dur": 445,
-      "end": 3200,
       "hr_avg": 143,
       "hr_max": 146,
       "index": 7,
-      "pace": 445.09513983840895,
       "start": 2755
      },
      {
       "cad": 182,
       "dist_km": 1.609,
       "dur": 443,
-      "end": 3643,
       "hr_avg": 145,
       "hr_max": 152,
       "index": 8,
-      "pace": 443.0947122436296,
       "start": 3200
      },
      {
       "cad": 182,
       "dist_km": 1.609,
       "dur": 436,
-      "end": 4079,
       "hr_avg": 148,
       "hr_max": 155,
       "index": 9,
-      "pace": 436.0932156619018,
       "start": 3643
      },
      {
       "cad": 182,
       "dist_km": 1.609,
       "dur": 449,
-      "end": 4528,
       "hr_avg": 146,
       "hr_max": 148,
       "index": 10,
-      "pace": 449.0959950279677,
       "start": 4079
      },
      {
       "cad": 182,
       "dist_km": 1.609,
       "dur": 445,
-      "end": 4973,
       "hr_avg": 147,
       "hr_max": 151,
       "index": 11,
-      "pace": 445.09513983840895,
       "start": 4528
      },
      {
       "cad": 182,
       "dist_km": 1.609,
       "dur": 426,
-      "end": 5399,
       "hr_avg": 153,
       "hr_max": 158,
       "index": 12,
-      "pace": 426.091077688005,
       "start": 4973
      },
      {
       "cad": 184,
       "dist_km": 0.02,
       "dur": 4,
-      "end": 5403,
       "hr_avg": 158,
       "hr_max": 159,
       "index": 13,
-      "pace": 321.8688,
       "start": 5399
      }
     ]
@@ -2277,18 +1979,10 @@
    "is_long": true,
    "key": "2025-06-29",
    "km": 19.33,
-   "miles": 12.011105145947663,
    "ordinal": 0,
-   "pace": 449.7504546301087,
-   "pct": 24.02369054229132,
    "planned": {
     "band": "long",
-    "band_display": "7:22-7:48/mi",
     "band_is_reference": true,
-    "band_sec_per_mi": [
-     442,
-     468
-    ],
     "ceiling": "137/140/143",
     "ceiling_kind": "hr",
     "ceiling_tiers": [
@@ -2305,9 +1999,6 @@
       143
      ]
     ],
-    "chart_confirmed": true,
-    "chart_is_carried_forward": false,
-    "chart_week_ending": "2025-06-22",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "Easy 90 min",
@@ -2327,7 +2018,6 @@
    "status": "completed",
    "total": 5403,
    "volume_km": 19.33,
-   "volume_miles": 12.011105145947663,
    "volume_seconds": 5402,
    "volume_source": "file"
   }
@@ -2335,22 +2025,18 @@
  "scores": {
   "easy": {
    "earned": 10881.666666666666,
-   "pct": 50.12052262294075,
    "total": 21711
   },
   "recorded": {
    "earned": 11012.666666666666,
-   "pct": 48.22924878105748,
    "total": 22834
   },
   "week": {
    "earned": 11012.666666666666,
-   "pct": 48.22924878105748,
    "total": 22834
   },
   "workout": {
    "earned": 131,
-   "pct": 11.665182546749778,
    "total": 1123
   }
  },

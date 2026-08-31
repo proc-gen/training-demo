@@ -55,6 +55,22 @@ const REPS = {
   ],
 } as unknown as RunResult["detail"];
 
+/** The Local 5k, 2026-08-30. A race publishes THIS instead of laps. */
+const RACE = {
+  race: {
+    seconds: 1119,
+    pace: 361.7,
+    total_mi: 3.093,
+    splits: [
+      { at_mi: 1, seconds: 354, hr_avg: 161, hr_max: 177, partial: false },
+      { at_mi: 2, seconds: 368, hr_avg: 178, hr_max: 181, partial: false },
+      { at_mi: 3, seconds: 366, hr_avg: 182, hr_max: 185, partial: false },
+      { at_mi: 3.09, seconds: 31, hr_avg: 182, hr_max: 184, partial: true, length_mi: 0.093 },
+    ],
+    halves: { first: 551, second: 568, delta_pct: 3.085 },
+  },
+} as unknown as RunResult["detail"];
+
 describe("RunDetail", () => {
   it("LEADS WITH THE EXPLANATION, then the evidence", () => {
     /* A reader opening a row wants the verdict explained first; the reverse
@@ -143,6 +159,116 @@ describe("RunDetail", () => {
     expect(container.textContent).toContain("HR avg");
     // The lap table's own header would say "Cadence" beside "HR avg/max".
     expect(container.textContent).not.toContain("HR avg/max");
+  });
+
+  it("OPENS A RACE ONTO ITS SPLITS, where it used to show nothing", () => {
+    /* THE DEFECT THIS CLOSES: a race has neither `sets` nor `laps` -- the
+     * grader withholds device laps on purpose and publishes per-mile splits cut
+     * from the distance stream instead -- so it matched neither arm of this
+     * branch and fell through to null. Eleven completed races had been
+     * publishing their splits the whole time, and the athlete found it by
+     * opening the Local 5k and asking why laps never show for races. */
+    const { container } = wrap(<RunDetail run={run({ role: "race", detail: RACE })} chart={null} />);
+    const text = container.textContent!;
+    expect(text).toContain("mi 1");
+    expect(text).toContain("5:54");
+    expect(text).toContain("3.09 mi");
+    expect(text).toContain("Halves 9:11 / 9:28");
+    expect(text).toContain("positive split");
+  });
+
+  it("gives a race a chart and NO criterion drawn on it", () => {
+    /* A race is scored by nothing, so there is no band to shade and no ceiling
+     * line to rule. `judged={false}` is what stops every mark rendering "not
+     * judged", which reads as a grader that failed to assess them. */
+    const { container } = wrap(<RunDetail run={run({ role: "race", detail: RACE })} chart={null} />);
+    expect(container.querySelector("svg")).not.toBeNull();
+    expect(container.textContent).not.toContain("not judged");
+    expect(container.querySelector(".ok")).toBeNull();
+    expect(container.querySelector(".bad")).toBeNull();
+  });
+
+  it("shows a race NO lap table, because the grader publishes none", () => {
+    const { container } = wrap(<RunDetail run={run({ role: "race", detail: RACE })} chart={null} />);
+    // The lap table's own header; the race table's says "Split".
+    expect(container.textContent).not.toContain("Cadence");
+    expect(container.textContent).toContain("Split");
+  });
+
+  describe("the Custom Laps button", () => {
+    /* PLACEMENT IS A STATED REQUIREMENT NOW, so it is asserted. It shipped
+     * after the whole reps/race/laps branch, which put it below the chart AND
+     * below the chart's own footnote -- the athlete: *"the custom lap button is
+     * barely visible. it should be just underneath the laps table"*. Nothing
+     * here asserted anything about it, so the correction would have regressed
+     * as silently as it arrived. */
+    const button = (c: HTMLElement) => c.querySelector(".custom-laps-open");
+
+    it("sits between a continuous run's lap table and its chart", () => {
+      const { container } = wrap(<RunDetail run={run({ detail: LAPS })} chart={null} />);
+      const table = container.querySelector("table")!;
+      const btn = button(container)!;
+      const svg = container.querySelector("svg")!;
+      expect(btn).toBeTruthy();
+      /* DOCUMENT ORDER, not a snapshot: the claim is a relationship between
+         three elements, and freezing the markup would fail on every unrelated
+         edit while saying nothing about this one. */
+      expect(
+        table.compareDocumentPosition(btn) & Node.DOCUMENT_POSITION_FOLLOWING,
+      ).toBeTruthy();
+      expect(
+        btn.compareDocumentPosition(svg) & Node.DOCUMENT_POSITION_FOLLOWING,
+      ).toBeTruthy();
+    });
+
+    it("sits between a race's split table and its chart", () => {
+      const { container } = wrap(
+        <RunDetail run={run({ role: "race", detail: RACE })} chart={null} />,
+      );
+      const table = container.querySelector("table")!;
+      const btn = button(container)!;
+      const svg = container.querySelector("svg")!;
+      expect(
+        table.compareDocumentPosition(btn) & Node.DOCUMENT_POSITION_FOLLOWING,
+      ).toBeTruthy();
+      expect(
+        btn.compareDocumentPosition(svg) & Node.DOCUMENT_POSITION_FOLLOWING,
+      ).toBeTruthy();
+    });
+
+    it("follows the whole session on a rep run, which has no single table", () => {
+      /* `SessionDetail` renders a `RepSetPanel` per set, each with its own
+         table and chart, so "under the laps table" has no referent in that arm.
+         Asserted so the difference is deliberate rather than discovered. */
+      const { container } = wrap(<RunDetail run={run({ detail: REPS })} chart={null} />);
+      const btn = button(container)!;
+      expect(btn).toBeTruthy();
+      const tables = [...container.querySelectorAll("table")];
+      expect(
+        tables[tables.length - 1].compareDocumentPosition(btn) &
+          Node.DOCUMENT_POSITION_FOLLOWING,
+      ).toBeTruthy();
+    });
+
+    it("is NOT a .ghost, which is transparent and read as text", () => {
+      /* The athlete could barely see it. `.ghost` has no resting fill, which is
+         the shape this page already paid for on the tab strips -- a control
+         with no resting fill and a text-only hover does not read as a
+         control. */
+      const { container } = wrap(<RunDetail run={run({ detail: LAPS })} chart={null} />);
+      expect(button(container)!.classList.contains("ghost")).toBe(false);
+    });
+
+    it("is absent on a run with no activity behind it", () => {
+      // A planned session has no samples to cut.
+      const { container } = wrap(
+        <RunDetail
+          run={run({ runalyze_id: undefined, detail: LAPS })}
+          chart={null}
+        />,
+      );
+      expect(button(container)).toBeNull();
+    });
   });
 
   it("shows the explanation even when there is no segment table at all", () => {

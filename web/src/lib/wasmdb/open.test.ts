@@ -38,8 +38,11 @@ const BUNDLE = {
     pace_charts: [],
   }),
   "history.json": "{}",
+  // The fitness series. `[]` is a real value -- an athlete with no
+  // `derived/vo2max.csv` has an empty series, not a missing record.
+  "vo2max.json": "[]",
   "thresholds.json": "{}",
-  "pace-chart-current.json": "null",
+  "load-model.json": "{}",
   "pace-models-current.json": "null",
   "weeks/2026-08-10/week.json": JSON.stringify({ week_start: "2026-08-10" }),
   "weeks/2026-08-10/trimp.json": "[]",

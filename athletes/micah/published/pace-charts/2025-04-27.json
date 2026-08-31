@@ -1,75 +1,35 @@
 {
  "bands": {
   "easy": {
-   "display": "7:35-8:11/mi",
    "fast_sec_per_mi": 455,
-   "pct": [
-    0.63,
-    0.68
-   ],
    "slow_sec_per_mi": 491
   },
   "long": {
-   "display": "7:09-7:35/mi",
    "fast_sec_per_mi": 429,
-   "pct": [
-    0.68,
-    0.72
-   ],
    "slow_sec_per_mi": 455
   },
   "recovery": {
-   "display": "8:11-8:53/mi",
    "fast_sec_per_mi": 491,
-   "pct": [
-    0.58,
-    0.63
-   ],
    "slow_sec_per_mi": 533
   },
   "rep_10min": {
-   "display": "6:17-6:31/mi",
    "fast_sec_per_mi": 377,
-   "pct": [
-    0.79,
-    0.82
-   ],
    "slow_sec_per_mi": 391
   },
   "rep_15min": {
-   "display": "6:26-6:42/mi",
    "fast_sec_per_mi": 386,
-   "pct": [
-    0.77,
-    0.8
-   ],
    "slow_sec_per_mi": 402
   },
   "rep_1min": {
-   "display": "5:51-6:04/mi",
    "fast_sec_per_mi": 351,
-   "pct": [
-    0.85,
-    0.88
-   ],
    "slow_sec_per_mi": 364
   },
   "rep_3min": {
-   "display": "5:59-6:12/mi",
    "fast_sec_per_mi": 359,
-   "pct": [
-    0.83,
-    0.86
-   ],
    "slow_sec_per_mi": 372
   },
   "rep_6min": {
-   "display": "6:08-6:22/mi",
    "fast_sec_per_mi": 368,
-   "pct": [
-    0.81,
-    0.84
-   ],
    "slow_sec_per_mi": 382
   }
  },
@@ -77,43 +37,34 @@
  "effective_vo2max": 62.47,
  "race_paces": {
   "10000m": {
-   "display": "34:10 @ 5:30/mi",
    "sec_per_mi": 330,
    "seconds": 2050
   },
   "1500m": {
-   "display": "4:26 @ 4:45/mi",
    "sec_per_mi": 285,
    "seconds": 266
   },
   "21097m": {
-   "display": "1:15:27 @ 5:45/mi",
    "sec_per_mi": 345,
    "seconds": 4527
   },
   "3000m": {
-   "display": "9:29 @ 5:05/mi",
    "sec_per_mi": 305,
    "seconds": 569
   },
   "42195m": {
-   "display": "2:37:51 @ 6:01/mi",
    "sec_per_mi": 361,
    "seconds": 9471
   },
   "5000m": {
-   "display": "16:28 @ 5:18/mi",
    "sec_per_mi": 318,
    "seconds": 988
   },
   "800m": {
-   "display": "2:15 @ 4:31/mi",
    "sec_per_mi": 271,
    "seconds": 135
   },
   "tempo": {
-   "basis": "60-80 minute race pace, the Daniels threshold definition, from the model's duration prognosis.",
-   "display": "5:40-5:47/mi",
    "fast_sec_per_mi": 340,
    "slow_sec_per_mi": 347
   }

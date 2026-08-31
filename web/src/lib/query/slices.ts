@@ -35,8 +35,16 @@
  */
 
 import type { Db } from "./db";
+import { daysByDate, deriveAdherence, deriveLoad } from "./derive";
 import { addDays, mondayOf, weekEnding } from "../data/weekDates";
-import { chart, singleton, weekFromRow, type WeekRow } from "./queries";
+import {
+  chart,
+  chartJoin,
+  newestChartKey,
+  singleton,
+  weekFromRow,
+  type WeekRow,
+} from "./queries";
 
 /** The columns every slice selects when it wants a whole week. */
 const WEEK_COLUMNS = `week_start, week_json, adherence_json, load_json,
@@ -180,16 +188,13 @@ export function weekSlice(db: Db, start: string): unknown {
   const weeks: Record<string, unknown> = {};
   if (row) weeks[start] = weekFromRow(db, row);
 
-  const current = singleton(db, "pace_chart_current") as {
-    week_ending?: unknown;
-  } | null;
-
   return {
     ...envelope(db),
     weeks,
     days: [],
-    pace_chart_current: chart(db, current?.week_ending),
-    pace_models_current: singleton(db, "pace_models_current"),
+    // The newest chart in the table. `pace-chart-current.json` was a pointer
+    // record at exactly this value and is gone (2026-08-30).
+    pace_chart_current: chart(db, newestChartKey(db)),
   };
 }
 
@@ -224,6 +229,18 @@ function trimRun(run: Record<string, unknown>) {
  */
 export function trendsSlice(db: Db): unknown {
   const weeks: Record<string, unknown> = {};
+  // The flag constants, read once for all 102 weeks. Frozen and
+  // athlete-agnostic, so one lookup rather than one per week.
+  const loadModel = singleton(db, "load_model");
+  /* THE JOIN SOURCE, LOADED ONCE. Every week's `LoadDay` restates four columns
+     off a `DayRecord`, and this slice touches all 102 -- a point lookup per
+     date would be ~700 statement executions to rebuild a map that is 758 rows
+     whole. `weekFromRow` does it per date because it reads one week. */
+  const dayMap = daysByDate(
+    (db.prepare("select doc from day").all() as { doc: string }[]).map((r) =>
+      JSON.parse(r.doc),
+    ),
+  );
   const rows = db
     .prepare("select week_start, week_json, adherence_json, load_json from week order by ordinal")
     .all() as {
@@ -242,11 +259,23 @@ export function trendsSlice(db: Db): unknown {
       ? (JSON.parse(row.load_json) as Record<string, unknown>)
       : null;
 
+    /* DERIVED BEFORE IT IS PROJECTED, and that order is the whole subtlety.
+       `trimRun` keeps `pace` and `miles`, and `fitnessSeries` reads a day's
+       `tsb` -- all three are computed from parts this projection then throws
+       away, so deriving afterwards would find nothing to derive from. The
+       equality case in `slices.test.ts` is what says the two agree. */
+    // THE JOIN IS RESOLVED BEFORE THE DERIVE, because the planned readouts
+    // this projection keeps restate the chart and are filled from it.
+    const join = chartJoin(db, week);
+    const paceChart = chart(db, join.key);
+    deriveAdherence(a, paceChart, join.carried === true);
+    deriveLoad(l, dayMap, loadModel);
+
     weeks[row.week_start] = {
       week_start: row.week_start,
       // Required by the schema, and the prose itself is never read here.
       notes: { adherence: null, load: null },
-      pace_chart: chart(db, week.pace_chart_week_ending),
+      pace_chart: paceChart,
       adherence: a && {
         results: ((a.results as Record<string, unknown>[]) ?? []).map(trimRun),
         facts: a.facts,
@@ -268,7 +297,49 @@ export function trendsSlice(db: Db): unknown {
       .all() as Record<string, unknown>[]
   ).map((d) => ({ ...d }));
 
-  return { ...envelope(db), weeks, days };
+  /* THE FITNESS SERIES, three columns of five. `paceSeries.fitnessCurve()`
+     shapes these into one effective-VO2max value per calendar day and the
+     race-times panel draws the model's prediction at each -- which is why the
+     panel is DAILY where it used to step through 87 confirmed Sundays.
+     `activity_id` and `estimate_source` are not read by any panel, so they stay
+     out; the same trimming `trimRun` does one field set over. */
+  /* NO `order by`, DELIBERATELY. `json_each` yields the array's own order, and
+     the array's own order is `estimate_vo2max.py`'s sort -- decided by Python,
+     once, exactly as `index.json` decides the order of weeks and days.
+     Re-sorting by date here would look harmless and is not: two activities on
+     one date would come back in a different order from the file's, and a
+     distance-weighted mean is a float SUM, which is not associative. The two
+     spellings differ in the last bits, which is enough for
+     `slices.test.ts`'s projection-equals-payload check to fail and enough for
+     a curve to disagree with itself between routes. */
+  const vo2max = db
+    .prepare("select date, vo2max, distance_km from vo2max_row")
+    .all() as Record<string, unknown>[];
+
+  /* THE ONE THRESHOLD A PANEL READS, and not the record it sits in.
+     `thresholds.json` is 14.9 KB, almost all of it athlete provenance prose --
+     which is the same thing `project_chart` just took out of the published
+     charts, and shipping it here to reach one integer would put it straight
+     back. `windowDays()` reads `vo2max.shape_window_days` and nothing else
+     does, so that is what travels.
+     STILL PAYLOAD-SHAPED: `thresholds` is a `looseObject`, so a subset of it
+     validates and `trendPanels()` cannot tell the difference -- which is
+     exactly what `slices.test.ts` asserts, and what would fail the day a panel
+     starts reading a second threshold. */
+  const thresholds = singleton(db, "thresholds") as {
+    vo2max?: { shape_window_days?: unknown };
+  } | null;
+  const window = thresholds?.vo2max?.shape_window_days;
+
+  return {
+    ...envelope(db),
+    weeks,
+    days,
+    vo2max,
+    thresholds: window === undefined
+      ? {}
+      : { vo2max: { shape_window_days: window } },
+  };
 }
 
 // ------------------------------------------------------------------- calendar
@@ -304,7 +375,10 @@ export function calendarSlice(
        where week_start >= ? and week_start <= ? order by ordinal`,
     )
     .all(firstStart, lastStart) as WeekRow[];
-  for (const row of rows) weeks[row.week_start] = weekFromRow(db, row);
+  const loadModel = singleton(db, "load_model");
+  for (const row of rows) {
+    weeks[row.week_start] = weekFromRow(db, row, loadModel);
+  }
 
   const days = (
     db

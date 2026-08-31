@@ -66,15 +66,25 @@
    },
    {
     "date": "2026-08-30",
+    "key": "2026-08-30-wu",
+    "prescribed": "warmup for the Local 5k",
+    "role": "volume_only"
+   },
+   {
+    "date": "2026-08-30",
     "key": "2026-08-30",
     "prescribed": "Local 5k",
     "role": "race"
+   },
+   {
+    "date": "2026-08-30",
+    "key": "2026-08-30-cd",
+    "prescribed": "cooldown for the Local 5k",
+    "role": "volume_only"
    }
   ],
   "week_start": "2026-08-24",
   "week_type": "Race"
  },
- "pace_chart_is_carried_forward": false,
- "pace_chart_week_ending": "2026-08-23",
  "week_start": "2026-08-24"
 }

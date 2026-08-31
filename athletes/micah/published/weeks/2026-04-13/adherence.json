@@ -74,33 +74,27 @@
       "cad": 137,
       "dist_km": 1.609,
       "dur": 777,
-      "end": 777,
       "hr_avg": 104,
       "hr_max": 125,
       "index": 1,
-      "pace": 777.1661205717837,
       "start": 0
      },
      {
       "cad": 131,
       "dist_km": 1.609,
       "dur": 826,
-      "end": 1603,
       "hr_avg": 104,
       "hr_max": 129,
       "index": 2,
-      "pace": 826.1765966438783,
       "start": 777
      },
      {
       "cad": 131,
       "dist_km": 0.383,
       "dur": 197,
-      "end": 1800,
       "hr_avg": 104,
       "hr_max": 125,
       "index": 3,
-      "pace": 827.782684073107,
       "start": 1603
      }
     ]
@@ -125,18 +119,10 @@
    "hr_pct": 100.0,
    "key": "2026-04-17",
    "km": 3.6,
-   "miles": 2.2369362920544025,
    "ordinal": 0,
-   "pace": 804.6719999999999,
-   "pct": 100.0,
    "planned": {
     "band": "easy",
-    "band_display": "7:58-8:36/mi",
     "band_is_reference": true,
-    "band_sec_per_mi": [
-     478,
-     516
-    ],
     "ceiling": "137",
     "ceiling_kind": "hr",
     "ceiling_tiers": [
@@ -145,9 +131,6 @@
       137
      ]
     ],
-    "chart_confirmed": true,
-    "chart_is_carried_forward": false,
-    "chart_week_ending": "2026-04-12",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "unplanned -- first run since 3/14 (30 min walk-jog, HR 104)",
@@ -167,7 +150,6 @@
    "status": "completed",
    "total": 1800,
    "volume_km": 3.6,
-   "volume_miles": 2.2369362920544025,
    "volume_seconds": 1800,
    "volume_source": "file"
   },
@@ -180,33 +162,27 @@
       "cad": 143,
       "dist_km": 1.609,
       "dur": 837,
-      "end": 837,
       "hr_avg": 101,
       "hr_max": 123,
       "index": 1,
-      "pace": 837.1789484151648,
       "start": 0
      },
      {
       "cad": 143,
       "dist_km": 1.609,
       "dur": 838,
-      "end": 1675,
       "hr_avg": 107,
       "hr_max": 123,
       "index": 2,
-      "pace": 838.1791622125544,
       "start": 837
      },
      {
       "cad": 142,
       "dist_km": 0.257,
       "dur": 126,
-      "end": 1801,
       "hr_avg": 104,
       "hr_max": 122,
       "index": 3,
-      "pace": 789.0169027237354,
       "start": 1675
      }
     ]
@@ -231,18 +207,10 @@
    "hr_pct": 100.0,
    "key": "2026-04-19",
    "km": 4.04,
-   "miles": 2.510339616638829,
    "ordinal": 0,
-   "pace": 717.4328079207921,
-   "pct": 100.0,
    "planned": {
     "band": "easy",
-    "band_display": "7:58-8:36/mi",
     "band_is_reference": true,
-    "band_sec_per_mi": [
-     478,
-     516
-    ],
     "ceiling": "137",
     "ceiling_kind": "hr",
     "ceiling_tiers": [
@@ -251,9 +219,6 @@
       137
      ]
     ],
-    "chart_confirmed": true,
-    "chart_is_carried_forward": false,
-    "chart_week_ending": "2026-04-12",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "unplanned -- return walk-jog (30 min, HR 104)",
@@ -273,7 +238,6 @@
    "status": "completed",
    "total": 1800,
    "volume_km": 4.04,
-   "volume_miles": 2.510339616638829,
    "volume_seconds": 1801,
    "volume_source": "file"
   }
@@ -281,22 +245,18 @@
  "scores": {
   "easy": {
    "earned": 3600.0,
-   "pct": 100.0,
    "total": 3600
   },
   "recorded": {
    "earned": 3600.0,
-   "pct": 100.0,
    "total": 3600
   },
   "week": {
    "earned": 3600.0,
-   "pct": 100.0,
    "total": 3600
   },
   "workout": {
    "earned": 0,
-   "pct": null,
    "total": 0
   }
  },

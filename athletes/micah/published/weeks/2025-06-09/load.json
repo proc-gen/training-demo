@@ -1,7 +1,6 @@
 {
  "acwr_mech": 1.0475952582456476,
  "acwr_mech_on": "2025-06-15",
- "acwr_run": 0.9463927178491796,
  "bg_trimp": 101.04786664993965,
  "ceiling_inputs": {
   "background_source": "baseline",
@@ -23,20 +22,12 @@
    "completeness": "full",
    "ctl": 89.96906187356251,
    "date": "2025-06-09",
-   "nonrun_se": 2291.0,
-   "nonrun_steps": 2291,
    "pct": 100.0,
    "prescribed_run_seconds": 3600.0,
    "prescribed_run_steps": 10680.0,
    "role": "easy",
-   "run_se": 26550.0,
-   "run_step_source": "cadence-stream",
-   "run_steps": 10620,
    "scored": true,
-   "se": 28841.0,
-   "total_steps": 12911,
-   "trimp": 75.99000000000001,
-   "tsb": -15.69842275305949
+   "trimp": 75.99000000000001
   },
   {
    "atl": 107.40061346996649,
@@ -47,20 +38,12 @@
    "completeness": "full",
    "ctl": 91.02166364688519,
    "date": "2025-06-10",
-   "nonrun_se": 2408.0,
-   "nonrun_steps": 2408,
    "pct": 100.0,
    "prescribed_run_seconds": 4649.000835122883,
    "prescribed_run_steps": 13792.035810864552,
    "role": "repetition",
-   "run_se": 34602.5,
-   "run_step_source": "cadence-stream",
-   "run_steps": 13841,
    "scored": true,
-   "se": 37010.5,
-   "total_steps": 16249,
-   "trimp": 112.6,
-   "tsb": -16.3789498230813
+   "trimp": 112.6
   },
   {
    "atl": 102.48046010247486,
@@ -71,20 +54,12 @@
    "completeness": "full",
    "ctl": 90.86809789586728,
    "date": "2025-06-11",
-   "nonrun_se": 2676.0,
-   "nonrun_steps": 2676,
    "pct": 100.0,
    "prescribed_run_seconds": 3600.0,
    "prescribed_run_steps": 10680.0,
    "role": "easy",
-   "run_se": 26435.0,
-   "run_step_source": "cadence-stream",
-   "run_steps": 10574,
    "scored": true,
-   "se": 29111.0,
-   "total_steps": 13250,
-   "trimp": 87.72,
-   "tsb": -11.612362206607585
+   "trimp": 87.72
   },
   {
    "atl": 103.47784507685614,
@@ -95,20 +70,12 @@
    "completeness": "full",
    "ctl": 91.59376776117578,
    "date": "2025-06-12",
-   "nonrun_se": 4672.0,
-   "nonrun_steps": 4672,
    "pct": 100.0,
    "prescribed_run_seconds": 4500.0,
    "prescribed_run_steps": 13350.0,
    "role": "easy",
-   "run_se": 33225.0,
-   "run_step_source": "cadence-stream",
-   "run_steps": 13290,
    "scored": true,
-   "se": 37897.0,
-   "total_steps": 17962,
-   "trimp": 106.47,
-   "tsb": -11.884077315680358
+   "trimp": 106.47
   },
   {
    "atl": 86.8483838076421,
@@ -119,20 +86,12 @@
    "completeness": "full",
    "ctl": 89.0526622839118,
    "date": "2025-06-13",
-   "nonrun_se": 3384.0,
-   "nonrun_steps": 3384,
    "pct": 100.0,
    "prescribed_run_seconds": 1800.0,
    "prescribed_run_steps": 5340.0,
    "role": "easy",
-   "run_se": 13355.0,
-   "run_step_source": "cadence-stream",
-   "run_steps": 5342,
    "scored": true,
-   "se": 16739.0,
-   "total_steps": 8726,
-   "trimp": 36.96,
-   "tsb": 2.2042784762697067
+   "trimp": 36.96
   },
   {
    "atl": 93.99378785573157,
@@ -143,20 +102,12 @@
    "completeness": "full",
    "ctl": 90.27951520093916,
    "date": "2025-06-14",
-   "nonrun_se": 9777.0,
-   "nonrun_steps": 9777,
    "pct": null,
    "prescribed_run_seconds": null,
    "prescribed_run_steps": null,
    "role": "race",
-   "run_se": 19597.5,
-   "run_step_source": "cadence-stream",
-   "run_steps": 7839,
    "scored": false,
-   "se": 29374.5,
-   "total_steps": 17616,
-   "trimp": 115.43,
-   "tsb": -3.71427265479241
+   "trimp": 115.43
   },
   {
    "atl": 83.81034089179867,
@@ -167,28 +118,17 @@
    "completeness": "full",
    "ctl": 88.5576772846164,
    "date": "2025-06-15",
-   "nonrun_se": 5456.0,
-   "nonrun_steps": 5456,
    "pct": 73.18281421192675,
    "prescribed_run_seconds": 1800.0,
    "prescribed_run_steps": 5340.0,
    "role": "easy",
-   "run_se": 20100.0,
-   "run_step_source": "cadence-stream",
-   "run_steps": 8040,
    "scored": true,
-   "se": 25556.0,
-   "total_steps": 13496,
-   "trimp": 53.26,
-   "tsb": 4.747336392817729
+   "trimp": 53.26
   }
  ],
  "fitness": {
   "activities": 13,
-  "acwr_run": 0.9463927178491796,
-  "atl": 83.81034089179867,
   "atl_converged": true,
-  "ctl": 88.5576772846164,
   "ctl_converged": true,
   "ctl_warmup_days": 126,
   "days_covered": 7,
@@ -199,19 +139,16 @@
   "stream_share": 0.998334551263532,
   "trimp": 588.4300000000001,
   "trimp_source": "mixed",
-  "tsb": 4.747336392817729,
   "unpriced": 0
  },
  "flags": [
   {
    "status": "clear",
-   "token": "steps-data-incomplete",
-   "why": "all 7 days covered by the export"
+   "token": "steps-data-incomplete"
   },
   {
    "status": "not-evaluable",
-   "token": "recovery-day-not-recovering",
-   "why": "no fully-covered rest or recovery day this week"
+   "token": "recovery-day-not-recovering"
   },
   {
    "status": "clear",
@@ -225,8 +162,7 @@
   },
   {
    "status": "clear",
-   "token": "load-monotony",
-   "why": "day-to-day SE coefficient of variation 0.23 (fires below 0.15)"
+   "token": "load-monotony"
   },
   {
    "status": "clear",
@@ -235,13 +171,11 @@
   },
   {
    "status": "clear",
-   "token": "hrv-suppressed",
-   "why": "longest run of 1 day(s) below 63.0 (90% of a 70.0 baseline); fires at 3"
+   "token": "hrv-suppressed"
   },
   {
    "status": "clear",
-   "token": "sleep-debt",
-   "why": "mean 7.2 h over 6 night(s) (fires below 6.5)"
+   "token": "sleep-debt"
   },
   {
    "status": "clear",
@@ -259,18 +193,14 @@
   "excluded": [
    "2025-06-14"
   ],
-  "pct": 96.08722584917886,
   "scored_days": 6,
   "total": 175154.5
  },
  "monotony_mech": 4.423830566535892,
- "overall": 92.78045502985259,
  "readiness": {
   "available": 19,
   "hrv_baseline": 70,
   "hrv_baseline_source": "snapshot",
-  "passed": 17,
-  "pct": 89.47368421052632,
   "per_day": [
    {
     "checks": {

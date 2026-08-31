@@ -1,7 +1,6 @@
 {
  "acwr_mech": 0.9275939066133241,
  "acwr_mech_on": "2026-07-19",
- "acwr_run": 1.130839499926566,
  "bg_trimp": 46.517440027394166,
  "ceiling_inputs": {
   "background_source": "baseline",
@@ -23,20 +22,12 @@
    "completeness": "full",
    "ctl": 67.56669917395193,
    "date": "2026-07-13",
-   "nonrun_se": 1237.0,
-   "nonrun_steps": 1237,
    "pct": 100.0,
    "prescribed_run_seconds": 0.0,
    "prescribed_run_steps": 0.0,
    "role": "rest",
-   "run_se": 0.0,
-   "run_step_source": "none",
-   "run_steps": 0,
    "scored": true,
-   "se": 1237.0,
-   "total_steps": 1237,
-   "trimp": 0.0,
-   "tsb": -5.808868743962577
+   "trimp": 0.0
   },
   {
    "atl": 83.49917593843588,
@@ -47,20 +38,12 @@
    "completeness": "full",
    "ctl": 69.72034107283788,
    "date": "2026-07-14",
-   "nonrun_se": 1334.0,
-   "nonrun_steps": 1334,
    "pct": 100.0,
    "prescribed_run_seconds": 4152.296587926509,
    "prescribed_run_steps": 11903.25021872266,
    "role": "interval",
-   "run_se": 27512.5,
-   "run_step_source": "cadence-stream",
-   "run_steps": 11005,
    "scored": true,
-   "se": 28846.5,
-   "total_steps": 12339,
-   "trimp": 113.87,
-   "tsb": -13.778834865598
+   "trimp": 113.87
   },
   {
    "atl": 80.20438195382691,
@@ -71,20 +54,12 @@
    "completeness": "full",
    "ctl": 69.74823218572914,
    "date": "2026-07-15",
-   "nonrun_se": 1818.0,
-   "nonrun_steps": 1818,
    "pct": 100.0,
    "prescribed_run_seconds": 3600.0,
    "prescribed_run_steps": 10320.0,
    "role": "easy",
-   "run_se": 25982.5,
-   "run_step_source": "cadence-stream",
-   "run_steps": 10393,
    "scored": true,
-   "se": 27800.5,
-   "total_steps": 12211,
-   "trimp": 70.32,
-   "tsb": -10.456149768097774
+   "trimp": 70.32
   },
   {
    "atl": 76.85828646537018,
@@ -95,20 +70,12 @@
    "completeness": "full",
    "ctl": 69.61203533988127,
    "date": "2026-07-16",
-   "nonrun_se": 728.0,
-   "nonrun_steps": 728,
    "pct": 100.0,
    "prescribed_run_seconds": 3600.0,
    "prescribed_run_steps": 10320.0,
    "role": "easy",
-   "run_se": 25052.5,
-   "run_step_source": "cadence-stream",
-   "run_steps": 10021,
    "scored": true,
-   "se": 25780.5,
-   "total_steps": 10749,
-   "trimp": 66.82,
-   "tsb": -7.246251125488911
+   "trimp": 66.82
   },
   {
    "atl": 69.42121484902763,
@@ -119,20 +86,12 @@
    "completeness": "full",
    "ctl": 68.56542904500307,
    "date": "2026-07-17",
-   "nonrun_se": 2335.0,
-   "nonrun_steps": 2335,
    "pct": 100.0,
    "prescribed_run_seconds": 2400.0,
    "prescribed_run_steps": 6880.0,
    "role": "easy",
-   "run_se": 17250.0,
-   "run_step_source": "cadence-stream",
-   "run_steps": 6900,
    "scored": true,
-   "se": 19585.0,
-   "total_steps": 9235,
-   "trimp": 47.11,
-   "tsb": -0.8557858040245634
+   "trimp": 47.11
   },
   {
    "atl": 63.390911136770725,
@@ -143,20 +102,12 @@
    "completeness": "full",
    "ctl": 67.48331606616571,
    "date": "2026-07-18",
-   "nonrun_se": 2624.0,
-   "nonrun_steps": 2624,
    "pct": 100.0,
    "prescribed_run_seconds": 2400.0,
    "prescribed_run_steps": 6880.0,
    "role": "easy",
-   "run_se": 17222.5,
-   "run_step_source": "cadence-stream",
-   "run_steps": 6889,
    "scored": true,
-   "se": 19846.5,
-   "total_steps": 9513,
-   "trimp": 45.3,
-   "tsb": 4.092404929394988
+   "trimp": 45.3
   },
   {
    "atl": 79.48318335257804,
@@ -167,28 +118,17 @@
    "completeness": "full",
    "ctl": 70.28688276076267,
    "date": "2026-07-19",
-   "nonrun_se": 5241.0,
-   "nonrun_steps": 5241,
    "pct": 91.5794655178217,
    "prescribed_run_seconds": 3225.0,
    "prescribed_run_steps": 9245.0,
    "role": "race",
-   "run_se": 24470.0,
-   "run_step_source": "cadence-stream",
-   "run_steps": 9788,
    "scored": true,
-   "se": 29711.0,
-   "total_steps": 15029,
-   "trimp": 127.76,
-   "tsb": -9.196300591815373
+   "trimp": 127.76
   }
  ],
  "fitness": {
   "activities": 11,
-  "acwr_run": 1.130839499926566,
-  "atl": 79.48318335257804,
   "atl_converged": true,
-  "ctl": 70.28688276076267,
   "ctl_converged": true,
   "ctl_warmup_days": 126,
   "days_covered": 7,
@@ -197,21 +137,17 @@
   "on_date": "2026-07-19",
   "seed_date": "2024-08-01",
   "stream_share": 1.0,
-  "trimp": 471.18,
   "trimp_source": "stream",
-  "tsb": -9.196300591815373,
   "unpriced": 0
  },
  "flags": [
   {
    "status": "clear",
-   "token": "steps-data-incomplete",
-   "why": "all 7 days covered by the export"
+   "token": "steps-data-incomplete"
   },
   {
    "status": "clear",
-   "token": "recovery-day-not-recovering",
-   "why": "1 rest/recovery day(s) within ceiling x1.15"
+   "token": "recovery-day-not-recovering"
   },
   {
    "status": "clear",
@@ -225,8 +161,7 @@
   },
   {
    "status": "clear",
-   "token": "load-monotony",
-   "why": "day-to-day SE coefficient of variation 0.42 (fires below 0.15)"
+   "token": "load-monotony"
   },
   {
    "status": "clear",
@@ -235,13 +170,11 @@
   },
   {
    "status": "clear",
-   "token": "hrv-suppressed",
-   "why": "longest run of 1 day(s) below 57.6 (90% of a 64.0 baseline); fires at 3"
+   "token": "hrv-suppressed"
   },
   {
    "status": "clear",
-   "token": "sleep-debt",
-   "why": "mean 7.1 h over 7 night(s) (fires below 6.5)"
+   "token": "sleep-debt"
   },
   {
    "status": "clear",
@@ -257,18 +190,14 @@
  "integrity": {
   "earned": 150305.175,
   "excluded": [],
-  "pct": 98.36275497850228,
   "scored_days": 7,
   "total": 152807.0
  },
  "monotony_mech": 2.3664756888928156,
- "overall": 92.038520346394,
  "readiness": {
   "available": 21,
   "hrv_baseline": 64,
   "hrv_baseline_source": "snapshot",
-  "passed": 18,
-  "pct": 85.71428571428571,
   "per_day": [
    {
     "checks": {

@@ -1175,6 +1175,161 @@ details.prose > summary {
 }
 
 
+/* ------------------------------------------------------- the Custom Laps modal
+ *
+ * THE APP'S FIRST DIALOG (2026-08-30). A native `<dialog>`, so the focus trap,
+ * Escape and the inert background come from the browser rather than from
+ * hand-rolled JavaScript -- see `lib/ux/primitives/Modal.tsx` for why that
+ * choice also decides how the component opens it.
+ *
+ * `::backdrop` DOES NOT INHERIT FROM THE PAGE, which is the one surprise here:
+ * it is rendered in the top layer with its own initial values, so a custom
+ * property set on `:root` is not visible to it. The scrim is therefore a plain
+ * colour rather than `var(--page)` at an opacity, and it is the same in both
+ * modes because it is a shadow over the page, not a surface of it. */
+dialog.modal {
+  /* RESTORED, NOT SET, AND THE DIFFERENCE IS THE WHOLE COMMENT. The UA
+     stylesheet centres a modal dialog itself -- `dialog { inset-inline: 0;
+     margin: auto }` plus `dialog:modal { position: fixed; inset-block: 0 }` --
+     and Tailwind's preflight sets `margin: 0` on `*`. An AUTHOR rule beats a UA
+     rule regardless of specificity, so without this line the box collapses to
+     the top-left corner of its inset:0 positioning box, which is exactly how it
+     first shipped.
+
+     `inset` is deliberately NOT restated beside it: the UA rule already supplies
+     it for `:modal`, and writing it out would be a second copy of a value the
+     browser owns.
+
+     Same shape as the preflight/list-marker note at the foot of this file -- a
+     user-agent behaviour the app was relying on without knowing it. */
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-1);
+  color: var(--text-primary);
+  /* Wide enough for ten columns and never wider than the viewport. A cut at
+     0.05 mi over a long run is a genuinely tall table, so it scrolls. */
+  width: min(60rem, calc(100vw - 2rem));
+  max-height: calc(100vh - 4rem);
+  overflow: auto;
+}
+dialog.modal::backdrop { background: rgba(0, 0, 0, 0.55); }
+
+/* Roomier than a `.card`, because a dialog is a surface in its own right rather
+   than one panel among several down a page. */
+.modal-body { padding: 1.5rem 1.75rem 1.75rem; }
+
+/* The title and Close share a row, so the control is where a reader reaches for
+   it without the heading losing its place as the dialog's accessible name. */
+.modal-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  /* Grows with the padding around it -- the same 0.9rem step `.card > h2`
+     takes. Left at 0.5rem the title sat tight against the form while
+     everything else breathed. */
+  margin-bottom: 0.9rem;
+}
+/* THE SIZE IS DECLARED HERE BECAUSE NOTHING ELSE DECLARES IT. Tailwind's
+   preflight sets `h1..h6 { font-size: inherit; font-weight: inherit }`, so this
+   heading rendered at the body's 15px/400 -- identical to the table text under
+   it, which is why it read as a label rather than a title.
+
+   THAT IS THE SECOND THING THE PREFLIGHT TOOK FROM THIS ONE COMPONENT, after
+   `margin: auto` on the dialog itself. The general form is worth stating: a new
+   element here inherits nothing from the user agent, so anything a browser
+   would normally supply has to be written down.
+
+   18px sits deliberately between `.card > h3` (16px) and `h1` (22.4px) -- a
+   dialog title should read as a heading without competing with the week title
+   behind it. `letter-spacing` matches what the page already does above body
+   size. */
+.modal-head > h2 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* The cut form: label above control, wrapping on a narrow screen. `end`
+   alignment so the unit select sits on the same baseline as the text input
+   beside it even though their labels differ in length. */
+.cut-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+.cut-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+}
+.cut-form input,
+.cut-form select {
+  font: inherit;
+  color: var(--text-primary);
+  background: var(--page);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.35rem 0.5rem;
+}
+.cut-form input { width: 14rem; }
+.cut-form input:focus-visible,
+.cut-form select:focus-visible {
+  outline: 2px solid var(--series-1);
+  outline-offset: 1px;
+}
+
+/* Every cell on one line: `1:28` and `5:54/mi` wrapping mid-value was the
+   defect the paces rail already paid for. The table scrolls instead. */
+.custom-laps td,
+.custom-laps th { white-space: nowrap; }
+
+/* THE BUTTON THAT OPENS IT, and it is NOT `.ghost`.
+ *
+ * It shipped as one and the athlete could barely see it: `.ghost` is
+ * `background: transparent` with `--text-secondary`, which is the exact shape
+ * this page has already paid for once -- *a control with no resting fill and a
+ * text-only hover does not read as a control*, learned on the tab strips.
+ *
+ * `.ghost` is NOT widened to fix that, because its other two users are
+ * deliberately subdued: the modal's own Close, which sits beside a title, and
+ * the top bar's theme toggle. So this borrows `.tab`'s RESTING chrome instead
+ * and the page grows no third idea of a pill.
+ *
+ * NOT `--accent`. That colour means *this pill is selected* everywhere else
+ * here -- the tab strips and the Trends presets -- and an action is not a
+ * selection. Chosen with the athlete over the accent-filled and
+ * accent-outlined alternatives. */
+.custom-laps-open {
+  display: inline-flex;
+  margin-top: 0.7rem;
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--track);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+/* --axis for the same reason `.tab` uses it: it is the one neutral that moves
+   TOWARD prominence in both modes. --grid would reverse in the dark. */
+.custom-laps-open:hover { background: var(--axis); }
+/* The same focus rule as `.tab` and `button.meter-row`, so the page has one
+   focus idea rather than one per control. */
+.custom-laps-open:focus-visible {
+  outline: 2px solid var(--series-1);
+  outline-offset: 1px;
+}
+
+
 /* Tailwind tokens, pointing at the variables above. `inline` so a utility
  * resolves to `var(--...)` at use rather than baking today's value in, which is
  * what keeps the light/dark swap working through both the media query and the

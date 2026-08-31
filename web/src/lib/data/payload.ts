@@ -172,6 +172,44 @@ export const RepSet = z.looseObject({
   work_seconds: num,
 });
 
+/** ONE SPLIT OF A RACE, cut from the distance stream rather than from a lap.
+ *
+ *  `at_mi` IS A CUMULATIVE MARKER, NOT A LENGTH -- the mile post this split
+ *  ends on. That is what stops this being a `Lap`: a lap knows how long it was,
+ *  a split knows where it finished. Only the final, `partial` split carries a
+ *  `length_mi`, because only that one is not a whole mile.
+ *
+ *  `hr_avg` / `hr_max` are null where the window held no heart-rate samples --
+ *  `race_report`'s `hr_over` returns `(None, None)` rather than zero. */
+export const RaceSplit = z.looseObject({
+  at_mi: num,
+  seconds: num,
+  hr_avg: num,
+  hr_max: num,
+  partial: z.boolean().nullable().optional(),
+  /** The tail split's own length. Absent on a whole mile. */
+  length_mi: num,
+});
+export type RaceSplit = z.infer<typeof RaceSplit>;
+
+/** THE TWO HALVES BY DISTANCE, bisected on the distance stream.
+ *
+ *  NOT derivable from `splits` and that is the point: bisecting the stream
+ *  finds the true halfway metre, where interpolating across mile splits assumes
+ *  constant pace inside the mile it lands in. On 2026-08-30 those two methods
+ *  gave +3.1% and +1.4% for the same race.
+ *
+ *  `delta_pct` is null when `first` is 0, which is the only case the grader
+ *  guards -- so a consumer must state the two times and withhold the verdict
+ *  rather than calling it even. */
+export const RaceHalves = z.looseObject({
+  first: num,
+  second: num,
+  /** Positive means the second half was slower. */
+  delta_pct: num,
+});
+export type RaceHalves = z.infer<typeof RaceHalves>;
+
 /** A RACE, MEASURED. The grader's own account of a completed race: the clock,
  *  the pace over the measured distance, and that distance itself -- which is
  *  the tooltip's provenance line on the Trends race dots, because the series
@@ -179,13 +217,23 @@ export const RepSet = z.looseObject({
  *
  *  `RunResult` is loose, so the value survived the parse before this
  *  declaration existed (`runWhy.ts` reads it untyped). Declaring it is what
- *  makes it visible to TypeScript -- the `treadmill_mph` precedent. `splits`
- *  and `halves` stay undeclared until something walks them. */
+ *  makes it visible to TypeScript -- the `treadmill_mph` precedent.
+ *
+ *  `splits` AND `halves` JOINED IT ON 2026-08-30, on that same rule: they said
+ *  here that they would stay undeclared "until something walks them", and
+ *  `RaceSplitTable` walks them. They were published on all eleven completed
+ *  races the whole time and reachable from nothing, which is the `chartVo2max`
+ *  shape -- a value inside a loose branch is in the payload and not in the
+ *  language. A RACE PUBLISHES THESE INSTEAD OF LAPS, deliberately:
+ *  `grade_week.attach_laps` returns early on `detail.race` because a race is
+ *  rarely lapped on the mile marks and the presses are watch-glances. */
 export const RaceDetail = z.looseObject({
   seconds: num,
   /** Seconds per mile over `total_mi`, not over the nominal distance. */
   pace: num,
   total_mi: num,
+  splits: z.array(RaceSplit).nullable().optional(),
+  halves: RaceHalves.nullable().optional(),
 });
 export type RaceDetail = z.infer<typeof RaceDetail>;
 
@@ -833,10 +881,13 @@ export const PaceChart = z.looseObject({
   gap_zone: Band.nullable().optional(),
 });
 
-/** One pace model's race table at the current anchor -- an entry in
- * `pace_models_current.models`. `label` and `seeded_from` are carried in the
- * payload so the app maps tokens to words it is GIVEN rather than growing its
- * own copy of the model vocabulary (the `score_bucket` rule). */
+/** One pace model's race table at the current anchor.
+ *
+ * IT IS NOT A PUBLISHED RECORD ANY MORE (2026-08-30) -- `lib/pacemodels/`
+ * computes it from the current chart's own anchor -- but the SHAPE survives
+ * here, because that is what `PaceRail` consumes and a shape two modules agree
+ * on is worth stating once. `label` and `seeded_from` come from the registry
+ * beside the arithmetic that produced them. */
 export const PaceModelTable = z.looseObject({
   label: str,
   seeded_from: str,
@@ -849,10 +900,14 @@ export const PaceModelTable = z.looseObject({
 /** Every registered pace model's race table at the newest chart's own anchor
  * -- what the paces rail's model dropdown swaps the Current column between.
  * The `daniels_gilbert` entry is the model the athlete grades against; the
- * rest are cross-checks and are never scored against. Null when
- * `scripts/pace-models/` is not installed, and the dropdown does not render. */
+ * rest are cross-checks and are never scored against.
+ *
+ * IT LEFT `Payload` ON 2026-08-30. `published/pace-models-current.json` was a
+ * 194-line record rebuilt by a subprocess on every publish and rewritten whole
+ * each time a confirmed chart moved the anchor, for a table that is a pure
+ * function of that one number. `lib/pacemodels/tables.ts` returns this shape
+ * now; the schema stays as the contract between it and `PaceRail`. */
 export const PaceModelsCurrent = z.looseObject({
-  source_chart: str,
   effective_vo2max: num,
   models: z.record(z.string(), PaceModelTable).nullable().optional(),
 });
@@ -924,6 +979,27 @@ export const Day = z.looseObject({
   sleep_score: num,
 });
 
+/** One activity's effective-VO2max estimate. A row of `derived/vo2max.csv`,
+ *  projected to five columns of seven.
+ *
+ *  `estimate_source` IS THE TIER and is why it is carried: `payload` is the
+ *  full formula and `index-no-elevation` is priced from a listing row that
+ *  states no elevation. The same distinction TRIMP's `trimp_source` draws, and
+ *  the web already marks a non-measurement tier with `≈`.
+ *
+ *  The two columns that did NOT survive the projection are `runalyze_vo2max`
+ *  and its `delta` -- the cross-check against Runalyze's own stored value,
+ *  which is provenance of the estimator's calibration rather than a
+ *  measurement of the athlete, and which lives in
+ *  `tests/fixtures/vo2max-reference.json`. */
+export const Vo2maxRow = z.looseObject({
+  date: z.string(),
+  activity_id: num,
+  vo2max: num,
+  estimate_source: str,
+  distance_km: num,
+});
+
 export const Payload = z.looseObject({
   schema: z.number(),
   athlete: z.looseObject({
@@ -934,13 +1010,28 @@ export const Payload = z.looseObject({
   weeks: z.record(z.string(), Week),
   days: z.array(Day).default([]),
   history: z.looseObject({}).nullable().optional(),
+  /** THE FITNESS SERIES -- one row per activity, oldest first.
+   *
+   * `derived/vo2max.csv` was the one derived series `published/` did not carry,
+   * so the read model could state fitness only at the 87 dates a pace chart was
+   * confirmed on. Published 2026-08-29 so effective VO2max can be evaluated on
+   * ANY date, as the trailing distance-weighted mean the pace charts already
+   * anchor on.
+   *
+   * A MEASUREMENT PER ACTIVITY, NOT A CURVE. The window is applied in SQL
+   * (`slices.effectiveVo2maxOn`), which is a port of
+   * `effective_vo2max.shape()` and nothing more -- the per-activity estimate
+   * itself stays in `estimate_vo2max.py`, where the heart-rate curve and the
+   * elevation setting live. */
+  vo2max: z.array(Vo2maxRow).default([]),
   thresholds: z.looseObject({}).nullable().optional(),
   /** The athlete's paces as of TODAY -- the newest chart on disk, whatever week
    *  is on screen. One record rather than a copy inside each week. */
   pace_chart_current: PaceChart.nullable().optional(),
-  /** Its sibling singleton: every pace model's race table at that same
-   *  anchor. See `PaceModelsCurrent`. */
-  pace_models_current: PaceModelsCurrent.nullable().optional(),
+  /* `pace_models_current` LEFT THIS PAYLOAD ON 2026-08-30 -- see
+   * `PaceModelsCurrent` above. The rail derives every model's table from
+   * `pace_chart_current`'s own anchor, which is the only input those tables
+   * ever had. */
   /* `adherence_csv` AND `load_csv` ARE GONE (2026-08-29). They were
    * `published/series/*.json`, which was `derived/<half>.csv`, which was a row
    * somebody PASTED out of a grader's terminal. Declared here and read by no
@@ -1023,6 +1114,8 @@ export type Day = z.infer<typeof Day>;
 export type Score = z.infer<typeof Score>;
 
 export type Band = z.infer<typeof Band>;
+
+export type Vo2maxRow = z.infer<typeof Vo2maxRow>;
 export type RepRow = z.infer<typeof RepRow>;
 export type Lap = z.infer<typeof Lap>;
 

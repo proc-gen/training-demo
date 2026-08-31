@@ -647,12 +647,28 @@ describe("the routes stay statically exportable", () => {
     /* Without it the demo build has no list of pages to write, and a URL that
      * was not built does not exist. `force-dynamic` ignores it here, so its
      * absence costs nothing until the export -- which is exactly why it is
-     * asserted rather than noticed. */
-    const missing = routes
+     * asserted rather than noticed.
+     *
+     * IT SCANS `patched`, NOT `routes`, SINCE 2026-08-30. `routes` is
+     * `page.tsx` alone, so `app/streams/[id]/data.json/route.ts` -- a route
+     * HANDLER with a dynamic segment -- slipped straight through it. The rule
+     * is about a segment needing a list of values, and a handler needs one for
+     * exactly the same reason a page does. */
+    const missing = patched
       .filter((f) => f.rel.includes("["))
       .filter((f) => !/export function generateStaticParams/.test(f.text))
       .map((f) => f.rel);
     expect(missing).toEqual([]);
+  });
+
+  it("finds a dynamic route HANDLER, so the rule above is not vacuous", () => {
+    /* The widening is worth nothing if no handler has a segment: the filter
+     * would pass over `page.tsx` files only and read as though it covered
+     * more. */
+    const handlers = patched.filter(
+      (f) => f.rel.endsWith("route.ts") && f.rel.includes("["),
+    );
+    expect(handlers.length).toBeGreaterThan(0);
   });
 
   it("never AWAITS searchParams before the static branch returns", () => {

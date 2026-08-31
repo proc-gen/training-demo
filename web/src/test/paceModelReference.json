@@ -1,0 +1,2163 @@
+{
+ "_comment": "GENERATED -- do not hand-edit. Written from scripts/pace-models/daniels_gilbert.py by tests/fixtures/build_pace_model_reference.py, and living here rather than under tests/ so that it travels with the app into the public demo, where the same pin runs. It is the check that web/src/views/TrendsView/data/paceModel.ts still agrees with the Python model it was ported from.",
+ "coefficients": {
+  "COST_INTERCEPT": -4.6,
+  "COST_LINEAR": 0.182258,
+  "COST_QUADRATIC": 0.000104,
+  "FRAC_FAST": [
+   0.2989558,
+   0.1932605
+  ],
+  "FRAC_FLOOR": 0.8,
+  "FRAC_SLOW": [
+   0.1894393,
+   0.012778
+  ],
+  "MILE_METRES": 1609.344
+ },
+ "constants": {
+  "labels": {
+   "cameron": "Cameron",
+   "critical_speed": "Critical speed",
+   "daniels_gilbert": "Daniels-Gilbert (effective VO2max)",
+   "riegel": "Riegel power law"
+  },
+  "race_distances": {
+   "10000m": 10000,
+   "1500m": 1500,
+   "21097m": 21097.5,
+   "3000m": 3000,
+   "42195m": 42195,
+   "5000m": 5000,
+   "800m": 800
+  },
+  "tempo_durations_seconds": [
+   3600,
+   4800
+  ]
+ },
+ "cross_check_fits": [
+  {
+   "exponent": null,
+   "model": "riegel",
+   "pace_for_duration": [
+    {
+     "duration_seconds": 3600,
+     "sec_per_mi": 374.40920442967695
+    },
+    {
+     "duration_seconds": 4800,
+     "sec_per_mi": 380.55595373698185
+    }
+   ],
+   "race_seconds": [
+    {
+     "distance_m": 800,
+     "seconds": 155.8105016028599
+    },
+    {
+     "distance_m": 1500,
+     "seconds": 303.37380181945184
+    },
+    {
+     "distance_m": 3000,
+     "seconds": 632.513602265957
+    },
+    {
+     "distance_m": 5000,
+     "seconds": 1087.0
+    },
+    {
+     "distance_m": 10000,
+     "seconds": 2266.320564068598
+    },
+    {
+     "distance_m": 16093.44,
+     "seconds": 3752.9187127061423
+    },
+    {
+     "distance_m": 21097.5,
+     "seconds": 5000.416675249909
+    },
+    {
+     "distance_m": 42195,
+     "seconds": 10425.526347774052
+    }
+   ],
+   "references": [
+    [
+     5000.0,
+     1087.0
+    ]
+   ],
+   "state": [
+    0.13041313633735435,
+    1.06
+   ]
+  },
+  {
+   "exponent": 1.12,
+   "model": "riegel",
+   "pace_for_duration": [
+    {
+     "duration_seconds": 3600,
+     "sec_per_mi": 397.76862809809745
+    },
+    {
+     "duration_seconds": 4800,
+     "sec_per_mi": 410.2199909109436
+    }
+   ],
+   "race_seconds": [
+    {
+     "distance_m": 800,
+     "seconds": 139.58666288945952
+    },
+    {
+     "distance_m": 1500,
+     "seconds": 282.23141254335496
+    },
+    {
+     "distance_m": 3000,
+     "seconds": 613.4214306216761
+    },
+    {
+     "distance_m": 5000,
+     "seconds": 1087.0
+    },
+    {
+     "distance_m": 10000,
+     "seconds": 2362.5615911316504
+    },
+    {
+     "distance_m": 16093.44,
+     "seconds": 4025.5932447937603
+    },
+    {
+     "distance_m": 21097.5,
+     "seconds": 5451.573280125546
+    },
+    {
+     "distance_m": 42195,
+     "seconds": 11848.829478255935
+    }
+   ],
+   "references": [
+    [
+     5000.0,
+     1087.0
+    ]
+   ],
+   "state": [
+    0.07823176692431175,
+    1.12
+   ]
+  },
+  {
+   "exponent": null,
+   "model": "riegel",
+   "pace_for_duration": [
+    {
+     "duration_seconds": 3600,
+     "sec_per_mi": 382.0827826061191
+    },
+    {
+     "duration_seconds": 4800,
+     "sec_per_mi": 391.2604581004747
+    }
+   ],
+   "race_seconds": [
+    {
+     "distance_m": 800,
+     "seconds": 145.77966945014919
+    },
+    {
+     "distance_m": 1500,
+     "seconds": 289.23360118239856
+    },
+    {
+     "distance_m": 3000,
+     "seconds": 615.67259817375
+    },
+    {
+     "distance_m": 5000,
+     "seconds": 1074.3580248427663
+    },
+    {
+     "distance_m": 10000,
+     "seconds": 2286.9154683955067
+    },
+    {
+     "distance_m": 16093.44,
+     "seconds": 3841.338318606181
+    },
+    {
+     "distance_m": 21097.5,
+     "seconds": 5159.868287823347
+    },
+    {
+     "distance_m": 42195,
+     "seconds": 10983.473227217362
+    }
+   ],
+   "references": [
+    [
+     1500.0,
+     288.0
+    ],
+    [
+     5000.0,
+     1087.0
+    ],
+    [
+     10000.0,
+     2270.0
+    ]
+   ],
+   "state": [
+    0.09989352322690506,
+    1.0899281952804403
+   ]
+  },
+  {
+   "exponent": null,
+   "model": "cameron",
+   "pace_for_duration": [
+    {
+     "duration_seconds": 3600,
+     "sec_per_mi": 373.51692937010205
+    },
+    {
+     "duration_seconds": 4800,
+     "sec_per_mi": 379.87609387458934
+    }
+   ],
+   "race_seconds": [
+    {
+     "distance_m": 800,
+     "seconds": 140.8251660365204
+    },
+    {
+     "distance_m": 1500,
+     "seconds": 291.7347039471782
+    },
+    {
+     "distance_m": 3000,
+     "seconds": 627.8579358480489
+    },
+    {
+     "distance_m": 5000,
+     "seconds": 1087.0
+    },
+    {
+     "distance_m": 10000,
+     "seconds": 2264.2765933907085
+    },
+    {
+     "distance_m": 16093.44,
+     "seconds": 3743.3524906971325
+    },
+    {
+     "distance_m": 21097.5,
+     "seconds": 4992.247274785825
+    },
+    {
+     "distance_m": 42195,
+     "seconds": 10608.638249388696
+    }
+   ],
+   "references": [
+    [
+     5000.0,
+     1087.0
+    ]
+   ],
+   "state": [
+    5000.0,
+    1087.0
+   ]
+  },
+  {
+   "exponent": null,
+   "model": "critical_speed",
+   "pace_for_duration": [
+    {
+     "duration_seconds": 3600,
+     "sec_per_mi": 370.7032074893617
+    },
+    {
+     "duration_seconds": 4800,
+     "sec_per_mi": 373.0482886072993
+    }
+   ],
+   "race_seconds": [
+    {
+     "distance_m": 800,
+     "seconds": 96.17142857142859
+    },
+    {
+     "distance_m": 1500,
+     "seconds": 261.5714285714286
+    },
+    {
+     "distance_m": 3000,
+     "seconds": 616.0
+    },
+    {
+     "distance_m": 5000,
+     "seconds": 1088.5714285714287
+    },
+    {
+     "distance_m": 10000,
+     "seconds": 2270.0
+    },
+    {
+     "distance_m": 16093.44,
+     "seconds": 3709.792822857143
+    },
+    {
+     "distance_m": 21097.5,
+     "seconds": 4892.180714285714
+    },
+    {
+     "distance_m": 42195,
+     "seconds": 9877.218571428572
+    }
+   ],
+   "references": [
+    [
+     3000.0,
+     616.0
+    ],
+    [
+     10000.0,
+     2270.0
+    ]
+   ],
+   "state": [
+    4.2321644498186215,
+    392.98669891172904
+   ]
+  },
+  {
+   "exponent": null,
+   "model": "critical_speed",
+   "pace_for_duration": [
+    {
+     "duration_seconds": 3600,
+     "sec_per_mi": 369.2923784009286
+    },
+    {
+     "duration_seconds": 4800,
+     "sec_per_mi": 371.15742326974777
+    }
+   ],
+   "race_seconds": [
+    {
+     "distance_m": 800,
+     "seconds": 113.49618563474772
+    },
+    {
+     "distance_m": 1500,
+     "seconds": 277.4183352353287
+    },
+    {
+     "distance_m": 3000,
+     "seconds": 628.6800843794308
+    },
+    {
+     "distance_m": 5000,
+     "seconds": 1097.0290832382336
+    },
+    {
+     "distance_m": 10000,
+     "seconds": 2267.901580385241
+    },
+    {
+     "distance_m": 16093.44,
+     "seconds": 3694.8298421883323
+    },
+    {
+     "distance_m": 21097.5,
+     "seconds": 4866.653087803023
+    },
+    {
+     "distance_m": 42195,
+     "seconds": 9807.149589514818
+    }
+   ],
+   "references": [
+    [
+     1500.0,
+     288.0
+    ],
+    [
+     3000.0,
+     616.0
+    ],
+    [
+     10000.0,
+     2270.0
+    ]
+   ],
+   "state": [
+    4.270319793302168,
+    315.3349920196397
+   ]
+  }
+ ],
+ "models_at": [
+  {
+   "tables": {
+    "effective_vo2max": 45.0,
+    "models": {
+     "cameron": {
+      "label": "Cameron",
+      "race_paces": {
+       "10000m": {
+        "sec_per_mi": 439,
+        "seconds": 2726
+       },
+       "1500m": {
+        "sec_per_mi": 377,
+        "seconds": 351
+       },
+       "21097m": {
+        "sec_per_mi": 458,
+        "seconds": 6010
+       },
+       "3000m": {
+        "sec_per_mi": 405,
+        "seconds": 756
+       },
+       "42195m": {
+        "sec_per_mi": 487,
+        "seconds": 12771
+       },
+       "5000m": {
+        "sec_per_mi": 421,
+        "seconds": 1309
+       },
+       "800m": {
+        "sec_per_mi": 341,
+        "seconds": 170
+       },
+       "tempo": {
+        "fast_sec_per_mi": 445,
+        "slow_sec_per_mi": 452
+       }
+      },
+      "seeded_from": "the Daniels-Gilbert 5000 m predictions at that VO2max"
+     },
+     "critical_speed": {
+      "label": "Critical speed",
+      "race_paces": {
+       "10000m": {
+        "sec_per_mi": 437,
+        "seconds": 2713
+       },
+       "1500m": {
+        "sec_per_mi": 366,
+        "seconds": 341
+       },
+       "21097m": {
+        "sec_per_mi": 443,
+        "seconds": 5811
+       },
+       "3000m": {
+        "sec_per_mi": 408,
+        "seconds": 760
+       },
+       "42195m": {
+        "sec_per_mi": 446,
+        "seconds": 11699
+       },
+       "5000m": {
+        "sec_per_mi": 424,
+        "seconds": 1318
+       },
+       "800m": {
+        "sec_per_mi": 293,
+        "seconds": 146
+       },
+       "tempo": {
+        "fast_sec_per_mi": 440,
+        "slow_sec_per_mi": 442
+       }
+      },
+      "seeded_from": "the Daniels-Gilbert 3000 m + 10000 m predictions at that VO2max"
+     },
+     "daniels_gilbert": {
+      "label": "Daniels-Gilbert (effective VO2max)",
+      "race_paces": {
+       "10000m": {
+        "sec_per_mi": 437,
+        "seconds": 2713
+       },
+       "1500m": {
+        "sec_per_mi": 382,
+        "seconds": 356
+       },
+       "21097m": {
+        "sec_per_mi": 459,
+        "seconds": 6014
+       },
+       "3000m": {
+        "sec_per_mi": 408,
+        "seconds": 760
+       },
+       "42195m": {
+        "sec_per_mi": 477,
+        "seconds": 12496
+       },
+       "5000m": {
+        "sec_per_mi": 421,
+        "seconds": 1309
+       },
+       "800m": {
+        "sec_per_mi": 360,
+        "seconds": 179
+       },
+       "tempo": {
+        "fast_sec_per_mi": 444,
+        "slow_sec_per_mi": 452
+       }
+      },
+      "seeded_from": "the chart's own effective VO2max"
+     },
+     "riegel": {
+      "label": "Riegel power law",
+      "race_paces": {
+       "10000m": {
+        "sec_per_mi": 439,
+        "seconds": 2728
+       },
+       "1500m": {
+        "sec_per_mi": 392,
+        "seconds": 365
+       },
+       "21097m": {
+        "sec_per_mi": 459,
+        "seconds": 6020
+       },
+       "3000m": {
+        "sec_per_mi": 408,
+        "seconds": 761
+       },
+       "42195m": {
+        "sec_per_mi": 479,
+        "seconds": 12551
+       },
+       "5000m": {
+        "sec_per_mi": 421,
+        "seconds": 1309
+       },
+       "800m": {
+        "sec_per_mi": 377,
+        "seconds": 188
+       },
+       "tempo": {
+        "fast_sec_per_mi": 446,
+        "slow_sec_per_mi": 453
+       }
+      },
+      "seeded_from": "the Daniels-Gilbert 5000 m predictions at that VO2max"
+     }
+    }
+   },
+   "vo2max": 45.0
+  },
+  {
+   "tables": {
+    "effective_vo2max": 55.57,
+    "models": {
+     "cameron": {
+      "label": "Cameron",
+      "race_paces": {
+       "10000m": {
+        "sec_per_mi": 366,
+        "seconds": 2276
+       },
+       "1500m": {
+        "sec_per_mi": 315,
+        "seconds": 293
+       },
+       "21097m": {
+        "sec_per_mi": 383,
+        "seconds": 5018
+       },
+       "3000m": {
+        "sec_per_mi": 339,
+        "seconds": 631
+       },
+       "42195m": {
+        "sec_per_mi": 407,
+        "seconds": 10662
+       },
+       "5000m": {
+        "sec_per_mi": 352,
+        "seconds": 1092
+       },
+       "800m": {
+        "sec_per_mi": 285,
+        "seconds": 142
+       },
+       "tempo": {
+        "fast_sec_per_mi": 375,
+        "slow_sec_per_mi": 382
+       }
+      },
+      "seeded_from": "the Daniels-Gilbert 5000 m predictions at that VO2max"
+     },
+     "critical_speed": {
+      "label": "Critical speed",
+      "race_paces": {
+       "10000m": {
+        "sec_per_mi": 365,
+        "seconds": 2265
+       },
+       "1500m": {
+        "sec_per_mi": 301,
+        "seconds": 281
+       },
+       "21097m": {
+        "sec_per_mi": 370,
+        "seconds": 4856
+       },
+       "3000m": {
+        "sec_per_mi": 339,
+        "seconds": 631
+       },
+       "42195m": {
+        "sec_per_mi": 373,
+        "seconds": 9782
+       },
+       "5000m": {
+        "sec_per_mi": 353,
+        "seconds": 1098
+       },
+       "800m": {
+        "sec_per_mi": 236,
+        "seconds": 118
+       },
+       "tempo": {
+        "fast_sec_per_mi": 369,
+        "slow_sec_per_mi": 370
+       }
+      },
+      "seeded_from": "the Daniels-Gilbert 3000 m + 10000 m predictions at that VO2max"
+     },
+     "daniels_gilbert": {
+      "label": "Daniels-Gilbert (effective VO2max)",
+      "race_paces": {
+       "10000m": {
+        "sec_per_mi": 365,
+        "seconds": 2265
+       },
+       "1500m": {
+        "sec_per_mi": 316,
+        "seconds": 295
+       },
+       "21097m": {
+        "sec_per_mi": 382,
+        "seconds": 5011
+       },
+       "3000m": {
+        "sec_per_mi": 339,
+        "seconds": 631
+       },
+       "42195m": {
+        "sec_per_mi": 399,
+        "seconds": 10463
+       },
+       "5000m": {
+        "sec_per_mi": 352,
+        "seconds": 1092
+       },
+       "800m": {
+        "sec_per_mi": 300,
+        "seconds": 149
+       },
+       "tempo": {
+        "fast_sec_per_mi": 374,
+        "slow_sec_per_mi": 381
+       }
+      },
+      "seeded_from": "the chart's own effective VO2max"
+     },
+     "riegel": {
+      "label": "Riegel power law",
+      "race_paces": {
+       "10000m": {
+        "sec_per_mi": 367,
+        "seconds": 2278
+       },
+       "1500m": {
+        "sec_per_mi": 327,
+        "seconds": 305
+       },
+       "21097m": {
+        "sec_per_mi": 383,
+        "seconds": 5026
+       },
+       "3000m": {
+        "sec_per_mi": 341,
+        "seconds": 636
+       },
+       "42195m": {
+        "sec_per_mi": 400,
+        "seconds": 10478
+       },
+       "5000m": {
+        "sec_per_mi": 352,
+        "seconds": 1092
+       },
+       "800m": {
+        "sec_per_mi": 315,
+        "seconds": 157
+       },
+       "tempo": {
+        "fast_sec_per_mi": 376,
+        "slow_sec_per_mi": 382
+       }
+      },
+      "seeded_from": "the Daniels-Gilbert 5000 m predictions at that VO2max"
+     }
+    }
+   },
+   "vo2max": 55.57
+  },
+  {
+   "tables": {
+    "effective_vo2max": 55.9,
+    "models": {
+     "cameron": {
+      "label": "Cameron",
+      "race_paces": {
+       "10000m": {
+        "sec_per_mi": 364,
+        "seconds": 2264
+       },
+       "1500m": {
+        "sec_per_mi": 313,
+        "seconds": 292
+       },
+       "21097m": {
+        "sec_per_mi": 381,
+        "seconds": 4992
+       },
+       "3000m": {
+        "sec_per_mi": 337,
+        "seconds": 628
+       },
+       "42195m": {
+        "sec_per_mi": 405,
+        "seconds": 10608
+       },
+       "5000m": {
+        "sec_per_mi": 350,
+        "seconds": 1087
+       },
+       "800m": {
+        "sec_per_mi": 283,
+        "seconds": 141
+       },
+       "tempo": {
+        "fast_sec_per_mi": 374,
+        "slow_sec_per_mi": 380
+       }
+      },
+      "seeded_from": "the Daniels-Gilbert 5000 m predictions at that VO2max"
+     },
+     "critical_speed": {
+      "label": "Critical speed",
+      "race_paces": {
+       "10000m": {
+        "sec_per_mi": 363,
+        "seconds": 2254
+       },
+       "1500m": {
+        "sec_per_mi": 300,
+        "seconds": 279
+       },
+       "21097m": {
+        "sec_per_mi": 369,
+        "seconds": 4832
+       },
+       "3000m": {
+        "sec_per_mi": 337,
+        "seconds": 628
+       },
+       "42195m": {
+        "sec_per_mi": 371,
+        "seconds": 9733
+       },
+       "5000m": {
+        "sec_per_mi": 352,
+        "seconds": 1093
+       },
+       "800m": {
+        "sec_per_mi": 235,
+        "seconds": 117
+       },
+       "tempo": {
+        "fast_sec_per_mi": 367,
+        "slow_sec_per_mi": 369
+       }
+      },
+      "seeded_from": "the Daniels-Gilbert 3000 m + 10000 m predictions at that VO2max"
+     },
+     "daniels_gilbert": {
+      "label": "Daniels-Gilbert (effective VO2max)",
+      "race_paces": {
+       "10000m": {
+        "sec_per_mi": 363,
+        "seconds": 2254
+       },
+       "1500m": {
+        "sec_per_mi": 314,
+        "seconds": 293
+       },
+       "21097m": {
+        "sec_per_mi": 380,
+        "seconds": 4985
+       },
+       "3000m": {
+        "sec_per_mi": 337,
+        "seconds": 628
+       },
+       "42195m": {
+        "sec_per_mi": 397,
+        "seconds": 10410
+       },
+       "5000m": {
+        "sec_per_mi": 350,
+        "seconds": 1087
+       },
+       "800m": {
+        "sec_per_mi": 298,
+        "seconds": 148
+       },
+       "tempo": {
+        "fast_sec_per_mi": 372,
+        "slow_sec_per_mi": 379
+       }
+      },
+      "seeded_from": "the chart's own effective VO2max"
+     },
+     "riegel": {
+      "label": "Riegel power law",
+      "race_paces": {
+       "10000m": {
+        "sec_per_mi": 365,
+        "seconds": 2266
+       },
+       "1500m": {
+        "sec_per_mi": 325,
+        "seconds": 303
+       },
+       "21097m": {
+        "sec_per_mi": 381,
+        "seconds": 5000
+       },
+       "3000m": {
+        "sec_per_mi": 339,
+        "seconds": 632
+       },
+       "42195m": {
+        "sec_per_mi": 398,
+        "seconds": 10425
+       },
+       "5000m": {
+        "sec_per_mi": 350,
+        "seconds": 1087
+       },
+       "800m": {
+        "sec_per_mi": 313,
+        "seconds": 156
+       },
+       "tempo": {
+        "fast_sec_per_mi": 374,
+        "slow_sec_per_mi": 381
+       }
+      },
+      "seeded_from": "the Daniels-Gilbert 5000 m predictions at that VO2max"
+     }
+    }
+   },
+   "vo2max": 55.9
+  },
+  {
+   "tables": {
+    "effective_vo2max": 64.2,
+    "models": {
+     "cameron": {
+      "label": "Cameron",
+      "race_paces": {
+       "10000m": {
+        "sec_per_mi": 323,
+        "seconds": 2010
+       },
+       "1500m": {
+        "sec_per_mi": 278,
+        "seconds": 259
+       },
+       "21097m": {
+        "sec_per_mi": 338,
+        "seconds": 4431
+       },
+       "3000m": {
+        "sec_per_mi": 299,
+        "seconds": 557
+       },
+       "42195m": {
+        "sec_per_mi": 359,
+        "seconds": 9417
+       },
+       "5000m": {
+        "sec_per_mi": 311,
+        "seconds": 965
+       },
+       "800m": {
+        "sec_per_mi": 251,
+        "seconds": 125
+       },
+       "tempo": {
+        "fast_sec_per_mi": 334,
+        "slow_sec_per_mi": 340
+       }
+      },
+      "seeded_from": "the Daniels-Gilbert 5000 m predictions at that VO2max"
+     },
+     "critical_speed": {
+      "label": "Critical speed",
+      "race_paces": {
+       "10000m": {
+        "sec_per_mi": 322,
+        "seconds": 2003
+       },
+       "1500m": {
+        "sec_per_mi": 263,
+        "seconds": 245
+       },
+       "21097m": {
+        "sec_per_mi": 328,
+        "seconds": 4298
+       },
+       "3000m": {
+        "sec_per_mi": 298,
+        "seconds": 556
+       },
+       "42195m": {
+        "sec_per_mi": 330,
+        "seconds": 8660
+       },
+       "5000m": {
+        "sec_per_mi": 312,
+        "seconds": 969
+       },
+       "800m": {
+        "sec_per_mi": 202,
+        "seconds": 101
+       },
+       "tempo": {
+        "fast_sec_per_mi": 327,
+        "slow_sec_per_mi": 328
+       }
+      },
+      "seeded_from": "the Daniels-Gilbert 3000 m + 10000 m predictions at that VO2max"
+     },
+     "daniels_gilbert": {
+      "label": "Daniels-Gilbert (effective VO2max)",
+      "race_paces": {
+       "10000m": {
+        "sec_per_mi": 322,
+        "seconds": 2003
+       },
+       "1500m": {
+        "sec_per_mi": 278,
+        "seconds": 259
+       },
+       "21097m": {
+        "sec_per_mi": 337,
+        "seconds": 4422
+       },
+       "3000m": {
+        "sec_per_mi": 298,
+        "seconds": 556
+       },
+       "42195m": {
+        "sec_per_mi": 353,
+        "seconds": 9253
+       },
+       "5000m": {
+        "sec_per_mi": 311,
+        "seconds": 965
+       },
+       "800m": {
+        "sec_per_mi": 265,
+        "seconds": 132
+       },
+       "tempo": {
+        "fast_sec_per_mi": 333,
+        "slow_sec_per_mi": 339
+       }
+      },
+      "seeded_from": "the chart's own effective VO2max"
+     },
+     "riegel": {
+      "label": "Riegel power law",
+      "race_paces": {
+       "10000m": {
+        "sec_per_mi": 324,
+        "seconds": 2012
+       },
+       "1500m": {
+        "sec_per_mi": 289,
+        "seconds": 269
+       },
+       "21097m": {
+        "sec_per_mi": 339,
+        "seconds": 4439
+       },
+       "3000m": {
+        "sec_per_mi": 301,
+        "seconds": 561
+       },
+       "42195m": {
+        "sec_per_mi": 353,
+        "seconds": 9254
+       },
+       "5000m": {
+        "sec_per_mi": 311,
+        "seconds": 965
+       },
+       "800m": {
+        "sec_per_mi": 278,
+        "seconds": 138
+       },
+       "tempo": {
+        "fast_sec_per_mi": 335,
+        "slow_sec_per_mi": 340
+       }
+      },
+      "seeded_from": "the Daniels-Gilbert 5000 m predictions at that VO2max"
+     }
+    }
+   },
+   "vo2max": 64.2
+  },
+  {
+   "tables": {
+    "effective_vo2max": 80.0,
+    "models": {
+     "cameron": {
+      "label": "Cameron",
+      "race_paces": {
+       "10000m": {
+        "sec_per_mi": 268,
+        "seconds": 1662
+       },
+       "1500m": {
+        "sec_per_mi": 230,
+        "seconds": 214
+       },
+       "21097m": {
+        "sec_per_mi": 280,
+        "seconds": 3665
+       },
+       "3000m": {
+        "sec_per_mi": 247,
+        "seconds": 461
+       },
+       "42195m": {
+        "sec_per_mi": 297,
+        "seconds": 7788
+       },
+       "5000m": {
+        "sec_per_mi": 257,
+        "seconds": 798
+       },
+       "800m": {
+        "sec_per_mi": 208,
+        "seconds": 103
+       },
+       "tempo": {
+        "fast_sec_per_mi": 279,
+        "slow_sec_per_mi": 285
+       }
+      },
+      "seeded_from": "the Daniels-Gilbert 5000 m predictions at that VO2max"
+     },
+     "critical_speed": {
+      "label": "Critical speed",
+      "race_paces": {
+       "10000m": {
+        "sec_per_mi": 267,
+        "seconds": 1662
+       },
+       "1500m": {
+        "sec_per_mi": 214,
+        "seconds": 199
+       },
+       "21097m": {
+        "sec_per_mi": 272,
+        "seconds": 3572
+       },
+       "3000m": {
+        "sec_per_mi": 245,
+        "seconds": 457
+       },
+       "42195m": {
+        "sec_per_mi": 275,
+        "seconds": 7202
+       },
+       "5000m": {
+        "sec_per_mi": 258,
+        "seconds": 802
+       },
+       "800m": {
+        "sec_per_mi": 159,
+        "seconds": 79
+       },
+       "tempo": {
+        "fast_sec_per_mi": 272,
+        "slow_sec_per_mi": 274
+       }
+      },
+      "seeded_from": "the Daniels-Gilbert 3000 m + 10000 m predictions at that VO2max"
+     },
+     "daniels_gilbert": {
+      "label": "Daniels-Gilbert (effective VO2max)",
+      "race_paces": {
+       "10000m": {
+        "sec_per_mi": 267,
+        "seconds": 1662
+       },
+       "1500m": {
+        "sec_per_mi": 230,
+        "seconds": 214
+       },
+       "21097m": {
+        "sec_per_mi": 279,
+        "seconds": 3657
+       },
+       "3000m": {
+        "sec_per_mi": 245,
+        "seconds": 457
+       },
+       "42195m": {
+        "sec_per_mi": 292,
+        "seconds": 7663
+       },
+       "5000m": {
+        "sec_per_mi": 257,
+        "seconds": 798
+       },
+       "800m": {
+        "sec_per_mi": 220,
+        "seconds": 109
+       },
+       "tempo": {
+        "fast_sec_per_mi": 279,
+        "slow_sec_per_mi": 284
+       }
+      },
+      "seeded_from": "the chart's own effective VO2max"
+     },
+     "riegel": {
+      "label": "Riegel power law",
+      "race_paces": {
+       "10000m": {
+        "sec_per_mi": 268,
+        "seconds": 1664
+       },
+       "1500m": {
+        "sec_per_mi": 239,
+        "seconds": 223
+       },
+       "21097m": {
+        "sec_per_mi": 280,
+        "seconds": 3671
+       },
+       "3000m": {
+        "sec_per_mi": 249,
+        "seconds": 464
+       },
+       "42195m": {
+        "sec_per_mi": 292,
+        "seconds": 7654
+       },
+       "5000m": {
+        "sec_per_mi": 257,
+        "seconds": 798
+       },
+       "800m": {
+        "sec_per_mi": 230,
+        "seconds": 114
+       },
+       "tempo": {
+        "fast_sec_per_mi": 280,
+        "slow_sec_per_mi": 284
+       }
+      },
+      "seeded_from": "the Daniels-Gilbert 5000 m predictions at that VO2max"
+     }
+    }
+   },
+   "vo2max": 80.0
+  }
+ ],
+ "oxygen_cost": [
+  {
+   "v": 50,
+   "vo2": 4.7729
+  },
+  {
+   "v": 100,
+   "vo2": 14.6658
+  },
+  {
+   "v": 200,
+   "vo2": 36.0116
+  },
+  {
+   "v": 268.97,
+   "vo2": 51.94579979360001
+  },
+  {
+   "v": 300,
+   "vo2": 59.4374
+  },
+  {
+   "v": 400,
+   "vo2": 84.9432
+  },
+  {
+   "v": 600,
+   "vo2": 142.1948
+  }
+ ],
+ "pace_for_duration": [
+  {
+   "duration_seconds": 3600,
+   "sec_per_mi": 838.7707062325405,
+   "vo2max": 20.0
+  },
+  {
+   "duration_seconds": 4800,
+   "sec_per_mi": 853.0503898372173,
+   "vo2max": 20.0
+  },
+  {
+   "duration_seconds": 3600,
+   "sec_per_mi": 697.0337619043929,
+   "vo2max": 25.5
+  },
+  {
+   "duration_seconds": 4800,
+   "sec_per_mi": 709.3270210226985,
+   "vo2max": 25.5
+  },
+  {
+   "duration_seconds": 3600,
+   "sec_per_mi": 543.2662242139983,
+   "vo2max": 35.0
+  },
+  {
+   "duration_seconds": 4800,
+   "sec_per_mi": 553.1431165836129,
+   "vo2max": 35.0
+  },
+  {
+   "duration_seconds": 3600,
+   "sec_per_mi": 443.962670623611,
+   "vo2max": 45.0
+  },
+  {
+   "duration_seconds": 4800,
+   "sec_per_mi": 452.139414986536,
+   "vo2max": 45.0
+  },
+  {
+   "duration_seconds": 3600,
+   "sec_per_mi": 407.6989759497856,
+   "vo2max": 50.0
+  },
+  {
+   "duration_seconds": 4800,
+   "sec_per_mi": 415.22886852029797,
+   "vo2max": 50.0
+  },
+  {
+   "duration_seconds": 3600,
+   "sec_per_mi": 385.36963124507895,
+   "vo2max": 53.6
+  },
+  {
+   "duration_seconds": 4800,
+   "sec_per_mi": 392.4946272575205,
+   "vo2max": 53.6
+  },
+  {
+   "duration_seconds": 3600,
+   "sec_per_mi": 374.2577675310462,
+   "vo2max": 55.57
+  },
+  {
+   "duration_seconds": 4800,
+   "sec_per_mi": 381.1794532083165,
+   "vo2max": 55.57
+  },
+  {
+   "duration_seconds": 3600,
+   "sec_per_mi": 372.46559792601937,
+   "vo2max": 55.9
+  },
+  {
+   "duration_seconds": 4800,
+   "sec_per_mi": 379.3543815522597,
+   "vo2max": 55.9
+  },
+  {
+   "duration_seconds": 3600,
+   "sec_per_mi": 368.1992557257814,
+   "vo2max": 56.7
+  },
+  {
+   "duration_seconds": 4800,
+   "sec_per_mi": 375.0095912944434,
+   "vo2max": 56.7
+  },
+  {
+   "duration_seconds": 3600,
+   "sec_per_mi": 367.62113210809173,
+   "vo2max": 56.81
+  },
+  {
+   "duration_seconds": 4800,
+   "sec_per_mi": 374.42082403522545,
+   "vo2max": 56.81
+  },
+  {
+   "duration_seconds": 3600,
+   "sec_per_mi": 348.9609891501439,
+   "vo2max": 60.58
+  },
+  {
+   "duration_seconds": 4800,
+   "sec_per_mi": 355.41545483028943,
+   "vo2max": 60.58
+  },
+  {
+   "duration_seconds": 3600,
+   "sec_per_mi": 332.9258433890374,
+   "vo2max": 64.2
+  },
+  {
+   "duration_seconds": 4800,
+   "sec_per_mi": 339.08110410457164,
+   "vo2max": 64.2
+  },
+  {
+   "duration_seconds": 3600,
+   "sec_per_mi": 310.4064103490746,
+   "vo2max": 70.0
+  },
+  {
+   "duration_seconds": 4800,
+   "sec_per_mi": 316.1376820085865,
+   "vo2max": 70.0
+  },
+  {
+   "duration_seconds": 3600,
+   "sec_per_mi": 278.6688652389222,
+   "vo2max": 80.0
+  },
+  {
+   "duration_seconds": 4800,
+   "sec_per_mi": 283.7956032027058,
+   "vo2max": 80.0
+  },
+  {
+   "duration_seconds": 3600,
+   "sec_per_mi": 253.481683355523,
+   "vo2max": 90.0
+  },
+  {
+   "duration_seconds": 4800,
+   "sec_per_mi": 258.12347197931444,
+   "vo2max": 90.0
+  }
+ ],
+ "race_seconds": [
+  {
+   "distance_m": 800,
+   "seconds": 362.3498823045009,
+   "vo2max": 20.0
+  },
+  {
+   "distance_m": 1500,
+   "seconds": 719.0769067889961,
+   "vo2max": 20.0
+  },
+  {
+   "distance_m": 3000,
+   "seconds": 1497.9914297012187,
+   "vo2max": 20.0
+  },
+  {
+   "distance_m": 5000,
+   "seconds": 2558.725894274267,
+   "vo2max": 20.0
+  },
+  {
+   "distance_m": 10000,
+   "seconds": 5334.185671717295,
+   "vo2max": 20.0
+  },
+  {
+   "distance_m": 16093.44,
+   "seconds": 8828.636341189298,
+   "vo2max": 20.0
+  },
+  {
+   "distance_m": 21097.5,
+   "seconds": 11712.441803122647,
+   "vo2max": 20.0
+  },
+  {
+   "distance_m": 42195,
+   "seconds": 23734.657323116648,
+   "vo2max": 20.0
+  },
+  {
+   "distance_m": 800,
+   "seconds": 294.30948182015936,
+   "vo2max": 25.5
+  },
+  {
+   "distance_m": 1500,
+   "seconds": 586.5149595586558,
+   "vo2max": 25.5
+  },
+  {
+   "distance_m": 3000,
+   "seconds": 1231.5249751747585,
+   "vo2max": 25.5
+  },
+  {
+   "distance_m": 5000,
+   "seconds": 2104.5083295197956,
+   "vo2max": 25.5
+  },
+  {
+   "distance_m": 10000,
+   "seconds": 4382.875373882564,
+   "vo2max": 25.5
+  },
+  {
+   "distance_m": 16093.44,
+   "seconds": 7274.2195123118,
+   "vo2max": 25.5
+  },
+  {
+   "distance_m": 21097.5,
+   "seconds": 9679.082821337553,
+   "vo2max": 25.5
+  },
+  {
+   "distance_m": 42195,
+   "seconds": 19750.07216048805,
+   "vo2max": 25.5
+  },
+  {
+   "distance_m": 800,
+   "seconds": 223.12004359318874,
+   "vo2max": 35.0
+  },
+  {
+   "distance_m": 1500,
+   "seconds": 444.87783634738827,
+   "vo2max": 35.0
+  },
+  {
+   "distance_m": 3000,
+   "seconds": 944.2563121129455,
+   "vo2max": 35.0
+  },
+  {
+   "distance_m": 5000,
+   "seconds": 1618.5705675474953,
+   "vo2max": 35.0
+  },
+  {
+   "distance_m": 10000,
+   "seconds": 3361.870365446777,
+   "vo2max": 35.0
+  },
+  {
+   "distance_m": 16093.44,
+   "seconds": 5585.250749028617,
+   "vo2max": 35.0
+  },
+  {
+   "distance_m": 21097.5,
+   "seconds": 7452.9469872125865,
+   "vo2max": 35.0
+  },
+  {
+   "distance_m": 42195,
+   "seconds": 15366.258157387849,
+   "vo2max": 35.0
+  },
+  {
+   "distance_m": 800,
+   "seconds": 178.96336535893815,
+   "vo2max": 45.0
+  },
+  {
+   "distance_m": 1500,
+   "seconds": 355.65090769215226,
+   "vo2max": 45.0
+  },
+  {
+   "distance_m": 3000,
+   "seconds": 759.7910190168561,
+   "vo2max": 45.0
+  },
+  {
+   "distance_m": 5000,
+   "seconds": 1308.5728881637672,
+   "vo2max": 45.0
+  },
+  {
+   "distance_m": 10000,
+   "seconds": 2713.490975614626,
+   "vo2max": 45.0
+  },
+  {
+   "distance_m": 16093.44,
+   "seconds": 4502.758663392959,
+   "vo2max": 45.0
+  },
+  {
+   "distance_m": 21097.5,
+   "seconds": 6014.212947618264,
+   "vo2max": 45.0
+  },
+  {
+   "distance_m": 42195,
+   "seconds": 12495.704417681718,
+   "vo2max": 45.0
+  },
+  {
+   "distance_m": 800,
+   "seconds": 163.24137154666886,
+   "vo2max": 50.0
+  },
+  {
+   "distance_m": 1500,
+   "seconds": 323.7175543616594,
+   "vo2max": 50.0
+  },
+  {
+   "distance_m": 3000,
+   "seconds": 692.7545928558113,
+   "vo2max": 50.0
+  },
+  {
+   "distance_m": 5000,
+   "seconds": 1196.0208243278526,
+   "vo2max": 50.0
+  },
+  {
+   "distance_m": 10000,
+   "seconds": 2479.603649337179,
+   "vo2max": 50.0
+  },
+  {
+   "distance_m": 16093.44,
+   "seconds": 4111.047782059451,
+   "vo2max": 50.0
+  },
+  {
+   "distance_m": 21097.5,
+   "seconds": 5491.197069311499,
+   "vo2max": 50.0
+  },
+  {
+   "distance_m": 42195,
+   "seconds": 11439.741755151472,
+   "vo2max": 50.0
+  },
+  {
+   "distance_m": 800,
+   "seconds": 153.67342347737332,
+   "vo2max": 53.6
+  },
+  {
+   "distance_m": 1500,
+   "seconds": 304.264034059233,
+   "vo2max": 53.6
+  },
+  {
+   "distance_m": 3000,
+   "seconds": 651.6096987570514,
+   "vo2max": 53.6
+  },
+  {
+   "distance_m": 5000,
+   "seconds": 1126.8695812601616,
+   "vo2max": 53.6
+  },
+  {
+   "distance_m": 10000,
+   "seconds": 2336.4509944920396,
+   "vo2max": 53.6
+  },
+  {
+   "distance_m": 16093.44,
+   "seconds": 3871.158118936499,
+   "vo2max": 53.6
+  },
+  {
+   "distance_m": 21097.5,
+   "seconds": 5170.31713115933,
+   "vo2max": 53.6
+  },
+  {
+   "distance_m": 42195,
+   "seconds": 10787.769841563946,
+   "vo2max": 53.6
+  },
+  {
+   "distance_m": 800,
+   "seconds": 148.94467929971336,
+   "vo2max": 55.57
+  },
+  {
+   "distance_m": 1500,
+   "seconds": 294.64750072144284,
+   "vo2max": 55.57
+  },
+  {
+   "distance_m": 3000,
+   "seconds": 631.1811930890157,
+   "vo2max": 55.57
+  },
+  {
+   "distance_m": 5000,
+   "seconds": 1092.498685544056,
+   "vo2max": 55.57
+  },
+  {
+   "distance_m": 10000,
+   "seconds": 2265.467628005699,
+   "vo2max": 55.57
+  },
+  {
+   "distance_m": 16093.44,
+   "seconds": 3752.1988172845895,
+   "vo2max": 55.57
+  },
+  {
+   "distance_m": 21097.5,
+   "seconds": 5011.045795848089,
+   "vo2max": 55.57
+  },
+  {
+   "distance_m": 42195,
+   "seconds": 10462.8975561103,
+   "vo2max": 55.57
+  },
+  {
+   "distance_m": 800,
+   "seconds": 148.18405055072455,
+   "vo2max": 55.9
+  },
+  {
+   "distance_m": 1500,
+   "seconds": 293.1006506003452,
+   "vo2max": 55.9
+  },
+  {
+   "distance_m": 3000,
+   "seconds": 627.8896318256578,
+   "vo2max": 55.9
+  },
+  {
+   "distance_m": 5000,
+   "seconds": 1086.9577166500899,
+   "vo2max": 55.9
+  },
+  {
+   "distance_m": 10000,
+   "seconds": 2254.0351881857955,
+   "vo2max": 55.9
+  },
+  {
+   "distance_m": 16093.44,
+   "seconds": 3733.0400897768,
+   "vo2max": 55.9
+  },
+  {
+   "distance_m": 21097.5,
+   "seconds": 4985.385941699663,
+   "vo2max": 55.9
+  },
+  {
+   "distance_m": 42195,
+   "seconds": 10410.477066581832,
+   "vo2max": 55.9
+  },
+  {
+   "distance_m": 800,
+   "seconds": 146.37563005971958,
+   "vo2max": 56.7
+  },
+  {
+   "distance_m": 1500,
+   "seconds": 289.423017814918,
+   "vo2max": 56.7
+  },
+  {
+   "distance_m": 3000,
+   "seconds": 620.0577362742849,
+   "vo2max": 56.7
+  },
+  {
+   "distance_m": 5000,
+   "seconds": 1073.7699860102557,
+   "vo2max": 56.7
+  },
+  {
+   "distance_m": 10000,
+   "seconds": 2226.837801016554,
+   "vo2max": 56.7
+  },
+  {
+   "distance_m": 16093.44,
+   "seconds": 3687.463477887541,
+   "vo2max": 56.7
+  },
+  {
+   "distance_m": 21097.5,
+   "seconds": 4924.334374498395,
+   "vo2max": 56.7
+  },
+  {
+   "distance_m": 42195,
+   "seconds": 10285.663074255086,
+   "vo2max": 56.7
+  },
+  {
+   "distance_m": 800,
+   "seconds": 146.13082311116494,
+   "vo2max": 56.81
+  },
+  {
+   "distance_m": 1500,
+   "seconds": 288.92518333412426,
+   "vo2max": 56.81
+  },
+  {
+   "distance_m": 3000,
+   "seconds": 618.9968739051069,
+   "vo2max": 56.81
+  },
+  {
+   "distance_m": 5000,
+   "seconds": 1071.9832457649993,
+   "vo2max": 56.81
+  },
+  {
+   "distance_m": 10000,
+   "seconds": 2223.1542977747577,
+   "vo2max": 56.81
+  },
+  {
+   "distance_m": 16093.44,
+   "seconds": 3681.290942316079,
+   "vo2max": 56.81
+  },
+  {
+   "distance_m": 21097.5,
+   "seconds": 4916.065023799319,
+   "vo2max": 56.81
+  },
+  {
+   "distance_m": 42195,
+   "seconds": 10268.747192904679,
+   "vo2max": 56.81
+  },
+  {
+   "distance_m": 800,
+   "seconds": 138.26114288066475,
+   "vo2max": 60.58
+  },
+  {
+   "distance_m": 1500,
+   "seconds": 272.9239872788168,
+   "vo2max": 60.58
+  },
+  {
+   "distance_m": 3000,
+   "seconds": 584.8136558432315,
+   "vo2max": 60.58
+  },
+  {
+   "distance_m": 5000,
+   "seconds": 1014.3513644851474,
+   "vo2max": 60.58
+  },
+  {
+   "distance_m": 10000,
+   "seconds": 2104.51442893506,
+   "vo2max": 60.58
+  },
+  {
+   "distance_m": 16093.44,
+   "seconds": 3482.519100382137,
+   "vo2max": 60.58
+  },
+  {
+   "distance_m": 21097.5,
+   "seconds": 4649.648195924584,
+   "vo2max": 60.58
+  },
+  {
+   "distance_m": 42195,
+   "seconds": 9722.461650032348,
+   "vo2max": 60.58
+  },
+  {
+   "distance_m": 800,
+   "seconds": 131.54829499212298,
+   "vo2max": 64.2
+  },
+  {
+   "distance_m": 1500,
+   "seconds": 259.2817791180478,
+   "vo2max": 64.2
+  },
+  {
+   "distance_m": 3000,
+   "seconds": 555.540122325845,
+   "vo2max": 64.2
+  },
+  {
+   "distance_m": 5000,
+   "seconds": 964.8878934544068,
+   "vo2max": 64.2
+  },
+  {
+   "distance_m": 10000,
+   "seconds": 2002.958229704432,
+   "vo2max": 64.2
+  },
+  {
+   "distance_m": 16093.44,
+   "seconds": 3312.4586262329503,
+   "vo2max": 64.2
+  },
+  {
+   "distance_m": 21097.5,
+   "seconds": 4421.543110007497,
+   "vo2max": 64.2
+  },
+  {
+   "distance_m": 42195,
+   "seconds": 9252.682548764653,
+   "vo2max": 64.2
+  },
+  {
+   "distance_m": 800,
+   "seconds": 122.19895283402705,
+   "vo2max": 70.0
+  },
+  {
+   "distance_m": 1500,
+   "seconds": 240.3001777617092,
+   "vo2max": 70.0
+  },
+  {
+   "distance_m": 3000,
+   "seconds": 514.6167968876958,
+   "vo2max": 70.0
+  },
+  {
+   "distance_m": 5000,
+   "seconds": 895.5236855676444,
+   "vo2max": 70.0
+  },
+  {
+   "distance_m": 10000,
+   "seconds": 1860.9502494800035,
+   "vo2max": 70.0
+  },
+  {
+   "distance_m": 16093.44,
+   "seconds": 3074.891717226931,
+   "vo2max": 70.0
+  },
+  {
+   "distance_m": 21097.5,
+   "seconds": 4102.678137969125,
+   "vo2max": 70.0
+  },
+  {
+   "distance_m": 42195,
+   "seconds": 8592.728224653258,
+   "vo2max": 70.0
+  },
+  {
+   "distance_m": 800,
+   "seconds": 109.17739606833999,
+   "vo2max": 80.0
+  },
+  {
+   "distance_m": 1500,
+   "seconds": 213.91986913035484,
+   "vo2max": 80.0
+  },
+  {
+   "distance_m": 3000,
+   "seconds": 457.401177812081,
+   "vo2max": 80.0
+  },
+  {
+   "distance_m": 5000,
+   "seconds": 798.0010400278106,
+   "vo2max": 80.0
+  },
+  {
+   "distance_m": 10000,
+   "seconds": 1662.0109708315747,
+   "vo2max": 80.0
+  },
+  {
+   "distance_m": 16093.44,
+   "seconds": 2742.8017350076016,
+   "vo2max": 80.0
+  },
+  {
+   "distance_m": 21097.5,
+   "seconds": 3656.682921144008,
+   "vo2max": 80.0
+  },
+  {
+   "distance_m": 42195,
+   "seconds": 7663.24699013871,
+   "vo2max": 80.0
+  },
+  {
+   "distance_m": 800,
+   "seconds": 98.97131213984349,
+   "vo2max": 90.0
+  },
+  {
+   "distance_m": 1500,
+   "seconds": 193.30984028216142,
+   "vo2max": 90.0
+  },
+  {
+   "distance_m": 3000,
+   "seconds": 412.4716166406615,
+   "vo2max": 90.0
+  },
+  {
+   "distance_m": 5000,
+   "seconds": 720.8632808003748,
+   "vo2max": 90.0
+  },
+  {
+   "distance_m": 10000,
+   "seconds": 1505.0799388155112,
+   "vo2max": 90.0
+  },
+  {
+   "distance_m": 16093.44,
+   "seconds": 2481.705662238729,
+   "vo2max": 90.0
+  },
+  {
+   "distance_m": 21097.5,
+   "seconds": 3306.002895655357,
+   "vo2max": 90.0
+  },
+  {
+   "distance_m": 42195,
+   "seconds": 6927.355864510194,
+   "vo2max": 90.0
+  }
+ ],
+ "round_target": [
+  {
+   "n": 1,
+   "x": 0.5
+  },
+  {
+   "n": 2,
+   "x": 1.5
+  },
+  {
+   "n": 3,
+   "x": 2.5
+  },
+  {
+   "n": 0,
+   "x": -0.5
+  },
+  {
+   "n": -1,
+   "x": -1.5
+  },
+  {
+   "n": -2,
+   "x": -2.5
+  },
+  {
+   "n": 37,
+   "x": 36.909
+  },
+  {
+   "n": 38,
+   "x": 37.4999996
+  },
+  {
+   "n": 289,
+   "x": 288.9530001
+  },
+  {
+   "n": 1087,
+   "x": 1086.5
+  }
+ ],
+ "sustainable_fraction": [
+  {
+   "f": 1.259652301139482,
+   "minutes": 0.5
+  },
+  {
+   "f": 1.1877748184625574,
+   "minutes": 2
+  },
+  {
+   "f": 1.091463440848868,
+   "minutes": 5
+  },
+  {
+   "f": 1.0002730329461356,
+   "minutes": 11
+  },
+  {
+   "f": 0.9300253355702349,
+   "minutes": 30
+  },
+  {
+   "f": 0.8880073144800814,
+   "minutes": 60
+  },
+  {
+   "f": 0.868158065672694,
+   "minutes": 80
+  },
+  {
+   "f": 0.8408827681321417,
+   "minutes": 120
+  },
+  {
+   "f": 0.8040986951074924,
+   "minutes": 300
+  }
+ ],
+ "velocity_at": [
+  {
+   "v": 76.74535872788941,
+   "vo2": 10
+  },
+  {
+   "v": 172.80180677790005,
+   "vo2": 30
+  },
+  {
+   "v": 241.58249082673404,
+   "vo2": 45.5
+  },
+  {
+   "v": 284.0849593888777,
+   "vo2": 55.57
+  },
+  {
+   "v": 342.4084179272549,
+   "vo2": 70
+  },
+  {
+   "v": 418.9092577990746,
+   "vo2": 90
+  }
+ ],
+ "vvo2max_sec_per_mi": [
+  {
+   "sec_per_mi": 766.8100673229344,
+   "vo2max": 20.0
+  },
+  {
+   "sec_per_mi": 635.3852654466639,
+   "vo2max": 25.5
+  },
+  {
+   "sec_per_mi": 493.9882379023747,
+   "vo2max": 35.0
+  },
+  {
+   "sec_per_mi": 403.2939123230008,
+   "vo2max": 45.0
+  },
+  {
+   "sec_per_mi": 370.2875770542887,
+   "vo2max": 50.0
+  },
+  {
+   "sec_per_mi": 349.9923831862401,
+   "vo2max": 53.6
+  },
+  {
+   "sec_per_mi": 339.90057132106125,
+   "vo2max": 55.57
+  },
+  {
+   "sec_per_mi": 338.2733944310183,
+   "vo2max": 55.9
+  },
+  {
+   "sec_per_mi": 334.40034907988303,
+   "vo2max": 56.7
+  },
+  {
+   "sec_per_mi": 333.87557686905217,
+   "vo2max": 56.81
+  },
+  {
+   "sec_per_mi": 316.9445821060175,
+   "vo2max": 60.58
+  },
+  {
+   "sec_per_mi": 302.4060585422699,
+   "vo2max": 64.2
+  },
+  {
+   "sec_per_mi": 282.00428185884857,
+   "vo2max": 70.0
+  },
+  {
+   "sec_per_mi": 253.27996920656247,
+   "vo2max": 80.0
+  },
+  {
+   "sec_per_mi": 230.5049081687144,
+   "vo2max": 90.0
+  }
+ ]
+}

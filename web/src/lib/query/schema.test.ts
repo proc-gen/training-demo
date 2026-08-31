@@ -84,13 +84,12 @@ describe("the scalars are reached, not copied", () => {
         scores: { week: { pct: 93.5 } },
       },
       { integrity: { total: 214255 }, acwr_mech: 1.09, days: [{ date: "2026-01-05" }] },
-      { pace_chart_week_ending: "2026-01-04" },
+      {},
     );
     const row = db
       .prepare(
         `select has_runs, miles, elapsed_days, quality_share, week_pct,
-                integrity_total, acwr_mech, load_day_count, week_end,
-                pace_chart_week_ending
+                integrity_total, acwr_mech, load_day_count, week_end
          from week where week_start = ?`,
       )
       .get("2026-01-05") as Record<string, unknown>;
@@ -104,7 +103,6 @@ describe("the scalars are reached, not copied", () => {
       acwr_mech: 1.09,
       load_day_count: 1,
       week_end: "2026-01-11",
-      pace_chart_week_ending: "2026-01-04",
     });
   });
 

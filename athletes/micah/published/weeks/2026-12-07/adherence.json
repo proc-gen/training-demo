@@ -87,19 +87,11 @@
    "hr_max": null,
    "key": "2026-12-07",
    "km": null,
-   "miles": null,
    "miss_forgiven": false,
    "ordinal": 0,
-   "pace": null,
-   "pct": null,
    "planned": {
     "band": "recovery",
-    "band_display": "8:50-9:36/mi",
     "band_is_reference": true,
-    "band_sec_per_mi": [
-     530,
-     576
-    ],
     "ceiling": "130",
     "ceiling_kind": "hr",
     "ceiling_tiers": [
@@ -108,9 +100,6 @@
       130
      ]
     ],
-    "chart_confirmed": false,
-    "chart_is_carried_forward": true,
-    "chart_week_ending": "2026-08-23",
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "30 min recovery",
@@ -144,26 +133,16 @@
    "hr_max": null,
    "key": "2026-12-13",
    "km": null,
-   "miles": null,
    "miss_forgiven": false,
    "ordinal": 0,
-   "pace": null,
-   "pct": null,
    "planned": {
     "band": "10000m",
-    "band_display": "37:03 @ 5:58/mi",
+    "band_display": "36:54 @ 5:56/mi",
     "band_is_reference": true,
-    "band_sec_per_mi": [
-     358,
-     358
-    ],
     "ceiling": "none (race)",
     "ceiling_kind": "none",
     "ceiling_role": "race",
     "ceiling_tiers": null,
-    "chart_confirmed": false,
-    "chart_is_carried_forward": true,
-    "chart_week_ending": "2026-08-23",
     "criterion": null,
     "hr_ceiling": null,
     "prescribed": "National Club XC Nats 10k",
@@ -189,22 +168,18 @@
  "scores": {
   "easy": {
    "earned": 0,
-   "pct": null,
    "total": 0
   },
   "recorded": {
    "earned": 0,
-   "pct": null,
    "total": 0
   },
   "week": {
    "earned": 0,
-   "pct": null,
    "total": 0
   },
   "workout": {
    "earned": 0,
-   "pct": null,
    "total": 0
   }
  },

@@ -51,6 +51,14 @@ import type {
 } from "./panels";
 import { type EasyMark, easyMarks } from "./easyMarks";
 import { type RaceMark, raceMarks } from "./raceMarks";
+import {
+  type CurvePoint,
+  fitnessCurve,
+  projectedSecPerMi,
+  projectedSeconds,
+  samples,
+  windowDays,
+} from "./vo2maxCurve";
 import { type WorkoutMark, metresOf, workoutMarks } from "./workoutMarks";
 
 /** The categorical slots, in the reference palette's own order.
@@ -501,6 +509,50 @@ function points(
   });
 }
 
+/** The race-times panel's points, one per CALENDAR DAY.
+ *
+ * THE ATHLETE ASKED FOR THIS, 2026-08-29: *"make sure that I can view the daily
+ * values in the graphs for projected race times."* Every point is the
+ * Daniels-Gilbert prediction at that day's effective VO2max -- the trailing
+ * distance-weighted window over the published per-activity series -- rather
+ * than a step held flat between confirmed Sundays.
+ *
+ * IT REPLACES THE WEEKLY POINT SET RATHER THAN JOINING IT, and the palette is
+ * what forces that: `CAT` declares seven slots, `raceKeys` already claims up to
+ * all seven for the distances, and `spec()` truncates at `CAT.length`. There is
+ * no room for a confirmed AND a daily series per distance, so drawing both
+ * would silently drop whichever came last.
+ *
+ * WHY THIS IS SAFE HERE AND NOT ON THE OTHER PANEL. Nothing is graded against a
+ * projected race time; the executed rep dots land on TARGET PACES, whose
+ * series stay weekly and stay on the confirmed chart, because a band IS the
+ * criterion a session was scored against. This panel carries only real race
+ * efforts, and comparing a race to the projection for the day it was run is
+ * more honest than comparing it to a chart confirmed the Sunday before.
+ *
+ * `vo2max` on each point is the day's own anchor, which is exactly the
+ * provenance field the tooltip already reads. No point is `carried`: a carried
+ * point restates a chart under a later date, and there is nothing to restate
+ * when every date has its own value.
+ */
+function dailyRacePoints(
+  curve: readonly CurvePoint[],
+  keys: readonly string[],
+  value: (vo2max: number, metres: number) => number | null,
+): TrendPoint[] {
+  const metres = new Map(keys.map((k) => [k, metresOf(k)]));
+  return curve.map(({ date, vo2max }) => {
+    const values: Record<string, SeriesValue> = {};
+    for (const k of keys) {
+      const m = metres.get(k);
+      // A key the metre parser does not recognise draws nothing rather than
+      // guessing a distance. `tempo` is already stripped by `raceKeys`.
+      values[k] = m === null || m === undefined ? null : value(vo2max, m);
+    }
+    return { date, label: shortDate(date), value: null, values, vo2max };
+  });
+}
+
 /** The repetition zone for one chart: 800 m race pace to 3000 m race pace.
  *
  * BOTH ENDS OR NOTHING, which is the adherence model's own rule for this pair --
@@ -566,6 +618,15 @@ export function paceSeries(payload: Payload): Panel[] {
   const extended = [...all, ...carriedCharts(all, anchor)];
   const span = { lo: extended[0].date, hi: extended[extended.length - 1].date };
 
+  /* THE FITNESS CURVE, and whether there is one. `windowDays` returns null
+     when the athlete's `thresholds.json` states no `shape_window_days` -- no
+     fallback to the model's 30, because a smoothing that does not match the
+     account describes somebody else's fitness. With no curve the panel keeps
+     the weekly chart points it always had, which is the right answer for an
+     athlete whose tree carries no `vo2max.json`. */
+  const window = windowDays(payload);
+  const curve = window ? fitnessCurve(samples(payload.vo2max), window) : [];
+
   const rk = raceKeys(all);
   if (rk.length) {
     const series = spec(rk);
@@ -576,26 +637,38 @@ export function paceSeries(payload: Payload): Panel[] {
        readable with everything ticked, since absolute times span 89x across
        these distances and min/mi spans 1.69x. EACH MODE CARRIES ITS OWN MARKS
        for the same reason it carries its own points: one race is two numbers. */
+    /* DAILY WHERE THERE IS A CURVE, weekly where there is not. The two branches
+       differ only in where a point's numbers come from -- the model at that
+       day's fitness, or the confirmed chart's own row -- so the modes, the
+       marks and the formatters below are shared. */
+    const daily = curve.length > 0;
+    const raceSpan = daily
+      ? { lo: curve[0].date, hi: curve[curve.length - 1].date }
+      : span;
     const modes: PanelMode[] = [
       {
         key: "time",
         label: "Times",
-        points: points(extended, keys, (c, k) => race(c, k)?.seconds ?? null),
-        marks: raceMarksFor(races, span, (m) => m.seconds, "time"),
+        points: daily
+          ? dailyRacePoints(curve, keys, projectedSeconds)
+          : points(extended, keys, (c, k) => race(c, k)?.seconds ?? null),
+        marks: raceMarksFor(races, raceSpan, (m) => m.seconds, "time"),
         format: (v) => clock(v),
       },
       {
         key: "pace",
         label: "min/mi",
-        points: points(extended, keys, (c, k) => race(c, k)?.sec_per_mi ?? null),
-        marks: raceMarksFor(races, span, (m) => m.pace, "pace"),
+        points: daily
+          ? dailyRacePoints(curve, keys, projectedSecPerMi)
+          : points(extended, keys, (c, k) => race(c, k)?.sec_per_mi ?? null),
+        marks: raceMarksFor(races, raceSpan, (m) => m.pace, "pace"),
         format: (v) => pace(v),
       },
     ];
     out.push({
       key: "race-times",
       title: "Projected race times",
-      cadence: "week",
+      cadence: daily ? "day" : "week",
       series,
       modes,
       points: modes[0].points,

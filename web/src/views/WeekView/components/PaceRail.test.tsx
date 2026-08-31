@@ -2,13 +2,13 @@ import { fireEvent } from "@testing-library/react";
 import { renderToString } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
-import type {
-  PaceChart,
-  PaceModelsCurrent,
-  Week,
-} from "@/lib/data/payload";
+import type { PaceChart, Week } from "@/lib/data/payload";
+import { chartVo2max } from "@/lib/data/paceRows";
+import { MODEL_NAMES } from "@/lib/pacemodels/registry";
+import { modelsAt } from "@/lib/pacemodels/tables";
 import { PUBLISHED, has } from "@/test/payload";
 import { wrap } from "@/test/render";
+import { bandText } from "./PaceBandTable";
 import * as PaceRailModule from "./PaceRail";
 import { PaceRail } from "./PaceRail";
 
@@ -127,27 +127,11 @@ describe("PaceRail", () => {
   });
 });
 
-const MODELS = {
-  source_chart: "2026-08-09",
-  effective_vo2max: 55.9,
-  models: {
-    daniels_gilbert: {
-      label: "Daniels-Gilbert (effective VO2max)",
-      seeded_from: "the chart's own effective VO2max",
-      race_paces: { "5000m": { display: "18:06 @ 5:49/mi" } },
-    },
-    riegel: {
-      label: "Riegel power law",
-      seeded_from: "the Daniels-Gilbert 5000 m prediction",
-      race_paces: { "5000m": { display: "18:07 @ 5:50/mi" } },
-    },
-  },
-} as unknown as PaceModelsCurrent;
-
 describe("modelOrder", () => {
-  it("puts the scored model first whatever the record's key order", () => {
-    /* publish.py's sort_keys alphabetises the record -- cameron first -- so
-     * order is this component's constant, the paces-rail row-order rule. */
+  it("puts the scored model first whatever order it is handed", () => {
+    /* `MODEL_NAMES` is the registry's own order -- the scored model first,
+     * cross-checks after -- and this component reads it rather than carrying
+     * a copy, which it had to while the order came off a `sort_keys` record. */
     expect(
       PaceRailModule.modelOrder([
         "cameron",
@@ -167,17 +151,45 @@ describe("modelOrder", () => {
 });
 
 describe("the model dropdown", () => {
-  it("does not render without the published record", () => {
-    /* Absence is the signal: no pace-models record, no control -- a dropdown
-     * with one dead option would read as a feature that failed to load. */
-    const { container } = wrap(<PaceRail week={week()} current={CURRENT} />);
+  /* THE TABLES ARE COMPUTED, NOT INJECTED (2026-08-30). They used to arrive as
+   * a `models` prop off `published/pace-models-current.json`; the rail derives
+   * them from the current chart's own `effective_vo2max` now, so these cases
+   * feed an ANCHOR and assert against what the models really say at it.
+   *
+   * At 55.9 the three one-reference models agree with Daniels-Gilbert at 5000 m
+   * by construction -- riegel and cameron are SEEDED from its 5000 m prediction
+   * -- so `critical_speed` is the one that visibly moves the column, and it is
+   * what the swap cases select. That is a property of the seeding rather than
+   * of this fixture, and it is worth knowing before reading a "why did nothing
+   * change" failure. */
+
+  it("does not render when the current chart states no anchor", () => {
+    /* Absence is still the signal, and the gate is now the honest one: a
+     * dropdown with one dead option would read as a feature that failed to
+     * load. A chart with no effective VO2max cannot seed any model. */
+    const { container } = wrap(
+      <PaceRail
+        week={week()}
+        current={{ week_ending: "2026-08-09", bands: {} } as PaceChart}
+      />,
+    );
+    expect(container.querySelector("select")).toBeNull();
+  });
+
+  it("does not render for an anchor outside the model's range", () => {
+    /* `checkVo2max` is 20-90; outside it the number is a typo, and a typo'd
+     * anchor does not fail downstream -- it prices every projection wrong. */
+    const { container } = wrap(
+      <PaceRail
+        week={week()}
+        current={{ week_ending: "2026-08-09", effective_vo2max: 5 } as PaceChart}
+      />,
+    );
     expect(container.querySelector("select")).toBeNull();
   });
 
   it("defaults to the confirmed chart", () => {
-    const { container } = wrap(
-      <PaceRail week={week()} current={CURRENT} models={MODELS} />,
-    );
+    const { container } = wrap(<PaceRail week={week()} current={CURRENT} />);
     const select = container.querySelector("select")!;
     expect(select.value).toBe("");
     expect(container.textContent).toContain("18:06 @ 5:49/mi");
@@ -189,9 +201,7 @@ describe("the model dropdown", () => {
      * `.value` directly, so only server markup shows what a browser sees
      * until hydration -- and browsers restore form values across a reload,
      * which is why the control carries autoComplete="off". */
-    const html = renderToString(
-      <PaceRail week={week()} current={CURRENT} models={MODELS} />,
-    );
+    const html = renderToString(<PaceRail week={week()} current={CURRENT} />);
     expect(html.toLowerCase()).toContain('autocomplete="off"');
     expect(html).toMatch(/<option[^>]*selected[^>]*>Confirmed chart<\/option>/);
   });
@@ -199,27 +209,23 @@ describe("the model dropdown", () => {
   it("swaps the race table's Current column and NAMES the model", () => {
     /* A projection must never wear the confirmed chart's label -- the header
      * says whose numbers the column holds. */
-    const { container } = wrap(
-      <PaceRail week={week()} current={CURRENT} models={MODELS} />,
-    );
+    const { container } = wrap(<PaceRail week={week()} current={CURRENT} />);
     fireEvent.change(container.querySelector("select")!, {
-      target: { value: "riegel" },
+      target: { value: "critical_speed" },
     });
     const text = container.textContent!;
-    expect(text).toContain("18:07 @ 5:50/mi");
+    expect(text).toContain("18:13 @ 5:52/mi");
     expect(text).not.toContain("18:06 @ 5:49/mi");
-    expect(text).toContain("Riegel power law");
+    expect(text).toContain("Critical speed");
   });
 
   it("never touches the band table or the week column", () => {
     /* The bands are percentages of vVO2max, which the alternate models do not
      * state; and the week column is the record the week was graded against.
      * Both stay on the confirmed charts whatever the dropdown says. */
-    const { container } = wrap(
-      <PaceRail week={week()} current={CURRENT} models={MODELS} />,
-    );
+    const { container } = wrap(<PaceRail week={week()} current={CURRENT} />);
     fireEvent.change(container.querySelector("select")!, {
-      target: { value: "riegel" },
+      target: { value: "critical_speed" },
     });
     const text = container.textContent!;
     expect(text).toContain("8:17-8:58/mi"); // current bands, confirmed chart
@@ -227,12 +233,11 @@ describe("the model dropdown", () => {
     expect(text).toContain("18:11 @ 5:50/mi"); // the week's own race column
   });
 
-  it("labels the options from the payload, never its own vocabulary", () => {
-    /* The score_bucket rule: tokens map to words the page is GIVEN. An entry
-     * with no label falls back to its token rather than vanishing. */
-    const { container } = wrap(
-      <PaceRail week={week()} current={CURRENT} models={MODELS} />,
-    );
+  it("offers every registered model, scored one first, each named", () => {
+    /* `LABELS` is total over `MODEL_NAMES` -- a model rendering as its bare
+     * token is the fallback `modelOrder`'s unknown-token case covers, and the
+     * registry should never need it. */
+    const { container } = wrap(<PaceRail week={week()} current={CURRENT} />);
     const labels = [...container.querySelectorAll("option")].map(
       (o) => o.textContent,
     );
@@ -240,28 +245,9 @@ describe("the model dropdown", () => {
       "Confirmed chart",
       "Daniels-Gilbert (effective VO2max)",
       "Riegel power law",
+      "Cameron",
+      "Critical speed",
     ]);
-  });
-
-  it("an unlabelled model shows its token rather than vanishing", () => {
-    const bare = {
-      models: { mystery: { race_paces: { "5000m": { display: "18:20" } } } },
-    } as unknown as PaceModelsCurrent;
-    const { container } = wrap(
-      <PaceRail week={week()} current={CURRENT} models={bare} />,
-    );
-    const labels = [...container.querySelectorAll("option")].map(
-      (o) => o.textContent,
-    );
-    expect(labels).toEqual(["Confirmed chart", "mystery"]);
-  });
-
-  it("an empty models record renders no control", () => {
-    const empty = { models: {} } as unknown as PaceModelsCurrent;
-    const { container } = wrap(
-      <PaceRail week={week()} current={CURRENT} models={empty} />,
-    );
-    expect(container.querySelector("select")).toBeNull();
   });
 });
 
@@ -280,24 +266,37 @@ describe("over the committed tree", () => {
     expect(future, "no carried-forward week in the published tree").toBeTruthy();
   });
 
+  /* THE EXPECTED STRING IS COMPOSED, NOT READ OFF THE RECORD (2026-08-29).
+   *
+   * Both cases used to take it from `bands.easy.display`, which `project_chart`
+   * stopped publishing: a display string is a RENDERING of the two endpoints
+   * beside it, and `bandText` is the one place that composes it now. Reading
+   * the field is what these cases were really doing anyway -- neither is about
+   * formatting, they are about WHICH COLUMN renders and how many times.
+   *
+   * `"--"` is `bandText`'s own nothing and is truthy, so the guard has to
+   * exclude it by value or a chart with no endpoints would satisfy every
+   * assertion below by rendering two dashes. */
+  const easyOf = (w: Week) => bandText(w.pace_chart?.bands?.easy);
+
   has(settled)("a settled week renders its own column", () => {
     const { container } = wrap(
       <PaceRail week={settled!} current={PUBLISHED!.pace_chart_current} />,
     );
-    const easy = settled!.pace_chart!.bands?.easy?.display;
-    expect(easy).toBeTruthy();
-    expect(container.textContent).toContain(easy!);
+    const easy = easyOf(settled!);
+    expect(easy).not.toBe("--");
+    expect(container.textContent).toContain(easy);
   });
 
   has(future)("a future week blanks it, silently", () => {
     const { container } = wrap(
       <PaceRail week={future!} current={PUBLISHED!.pace_chart_current} />,
     );
-    const easy = future!.pace_chart!.bands?.easy?.display;
-    expect(easy).toBeTruthy();
+    const easy = easyOf(future!);
+    expect(easy).not.toBe("--");
     // The CURRENT column still shows it; the week column is the one that is
     // blank, and there is exactly one occurrence rather than two.
-    const hits = container.textContent!.split(easy!).length - 1;
+    const hits = container.textContent!.split(easy).length - 1;
     expect(hits).toBe(1);
     expect(container.querySelector(".note")).toBeNull();
   });
@@ -316,42 +315,36 @@ describe("over the committed tree", () => {
     ).toBe(true);
   });
 
-  const models = PUBLISHED?.pace_models_current ?? null;
+  const anchored = PUBLISHED
+    ? chartVo2max(PUBLISHED.pace_chart_current) !== null
+    : false;
 
-  has(models)("the models record anchors on the newest chart", () => {
-    expect(models!.source_chart).toBe(
-      PUBLISHED!.pace_chart_current!.week_ending,
+  has(anchored || null)("every model resolves at the real anchor", () => {
+    /* THE PORT, RUN OVER THE COMMITTED TREE. The unit cases feed a synthetic
+     * 55.9; this asks whether all four models seed and price at the anchor the
+     * athlete's newest chart actually records -- which is the one number the
+     * rail will use in production. A cross-check that cannot fit there would
+     * silently be a column the dropdown stops offering. */
+    const tables = modelsAt(chartVo2max(PUBLISHED!.pace_chart_current))!;
+    expect(Object.keys(tables.models).sort()).toEqual(
+      [...MODEL_NAMES].sort(),
     );
-    /* The record's KEY order is publish.py's sort_keys and means nothing;
-     * the component's MODEL_ORDER is what puts the scored model first. */
-    expect(Object.keys(models!.models ?? {})).toContain("daniels_gilbert");
-  });
-
-  has(models)("every published model carries a label and a race table", () => {
-    /* The dropdown maps tokens to words it is GIVEN; a model without a label
-     * would render as its bare token, which the unit case above covers -- but
-     * the committed record should never need that fallback. */
-    for (const entry of Object.values(models!.models ?? {})) {
+    for (const entry of Object.values(tables.models)) {
       expect(entry.label).toBeTruthy();
       expect(entry.seeded_from).toBeTruthy();
-      expect(Object.keys(entry.race_paces ?? {}).length).toBeGreaterThan(0);
+      expect(Object.keys(entry.race_paces).length).toBeGreaterThan(0);
     }
   });
 
-  has(models)("the dropdown renders over the committed tree", () => {
+  has(anchored || null)("the dropdown renders over the committed tree", () => {
     const { container } = wrap(
-      <PaceRail
-        week={settled!}
-        current={PUBLISHED!.pace_chart_current}
-        models={models}
-      />,
+      <PaceRail week={settled!} current={PUBLISHED!.pace_chart_current} />,
     );
     const select = container.querySelector("select");
     expect(select).toBeTruthy();
     const options = [...select!.querySelectorAll("option")];
-    expect(options.length).toBe(Object.keys(models!.models ?? {}).length + 1);
-    // The scored model directly after the confirmed chart, whatever order
-    // sort_keys wrote the record in.
+    expect(options.length).toBe(MODEL_NAMES.length + 1);
+    // The scored model directly after the confirmed chart.
     expect(options[1]!.value).toBe("daniels_gilbert");
   });
 });
