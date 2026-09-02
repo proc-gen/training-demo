@@ -1674,14 +1674,14 @@
  "structure": {
   "checks": {
    "long_run_share": false,
-   "quality_days_met": false,
+   "quality_days_met": true,
    "rest_days_met": null,
    "volume_vs_plan": false
   },
-  "pct": 0.0,
+  "pct": 33.333333333333336,
   "why": {
    "long_run_share": "the long run was 26.7% of the running distance, against a 25% ceiling",
-   "quality_days_met": "3 quality day(s) against the 2 the plan has asked for so far, which is what a Volume week asks for",
+   "quality_days_met": "every quality session the plan scheduled on 2026-02-24, 2026-02-26, 2026-02-28 was completed",
    "rest_days_met": "the plan schedules no rest day, so this check does not apply and left the denominator",
    "volume_vs_plan": "7:16:06 run against a plan of 7:58:00, tolerance 5%"
   }

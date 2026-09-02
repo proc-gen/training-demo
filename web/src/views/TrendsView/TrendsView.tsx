@@ -8,6 +8,7 @@ import { EmptyState } from "@/lib/ux/primitives/EmptyState";
 import { GraphPicker } from "./components/GraphPicker";
 import { RangePicker } from "./components/RangePicker";
 import { TrendPanel } from "./components/TrendPanel";
+import { type Agg, DEFAULT_AGG, aggregatedPanel } from "./data/aggregate";
 import { trendPanels } from "./data/panels";
 import {
   DEFAULT_PRESET,
@@ -50,6 +51,12 @@ export function TrendsView({ payload }: { payload: Payload }) {
   const [key, setKey] = useState<string>(() => panels[0]?.key ?? "");
   const [preset, setPreset] = useState<PresetKey>(DEFAULT_PRESET);
   const [range, setRange] = useState<Range | null>(() => defaultRange(panels));
+  /* SHARED ACROSS THE THREE AGGREGABLE PANELS, for the reason the window is
+     shared: the athlete switches series to compare them over the same dates,
+     and now the same aggregation. It also cannot live in `TrendPanel` — the
+     `key={panel.key}` remount below would silently reset it on every graph
+     switch, which is correct for series ticks and wrong for this. */
+  const [agg, setAgg] = useState<Agg>(DEFAULT_AGG);
 
   if (!panels.length) {
     return (
@@ -63,6 +70,13 @@ export function TrendsView({ payload }: { payload: Payload }) {
   // nothing: a blank card cannot say whether the series went away or the app
   // broke.
   const panel = panels.find((p) => p.key === key) ?? panels[0];
+  /* THE AGGREGATED VIEW OF IT — the identity for the default aggregation and
+     for every non-aggregable panel. THE WINDOW DOES NOT MOVE: `defaultRange`
+     above and `presetRange`/`shift` below keep reading the BASE panels, so
+     changing aggregation, like changing graph, never re-resolves the window —
+     and every aggregated point falls inside the base span (bucket starts are
+     at or after the first covered day, rolling points start N−1 days in). */
+  const shownPanel = panel.aggregable ? aggregatedPanel(panel, payload, agg) : panel;
 
   const choose = (k: PresetKey) => {
     setPreset(k);
@@ -116,9 +130,13 @@ export function TrendsView({ payload }: { payload: Payload }) {
           comparing two series over the same dates is why a reader switches. */}
       <TrendPanel
         key={panel.key}
-        panel={panel}
-        shown={pointsIn(panel.points, range)}
+        panel={shownPanel}
+        shown={pointsIn(shownPanel.points, range)}
         range={range}
+        /* Only an aggregable panel gets the controls — the `UnitToggle` rule.
+           The state rides above the key so it survives the switch. */
+        agg={panel.aggregable ? agg : undefined}
+        onAgg={panel.aggregable ? setAgg : undefined}
       />
     </Card>
   );

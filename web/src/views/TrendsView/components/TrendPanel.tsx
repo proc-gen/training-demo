@@ -6,11 +6,14 @@ import { LineChart, type Margin } from "@/lib/ux/charts/LineChart";
 import { MultiLineChart } from "@/lib/ux/charts/MultiLineChart";
 import { EmptyState } from "@/lib/ux/primitives/EmptyState";
 import { num, shortDate } from "@/lib/data/format";
+import type { Agg } from "../data/aggregate";
 import { axisPoints, slotAt } from "../data/axis";
 import type { Panel, TrendPoint } from "../data/panels";
 import { type Range, plotted, pointsIn, spanOf } from "../data/range";
+import { AggPicker } from "./AggPicker";
 import { GroupPicker } from "./GroupPicker";
 import { MarksToggle } from "./MarksToggle";
+import { PeriodPicker } from "./PeriodPicker";
 import { SeriesPicker } from "./SeriesPicker";
 import { UnitToggle } from "./UnitToggle";
 
@@ -54,10 +57,19 @@ export function TrendPanel({
   panel,
   shown,
   range,
+  agg,
+  onAgg,
 }: {
   panel: Panel;
   shown: TrendPoint[];
   range: Range | null;
+  /** The aggregation state, handed over ONLY for an `aggregable` panel — the
+   *  `UnitToggle` rule: the controls render only where there is a choice. The
+   *  state itself lives in `TrendsView`, beside the window, because the
+   *  `key={panel.key}` remount would reset it here and the aggregation should
+   *  survive a graph switch exactly as the window does. */
+  agg?: Agg;
+  onAgg?: (agg: Agg) => void;
 }) {
   /* STATE PER PANEL, RESET BY THE KEY ABOVE. `TrendsView` renders this with
      `key={panel.key}`, so switching graph re-initialises both of these -- the
@@ -168,6 +180,15 @@ export function TrendPanel({
         {range ? `${range.from} → ${range.to} · ` : ""}
         {n} of {total} points
       </p>
+      {agg && onAgg ? (
+        <div className="agg-controls">
+          <AggPicker mode={agg.mode} onMode={(mode) => onAgg({ ...agg, mode })} />
+          <PeriodPicker
+            period={agg.period}
+            onPeriod={(period) => onAgg({ ...agg, period })}
+          />
+        </div>
+      ) : null}
       {panel.series ? (
         <div className="series-controls">
           {panel.groups && panel.groups.length > 1 ? (
@@ -257,6 +278,8 @@ export function TrendPanel({
             reference={panel.reference}
             color={panel.color}
             format={panel.format}
+            pointsOnly={panel.pointsOnly}
+            bandTitle={panel.bandTitle}
           />
         )
       ) : (

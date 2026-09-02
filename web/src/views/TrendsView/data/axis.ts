@@ -22,13 +22,24 @@ import { shortDate, shortDateY } from "@/lib/data/format";
 import { labelWidth } from "@/lib/ux/charts/data/scales";
 import { dateFromIndex, dayIndex, yearOf } from "./dates";
 import type { Cadence, TrendPoint } from "./panels";
+import { type Period, periodOrdinal, periodStartOf } from "./periods";
 import { axisTicks } from "./ticks";
 
 /** A daily series over a decade is 3,650 slots; anything past this is a sign
  *  the cadence is wrong, and a runaway array would hang the render. */
 const MAX_SLOTS = 4000;
 
-const STEP: Record<Cadence, number> = { day: 1, week: 7 };
+/** The FIXED-STEP cadences. `month` and `year` are deliberately absent: a
+ *  month is 28–31 days, so no constant step can walk one, and `densify`
+ *  branches to the calendar walk below instead. */
+const STEP: Partial<Record<Cadence, number>> = { day: 1, week: 7, fortnight: 14 };
+
+/** The calendar cadences map onto `periods.ts`' own buckets, so the axis and
+ *  the aggregation cannot disagree about where a month starts. */
+const CALENDAR: Partial<Record<Cadence, Period>> = {
+  month: "monthly",
+  year: "yearly",
+};
 
 /** One slot per date between the first and last point, gaps carrying `null`.
  *
@@ -44,6 +55,8 @@ const STEP: Record<Cadence, number> = { day: 1, week: 7 };
  */
 export function densify(points: TrendPoint[], cadence: Cadence): TrendPoint[] {
   if (points.length < 2) return points;
+  const calendar = CALENDAR[cadence];
+  if (calendar) return densifyCalendar(points, calendar);
   const step = STEP[cadence] ?? 1;
 
   const sorted = [...points].sort((a, b) => a.date.localeCompare(b.date));
@@ -64,6 +77,37 @@ export function densify(points: TrendPoint[], cadence: Cadence): TrendPoint[] {
   const out: TrendPoint[] = [];
   for (let i = first; i <= last; i += step) {
     const date = dateFromIndex(i);
+    out.push(byDate.get(date) ?? { date, label: shortDate(date), value: null });
+  }
+  return out;
+}
+
+/** The calendar-cadence half of `densify`: one slot per month or year.
+ *
+ * Slots are walked on the PERIOD ORDINAL rather than a day step, because the
+ * periods are not fixed-length in days. Every point must sit at its period's
+ * canonical START — `boundarySeries` is the only producer and plots buckets at
+ * their starts — and a misaligned input comes back untouched, the same refusal
+ * the fixed-step walk makes: an uneven axis is a display defect, a dropped
+ * measurement is a lie.
+ */
+function densifyCalendar(points: TrendPoint[], period: Period): TrendPoint[] {
+  const sorted = [...points].sort((a, b) => a.date.localeCompare(b.date));
+  const first = periodOrdinal(sorted[0].date, period);
+  const last = periodOrdinal(sorted[sorted.length - 1].date, period);
+  if (first === null || last === null) return points;
+  if (last - first + 1 > MAX_SLOTS) return points;
+
+  const byDate = new Map<string, TrendPoint>();
+  for (const p of sorted) {
+    const ord = periodOrdinal(p.date, period);
+    if (ord === null || periodStartOf(ord, period) !== p.date) return points;
+    byDate.set(p.date, p);
+  }
+
+  const out: TrendPoint[] = [];
+  for (let ord = first; ord <= last; ord++) {
+    const date = periodStartOf(ord, period);
     out.push(byDate.get(date) ?? { date, label: shortDate(date), value: null });
   }
   return out;
@@ -143,6 +187,12 @@ export function slotAt(
   cadence: Cadence,
 ): number | null {
   if (slots.length < 2) return null;
+  /* REFUSED on the calendar cadences: their slots are not evenly spaced in
+     days, so the linear map below would place every mark wrong while looking
+     plausible — the same reason an uneven grid is refused. No producer places
+     marks on a month or year axis (the three aggregable panels carry none),
+     and the refusal is the existing "no pair of slots" behaviour. */
+  if (CALENDAR[cadence]) return null;
   const step = STEP[cadence] ?? 1;
   const first = dayIndex(slots[0].date);
   const last = dayIndex(slots[slots.length - 1].date);

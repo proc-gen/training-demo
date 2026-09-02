@@ -77,6 +77,95 @@ describe("TrendPanel", () => {
   });
 });
 
+describe("the aggregation controls", () => {
+  it("render ONLY when the panel is handed the state -- a choice must exist", () => {
+    const { container } = render();
+    expect(container.querySelector(".agg-controls")).toBeNull();
+  });
+
+  it("show the mode and period dropdowns, and report a change of each", () => {
+    const seen: unknown[] = [];
+    const { container, q } = wrap(
+      <TrendPanel
+        panel={panel()}
+        shown={POINTS}
+        range={WHOLE}
+        agg={{ mode: "boundaries", period: "weekly" }}
+        onAgg={(a) => seen.push(a)}
+      />,
+    );
+    expect(q.getByText("Aggregation")).toBeTruthy();
+    expect(q.getByText("Period")).toBeTruthy();
+    const selects = [...container.querySelectorAll<HTMLSelectElement>(".agg-controls select")];
+    expect(selects).toHaveLength(2);
+    fireEvent.change(selects[0], { target: { value: "rolling" } });
+    fireEvent.change(selects[1], { target: { value: "monthly" } });
+    // Each change carries the OTHER half along -- one state, two controls.
+    expect(seen).toEqual([
+      { mode: "rolling", period: "weekly" },
+      { mode: "boundaries", period: "monthly" },
+    ]);
+  });
+});
+
+describe("a points-only panel with a band", () => {
+  /* The wellness panels: markers over the trailing-mean band, no connecting
+   * line. Daily cadence, so `axisPoints` densifies -- these cases are what says
+   * the band SURVIVES that trip and breaks where a day is unmeasured. */
+  const BANDED: Panel["points"] = [
+    { date: "2026-08-13", label: "8/13", value: 42, band: { lo: 38, hi: 46 } },
+    { date: "2026-08-14", label: "8/14", value: 44, band: { lo: 39, hi: 47 } },
+  ];
+
+  const wellness = (points: Panel["points"]) =>
+    panel({
+      key: "hrv",
+      title: "HRV",
+      cadence: "day",
+      points,
+      pointsOnly: true,
+      bandTitle: "7-day mean ±10%",
+    });
+
+  it("renders no connecting line and one band region", () => {
+    const p = wellness(BANDED);
+    const { container } = render(p, BANDED, {
+      from: "2026-08-13",
+      to: "2026-08-14",
+    });
+    expect(container.querySelectorAll("path.series-line")).toHaveLength(0);
+    expect(container.querySelectorAll("path.series-band")).toHaveLength(1);
+    expect(container.querySelectorAll("circle.marker")).toHaveLength(2);
+  });
+
+  it("breaks the band at a densified gap", () => {
+    // 8/15 is invented by the axis with no value and no band; a run of one
+    // banded point either side draws nothing (the sliver rule).
+    const gapped: Panel["points"] = [
+      { date: "2026-08-14", label: "8/14", value: 44, band: { lo: 39, hi: 47 } },
+      { date: "2026-08-16", label: "8/16", value: 45, band: { lo: 40, hi: 48 } },
+    ];
+    const p = wellness(gapped);
+    const { container } = render(p, gapped, {
+      from: "2026-08-14",
+      to: "2026-08-16",
+    });
+    expect(container.querySelectorAll("path.series-band")).toHaveLength(0);
+    expect(container.querySelectorAll("circle.marker")).toHaveLength(2);
+  });
+
+  it("counts measurements in the caption, not band decoration", () => {
+    const p = wellness(BANDED);
+    const { container } = render(p, BANDED, {
+      from: "2026-08-13",
+      to: "2026-08-14",
+    });
+    expect(container.querySelector(".sm-range")!.textContent).toContain(
+      "2 of 2 points",
+    );
+  });
+});
+
 describe("the x axis", () => {
   /* One slot per date, so position means time. `shown` carries measurements
    * only, and a week the athlete did not run at all is simply absent from it. */

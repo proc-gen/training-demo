@@ -175,6 +175,94 @@ describe("TrendsView", () => {
   });
 });
 
+describe("the aggregation controls", () => {
+  const aggSelects = (c: HTMLElement) =>
+    [...c.querySelectorAll<HTMLSelectElement>(".agg-controls select")];
+
+  /** Two whole Mon-Sun weeks with dated runs, so the ledgers have days. */
+  const AGG = {
+    weeks: {
+      "2026-07-20": {
+        adherence: {
+          results: [{ date: "2026-07-21", role: "easy", miles: 30, seconds: 15000 }],
+          facts: { miles: 30, elapsed_days: 7 },
+          scores: { week: { pct: 90 } },
+        },
+      },
+      "2026-07-27": {
+        adherence: {
+          results: [{ date: "2026-07-28", role: "easy", miles: 40, seconds: 20000 }],
+          facts: { miles: 40, elapsed_days: 7 },
+          scores: { week: { pct: 90 } },
+        },
+      },
+    },
+    days: [],
+    history: {},
+  } as unknown as Payload;
+
+  has(D)("appear on the volume graph and not on a wellness one", () => {
+    const { container } = wrap(<TrendsView payload={D!} />);
+    // Volume is the first panel, so the page opens on it.
+    expect(aggSelects(container)).toHaveLength(2);
+    fireEvent.change(select(container), { target: { value: "rhr" } });
+    // A monthly total of a resting heart rate is not a quantity.
+    expect(aggSelects(container)).toHaveLength(0);
+  });
+
+  has(D)("keep the aggregation across a graph switch -- shared like the window", () => {
+    const { container } = wrap(<TrendsView payload={D!} />);
+    fireEvent.change(aggSelects(container)[0], { target: { value: "rolling" } });
+    fireEvent.change(aggSelects(container)[1], { target: { value: "monthly" } });
+    fireEvent.change(select(container), { target: { value: "load" } });
+    expect(aggSelects(container).map((s) => s.value)).toEqual(["rolling", "monthly"]);
+    // Detouring through a panel with no controls does not lose it either.
+    fireEvent.change(select(container), { target: { value: "rhr" } });
+    fireEvent.change(select(container), { target: { value: "quality" } });
+    expect(aggSelects(container).map((s) => s.value)).toEqual(["rolling", "monthly"]);
+  });
+
+  has(D)("DO NOT MOVE THE WINDOW when the aggregation changes", () => {
+    /* The window is resolved against the BASE panels; re-resolving it per
+       aggregation would answer a different question after every switch. */
+    const { container } = wrap(<TrendsView payload={D!} />);
+    const before = dates(container).map((i) => i.value);
+    fireEvent.change(aggSelects(container)[0], { target: { value: "rolling" } });
+    expect(dates(container).map((i) => i.value)).toEqual(before);
+    fireEvent.change(aggSelects(container)[1], { target: { value: "yearly" } });
+    expect(dates(container).map((i) => i.value)).toEqual(before);
+  });
+
+  it("retitle the drawn panel period-free; the picker keeps the series name", () => {
+    const { container } = wrap(<TrendsView payload={AGG} />);
+    expect(title(container)).toBe("Weekly volume");
+    fireEvent.change(aggSelects(container)[1], { target: { value: "monthly" } });
+    // "Weekly volume" over a monthly bucket would be wrong on its face.
+    expect(title(container)).toBe("Volume");
+    const offered = [...select(container).querySelectorAll("option")].map(
+      (o) => o.textContent,
+    );
+    expect(offered).toContain("Weekly volume");
+  });
+
+  it("draw the rolling series at day resolution over the full record", () => {
+    const { container } = wrap(<TrendsView payload={AGG} />);
+    fireEvent.change(aggSelects(container)[0], { target: { value: "rolling" } });
+    // 14 covered days hold eight 7-day windows -- computed from the FULL
+    // record, so the count is 8 whatever the window shows.
+    expect(range(container)).toContain("of 8 points");
+  });
+
+  it("return to the identity series when the defaults are re-chosen", () => {
+    const { container } = wrap(<TrendsView payload={AGG} />);
+    const before = range(container);
+    fireEvent.change(aggSelects(container)[0], { target: { value: "rolling" } });
+    fireEvent.change(aggSelects(container)[0], { target: { value: "boundaries" } });
+    expect(range(container)).toBe(before);
+    expect(title(container)).toBe("Weekly volume");
+  });
+});
+
 describe("choosing a graph", () => {
   it("swaps the chart", () => {
     const { container } = wrap(<TrendsView payload={SYNTH} />);

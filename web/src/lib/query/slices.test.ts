@@ -19,11 +19,14 @@ import { maxSteps } from "@/views/CalendarView/data/days";
 import { defaultWeekKey } from "@/views/Report/data/defaultWeek";
 import { defaultLastDay } from "@/views/CalendarView/data/window";
 import { DEFAULT_WEEKS, weekRowsEnding } from "@/views/CalendarView/data/window";
+import { type Agg, aggregatedPanel } from "@/views/TrendsView/data/aggregate";
 import { easyMarks } from "@/views/TrendsView/data/easyMarks";
 import { fitnessSeries } from "@/views/TrendsView/data/fitnessSeries";
 import { charts } from "@/views/TrendsView/data/paceSeries";
 import { raceMarks } from "@/views/TrendsView/data/raceMarks";
 import { trendPanels } from "@/views/TrendsView/data/panels";
+import { runDays } from "@/views/TrendsView/data/runDays";
+import { seDays } from "@/views/TrendsView/data/seDays";
 import { metresOf, workoutMarks } from "@/views/TrendsView/data/workoutMarks";
 import { weekEnding } from "../data/weekDates";
 import { Payload } from "../data/payload";
@@ -139,6 +142,45 @@ describe.skipIf(!slug)("the trends slice feeds every panel identically", () => {
 
   it("builds the same panels", () => {
     expect(json(trendPanels(trends!))).toBe(json(trendPanels(full!)));
+  });
+
+  it("builds the same per-day ledgers -- what forced trimRun to widen", () => {
+    /* `runDays` reads per-run `seconds`, the `volume_*` pair and the four
+       quality-detail fields, none of which the projection carried before
+       2026-09-02. A Map does not stringify, so the ENTRIES are compared. */
+    const gotRuns = [...runDays(trends!)];
+    expect(gotRuns.length).toBeGreaterThan(0);
+    expect(json(gotRuns)).toBe(json([...runDays(full!)]));
+
+    const gotSe = [...seDays(trends!)];
+    expect(gotSe.length).toBeGreaterThan(0);
+    expect(json(gotSe)).toBe(json([...seDays(full!)]));
+  });
+
+  it("builds the same AGGREGATED series, one non-default mode per quantity", () => {
+    /* The end-to-end half of the ledger guard: the whole aggregated panel --
+       points, cadence, title -- must not depend on which payload fed it. The
+       three cases cover both engines and all three quantities. */
+    const cases: [string, Agg][] = [
+      ["volume", { mode: "rolling", period: "monthly" }],
+      ["quality", { mode: "boundaries", period: "biweekly" }],
+      ["load", { mode: "rolling", period: "weekly" }],
+    ];
+    for (const [key, agg] of cases) {
+      const fromSlice = aggregatedPanel(
+        trendPanels(trends!).find((p) => p.key === key)!,
+        trends!,
+        agg,
+      );
+      const fromFull = aggregatedPanel(
+        trendPanels(full!).find((p) => p.key === key)!,
+        full!,
+        agg,
+      );
+      expect(fromSlice.points.length, key).toBeGreaterThan(0);
+      expect(json(fromSlice.points), key).toBe(json(fromFull.points));
+      expect(fromSlice.cadence, key).toBe(fromFull.cadence);
+    }
   });
 
   it("builds the same easy/recovery/long marks", () => {

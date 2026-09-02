@@ -1,6 +1,6 @@
 {
- "acwr_mech": 0.9781689944528029,
- "acwr_mech_on": "2026-08-29",
+ "acwr_mech": 0.939146209555999,
+ "acwr_mech_on": "2026-08-30",
  "ceiling_inputs": {
   "background_source": "baseline",
   "background_steps": 1665.0,
@@ -110,21 +110,18 @@
   },
   {
    "atl": 91.70044116881266,
-   "bg_trimp": null,
+   "bg_trimp": 17.516948831938873,
    "bg_trimp_hr_rest_source": "measured",
    "ceiling": 26033.875,
    "ceiling_source": "session-default",
-   "completeness": "in-progress",
+   "completeness": "full",
    "ctl": 87.29874520263947,
    "date": "2026-08-30",
-   "nonrun_steps": null,
-   "pct": null,
+   "pct": 80.58900462783822,
    "prescribed_run_seconds": 3172.0,
    "prescribed_run_steps": 9251.666666666666,
    "role": "race",
-   "run_steps": null,
-   "scored": false,
-   "total_steps": null,
+   "scored": true,
    "trimp": 124.16
   }
  ],
@@ -145,7 +142,7 @@
  },
  "flags": [
   {
-   "status": "fired",
+   "status": "clear",
    "token": "steps-data-incomplete"
   },
   {
@@ -155,15 +152,15 @@
   {
    "status": "clear",
    "token": "background-load-spike",
-   "why": "8,653 SE background against a 17,096 SE baseline = 0.51x (fires above 1.3x)"
+   "why": "14,010 SE background against a 17,096 SE baseline = 0.82x (fires above 1.3x)"
   },
   {
    "status": "clear",
    "token": "hidden-load",
-   "why": "mechanical A:C 0.98 against running-only 1.05 from our TRIMP (optimum 0.8-1.3)"
+   "why": "mechanical A:C 0.94 against running-only 1.05 from our TRIMP (optimum 0.8-1.3)"
   },
   {
-   "status": "not-evaluable",
+   "status": "clear",
    "token": "load-monotony"
   },
   {
@@ -180,25 +177,23 @@
    "token": "sleep-debt"
   },
   {
-   "status": "not-evaluable",
+   "status": "clear",
    "token": "strain-spike",
-   "why": "mechanical strain --, 4-week baseline 645,421 — needs both"
+   "why": "strain 531,959 SE against a 645,421 SE baseline = 0.82x (fires above 1.5x)"
   },
   {
    "status": "clear",
    "token": "form-suppressed",
-   "why": "running-only TSB -4 from our TRIMP (fires below -25) with mechanical A:C 0.98 (fires above 1.3)"
+   "why": "running-only TSB -4 from our TRIMP (fires below -25) with mechanical A:C 0.94 (fires above 1.3)"
   }
  ],
  "integrity": {
-  "earned": 170825.625,
-  "excluded": [
-   "2026-08-30"
-  ],
-  "scored_days": 6,
-  "total": 170853.0
+  "earned": 196859.5,
+  "excluded": [],
+  "scored_days": 7,
+  "total": 203157.5
  },
- "monotony_mech": null,
+ "monotony_mech": 2.618455640592462,
  "readiness": {
   "available": 21,
   "hrv_baseline": 70,
@@ -333,8 +328,8 @@
   ],
   "resting_hr_ceiling": 47
  },
- "shape_days_covered": 6,
+ "shape_days_covered": 7,
  "shape_days_needed": 7,
- "strain_mech": null,
+ "strain_mech": 531958.9018036631,
  "week_start": "2026-08-24"
 }

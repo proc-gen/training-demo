@@ -1,4 +1,4 @@
-import { cleanup } from "@testing-library/react";
+import { cleanup, fireEvent } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { wrap } from "@/test/render";
@@ -12,6 +12,19 @@ const pts = (...values: (number | null)[]): Point[] =>
 const markers = (c: HTMLElement) => c.querySelectorAll("circle.marker");
 const texts = (c: HTMLElement) =>
   [...c.querySelectorAll("text")].map((t) => t.textContent);
+
+/* The area wash under the series: a filled path that is neither the line nor a
+ * band. The band exclusions matter -- a `series-band` is also a filled path,
+ * and without them this selector turns ambiguous the first time a test
+ * combines the two. */
+const washes = (c: HTMLElement) =>
+  [...c.querySelectorAll("path")].filter(
+    (p) =>
+      p.getAttribute("fill") &&
+      !p.classList.contains("series-line") &&
+      !p.classList.contains("series-band") &&
+      !p.classList.contains("series-edge"),
+  );
 
 describe("LineChart", () => {
   it("draws one marker per point", () => {
@@ -45,10 +58,7 @@ describe("LineChart", () => {
 
   it("breaks the wash with it", () => {
     const { container } = wrap(<LineChart points={pts(40, 41, null, 43, 44)} />);
-    const washes = [...container.querySelectorAll("path")].filter(
-      (p) => p.getAttribute("fill") && !p.classList.contains("series-line"),
-    );
-    expect(washes).toHaveLength(2);
+    expect(washes(container)).toHaveLength(2);
   });
 
   it("draws no line or wash for a lone point between two gaps", () => {
@@ -179,9 +189,7 @@ describe("LineChart", () => {
     const base = parseFloat(
       container.querySelector("line.baseline")!.getAttribute("y1")!,
     );
-    const wash = [...container.querySelectorAll("path")].find(
-      (p) => p.getAttribute("fill") && !p.classList.contains("series-line"),
-    )!;
+    const wash = washes(container)[0]!;
     // `... L<x> <y> L<x> <y> Z` -- both closing corners sit on the baseline.
     const closes = [...wash.getAttribute("d")!.matchAll(/L[\d.-]+ ([\d.-]+)/g)]
       .map((m) => parseFloat(m[1]))
@@ -253,6 +261,116 @@ describe("LineChart", () => {
   it("takes its series colour from the domain, not the panel", () => {
     const { container } = wrap(<LineChart points={pts(1, 2)} color="var(--series-3)" />);
     expect(markers(container)[0].getAttribute("fill")).toBe("var(--series-3)");
+  });
+});
+
+describe("points-only mode and the band", () => {
+  /* The wellness panels: unconnected markers over a trailing-mean band. The
+   * band's edges are CALLER-COMPUTED -- this chart draws where they are and
+   * claims nothing about what they mean. */
+
+  const banded = (...values: (number | null)[]): Point[] =>
+    values.map((value, i) => ({
+      label: `7/${i + 1}`,
+      value,
+      band: value === null ? undefined : { lo: value - 4, hi: value + 4 },
+    }));
+
+  it("draws markers and NOTHING ELSE under pointsOnly with no band", () => {
+    const { container } = wrap(<LineChart points={pts(40, 44, 42)} pointsOnly />);
+    expect(markers(container)).toHaveLength(3);
+    expect(container.querySelectorAll("path")).toHaveLength(0);
+  });
+
+  it("keeps the endpoint label under pointsOnly", () => {
+    // The value at the right edge still belongs beside the mark it describes.
+    const { container } = wrap(<LineChart points={pts(40, 44, 42)} pointsOnly />);
+    const marks = [...markers(container)];
+    const last = marks[marks.length - 1];
+    const beside = [...container.querySelectorAll("text")].filter((t) => {
+      const dx = parseFloat(t.getAttribute("x")!) - parseFloat(last.getAttribute("cx")!);
+      return dx >= 0 && dx < 20;
+    });
+    expect(beside.map((t) => t.textContent)).toContain("42");
+  });
+
+  it("draws one band fill per run, and NO dashed edges", () => {
+    // The athlete struck the edges (2026-09-01): one band per chart needs no
+    // boundary to tell it from a neighbour, which is what the pace panels'
+    // edges are for.
+    const { container } = wrap(<LineChart points={banded(40, 44, 42)} pointsOnly />);
+    expect(container.querySelectorAll("path.series-band")).toHaveLength(1);
+    expect(container.querySelectorAll("path.series-edge")).toHaveLength(0);
+  });
+
+  it("wears the series colour at wash opacity, and is not a wash", () => {
+    const { container } = wrap(
+      <LineChart points={banded(40, 44, 42)} pointsOnly color="var(--series-3)" />,
+    );
+    const band = container.querySelector("path.series-band")!;
+    expect(band.getAttribute("fill")).toBe("var(--series-3)");
+    expect(band.getAttribute("opacity")).toBe("0.1");
+    expect(washes(container)).toHaveLength(0);
+  });
+
+  it("BREAKS THE BAND at a null slot, where the line would break", () => {
+    // A day nobody measured has no trailing mean drawn through it.
+    const { container } = wrap(
+      <LineChart points={banded(40, 41, null, 43, 44)} pointsOnly />,
+    );
+    expect(container.querySelectorAll("path.series-band")).toHaveLength(2);
+  });
+
+  it("draws no band for a lone banded point, but keeps its marker", () => {
+    // The sliver rule: a zero-width region reads as a rendering fault.
+    const { container } = wrap(
+      <LineChart points={banded(40, null, 42, null, 44)} pointsOnly />,
+    );
+    expect(container.querySelectorAll("path.series-band")).toHaveLength(0);
+    expect(markers(container)).toHaveLength(3);
+  });
+
+  it("feeds the band edges into the domain, so the band stays in the plot", () => {
+    /* Marks may never overflow their axis. The band here reaches far above and
+     * below every measured value; every coordinate of its path must still land
+     * inside the viewBox. */
+    const wide: Point[] = pts(40, 44, 42).map((p) => ({
+      ...p,
+      band: { lo: 10, hi: 90 },
+    }));
+    const { container } = wrap(<LineChart points={wide} pointsOnly height={130} />);
+    const d = container.querySelector("path.series-band")!.getAttribute("d")!;
+    const ys = [...d.matchAll(/[ML][\d.-]+ ([\d.-]+)/g)].map((m) => parseFloat(m[1]));
+    expect(ys.length).toBeGreaterThan(0);
+    for (const yv of ys) {
+      expect(yv).toBeGreaterThanOrEqual(-0.001);
+      expect(yv).toBeLessThanOrEqual(130.001);
+    }
+  });
+
+  it("names the band in the tooltip and states its RANGE, never a midpoint", () => {
+    const { container } = wrap(
+      <LineChart points={banded(40, 44, 42)} pointsOnly bandTitle="7-day avg" />,
+    );
+    const dot = markers(container)[0];
+    fireEvent.mouseEnter(dot.closest("g")!, { clientX: 1, clientY: 1 });
+    const text = document.body.textContent ?? "";
+    expect(text).toContain("7-day avg");
+    expect(text).toContain("36–44");
+  });
+
+  it("leaves an unbanded chart's tooltip alone", () => {
+    const { container } = wrap(<LineChart points={pts(40, 44)} bandTitle="7-day avg" />);
+    fireEvent.mouseEnter(markers(container)[0].closest("g")!, { clientX: 1, clientY: 1 });
+    expect(document.body.textContent ?? "").not.toContain("7-day avg");
+  });
+
+  it("draws band and line together when pointsOnly is not set", () => {
+    // Explicit prop, not inferred from band presence: a future caller may want
+    // both, and today's callers must not change behaviour by passing bands.
+    const { container } = wrap(<LineChart points={banded(40, 44, 42)} />);
+    expect(container.querySelectorAll("path.series-band")).toHaveLength(1);
+    expect(container.querySelectorAll("path.series-line")).toHaveLength(1);
   });
 });
 

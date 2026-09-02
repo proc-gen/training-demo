@@ -1888,14 +1888,14 @@
  "structure": {
   "checks": {
    "long_run_share": true,
-   "quality_days_met": false,
+   "quality_days_met": true,
    "rest_days_met": null,
    "volume_vs_plan": true
   },
-  "pct": 66.66666666666667,
+  "pct": 100.0,
   "why": {
    "long_run_share": "the long run was 0.0% of the running distance, against a 25% ceiling",
-   "quality_days_met": "3 quality day(s) against the 2 the plan has asked for so far, which is what a Race week asks for",
+   "quality_days_met": "every quality session the plan scheduled on 2026-08-25, 2026-08-28, 2026-08-30 was completed",
    "rest_days_met": "the plan schedules no rest day, so this check does not apply and left the denominator",
    "volume_vs_plan": "7:20:33 run against a plan of 7:30:00, tolerance 5%"
   }

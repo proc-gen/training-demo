@@ -96,6 +96,42 @@ describe("densify", () => {
     const got = densify([pt("2026-06-10"), pt("2026-06-12")], "day");
     expect(got[1].label).toBe("6/11");
   });
+
+  it("steps a fortnight cadence by 14 days", () => {
+    // 2026-07-27 and 2026-08-24 are fortnight starts two buckets apart.
+    const got = densify([pt("2026-07-27", 60), pt("2026-08-24", 70)], "fortnight");
+    expect(dates(got)).toEqual(["2026-07-27", "2026-08-10", "2026-08-24"]);
+    expect(values(got)).toEqual([60, null, 70]);
+  });
+
+  it("walks MONTH slots on the calendar, not on a day step", () => {
+    /* A month is 28-31 days, so no constant step can walk one -- the slots
+       come from `periods.ts`' own buckets, one per calendar month. */
+    const got = densify([pt("2026-05-01", 120), pt("2026-08-01", 150)], "month");
+    expect(dates(got)).toEqual(["2026-05-01", "2026-06-01", "2026-07-01", "2026-08-01"]);
+    expect(values(got)).toEqual([120, null, null, 150]);
+  });
+
+  it("walks month slots across a year boundary", () => {
+    const got = densify([pt("2027-12-01", 1), pt("2028-02-01", 2)], "month");
+    expect(dates(got)).toEqual(["2027-12-01", "2028-01-01", "2028-02-01"]);
+  });
+
+  it("walks YEAR slots the same way", () => {
+    const got = densify([pt("2025-01-01", 900), pt("2027-01-01", 1100)], "year");
+    expect(dates(got)).toEqual(["2025-01-01", "2026-01-01", "2027-01-01"]);
+    expect(values(got)).toEqual([900, null, 1100]);
+  });
+
+  it("REFUSES a calendar point off its period's canonical start", () => {
+    /* `boundarySeries` plots buckets at their starts; anything else means the
+       cadence and the data disagree, and the input comes back untouched --
+       the same refusal the fixed-step walk makes. */
+    const odd = [pt("2026-05-01"), pt("2026-06-15")];
+    expect(densify(odd, "month")).toEqual(odd);
+    const oddYear = [pt("2025-01-01"), pt("2026-07-01")];
+    expect(densify(oddYear, "year")).toEqual(oddYear);
+  });
 });
 
 describe("crossesYears", () => {
@@ -221,5 +257,21 @@ describe("slotAt", () => {
     expect(slotAt("2026-08-18", [{ date: "2026-08-16" }], "week")).toBeNull();
     expect(slotAt("2026-08-18", [], "week")).toBeNull();
     expect(slotAt("not-a-date", weekly, "week")).toBeNull();
+  });
+
+  it("steps by 14 on a fortnight cadence", () => {
+    const fortnights = ["2026-07-27", "2026-08-10", "2026-08-24"].map((d) => ({ date: d }));
+    expect(slotAt("2026-08-10", fortnights, "fortnight")).toBe(1);
+    expect(slotAt("2026-08-03", fortnights, "fortnight")).toBeCloseTo(0.5, 10);
+  });
+
+  it("REFUSES the calendar cadences -- their slots are not evenly spaced", () => {
+    /* A linear date->index map over month slots 28-31 days apart would place
+       every mark wrong while looking plausible. No producer places marks on a
+       month or year axis; the refusal is the existing no-pair-of-slots answer. */
+    const months = ["2026-05-01", "2026-06-01", "2026-07-01"].map((d) => ({ date: d }));
+    expect(slotAt("2026-06-01", months, "month")).toBeNull();
+    const years = ["2025-01-01", "2026-01-01"].map((d) => ({ date: d }));
+    expect(slotAt("2025-06-01", years, "year")).toBeNull();
   });
 });

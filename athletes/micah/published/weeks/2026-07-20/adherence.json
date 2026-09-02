@@ -1132,14 +1132,14 @@
  "structure": {
   "checks": {
    "long_run_share": true,
-   "quality_days_met": true,
+   "quality_days_met": null,
    "rest_days_met": true,
    "volume_vs_plan": true
   },
   "pct": 100.0,
   "why": {
    "long_run_share": "the long run was 23.2% of the running distance, against a 25% ceiling",
-   "quality_days_met": "0 quality day(s) against the 0 the plan has asked for so far, which is what a Recovery week asks for",
+   "quality_days_met": "the plan schedules no quality day, so this check does not apply and left the denominator",
    "rest_days_met": "the plan's scheduled rest day(s) 2026-07-20 were taken -- no run recorded on any of them",
    "volume_vs_plan": "6:47:31 run against a plan of 6:45:00, tolerance 5%"
   }

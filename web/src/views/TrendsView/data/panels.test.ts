@@ -90,6 +90,26 @@ describe("trendPanels", () => {
     expect(by.rhr).toBe("var(--series-3)");
   });
 
+  it("flags exactly the three SUMMABLE panels aggregable", () => {
+    /* Volume, quality share and total load are sums, so a rolling window or a
+     * coarser bucket is the same quantity over a different span. Everything
+     * else is a state sampled over time -- a "monthly total" of a resting
+     * heart rate is not a quantity -- and must never grow the controls. */
+    const p = payload({
+      weeks: {
+        "2026-07-27": week({
+          adherence: A(90, { miles: 50, seconds: 1000, quality_share: 0.1 }),
+          load: L({ integrity: { total: 158474 }, acwr_mech: 1.1 }),
+        }),
+      },
+      days: [{ date: "2026-07-27", hrv: "85" }] as unknown as Payload["days"],
+    });
+    const flagged = trendPanels(p)
+      .filter((x) => x.aggregable)
+      .map((x) => x.key);
+    expect(flagged).toEqual(["volume", "quality", "load"]);
+  });
+
   it("marks 1.30 as the A:C danger line", () => {
     const p = payload({
       weeks: { "2026-07-27": week({ load: L({ acwr_mech: 1.1 }) }) },
@@ -360,6 +380,71 @@ describe("the wellness series", () => {
     });
     expect(keys(p)).not.toContain("hrv");
   });
+
+  it("draws HRV and resting HR as POINTS, and names their band", () => {
+    /* Athlete's request, 2026-09-01: unconnected markers, with the faded area
+     * being the trailing mean +/-10% at the grading timeframe. */
+    const p = payload({
+      days: [
+        { date: "2026-08-14", resting_hr: "43", hrv: "70" },
+      ] as unknown as Payload["days"],
+    });
+    for (const key of ["rhr", "hrv"]) {
+      expect(panel(p, key).pointsOnly).toBe(true);
+      expect(panel(p, key).bandTitle).toBe("7-day mean ±10%");
+    }
+  });
+
+  it("bands every point at the trailing 7-day mean +/-10%, hand-computed", () => {
+    /* Recomputed BY HAND here, never via `baselineBands` -- the point is to
+     * catch the module and the wiring disagreeing. 41+45+43 = 129, /3 = 43:
+     * three measured days inside one 7-day window. */
+    const p = payload({
+      days: [
+        { date: "2026-08-13", hrv: "41" },
+        { date: "2026-08-14", hrv: "45" },
+        { date: "2026-08-15", hrv: "43" },
+      ] as unknown as Payload["days"],
+    });
+    const pts = panel(p, "hrv").points;
+    expect(pts[2].band!.lo).toBeCloseTo(43 * 0.9, 10);
+    expect(pts[2].band!.hi).toBeCloseTo(43 * 1.1, 10);
+    // The FIRST point is banded too: its window holds itself.
+    expect(pts[0].band!.lo).toBeCloseTo(41 * 0.9, 10);
+    expect(pts[0].band!.hi).toBeCloseTo(41 * 1.1, 10);
+  });
+
+  it("computes the band from FULL history, not the on-screen window", () => {
+    /* The Trends window is applied later, in TrendPanel -- so a date whose
+     * trailing week reaches earlier measurements must use them here, or the
+     * left edge of any window would forget its history. A value 7 days back is
+     * out; 6 days back is in. */
+    const p = payload({
+      days: [
+        { date: "2026-08-08", resting_hr: "50" },
+        { date: "2026-08-14", resting_hr: "40" },
+        { date: "2026-08-15", resting_hr: "40" },
+      ] as unknown as Payload["days"],
+    });
+    const pts = panel(p, "rhr").points;
+    const mid = (b: { lo: number; hi: number }) => (b.lo + b.hi) / 2;
+    expect(mid(pts[1].band!)).toBeCloseTo(45, 10); // 8/08 is 6 back: in
+    expect(mid(pts[2].band!)).toBeCloseTo(40, 10); // 8/08 is 7 back: out
+  });
+
+  it("gives SLEEP no band and no points-only mode", () => {
+    // The athlete named HRV and resting HR; sleep keeps its line and its
+    // 7-hour reference.
+    const p = payload({
+      days: [
+        { date: "2026-07-27", sleep_hours: "7.5" },
+        { date: "2026-07-28", sleep_hours: "8.0" },
+      ] as unknown as Payload["days"],
+    });
+    const sleep = panel(p, "sleep");
+    expect(sleep.pointsOnly ?? false).toBe(false);
+    for (const pt of sleep.points) expect(pt.band ?? null).toBeNull();
+  });
 });
 
 describe("over the committed payload", () => {
@@ -517,6 +602,26 @@ describe("over the committed payload", () => {
       expect(pt.value).toBe(facts.miles);
     }
     expect(volume.points.length).toBeGreaterThan(2);
+  });
+
+  it("bands EXACTLY the two wellness point panels, and every band is sane", () => {
+    /* Both directions over the real tree: hrv and rhr carry a finite band with
+     * lo < hi on every point, and no other panel carries one anywhere. */
+    if (!PUBLISHED) return;
+    const bandedKeys = new Set(["hrv", "rhr"]);
+    for (const p of trendPanels(PUBLISHED)) {
+      for (const pt of p.points) {
+        if (!bandedKeys.has(p.key)) {
+          expect(pt.band ?? null).toBeNull();
+          continue;
+        }
+        expect(pt.band).toBeDefined();
+        expect(Number.isFinite(pt.band!.lo)).toBe(true);
+        expect(Number.isFinite(pt.band!.hi)).toBe(true);
+        expect(pt.band!.lo).toBeLessThan(pt.band!.hi);
+      }
+      if (bandedKeys.has(p.key)) expect(p.points.length).toBeGreaterThan(0);
+    }
   });
 });
 

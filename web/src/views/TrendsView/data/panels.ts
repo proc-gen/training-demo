@@ -22,6 +22,7 @@ import type { Payload } from "@/lib/data/payload";
 import { shortDate } from "@/lib/data/format";
 import { hasRuns, weekKeys } from "@/lib/data/weeks";
 import type { Point } from "@/lib/ux/charts/LineChart";
+import { baselineBands } from "./baselineBand";
 import { isIncomplete, isLived } from "./coverage";
 import { type FitnessDay, fitnessSeries } from "./fitnessSeries";
 import { CAT, paceSeries } from "./paceSeries";
@@ -172,14 +173,26 @@ export function drawn(p: TrendPoint): boolean {
  * x axis, and a weekly series stepped daily gets six empty slots between every
  * pair of points. A default would make that a silent mistake in whichever panel
  * somebody adds next.
+ *
+ * `fortnight`, `month` and `year` arrived with the aggregated series
+ * (2026-09-02) and only `aggregatedPanel` produces them. The first is a fixed
+ * 14-day step; the calendar two are NOT fixed-length in days, which is why
+ * `densify` walks their ordinals instead of a step — see `axis.ts`.
  */
-export type Cadence = "day" | "week";
+export type Cadence = "day" | "week" | "fortnight" | "month" | "year";
 
 export type Panel = {
   key: string;
   title: string;
   cadence: Cadence;
   points: TrendPoint[];
+  /** Whether `aggregatedPanel` can re-express this series — a rolling total or
+   *  a coarser calendar bucket. Set on exactly the three SUMMABLE series
+   *  (volume, quality share, total load): the wellness and fitness panels are
+   *  states sampled over time, and a "monthly total" of a resting heart rate
+   *  is not a quantity. `TrendsView` passes the aggregation controls only where
+   *  this is set — the `UnitToggle` rule: a one-option control cannot be used. */
+  aggregable?: boolean;
   /** Present on a MULTI-SERIES panel, and what makes it one. On a GROUPED panel
    *  it is the DEFAULT group's series, so the panel still declares one. */
   series?: SeriesSpec[];
@@ -218,6 +231,12 @@ export type Panel = {
   places?: number;
   zero?: boolean;
   reference?: number | null;
+  /** Markers only, no connecting line -- the wellness panels, whose points
+   *  carry a `band` instead. Passed straight through to `LineChart`. */
+  pointsOnly?: boolean;
+  /** What the tooltip calls a point's band. Worded HERE, beside the code that
+   *  computes the band, so `lib/ux` never learns what it means. */
+  bandTitle?: string;
   seriesTitle: string;
   format: (v: number) => string;
 };
@@ -266,6 +285,7 @@ export function trendPanels(payload: Payload): Panel[] {
       key: "volume",
       title: "Weekly volume",
       cadence: "week",
+      aggregable: true,
       points: ran.map((k) => ({
         date: k,
         label: shortDate(k),
@@ -303,6 +323,7 @@ export function trendPanels(payload: Payload): Panel[] {
       key: "quality",
       title: "Quality share of weekly time",
       cadence: "week",
+      aggregable: true,
       points: ran.map((k) => {
         const facts = (payload.weeks[k].adherence?.facts ?? {}) as {
           quality_share?: number;
@@ -337,6 +358,7 @@ export function trendPanels(payload: Payload): Panel[] {
       key: "load",
       title: "Total load",
       cadence: "week",
+      aggregable: true,
       points: whole.map((k) => ({
         date: k,
         label: shortDate(k),
@@ -435,17 +457,28 @@ export function trendPanels(payload: Payload): Panel[] {
    * `wellness.resting_hr_baseline_band` is a published measurement, but the
    * readiness check is a one-sided rise and not a band test, so drawing an edge
    * of it would state a criterion nothing scores. */
+  /* POINTS, NOT A LINE, WITH THE GRADING BASELINE BEHIND THEM (2026-09-01,
+   * athlete's request): the measurements draw as unconnected markers and the
+   * faded area is the trailing 7-day mean +/-10% -- the grader's own
+   * timeframe, and for HRV the band's lower edge is the readiness floor
+   * itself. Computed over the FULL series here, before the window is applied,
+   * so the left edge of any on-screen window keeps its trailing history. */
   const rhr = (payload.days ?? []).filter((d) => n(d.resting_hr) !== null);
   if (rhr.length) {
+    const series = rhr.map((d) => ({ date: d.date, value: n(d.resting_hr)! }));
+    const bands = baselineBands(series);
     panels.push({
       key: "rhr",
       title: "Resting heart rate",
       cadence: "day",
-      points: rhr.map((d) => ({
-        date: d.date,
-        label: shortDate(d.date),
-        value: n(d.resting_hr),
+      points: series.map((s) => ({
+        date: s.date,
+        label: shortDate(s.date),
+        value: s.value,
+        band: bands.get(s.date),
       })),
+      pointsOnly: true,
+      bandTitle: "7-day mean ±10%",
       seriesTitle: "bpm",
       color: "var(--series-3)",
       format: (v) => num(v) + " bpm",
@@ -473,15 +506,21 @@ export function trendPanels(payload: Payload): Panel[] {
 
   const hrv = (payload.days ?? []).filter((d) => n(d.hrv) !== null);
   if (hrv.length) {
+    // Same treatment as resting HR above -- see the comment there.
+    const series = hrv.map((d) => ({ date: d.date, value: n(d.hrv)! }));
+    const bands = baselineBands(series);
     panels.push({
       key: "hrv",
       title: "HRV",
       cadence: "day",
-      points: hrv.map((d) => ({
-        date: d.date,
-        label: shortDate(d.date),
-        value: n(d.hrv),
+      points: series.map((s) => ({
+        date: s.date,
+        label: shortDate(s.date),
+        value: s.value,
+        band: bands.get(s.date),
       })),
+      pointsOnly: true,
+      bandTitle: "7-day mean ±10%",
       seriesTitle: "ms",
       color: "var(--series-3)",
       format: (v) => num(v) + " ms",

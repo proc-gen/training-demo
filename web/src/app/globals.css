@@ -1042,6 +1042,19 @@ details.prose > summary {
   margin-left: auto;
 }
 
+/* THE AGGREGATION ROW: the mode and period dropdowns for the three summable
+   series — dropdowns, not pills, the athlete's instruction (2026-09-02). Its
+   own row rather than a `.series-controls` tenant, because those panels are
+   single-series and render no series row. `align-items: end` for the reason
+   `.trend-controls` states: a `.field` puts its label above its control. */
+.agg-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 1rem;
+  margin: 0 0 0.7rem;
+}
+
 .sm-title {
   font-size: 0.95rem;
   font-weight: 600;

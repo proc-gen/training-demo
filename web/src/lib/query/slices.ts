@@ -200,22 +200,46 @@ export function weekSlice(db: Db, start: string): unknown {
 
 // --------------------------------------------------------------------- trends
 
-/** Per-run fields the three mark builders read.
+/** Per-run fields the three mark builders and the day ledger read.
  *
  * `detail.sets` is kept WHOLE rather than projected inside: `workoutMarks`
  * walks each set's rep rows through `workReps`, so trimming within a set would
  * be an allowlist over a shape that is already a union of five session kinds.
+ *
+ * `seconds`, the `volume_*` pair and the four quality-detail fields arrived
+ * with the aggregated series (2026-09-02): `runDays` re-sums the grader's own
+ * per-run quantities at day resolution, and its `qualitySecondsOf` port reads
+ * `core_seconds` / `from_prescription` plus each embedded span segment's `dur`
+ * — the ONE field of a segment it reads, which is why the spans are projected
+ * to `{dur}` rows rather than kept whole. `slices.test.ts` holds the ledger
+ * built from this projection to the one built from the full payload.
  */
 function trimRun(run: Record<string, unknown>) {
   const detail = run.detail as Record<string, unknown> | null | undefined;
+  const durs = (span: unknown) =>
+    Array.isArray(span)
+      ? span.map((s) => ({ dur: (s as Record<string, unknown> | null)?.dur }))
+      : span;
   return {
     date: run.date,
     role: run.role,
     pace: run.pace,
     miles: run.miles,
+    seconds: run.seconds,
+    volume_miles: run.volume_miles,
+    volume_seconds: run.volume_seconds,
     distance_source: run.distance_source,
     treadmill_mph: run.treadmill_mph,
-    detail: detail ? { race: detail.race, sets: detail.sets } : detail,
+    detail: detail
+      ? {
+          race: detail.race,
+          sets: detail.sets,
+          core_seconds: detail.core_seconds,
+          from_prescription: detail.from_prescription,
+          quality_block: durs(detail.quality_block),
+          progression: durs(detail.progression),
+        }
+      : detail,
   };
 }
 

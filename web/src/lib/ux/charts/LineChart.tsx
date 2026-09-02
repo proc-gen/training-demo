@@ -17,6 +17,15 @@ export type Point = {
    * dates. When no point carries one the chart thins the labels with
    * `labelStride`, which is what every caller got before the flag existed. */
   tick?: boolean;
+  /** A per-point band, drawn as a washed region under the series --
+   * MultiLineChart's `MultiValue` band on a single-series chart, minus the
+   * dashed edges (athlete's call: one band per chart needs no boundary).
+   *
+   * COMPUTED BY THE CALLER, both edges: this library never learns what the
+   * band means or that it is symmetric, the same rule that keeps which dates
+   * deserve a label out of here. The Trends view passes a trailing mean
+   * +/-10%; the chart only draws where it stops. */
+  band?: { lo: number; hi: number } | null;
 };
 
 /** The space around the plot, in viewBox units. */
@@ -53,6 +62,8 @@ export function LineChart({
   title = "value",
   format,
   label,
+  pointsOnly = false,
+  bandTitle = "band",
 }: {
   points: Point[];
   width?: number;
@@ -69,6 +80,13 @@ export function LineChart({
   title?: string;
   format?: (v: number) => string;
   label?: string;
+  /** Markers only -- no connecting line and no area wash. EXPLICIT rather than
+   *  inferred from band presence, so a caller can someday want band+line
+   *  without a silent behaviour change on everyone already passing bands. */
+  pointsOnly?: boolean;
+  /** What the tooltip calls a point's band -- caller-supplied wording, since
+   *  only the caller knows what the band means. */
+  bandTitle?: string;
 }) {
   const m = margin ?? DEFAULT_MARGIN;
   const iw = width - m.l - m.r;
@@ -86,8 +104,13 @@ export function LineChart({
   };
   if (!measured.length) return <svg {...svgProps} />;
 
+  /* Band edges join the domain: both `lineScale` bounds are ticks, so this is
+     what keeps a band inside the plot -- marks may never overflow their axis. */
   const { lo, hi, ticks } = lineScale(
-    measured.map((p) => p.value),
+    points.flatMap((p) => [
+      ...(p.value !== null ? [p.value] : []),
+      ...(p.band ? [p.band.lo, p.band.hi] : []),
+    ]),
     { zero, count: tickCount(ih) },
   );
   const y = (v: number) => m.t + ih - ((v - lo) / (hi - lo)) * ih;
@@ -112,6 +135,24 @@ export function LineChart({
   const pathOf = (seg: number[]) =>
     seg
       .map((i, k) => (k ? "L" : "M") + x(i) + " " + y(points[i].value as number))
+      .join(" ");
+
+  /* Runs of consecutive BANDED slots, accumulated by the same rule as the
+     value runs: a slot nobody measured carries no band, so a gap breaks the
+     band exactly where it breaks the line. */
+  const bandRuns: number[][] = [];
+  let bandRun: number[] = [];
+  points.forEach((p, i) => {
+    if (p.band == null) {
+      if (bandRun.length) bandRuns.push(bandRun);
+      bandRun = [];
+    } else bandRun.push(i);
+  });
+  if (bandRun.length) bandRuns.push(bandRun);
+
+  const bandPathOf = (seg: number[], end: "lo" | "hi") =>
+    seg
+      .map((i, k) => (k ? "L" : "M") + x(i) + " " + y(points[i].band![end]))
       .join(" ");
 
   const lastIndex = runs[runs.length - 1][runs[runs.length - 1].length - 1];
@@ -159,23 +200,53 @@ export function LineChart({
       {/* The axis itself, over the gridline that shares its place. */}
       <line className="baseline" x1={m.l} x2={m.l + iw} y1={floor} y2={floor} />
 
-      {runs.map((seg, i) =>
-        /* A run of one has no line and no area -- a zero-width sliver of wash
-           reads as a rendering fault. Its marker is drawn below like any other. */
+      {/* BANDS FIRST, under everything that is a measurement --
+          MultiLineChart's order. The FILL ALONE, no dashed edges: the athlete
+          struck them (2026-09-01), and unlike the pace panels there is one
+          band per chart, so nothing needs an edge to tell neighbours apart.
+          A run of one draws nothing, the sliver rule below. */}
+      {bandRuns.map((seg, i) =>
         seg.length > 1 ? (
           <path
-            key={"a" + i}
-            d={`${pathOf(seg)} L${x(seg[seg.length - 1])} ${floor} L${x(seg[0])} ${floor} Z`}
+            key={"bb" + i}
+            className="series-band"
+            d={`${bandPathOf(seg, "hi")} ${[...seg]
+              .reverse()
+              .map((j) => "L" + x(j) + " " + y(points[j].band!.lo))
+              .join(" ")} Z`}
             fill={color}
             opacity={0.1}
           />
         ) : null,
       )}
-      {runs.map((seg, i) =>
-        seg.length > 1 ? (
-          <path key={"l" + i} className="series-line" d={pathOf(seg)} stroke={color} />
-        ) : null,
-      )}
+
+      {pointsOnly
+        ? null
+        : runs.map((seg, i) =>
+            /* A run of one has no line and no area -- a zero-width sliver of
+               wash reads as a rendering fault. Its marker is drawn below like
+               any other. */
+            seg.length > 1 ? (
+              <path
+                key={"a" + i}
+                d={`${pathOf(seg)} L${x(seg[seg.length - 1])} ${floor} L${x(seg[0])} ${floor} Z`}
+                fill={color}
+                opacity={0.1}
+              />
+            ) : null,
+          )}
+      {pointsOnly
+        ? null
+        : runs.map((seg, i) =>
+            seg.length > 1 ? (
+              <path
+                key={"l" + i}
+                className="series-line"
+                d={pathOf(seg)}
+                stroke={color}
+              />
+            ) : null,
+          )}
 
       {reference !== null && reference !== undefined && reference >= lo && reference <= hi ? (
         <line
@@ -199,6 +270,12 @@ export function LineChart({
               <>
                 <b>{p.label}</b>
                 <TipRow k={title} v={fmt(p.value as number)} />
+                {/* The RANGE, never a midpoint -- what a reader wants off a
+                    band is where it stops, and the caller's lower edge may be
+                    a real criterion (the HRV floor is). */}
+                {p.band ? (
+                  <TipRow k={bandTitle} v={`${fmt(p.band.lo)}–${fmt(p.band.hi)}`} />
+                ) : null}
               </>
             )}
           />

@@ -18,9 +18,21 @@
    },
    {
     "date": "2026-09-01",
+    "key": "2026-09-01-pm-wu",
+    "prescribed": "warmup for the 4x3x200m",
+    "role": "volume_only"
+   },
+   {
+    "date": "2026-09-01",
     "key": "2026-09-01-pm",
     "prescribed": "PM: 4x3x200m w/ 200m jog between reps and 400m between sets",
     "role": "repetition"
+   },
+   {
+    "date": "2026-09-01",
+    "key": "2026-09-01-pm-cd",
+    "prescribed": "cooldown for the 4x3x200m",
+    "role": "volume_only"
    },
    {
     "date": "2026-09-02",
