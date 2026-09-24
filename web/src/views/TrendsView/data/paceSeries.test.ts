@@ -750,27 +750,33 @@ describe("the executed workouts", () => {
     }
   });
 
-  has(P)("HOLDS THE EXCEPTION AT SET LEVEL, which is what the plan needs", () => {
-    /* 08-14 and 08-21 author the sprints and the sub-T as two RUNS. From
-       2026-09-04 the plan authors them as ONE run with two sets, so a rule that
-       keyed on the run's role would work today and quietly stop working in a
-       fortnight. Nothing here looks at a run as a whole -- asserted by finding
-       the one-run form in the plan and checking that only its sub-T half is a
-       mode this panel draws. */
-    const mixed = weekKeys(P!).flatMap((k) => {
-      const a = P!.weeks[k]?.adherence;
-      /* BOTH LISTS. `results` is what was measured and `planned` is what the
-         plan states -- and the one-run form is currently all in the second,
-         because those weeks have not been run. That is the point: the rule has
-         to be right before the sessions arrive, not corrected afterwards. */
-      return [...(a?.results ?? []), ...(a?.planned ?? [])].filter((r) => {
-        const modes = new Set(
-          [...(r.detail?.sets ?? []), ...(r.planned?.sets ?? [])].map((s) => s.mode),
-        );
-        return modes.has("neuromuscular") && modes.has("subt");
+  /* Every run, measured or planned, that carries BOTH a sprint set and a sub-T
+     set -- the one-run form of a hill-sprint day. */
+  const mixed = !P
+    ? []
+    : weekKeys(P).flatMap((k) => {
+        const a = P.weeks[k]?.adherence;
+        return [...(a?.results ?? []), ...(a?.planned ?? [])].filter((r) => {
+          const modes = new Set(
+            [...(r.detail?.sets ?? []), ...(r.planned?.sets ?? [])].map((s) => s.mode),
+          );
+          return modes.has("neuromuscular") && modes.has("subt");
+        });
       });
-    });
-    expect(mixed.length, "the one-run form has gone from the plan").toBeGreaterThan(0);
+
+  has(mixed.length > 0)("HOLDS THE EXCEPTION AT SET LEVEL, which is what the plan needs", () => {
+    /* 08-14 and 08-21 author the sprints and the sub-T as two RUNS. The plan
+       authored 09-04 and 09-11 as ONE run with two sets, so a rule that keyed
+       on the run's role would have worked on the record and quietly failed on
+       the plan. Nothing here looks at a run as a whole.
+
+       GATED ON THE FORM BEING PRESENT, NOT ASSERTED. It was a PLAN shape: on
+       reconciliation each of those days was re-authored as separate rows
+       (`-pm-wu`, `-pm-hills`, `-pm`, `-pm-cd`) and 09-18 was authored sub-T
+       alone, so requiring it here went red on 2026-09-23 with nothing wrong. The
+       rule is pinned synthetically in `workoutMarks.test.ts` ("ignores every mode
+       outside the two it was asked for"); this case only confirms agreement with
+       the corpus whenever the plan carries the form again. */
     for (const run of mixed) {
       const modes = [...(run.detail?.sets ?? []), ...(run.planned?.sets ?? [])].map(
         (s) => s.mode,

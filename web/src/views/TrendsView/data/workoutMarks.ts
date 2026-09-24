@@ -38,9 +38,10 @@
  * exception for free: a run carrying hill sprints and a sub-T block yields the
  * sub-T mark and ignores the sprints, because the sprints are a `neuromuscular`
  * set and this only ever looks at the two modes it is asked for. 2026-08-14 and
- * 08-21 author those as separate runs, but 2026-09-04, 09-11 and 09-18 author
- * them as ONE run with two sets -- so that has to work at set level, and it is a
- * different question from which blocks average together.
+ * 08-21 author those as separate runs; the PLAN authored 2026-09-04 and 09-11 as
+ * ONE run with two sets until each was run and reconciled into separate rows --
+ * so it has to work at set level in whichever form a week is currently in, and
+ * that is a different question from which blocks average together.
  */
 
 import type { Payload, RepRow, RepSet, RunResult } from "@/lib/data/payload";

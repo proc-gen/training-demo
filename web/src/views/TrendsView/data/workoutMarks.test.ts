@@ -257,7 +257,11 @@ describe("workoutMarks", () => {
   it("ignores every mode outside the two it was asked for", () => {
     /* The athlete's scope: *"only focus on sub-t and repetition paces for
        now."* This is also what delivers the hill-sprint exception -- a run
-       carrying both yields the sub-T mark and nothing else. */
+       carrying both yields the sub-T mark and nothing else -- AND IT IS THE PIN
+       FOR IT. The one-run form (sprints and sub-T as two sets on one run) was a
+       plan shape that reconciliation replaced with separate rows, so the corpus
+       case in `paceSeries.test.ts` is gated on the form being present and this
+       synthetic run is what holds the rule at set level. */
     const marks = workoutMarks(
       payloadOf(
         runOf({

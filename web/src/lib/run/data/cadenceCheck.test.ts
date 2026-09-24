@@ -47,6 +47,8 @@ function hasSprintSet(r: RunResult): boolean {
 describe("the sprint cadence verdict over the committed tree", () => {
   const runs = allRuns();
   const asked = runs.filter(({ run }) => !!run.cadence_check);
+  /* A sprint session still on the PLAN: it carries the set and no verdict yet. */
+  const planned = runs.filter(({ run }) => hasSprintSet(run) && !run.cadence_check);
 
   has(P)("reaches every neuromuscular session that was RUN", () => {
     /* The role, which is how every 2025 session and the three 2026 hill-sprint
@@ -137,16 +139,19 @@ describe("the sprint cadence verdict over the committed tree", () => {
     }
   });
 
-  has(P)("a PLANNED sprint session states the line it will be judged on", () => {
+  has(planned.length > 0)("a PLANNED sprint session states the line it will be judged on", () => {
     /* The verdict needs a file and a planned run has none, so what a session on
        the plan gets is the TARGET -- composed in Python beside the band it comes
        from. Both sides read `spec_sprint_rep_seconds`, so a session cannot be
-       shown a line it will not be judged against. */
-    const planned = runs.filter(
-      ({ run }) => hasSprintSet(run) && !run.cadence_check,
-    );
-    expect(planned.length, "no planned sprint sessions in the tree")
-      .toBeGreaterThan(0);
+       shown a line it will not be judged against.
+
+       GATED ON THE PLAN CARRYING ONE, NOT ASSERTED. A planned shape is transient
+       by construction -- the week the athlete runs the session it gains a verdict
+       and leaves this filter -- and requiring it here went red on 2026-09-23 the
+       moment the last sprint session on the plan was run. The composition rule
+       is pinned where it lives, in `tests/test_prescription.py`; this case is an
+       AGREEMENT check that it reached the page, and a skip reads "nothing on the
+       plan to check" rather than a lost guard. */
     for (const { week, run } of planned) {
       const sets = (run.planned?.sets ?? []).filter(
         (s) => s.mode === "neuromuscular",
