@@ -3,6 +3,9 @@
  "load_error": null,
  "manifest": {
   "phase": "General Prep",
+  "rest_days": [
+   "2026-06-22"
+  ],
   "runs": [
    {
     "date": "2026-06-23",
@@ -20,13 +23,13 @@
     "date": "2026-06-24",
     "key": "2026-06-24-b",
     "prescribed": "barefoot jogging",
-    "role": "volume_only"
+    "role": "easy"
    },
    {
     "date": "2026-06-25",
     "key": "2026-06-25-wu",
     "prescribed": "warmup",
-    "role": "volume_only"
+    "role": "warmup"
    },
    {
     "date": "2026-06-25",
@@ -44,25 +47,19 @@
     "date": "2026-06-25",
     "key": "2026-06-25-cd",
     "prescribed": "cooldown",
-    "role": "volume_only"
+    "role": "cooldown"
    },
    {
     "date": "2026-06-26",
     "key": "2026-06-26-1",
     "prescribed": "first fragment of the 45 min easy",
-    "role": "volume_only"
+    "role": "easy"
    },
    {
     "date": "2026-06-26",
     "key": "2026-06-26",
     "prescribed": "45 min easy",
     "role": "easy"
-   },
-   {
-    "date": "2026-06-26",
-    "key": "2026-06-26-x",
-    "prescribed": "stray 104-second evening fragment (travel day)",
-    "role": "volume_only"
    },
    {
     "date": "2026-06-27",

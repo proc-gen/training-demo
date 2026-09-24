@@ -3,24 +3,25 @@
  "load_error": null,
  "manifest": {
   "phase": "Rebuild",
+  "rest_days": [],
   "runs": [
    {
     "date": "2026-06-16",
     "key": "2026-06-16-wu",
     "prescribed": "warmup",
-    "role": "volume_only"
+    "role": "warmup"
    },
    {
     "date": "2026-06-16",
     "key": "2026-06-16",
-    "prescribed": "unplanned -- work block 1 of the five-file session (7:34 at HR 168)",
-    "role": "subt"
+    "prescribed": "unplanned -- 1 mile time trial, then recovery on a watch nobody stopped (7:34 at HR 168)",
+    "role": "time_trial"
    },
    {
     "date": "2026-06-16",
     "key": "2026-06-16-jog",
     "prescribed": "jog between work blocks",
-    "role": "volume_only"
+    "role": "easy"
    },
    {
     "date": "2026-06-16",
@@ -32,7 +33,7 @@
     "date": "2026-06-16",
     "key": "2026-06-16-cd",
     "prescribed": "cooldown",
-    "role": "volume_only"
+    "role": "cooldown"
    },
    {
     "date": "2026-06-17",

@@ -3,6 +3,7 @@
  "load_error": null,
  "manifest": {
   "phase": "Return to Normal",
+  "rest_days": [],
   "runs": [
    {
     "date": "2025-06-02",
@@ -26,7 +27,7 @@
     "date": "2025-06-03",
     "key": "2025-06-03-wu",
     "prescribed": "warmup for the strides",
-    "role": "volume_only"
+    "role": "warmup"
    },
    {
     "date": "2025-06-03",
@@ -38,7 +39,7 @@
     "date": "2025-06-03",
     "key": "2025-06-03-cd",
     "prescribed": "cooldown",
-    "role": "volume_only"
+    "role": "cooldown"
    },
    {
     "date": "2025-06-04",

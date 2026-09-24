@@ -1,5 +1,6 @@
 import type { Loaded } from "@/lib/data/payload";
 import { CalendarView } from "./CalendarView";
+import type { CalendarMode } from "./data/mode";
 
 /* One calendar window's slice, unpacked into `CalendarView`'s props.
  *
@@ -17,10 +18,23 @@ import { CalendarView } from "./CalendarView";
  */
 export function CalendarRoute({
   end,
+  mode,
+  weeks,
+  today,
   loaded,
 }: {
   /** The window's last day -- a Sunday, normalised from `?end=`. */
   end: string;
+  /** View or Plan, normalised from `?mode=` by whichever route read the URL. */
+  mode: CalendarMode;
+  /** How many weeks of the slice to draw, clamped from `?weeks=`. It does NOT
+   *  reach `loaded`: the server sends the widest window whatever it says. */
+  weeks: number;
+  /** The date Plan mode marks up to. Read ONCE, on the server, by the route
+   *  above -- see `data/dayDone.ts` for why it is not read in the browser. It
+   *  rides beside the payload like `maxSteps`, being a fact the slice does not
+   *  carry. */
+  today: string | null;
   loaded: (Loaded & { ok: true; maxSteps: number }) | { ok: false; error: string };
 }) {
   if (!loaded.ok) {
@@ -37,11 +51,20 @@ export function CalendarRoute({
       /* SAME REASON AS `WeekRoute`'s. Moving the anchor renders this component
          at the same position, so React reconciles by type and `selected` would
          survive the navigation -- opening a day card for a date the new window
-         does not contain. */
+         does not contain.
+
+         NEITHER THE MODE NOR THE WEEK COUNT IS IN THE KEY, and for one reason:
+         `selected` must survive both. Coming back to View shows the day that
+         was open, and widening the grid keeps it open too -- a day card that
+         closed because the reader asked for two more weeks would be the reset
+         `?weeks=` exists to stop, one state along. */
       key={end}
       payload={loaded.payload}
       lastDay={end}
       maxSteps={loaded.maxSteps}
+      mode={mode}
+      weeks={weeks}
+      today={today}
     />
   );
 }

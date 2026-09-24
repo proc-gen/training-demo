@@ -3,6 +3,7 @@
  "load_error": null,
  "manifest": {
   "phase": "General Prep",
+  "rest_days": [],
   "runs": [
    {
     "date": "2026-08-24",
@@ -20,7 +21,7 @@
     "date": "2026-08-25",
     "key": "2026-08-25-pm-wu",
     "prescribed": "warmup for the 12x600m",
-    "role": "volume_only"
+    "role": "warmup"
    },
    {
     "date": "2026-08-25",
@@ -32,7 +33,7 @@
     "date": "2026-08-25",
     "key": "2026-08-25-pm-cd",
     "prescribed": "cooldown for the 12x600m",
-    "role": "volume_only"
+    "role": "cooldown"
    },
    {
     "date": "2026-08-26",
@@ -68,7 +69,7 @@
     "date": "2026-08-30",
     "key": "2026-08-30-wu",
     "prescribed": "warmup for the Local 5k",
-    "role": "volume_only"
+    "role": "warmup"
    },
    {
     "date": "2026-08-30",
@@ -80,7 +81,7 @@
     "date": "2026-08-30",
     "key": "2026-08-30-cd",
     "prescribed": "cooldown for the Local 5k",
-    "role": "volume_only"
+    "role": "cooldown"
    }
   ],
   "week_start": "2026-08-24",

@@ -8,7 +8,56 @@
   "long_run_share": 0,
   "miles": 0.0,
   "non_run_days": [],
+  "plan_miles_unpriceable": [
+   [
+    "2026-10-05",
+    "2026-10-05",
+    "30 min recovery"
+   ],
+   [
+    "2026-10-06",
+    "2026-10-06-am",
+    "AM: 30 min recovery"
+   ],
+   [
+    "2026-10-06",
+    "2026-10-06-pm",
+    "PM: 60 min recovery"
+   ],
+   [
+    "2026-10-07",
+    "2026-10-07",
+    "60-70 min easy"
+   ],
+   [
+    "2026-10-08",
+    "2026-10-08",
+    "60-70 min easy"
+   ],
+   [
+    "2026-10-09",
+    "2026-10-09-am",
+    "AM: 30 min recovery"
+   ],
+   [
+    "2026-10-09",
+    "2026-10-09-pm",
+    "PM: 60 min recovery"
+   ],
+   [
+    "2026-10-10",
+    "2026-10-10",
+    "30 min recovery"
+   ],
+   [
+    "2026-10-11",
+    "2026-10-11",
+    "90 min easy/long"
+   ]
+  ],
   "plan_unpriceable": [],
+  "planned_miles": null,
+  "planned_miles_week": null,
   "planned_seconds": [
    27000.0,
    27000.0
@@ -19,10 +68,12 @@
   ],
   "prescribed_dates": 7,
   "prescribed_dates_due": 0,
+  "projected_miles": 0.0,
   "projected_seconds": 27000.0,
   "quality_days": 0,
   "quality_seconds": 0,
   "quality_share": 0,
+  "remaining_planned_miles": 0.0,
   "remaining_planned_seconds": 27000.0,
   "rest_days": 0,
   "running_days": 0,
@@ -52,7 +103,56 @@
   "long_run_share": 0,
   "miles": 0.0,
   "non_run_days": [],
+  "plan_miles_unpriceable": [
+   [
+    "2026-10-05",
+    "2026-10-05",
+    "30 min recovery"
+   ],
+   [
+    "2026-10-06",
+    "2026-10-06-am",
+    "AM: 30 min recovery"
+   ],
+   [
+    "2026-10-06",
+    "2026-10-06-pm",
+    "PM: 60 min recovery"
+   ],
+   [
+    "2026-10-07",
+    "2026-10-07",
+    "60-70 min easy"
+   ],
+   [
+    "2026-10-08",
+    "2026-10-08",
+    "60-70 min easy"
+   ],
+   [
+    "2026-10-09",
+    "2026-10-09-am",
+    "AM: 30 min recovery"
+   ],
+   [
+    "2026-10-09",
+    "2026-10-09-pm",
+    "PM: 60 min recovery"
+   ],
+   [
+    "2026-10-10",
+    "2026-10-10",
+    "30 min recovery"
+   ],
+   [
+    "2026-10-11",
+    "2026-10-11",
+    "90 min easy/long"
+   ]
+  ],
   "plan_unpriceable": [],
+  "planned_miles": null,
+  "planned_miles_week": null,
   "planned_seconds": [
    27000.0,
    27000.0
@@ -63,10 +163,12 @@
   ],
   "prescribed_dates": 7,
   "prescribed_dates_due": 0,
+  "projected_miles": 0.0,
   "projected_seconds": 27000.0,
   "quality_days": 0,
   "quality_seconds": 0,
   "quality_share": 0,
+  "remaining_planned_miles": 0.0,
   "remaining_planned_seconds": 27000.0,
   "rest_days": 0,
   "running_days": 0,
@@ -103,6 +205,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "30 min recovery",
+    "prescribed_miles": null,
     "prescribed_seconds": 1800,
     "role": "recovery",
     "sets": null,
@@ -147,6 +250,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "AM: 30 min recovery",
+    "prescribed_miles": null,
     "prescribed_seconds": 1800,
     "role": "recovery",
     "sets": null,
@@ -191,6 +295,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "PM: 60 min recovery",
+    "prescribed_miles": null,
     "prescribed_seconds": 3600,
     "role": "recovery",
     "sets": null,
@@ -235,6 +340,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "60-70 min easy",
+    "prescribed_miles": null,
     "prescribed_seconds": [
      3600,
      4200
@@ -282,6 +388,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "60-70 min easy",
+    "prescribed_miles": null,
     "prescribed_seconds": [
      3600,
      4200
@@ -329,6 +436,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "AM: 30 min recovery",
+    "prescribed_miles": null,
     "prescribed_seconds": 1800,
     "role": "recovery",
     "sets": null,
@@ -373,6 +481,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "PM: 60 min recovery",
+    "prescribed_miles": null,
     "prescribed_seconds": 3600,
     "role": "recovery",
     "sets": null,
@@ -417,6 +526,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "30 min recovery",
+    "prescribed_miles": null,
     "prescribed_seconds": 1800,
     "role": "recovery",
     "sets": null,
@@ -450,7 +560,7 @@
    "miss_forgiven": false,
    "ordinal": 0,
    "planned": {
-    "band": "long",
+    "band": "easy",
     "band_is_reference": true,
     "ceiling": "137/140/143",
     "ceiling_kind": "hr",
@@ -471,6 +581,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "90 min easy/long",
+    "prescribed_miles": null,
     "prescribed_seconds": 5400,
     "role": "long",
     "sets": null,
@@ -513,6 +624,7 @@
    "long_run_share": null,
    "quality_days_met": null,
    "rest_days_met": null,
+   "volume_miles_vs_plan": null,
    "volume_vs_plan": null
   },
   "pct": null,
@@ -520,6 +632,7 @@
    "long_run_share": "no day of this week is over yet, so this check left the denominator",
    "quality_days_met": "no day of this week is over yet, so this check left the denominator",
    "rest_days_met": "the plan schedules no rest day, so this check does not apply and left the denominator",
+   "volume_miles_vs_plan": "no day of this week is over yet, so this check left the denominator",
    "volume_vs_plan": "no day of this week is over yet, so this check left the denominator"
   }
  },

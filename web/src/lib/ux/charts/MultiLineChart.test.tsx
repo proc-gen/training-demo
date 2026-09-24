@@ -313,6 +313,103 @@ describe("MultiLineChart", () => {
       );
       expect(container.querySelectorAll("rect[fill='transparent']")).toHaveLength(2);
     });
+
+    describe("a point's extra rows", () => {
+      const hits = (c: HTMLElement) => c.querySelectorAll("rect[fill='transparent']");
+      const hover = (el: Element) =>
+        fireEvent.mouseEnter(el, { clientX: 1, clientY: 1 });
+      const rows = () =>
+        [...document.body.querySelectorAll(".tooltip .row")].map((r) => r.textContent);
+
+      it("renders them AFTER the series rows, in the caller's order", () => {
+        const points: MultiPoint[] = [
+          {
+            label: "7/1",
+            values: { a: 130, b: 950 },
+            note: { k: "VO2max", v: "57.81" },
+            extra: () => [
+              { k: "Projected", v: "42 d · 30 d" },
+              { k: "5000m", v: "18:06 · 18:12" },
+            ],
+          },
+          { label: "7/2", values: { a: 131, b: 955 } },
+        ];
+        const { container } = draw(
+          <MultiLineChart points={points} series={S} margin={M} format={(v) => `${v}s`} />,
+        );
+        hover(hits(container)[0]);
+        expect(rows()).toEqual([
+          "VO2max57.81",
+          "800m130s",
+          "5K950s",
+          "Projected42 d · 30 d",
+          "5000m18:06 · 18:12",
+        ]);
+      });
+
+      it("is a THUNK -- nothing is priced until the reader points", () => {
+        let calls = 0;
+        const points: MultiPoint[] = [
+          {
+            label: "7/1",
+            values: { a: 130 },
+            extra: () => {
+              calls += 1;
+              return [{ k: "x", v: "y" }];
+            },
+          },
+          {
+            label: "7/2",
+            values: { a: 131 },
+            extra: () => {
+              calls += 1;
+              return [{ k: "x", v: "z" }];
+            },
+          },
+        ];
+        const { container } = draw(
+          <MultiLineChart points={points} series={[S[0]]} margin={M} />,
+        );
+        expect(calls).toBe(0);
+        hover(hits(container)[1]);
+        expect(calls).toBe(1);
+        expect(document.body.textContent).toContain("z");
+        expect(document.body.textContent).not.toContain("y");
+      });
+
+      it("renders nothing extra for a point that states none, or an empty list", () => {
+        const points: MultiPoint[] = [
+          { label: "7/1", values: { a: 130 } },
+          { label: "7/2", values: { a: 131 }, extra: () => [] },
+        ];
+        const { container } = draw(
+          <MultiLineChart points={points} series={[S[0]]} margin={M} />,
+        );
+        hover(hits(container)[0]);
+        expect(rows()).toEqual(["800m130"]);
+        fireEvent.mouseLeave(hits(container)[0]);
+        hover(hits(container)[1]);
+        expect(rows()).toEqual(["800m131"]);
+      });
+
+      it("keeps a repeated key as two rows rather than collapsing them", () => {
+        const points: MultiPoint[] = [
+          {
+            label: "7/1",
+            values: { a: 130 },
+            extra: () => [
+              { k: "same", v: "1" },
+              { k: "same", v: "2" },
+            ],
+          },
+        ];
+        const { container } = draw(
+          <MultiLineChart points={points} series={[S[0]]} margin={M} />,
+        );
+        hover(hits(container)[0]);
+        expect(rows()).toEqual(["800m130", "same1", "same2"]);
+      });
+    });
   });
 
   describe("the x axis", () => {

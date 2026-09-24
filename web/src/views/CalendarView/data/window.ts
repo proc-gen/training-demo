@@ -172,14 +172,47 @@ export function stepLastDay(
   return addDays(lastDay, 7 * weeks * steps);
 }
 
-/** A week count clamped to what the strip offers.
+/** A week count clamped to what the dropdown offers.
  *
- * State arriving from outside -- a restored form control, a future URL
- * parameter -- must not be able to ask for 400 rows or for zero.
+ * State arriving from outside -- a restored form control, a URL parameter --
+ * must not be able to ask for 400 rows or for zero.
  */
 export function clampWeeks(n: number): number {
   const first = WEEK_CHOICES[0];
   const last = WEEK_CHOICES[WEEK_CHOICES.length - 1];
   if (!isFinite(n)) return DEFAULT_WEEKS;
   return Math.min(last, Math.max(first, Math.round(n)));
+}
+
+/** `?weeks=` resolved, or the default.
+ *
+ * IT IS A QUERY PARAMETER AND WAS COMPONENT STATE UNTIL 2026-09-07, WHICH WAS A
+ * BUG THE WHOLE TIME. `CalendarRoute` renders `<CalendarView key={end}>`, so a
+ * `useState` here reset on every step of the window -- the athlete found it the
+ * moment the week arrows made stepping constant: *"clicking on one of the move
+ * by 1 week buttons is resetting the dropdown choice back to the 4 week
+ * default."* The coarse arrows and the date field had always done the same; the
+ * finer pair only made it impossible to miss.
+ *
+ * **THE WINDOW IS `(end, weeks)` AND BOTH HALVES NOW LIVE IN THE URL.** Keeping
+ * one of them in state meant `?end=2026-09-13` rendered a different window
+ * depending on something the URL did not say, and no refresh or link could
+ * carry it. `resolveMode` records the identical decision for the identical
+ * reason, one parameter over.
+ *
+ * IT COSTS A NAVIGATION WHERE THE COUNT USED TO REDRAW IN PLACE, and that is the
+ * trade taken: the slice is a function of `end` ALONE -- the server sends the
+ * widest window whatever this says -- so changing the count refetches bytes it
+ * already had. Stepping was always a navigation, and the count is changed far
+ * less often than the window is moved.
+ *
+ * IT CLAMPS RATHER THAN REFUSING, unlike `resolveAnchor`. `?weeks=99` names a
+ * real intention badly where `?end=2026-02-31` names a day that does not exist,
+ * and `clampWeeks` is the rule for state arriving from outside. A non-numeric
+ * value is not finite and falls back.
+ */
+export function resolveWeeks(raw: string | string[] | undefined): number {
+  const value = Array.isArray(raw) ? raw[0] : raw;
+  if (typeof value !== "string" || value.trim() === "") return DEFAULT_WEEKS;
+  return clampWeeks(Number(value));
 }

@@ -3,6 +3,7 @@
  "load_error": null,
  "manifest": {
   "phase": "General Prep",
+  "rest_days": [],
   "runs": [
    {
     "date": "2026-09-14",
@@ -18,9 +19,27 @@
    },
    {
     "date": "2026-09-15",
+    "key": "2026-09-15-pm-wu",
+    "prescribed": "warmup for the sub-T session",
+    "role": "warmup"
+   },
+   {
+    "alternates": [
+     {
+      "prescribed": "PM: 12x800m w/ 200m jog at Sub-T",
+      "role": "subt"
+     }
+    ],
+    "date": "2026-09-15",
     "key": "2026-09-15-pm",
-    "prescribed": "PM: 12x600m w/ 200m jog at Sub-T",
+    "prescribed": "PM: 12x800m w/ 200m jog at Sub-T -> PM: 12-13x3:00m w/ 1:00m jog at Sub-T",
     "role": "subt"
+   },
+   {
+    "date": "2026-09-15",
+    "key": "2026-09-15-pm-cd",
+    "prescribed": "cooldown for the sub-T session",
+    "role": "cooldown"
    },
    {
     "date": "2026-09-16",
@@ -43,8 +62,8 @@
    {
     "date": "2026-09-18",
     "key": "2026-09-18-pm",
-    "prescribed": "PM: 4x6s hill sprints w/ 2-3 min walking recovery, then 3x9:00 w/ 2:00 jog at Sub-T",
-    "role": "mixed"
+    "prescribed": "PM: 3x9:00 w/ 2:00 jog at Sub-T",
+    "role": "subt"
    },
    {
     "date": "2026-09-19",

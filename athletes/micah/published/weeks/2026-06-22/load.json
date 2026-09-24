@@ -1,27 +1,32 @@
 {
- "acwr_mech": 1.3287692166019995,
+ "acwr_mech": 1.327301716081588,
  "acwr_mech_on": "2026-06-28",
  "ceiling_inputs": {
   "background_source": "baseline",
   "background_steps": 2108.0,
+  "background_trimp_budget": 10,
   "background_window_days": 28,
   "cadence_source": "measured",
   "cadence_spm": 169.0,
   "default_cadence_spm": 172,
   "margin": 1.05,
-  "run_step_weight": 2.5
+  "run_step_weight": 2.5,
+  "walk_reference_spm": 110
  },
  "days": [
   {
    "atl": 35.26438274444362,
-   "bg_trimp": 8.665253696395775,
+   "bg_trimp": 5.60070928256064,
    "bg_trimp_hr_rest_source": "measured",
-   "ceiling": 2213.4,
+   "bg_trimp_source": "nominal-cadence",
+   "ceiling": 6349.731472536033,
+   "ceiling_background_source": "budget",
+   "ceiling_background_steps": 6349.731472536033,
    "ceiling_source": "prescribed",
    "completeness": "full",
    "ctl": 49.35219322106938,
    "date": "2026-06-22",
-   "pct": 68.46272811630065,
+   "pct": 100.0,
    "prescribed_run_seconds": 0.0,
    "prescribed_run_steps": 0.0,
    "role": "rest",
@@ -30,14 +35,17 @@
   },
   {
    "atl": 50.58578705833271,
-   "bg_trimp": 19.391354390284857,
+   "bg_trimp": 12.91830319413837,
    "bg_trimp_hr_rest_source": "measured",
-   "ceiling": 22176.525,
+   "bg_trimp_source": "nominal-cadence",
+   "ceiling": 25594.97919219854,
+   "ceiling_background_source": "budget",
+   "ceiling_background_steps": 5631.8541921985425,
    "ceiling_source": "session-default",
    "completeness": "full",
    "ctl": 51.54744004799638,
    "date": "2026-06-23",
-   "pct": 84.44500504540868,
+   "pct": 97.46198500542064,
    "prescribed_run_seconds": 2700.0,
    "prescribed_run_steps": 7605.0,
    "role": "subt",
@@ -46,25 +54,31 @@
   },
   {
    "atl": 51.72934029374954,
-   "bg_trimp": 10.062694325661957,
+   "bg_trimp": 6.430438026093033,
    "bg_trimp_hr_rest_source": "measured",
-   "ceiling": 29939.9625,
-   "ceiling_source": "session-default",
+   "bg_trimp_source": "nominal-cadence",
+   "ceiling": 26591.755868852,
+   "ceiling_background_source": "budget",
+   "ceiling_background_steps": 6628.630868851999,
+   "ceiling_source": "day-prescribed",
    "completeness": "full",
    "ctl": 51.71546609227562,
    "date": "2026-06-24",
    "pct": 100.0,
-   "prescribed_run_seconds": 3750.0,
-   "prescribed_run_steps": 10562.5,
+   "prescribed_run_seconds": 2700.0,
+   "prescribed_run_steps": 7605.0,
    "role": "easy",
    "scored": true,
    "trimp": 55.16
   },
   {
    "atl": 68.50200522031216,
-   "bg_trimp": 21.019514774085778,
+   "bg_trimp": 13.8705683264701,
    "bg_trimp_hr_rest_source": "measured",
+   "bg_trimp_source": "nominal-cadence",
    "ceiling": null,
+   "ceiling_background_source": null,
+   "ceiling_background_steps": null,
    "ceiling_source": null,
    "completeness": "full",
    "ctl": 54.836607204262805,
@@ -77,31 +91,37 @@
    "trimp": 118.82
   },
   {
-   "atl": 67.72150391523411,
-   "bg_trimp": 67.6427632973729,
+   "atl": 67.50400391523411,
+   "bg_trimp": 45.80004769288539,
    "bg_trimp_hr_rest_source": "measured",
-   "ceiling": 22176.525,
+   "bg_trimp_source": "nominal-cadence",
+   "ceiling": 25388.665201753996,
+   "ceiling_background_source": "budget",
+   "ceiling_background_steps": 5425.540201753995,
    "ceiling_source": "day-prescribed",
    "completeness": "full",
-   "ctl": 55.32699756685523,
+   "ctl": 55.28653245057616,
    "date": "2026-06-26",
-   "pct": 54.52193634832635,
+   "pct": 62.7965995591244,
    "prescribed_run_seconds": 2700.0,
    "prescribed_run_steps": 7605.0,
    "role": "easy",
    "scored": true,
-   "trimp": 65.38
+   "trimp": 64.50999999999999
   },
   {
-   "atl": 73.19612793642558,
-   "bg_trimp": 16.05486373709885,
+   "atl": 73.03300293642559,
+   "bg_trimp": 10.792105084959227,
    "bg_trimp_hr_rest_source": "measured",
-   "ceiling": 24394.65,
+   "bg_trimp_source": "nominal-cadence",
+   "ceiling": 27606.790201753996,
+   "ceiling_background_source": "budget",
+   "ceiling_background_steps": 5425.540201753995,
    "ceiling_source": "prescribed",
    "completeness": "full",
-   "ctl": 56.92202093583872,
+   "ctl": 56.88343791799123,
    "date": "2026-06-27",
-   "pct": 87.70952432315823,
+   "pct": 99.25858484073633,
    "prescribed_run_seconds": 3000.0,
    "prescribed_run_steps": 8450.0,
    "role": "easy",
@@ -109,15 +129,18 @@
    "trimp": 89.62
   },
   {
-   "atl": 97.37959595231919,
-   "bg_trimp": 11.268692583804013,
+   "atl": 97.2572522023192,
+   "bg_trimp": 7.43609793630161,
    "bg_trimp_hr_rest_source": "measured",
-   "ceiling": 37703.4,
+   "bg_trimp_source": "nominal-cadence",
+   "ceiling": 41343.47320232423,
+   "ceiling_background_source": "budget",
+   "ceiling_background_steps": 5853.473202324232,
    "ceiling_source": "prescribed",
    "completeness": "full",
-   "ctl": 62.17820600859041,
+   "ctl": 62.14141754971257,
    "date": "2026-06-28",
-   "pct": 95.61625076080341,
+   "pct": 100.0,
    "prescribed_run_seconds": 4800.0,
    "prescribed_run_steps": 13520.0,
    "role": "long",
@@ -126,7 +149,7 @@
   }
  ],
  "fitness": {
-  "activities": 12,
+  "activities": 11,
   "atl_converged": true,
   "ctl_converged": true,
   "ctl_warmup_days": 126,
@@ -136,6 +159,7 @@
   "on_date": "2026-06-28",
   "seed_date": "2024-08-01",
   "stream_share": 1.0,
+  "trimp": 594.59,
   "trimp_source": "stream",
   "unpriced": 0
  },
@@ -145,13 +169,13 @@
    "token": "steps-data-incomplete"
   },
   {
-   "status": "fired",
+   "status": "clear",
    "token": "recovery-day-not-recovering"
   },
   {
    "status": "fired",
    "token": "background-load-spike",
-   "why": "45,429 SE background against a 18,752 SE baseline = 2.42x (fires above 1.3x)"
+   "why": "45,592 SE background against a 18,752 SE baseline = 2.43x (fires above 1.3x)"
   },
   {
    "status": "clear",
@@ -178,7 +202,7 @@
   {
    "status": "fired",
    "token": "strain-spike",
-   "why": "strain 442,674 SE against a 206,686 SE baseline = 2.14x (fires above 1.5x)"
+   "why": "strain 443,073 SE against a 206,686 SE baseline = 2.14x (fires above 1.5x)"
   },
   {
    "status": "fired",
@@ -187,14 +211,14 @@
   }
  ],
  "integrity": {
-  "earned": 130467.0,
+  "earned": 143057.93459570652,
   "excluded": [
    "2026-06-25"
   ],
   "scored_days": 6,
-  "total": 159216.5
+  "total": 158972.0
  },
- "monotony_mech": 2.3310569319233982,
+ "monotony_mech": 2.336167252049832,
  "readiness": {
   "available": 21,
   "hrv_baseline": 62,
@@ -331,6 +355,6 @@
  },
  "shape_days_covered": 7,
  "shape_days_needed": 7,
- "strain_mech": 442673.53901458316,
+ "strain_mech": 443072.8086892671,
  "week_start": "2026-06-22"
 }

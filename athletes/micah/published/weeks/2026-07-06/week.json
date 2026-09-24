@@ -3,12 +3,15 @@
  "load_error": null,
  "manifest": {
   "phase": "General Prep",
+  "rest_days": [
+   "2026-07-06"
+  ],
   "runs": [
    {
     "date": "2026-07-07",
     "key": "2026-07-07-wu",
     "prescribed": "warmup for the repetition set",
-    "role": "volume_only"
+    "role": "warmup"
    },
    {
     "date": "2026-07-07",
@@ -20,13 +23,13 @@
     "date": "2026-07-07",
     "key": "2026-07-07-cd",
     "prescribed": "part of the abandoned sub-T mile, then cooldown",
-    "role": "volume_only"
+    "role": "cooldown"
    },
    {
     "date": "2026-07-07",
     "key": "2026-07-07-cd2",
     "prescribed": "cooldown",
-    "role": "volume_only"
+    "role": "cooldown"
    },
    {
     "date": "2026-07-08",
@@ -50,7 +53,7 @@
     "date": "2026-07-11",
     "key": "2026-07-11-1",
     "prescribed": "first half of the 30 min easy",
-    "role": "volume_only"
+    "role": "easy"
    },
    {
     "date": "2026-07-11",

@@ -3,6 +3,7 @@
  "load_error": null,
  "manifest": {
   "phase": "Block",
+  "rest_days": [],
   "runs": [
    {
     "date": "2025-08-25",
@@ -26,7 +27,7 @@
     "date": "2025-08-26",
     "key": "2025-08-26-wu",
     "prescribed": "warmup",
-    "role": "volume_only"
+    "role": "warmup"
    },
    {
     "date": "2025-08-26",
@@ -38,7 +39,7 @@
     "date": "2025-08-26",
     "key": "2025-08-26-cd",
     "prescribed": "cooldown",
-    "role": "volume_only"
+    "role": "cooldown"
    },
    {
     "date": "2025-08-27",
@@ -86,7 +87,7 @@
     "date": "2025-08-31",
     "key": "2025-08-31-wu",
     "prescribed": "warmup",
-    "role": "volume_only"
+    "role": "warmup"
    },
    {
     "date": "2025-08-31",
@@ -98,7 +99,7 @@
     "date": "2025-08-31",
     "key": "2025-08-31-cd",
     "prescribed": "cooldown",
-    "role": "volume_only"
+    "role": "cooldown"
    }
   ],
   "week_start": "2025-08-25",

@@ -3,6 +3,7 @@
  "load_error": null,
  "manifest": {
   "phase": "More Doubles",
+  "rest_days": [],
   "runs": [
    {
     "date": "2025-03-24",
@@ -20,7 +21,7 @@
     "date": "2025-03-25",
     "key": "2025-03-25-wu",
     "prescribed": "warmup",
-    "role": "volume_only"
+    "role": "warmup"
    },
    {
     "date": "2025-03-25",
@@ -32,7 +33,7 @@
     "date": "2025-03-25",
     "key": "2025-03-25-cd",
     "prescribed": "cooldown",
-    "role": "volume_only"
+    "role": "cooldown"
    },
    {
     "date": "2025-03-26",
@@ -62,7 +63,7 @@
     "date": "2025-03-28",
     "key": "2025-03-28-wu",
     "prescribed": "warmup",
-    "role": "volume_only"
+    "role": "warmup"
    },
    {
     "date": "2025-03-28",
@@ -74,7 +75,7 @@
     "date": "2025-03-28",
     "key": "2025-03-28-cd",
     "prescribed": "cooldown",
-    "role": "volume_only"
+    "role": "cooldown"
    },
    {
     "date": "2025-03-29",

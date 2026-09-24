@@ -34,6 +34,18 @@ export type MultiPoint = {
    *  the extra quantity IS -- naming it here would be domain knowledge in a
    *  chart component. */
   note?: { k: string; v: string } | null;
+  /** Further rows BELOW the series rows, built ON HOVER.
+   *
+   * A THUNK, NOT A LIST, and that is the whole reason it is a second field
+   * rather than `note` grown into an array. The Trends VO2max panel prices
+   * seven race distances at every drawn window for the hovered day -- twenty-
+   * odd bisections -- and a list would do that for every one of ~750 slots on
+   * every render to show one of them. The tooltip is already a thunk
+   * (`HitColumn` takes one), so the cost lands exactly where the reader points.
+   *
+   * Worded by the caller, like `note` and like a mark's `detail`: `k` and `v`
+   * arrive as strings and this library learns nothing about the quantity. */
+  extra?: () => { k: string; v: string }[];
 };
 
 /** A single observation dropped onto the grid the points decided.
@@ -280,6 +292,13 @@ export function MultiLineChart({
           />
         );
       })}
+      {/* AFTER the series rows: the series are the chart's subject and the
+          extra rows qualify them. Keyed by position -- the caller may repeat a
+          `k` (two distances cannot, but nothing here says so) and a duplicate
+          React key would drop a row silently. */}
+      {(points[i].extra?.() ?? []).map((row, k) => (
+        <TipRow key={k} k={row.k} v={row.v} />
+      ))}
     </>
   );
 

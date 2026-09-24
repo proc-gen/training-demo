@@ -8,7 +8,10 @@
   "long_run_share": 0.0,
   "miles": 47.460331663087565,
   "non_run_days": [],
+  "plan_miles_unpriceable": [],
   "plan_unpriceable": [],
+  "planned_miles": null,
+  "planned_miles_week": null,
   "planned_seconds": [
    25200.0,
    25200.0
@@ -19,10 +22,12 @@
   ],
   "prescribed_dates": 7,
   "prescribed_dates_due": 7,
+  "projected_miles": 47.460331663087565,
   "projected_seconds": 23872.0,
   "quality_days": 2,
   "quality_seconds": 3675,
   "quality_share": 0.1539460455764075,
+  "remaining_planned_miles": 0.0,
   "remaining_planned_seconds": 0.0,
   "rest_days": 0,
   "running_days": 7,
@@ -52,7 +57,10 @@
   "long_run_share": 0.0,
   "miles": 47.460331663087565,
   "non_run_days": [],
+  "plan_miles_unpriceable": [],
   "plan_unpriceable": [],
+  "planned_miles": null,
+  "planned_miles_week": null,
   "planned_seconds": [
    25200.0,
    25200.0
@@ -63,10 +71,12 @@
   ],
   "prescribed_dates": 7,
   "prescribed_dates_due": 7,
+  "projected_miles": 47.460331663087565,
   "projected_seconds": 23872.0,
   "quality_days": 2,
   "quality_seconds": 3675,
   "quality_share": 0.1539460455764075,
+  "remaining_planned_miles": 0.0,
   "remaining_planned_seconds": 0.0,
   "rest_days": 0,
   "running_days": 7,
@@ -120,6 +130,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": {
     "actual": 1802,
     "factor": 1.0,
@@ -164,6 +175,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "A - Easy 30 min",
+    "prescribed_miles": null,
     "prescribed_seconds": 1800,
     "role": "easy",
     "sets": null,
@@ -226,6 +238,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": {
     "actual": 1800,
     "factor": 1.0,
@@ -270,6 +283,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "B - Easy 30 min",
+    "prescribed_miles": null,
     "prescribed_seconds": 1800,
     "role": "easy",
     "sets": null,
@@ -332,6 +346,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": {
     "actual": 1800,
     "factor": 1.0,
@@ -376,6 +391,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "A - Easy 30 min",
+    "prescribed_miles": null,
     "prescribed_seconds": 1800,
     "role": "easy",
     "sets": null,
@@ -430,22 +446,23 @@
    "planned": {
     "band": null,
     "band_is_reference": false,
-    "ceiling": "none (volume_only)",
+    "ceiling": "none (warmup)",
     "ceiling_kind": "none",
-    "ceiling_role": "volume_only",
+    "ceiling_role": "warmup",
     "ceiling_tiers": null,
     "criterion": null,
     "hr_ceiling": null,
     "prescribed": "warmup",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
-    "role": "volume_only",
+    "role": "warmup",
     "sets": null,
     "target_display": null,
     "target_sec_per_mi": null,
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "role": "volume_only",
+   "role": "warmup",
    "runalyze_id": 136757532,
    "score_bucket": null,
    "seconds": 963,
@@ -461,7 +478,6 @@
    "date": "2025-06-10",
    "detail": {
     "autolaps": [],
-    "cooldown": null,
     "core_seconds": 729,
     "data_quality": [],
     "detected_reps": 8,
@@ -550,6 +566,7 @@
         "dist_km": 0.204,
         "dur": 39,
         "hr_avg": 147,
+        "hr_end": 157,
         "hr_max": 158,
         "label": "200m",
         "ok": true,
@@ -575,6 +592,7 @@
         "dist_km": 0.207,
         "dur": 38,
         "hr_avg": 152,
+        "hr_end": 162,
         "hr_max": 162,
         "label": "200m",
         "ok": true,
@@ -593,6 +611,7 @@
         "dist_km": 0.214,
         "dur": 38,
         "hr_avg": 161,
+        "hr_end": 170,
         "hr_max": 170,
         "label": null,
         "ok": null,
@@ -608,6 +627,7 @@
         "dist_km": 0.214,
         "dur": 38,
         "hr_avg": 165,
+        "hr_end": 172,
         "hr_max": 172,
         "label": null,
         "ok": null,
@@ -630,6 +650,7 @@
         "dist_km": 0.205,
         "dur": 38,
         "hr_avg": 167,
+        "hr_end": 175,
         "hr_max": 175,
         "label": "200m",
         "ok": true,
@@ -655,6 +676,7 @@
         "dist_km": 0.208,
         "dur": 38,
         "hr_avg": 167,
+        "hr_end": 175,
         "hr_max": 175,
         "label": "200m",
         "ok": true,
@@ -680,6 +702,7 @@
         "dist_km": 0.208,
         "dur": 38,
         "hr_avg": 170,
+        "hr_end": 177,
         "hr_max": 177,
         "label": "200m",
         "ok": true,
@@ -698,6 +721,7 @@
         "dist_km": 0.209,
         "dur": 36,
         "hr_avg": 172,
+        "hr_end": 178,
         "hr_max": 178,
         "label": null,
         "ok": null,
@@ -723,7 +747,6 @@
       "work_seconds": 303
      }
     ],
-    "slivers": [],
     "suspect_seconds": 0,
     "treadmill_mph": null,
     "treadmill_warning": null,
@@ -753,6 +776,7 @@
     "criterion": "pace",
     "hr_ceiling": null,
     "prescribed": "B - 6-8x200m w/ 200m jog",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
     "role": "repetition",
     "sets": [
@@ -770,11 +794,13 @@
       "float_mode": null,
       "float_seconds": null,
       "group_float_distance_m": null,
+      "group_float_mode": null,
       "group_float_seconds": null,
       "groups": null,
       "hr_ceiling": null,
       "mode": "repetition",
       "rep_distance_m": 200,
+      "rep_rows": null,
       "rep_seconds": null,
       "reps": [
        6,
@@ -873,22 +899,23 @@
    "planned": {
     "band": null,
     "band_is_reference": false,
-    "ceiling": "none (volume_only)",
+    "ceiling": "none (cooldown)",
     "ceiling_kind": "none",
-    "ceiling_role": "volume_only",
+    "ceiling_role": "cooldown",
     "ceiling_tiers": null,
     "criterion": null,
     "hr_ceiling": null,
     "prescribed": "cooldown",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
-    "role": "volume_only",
+    "role": "cooldown",
     "sets": null,
     "target_display": null,
     "target_sec_per_mi": null,
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "role": "volume_only",
+   "role": "cooldown",
    "runalyze_id": 136757539,
    "score_bucket": null,
    "seconds": 1127,
@@ -978,6 +1005,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": {
     "actual": 3555,
     "factor": 1.0,
@@ -1022,6 +1050,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "Easy 60 min",
+    "prescribed_miles": null,
     "prescribed_seconds": 3600,
     "role": "easy",
     "sets": null,
@@ -1084,6 +1113,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": {
     "actual": 1801,
     "factor": 1.0,
@@ -1128,6 +1158,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "A - Easy 30 min",
+    "prescribed_miles": null,
     "prescribed_seconds": 1800,
     "role": "easy",
     "sets": null,
@@ -1208,6 +1239,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": {
     "actual": 2701,
     "factor": 1.0,
@@ -1252,6 +1284,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "B - Easy 45 min",
+    "prescribed_miles": null,
     "prescribed_seconds": 2700,
     "role": "easy",
     "sets": null,
@@ -1314,6 +1347,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": {
     "actual": 1800,
     "factor": 1.0,
@@ -1358,6 +1392,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "Easy 30 min",
+    "prescribed_miles": null,
     "prescribed_seconds": 1800,
     "role": "easy",
     "sets": null,
@@ -1391,22 +1426,23 @@
    "planned": {
     "band": null,
     "band_is_reference": false,
-    "ceiling": "none (volume_only)",
+    "ceiling": "none (warmup)",
     "ceiling_kind": "none",
-    "ceiling_role": "volume_only",
+    "ceiling_role": "warmup",
     "ceiling_tiers": null,
     "criterion": null,
     "hr_ceiling": null,
     "prescribed": "82-second pre-race blip",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
-    "role": "volume_only",
+    "role": "warmup",
     "sets": null,
     "target_display": null,
     "target_sec_per_mi": null,
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "role": "volume_only",
+   "role": "warmup",
    "runalyze_id": 137199333,
    "score_bucket": null,
    "seconds": 82,
@@ -1482,6 +1518,7 @@
     "criterion": null,
     "hr_ceiling": null,
     "prescribed": "Mountain Race -> 49:03, half cancelled, only half the intended distance",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
     "role": "race",
     "sets": null,
@@ -1562,6 +1599,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": {
     "actual": 2701,
     "factor": 0.0,
@@ -1606,6 +1644,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "Easy 30 min",
+    "prescribed_miles": null,
     "prescribed_seconds": 1800,
     "role": "easy",
     "sets": null,
@@ -1649,6 +1688,7 @@
    "long_run_share": true,
    "quality_days_met": true,
    "rest_days_met": null,
+   "volume_miles_vs_plan": null,
    "volume_vs_plan": false
   },
   "pct": 66.66666666666667,
@@ -1656,6 +1696,7 @@
    "long_run_share": "the long run was 0.0% of the running distance, against a 25% ceiling",
    "quality_days_met": "every quality session the plan scheduled on 2025-06-10, 2025-06-14 was completed",
    "rest_days_met": "the plan schedules no rest day, so this check does not apply and left the denominator",
+   "volume_miles_vs_plan": "the manifest states no planned_miles, so there is nothing to compare the week's running distance against",
    "volume_vs_plan": "6:37:52 run against a plan of 7:00:00, tolerance 5%"
   }
  },

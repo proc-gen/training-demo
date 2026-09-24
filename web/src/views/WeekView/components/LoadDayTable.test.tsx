@@ -27,6 +27,7 @@ const day = (over: Partial<LoadDay>): LoadDay =>
     pct: 100,
     trimp: 88.6,
     bg_trimp: 3.9,
+    bg_trimp_source: "cadence-profile",
     bg_trimp_hr_rest_source: "measured",
     ctl: 82,
     atl: 88,
@@ -131,14 +132,35 @@ describe("LoadDayTable", () => {
     });
 
     it("keeps background TRIMP in its own column", () => {
-      /* It is an UNCALIBRATED estimate sitting beside a measurement integrated
-       * from heart rate. Folding the two into one number would make them
+      /* It is a PRICED figure sitting beside a measurement integrated from
+       * heart rate. Folding the two into one number would make them
        * indistinguishable in the one place a reader compares them. */
       const { container } = wrap(<LoadDayTable days={[day({})]} />);
       const h = headers(container);
       expect(h.indexOf("Bg TRIMP")).toBe(h.indexOf("Run TRIMP") + 1);
       expect(cells(container)).toContain("3.9");
       expect(cells(container)).toContain("88.6");
+    });
+
+    it("marks a background TRIMP that is not the measurement with a tilde", () => {
+      // `nominal-cadence` prices the day's step TOTAL at one nominal walking
+      // cadence rather than integrating its measured minutes, and overstates by
+      // about 1.47x. Unmarked it reads as the same quantity as the row above.
+      const { container } = wrap(
+        <LoadDayTable days={[day({ bg_trimp_source: "nominal-cadence" })]} />,
+      );
+      expect(cells(container)).toContain("≈3.9");
+      expect(cells(container)).not.toContain("3.9");
+    });
+
+    it("marks any tier that is not the measurement, not just the known one", () => {
+      // Keyed on "not `cadence-profile`", so a tier added later is marked by
+      // DEFAULT. An estimate reading as a measurement is the failure mode, and
+      // it is the one an allow-list of estimate names would reintroduce.
+      const { container } = wrap(
+        <LoadDayTable days={[day({ bg_trimp_source: "something-new" })]} />,
+      );
+      expect(cells(container)).toContain("≈3.9");
     });
   });
 

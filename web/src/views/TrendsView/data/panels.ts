@@ -26,6 +26,7 @@ import { baselineBands } from "./baselineBand";
 import { isIncomplete, isLived } from "./coverage";
 import { type FitnessDay, fitnessSeries } from "./fitnessSeries";
 import { CAT, paceSeries } from "./paceSeries";
+import { vo2maxPanel } from "./vo2maxPanel";
 
 /** A plotted point that still knows its own date.
  *
@@ -47,6 +48,16 @@ export type TrendPoint = Point & {
    * figure that none of its series are drawn from. One early chart records this
    * nested under `source`, which is why it arrives through `chartVo2max()`. */
   vo2max?: number | null;
+  /** Further tooltip rows under the series rows, ALREADY WORDED and built on
+   *  hover -- `MultiPoint.extra`, passed straight through by `TrendPanel`.
+   *
+   * The VO2max panel's projected race times: seven distances priced at every
+   * drawn window's value for that day. A thunk because pricing is ~20
+   * bisections per point and only the hovered point is ever read; a list
+   * would pay that for ~750 slots on every render. Worded HERE, in `data/`,
+   * for `PanelMark.detail`'s reason -- the vocabulary is on this side and
+   * `lib/ux` is handed strings. */
+  extra?: () => { k: string; v: string }[];
   /** Set on a point that RESTATES the newest pace chart under a later Sunday,
    *  naming the chart it restates -- see `carriedCharts` in `paceSeries.ts`.
    *
@@ -193,6 +204,14 @@ export type Panel = {
    *  is not a quantity. `TrendsView` passes the aggregation controls only where
    *  this is set — the `UnitToggle` rule: a one-option control cannot be used. */
   aggregable?: boolean;
+  /** Whether `vo2maxPanel` can re-express this panel with a CUSTOM window
+   *  length beside the two it always draws. Set on exactly that panel, and
+   *  `TrendsView` hands the window box over only where it is set -- the
+   *  `aggregable` shape, for the `UnitToggle` reason: a control renders only
+   *  where there is a choice. The typed window is view state, like the
+   *  aggregation, so the panel is REBUILT from the payload rather than
+   *  carrying a mutable series list. */
+  windowed?: boolean;
   /** Present on a MULTI-SERIES panel, and what makes it one. On a GROUPED panel
    *  it is the DEFAULT group's series, so the panel still declares one. */
   series?: SeriesSpec[];
@@ -527,10 +546,16 @@ export function trendPanels(payload: Payload): Panel[] {
     });
   }
 
-  /* LAST, and the only multi-series panels here. They answer a different
-   * question from everything above -- not "what did the athlete do" but "what is
-   * the athlete now capable of", which is the whole consequence of effective
-   * VO2max moving and had never been drawn. */
+  /* LAST, and multi-series. They answer a different question from everything
+   * above -- not "what did the athlete do" but "what is the athlete now capable
+   * of", which is the whole consequence of effective VO2max moving and had
+   * never been drawn. THE VO2MAX PANEL LEADS THE THREE because it is the anchor
+   * the other two derive from (2026-09-09). It is pushed from HERE rather than
+   * from `paceSeries` because it reads `CAT` from that module, and the module
+   * pushing it would be an import cycle. `null` is the custom window at first
+   * paint; `TrendsView` rebuilds the panel with the typed one. */
+  const vo2 = vo2maxPanel(payload, null);
+  if (vo2) panels.push(vo2);
   panels.push(...paceSeries(payload));
 
   return panels;

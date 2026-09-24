@@ -3,6 +3,7 @@
  "load_error": null,
  "manifest": {
   "phase": "Taper",
+  "rest_days": [],
   "runs": [
    {
     "date": "2025-04-28",
@@ -20,7 +21,7 @@
     "date": "2025-04-29",
     "key": "2025-04-29-wu",
     "prescribed": "warmup",
-    "role": "volume_only"
+    "role": "warmup"
    },
    {
     "date": "2025-04-29",
@@ -32,7 +33,7 @@
     "date": "2025-04-29",
     "key": "2025-04-29-cd",
     "prescribed": "cooldown",
-    "role": "volume_only"
+    "role": "cooldown"
    },
    {
     "date": "2025-04-30",

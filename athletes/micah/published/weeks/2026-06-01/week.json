@@ -3,12 +3,13 @@
  "load_error": null,
  "manifest": {
   "phase": "Rebuild",
+  "rest_days": [],
   "runs": [
    {
     "date": "2026-06-02",
     "key": "2026-06-02-wu",
     "prescribed": "warmup",
-    "role": "volume_only"
+    "role": "warmup"
    },
    {
     "date": "2026-06-02",
@@ -20,7 +21,7 @@
     "date": "2026-06-02",
     "key": "2026-06-02-cd",
     "prescribed": "cooldown",
-    "role": "volume_only"
+    "role": "cooldown"
    },
    {
     "date": "2026-06-03",

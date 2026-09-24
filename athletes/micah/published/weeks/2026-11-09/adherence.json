@@ -8,15 +8,26 @@
   "long_run_share": 0,
   "miles": 0.0,
   "non_run_days": [],
+  "plan_miles_unpriceable": [
+   [
+    "2026-11-09",
+    "2026-11-09",
+    "30 min recovery"
+   ]
+  ],
   "plan_unpriceable": [],
+  "planned_miles": null,
+  "planned_miles_week": null,
   "planned_seconds": null,
   "planned_seconds_week": null,
   "prescribed_dates": 1,
   "prescribed_dates_due": 0,
+  "projected_miles": 0.0,
   "projected_seconds": 1800.0,
   "quality_days": 0,
   "quality_seconds": 0,
   "quality_share": 0,
+  "remaining_planned_miles": 0.0,
   "remaining_planned_seconds": 1800.0,
   "rest_days": 0,
   "running_days": 0,
@@ -46,15 +57,26 @@
   "long_run_share": 0,
   "miles": 0.0,
   "non_run_days": [],
+  "plan_miles_unpriceable": [
+   [
+    "2026-11-09",
+    "2026-11-09",
+    "30 min recovery"
+   ]
+  ],
   "plan_unpriceable": [],
+  "planned_miles": null,
+  "planned_miles_week": null,
   "planned_seconds": null,
   "planned_seconds_week": null,
   "prescribed_dates": 1,
   "prescribed_dates_due": 0,
+  "projected_miles": 0.0,
   "projected_seconds": 1800.0,
   "quality_days": 0,
   "quality_seconds": 0,
   "quality_share": 0,
+  "remaining_planned_miles": 0.0,
   "remaining_planned_seconds": 1800.0,
   "rest_days": 0,
   "running_days": 0,
@@ -91,6 +113,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "30 min recovery",
+    "prescribed_miles": null,
     "prescribed_seconds": 1800,
     "role": "recovery",
     "sets": null,
@@ -133,6 +156,7 @@
    "long_run_share": null,
    "quality_days_met": null,
    "rest_days_met": null,
+   "volume_miles_vs_plan": null,
    "volume_vs_plan": null
   },
   "pct": null,
@@ -140,6 +164,7 @@
    "long_run_share": "no day of this week is over yet, so this check left the denominator",
    "quality_days_met": "no day of this week is over yet, so this check left the denominator",
    "rest_days_met": "the plan schedules no rest day, so this check does not apply and left the denominator",
+   "volume_miles_vs_plan": "no day of this week is over yet, so this check left the denominator",
    "volume_vs_plan": "no day of this week is over yet, so this check left the denominator"
   }
  },

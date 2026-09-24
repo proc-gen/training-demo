@@ -16,10 +16,13 @@ afterEach(cleanup);
 const slug = athleteSlugs()[0];
 const shell = slug ? shellSlice(openIndex(slug)) : null;
 
-/** `?end=<value>`, in the shape a route receives it. */
-const at = (end?: string) => ({
+/** `?end=<value>&mode=<value>`, in the shape a route receives it. */
+const at = (end?: string, mode?: string) => ({
   params: Promise.resolve({}),
-  searchParams: Promise.resolve(end === undefined ? {} : { end }),
+  searchParams: Promise.resolve({
+    ...(end === undefined ? {} : { end }),
+    ...(mode === undefined ? {} : { mode }),
+  }),
 });
 
 describe("the route's caching", () => {
@@ -93,6 +96,32 @@ describe("Page", () => {
     const { container } = render(await Page(at("2019-01-06")));
     expect(container.querySelectorAll(".cal-cell").length).toBeGreaterThan(0);
     expect(container.querySelector(".banner.stop")).toBeNull();
+  });
+
+  it.skipIf(!slug)("reads `?mode=` alongside the anchor", async () => {
+    /* BOTH OFF ONE `await searchParams`, below the static branch --
+       `structure.test.ts` pins that a query string is not read above it,
+       because that forces dynamic rendering, which `output: export` cannot do. */
+    const { container } = render(
+      await Page(at(shell!.defaultCalendarAnchor!, "plan")),
+    );
+    const tabs = [...container.querySelectorAll("[role='tab']")];
+    expect(tabs.map((t) => t.textContent)).toEqual(["View", "Plan"]);
+    expect(tabs[1].getAttribute("aria-selected")).toBe("true");
+    // The measurements really are gone, which is what the mode is FOR.
+    expect(container.querySelector(".cal-bar")).toBeNull();
+  });
+
+  it.skipIf(!slug)("defaults to View, and falls back on a typo", async () => {
+    for (const mode of [undefined, "planning", ""]) {
+      const { container } = render(
+        await Page(at(shell!.defaultCalendarAnchor!, mode)),
+      );
+      const tabs = [...container.querySelectorAll("[role='tab']")];
+      expect(tabs[0].getAttribute("aria-selected")).toBe("true");
+      expect(container.querySelector(".cal-bar")).toBeTruthy();
+      cleanup();
+    }
   });
 
   it.skipIf(!slug)("falls back rather than trusting a date that does not exist", async () => {

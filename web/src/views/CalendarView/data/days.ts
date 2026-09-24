@@ -60,6 +60,35 @@ export function runsByDate(payload: Payload): Map<string, RunResult[]> {
   return byDate;
 }
 
+/** Every date the PLAN schedules rest on, across the window's weeks.
+ *
+ * OFF THE MANIFEST, WHICH IS THE ONLY PLACE IT IS SAID. `LoadDay.role` carries
+ * `rest` too, but only for a week the load grader ran -- and Plan mode's whole
+ * subject is the weeks ahead, where there is no load record at all.
+ *
+ * IT IS NOT INFERRED FROM AN EMPTY DAY, and that is the point of reading it.
+ * A date the manifest does not mention is `unstated` -- reported and unscored,
+ * and named in the load grader's caveats -- which is a different fact from rest
+ * being scheduled. Deriving "no runs means rest" would reverse that and start
+ * grading `rest_days_met` on the ~90 weeks carrying `rest_days: []` with unrun
+ * days in them.
+ *
+ * `manifest` IS A LOOSE OBJECT in the payload schema (the exporter's allowlist
+ * decides what reaches it), so the field is pulled out here in one place rather
+ * than through an inline cast in a component -- `weekTotals` below is the same
+ * shape for the same reason.
+ */
+export function restDates(payload: Payload): Set<string> {
+  const out = new Set<string>();
+  for (const w of Object.values(payload.weeks ?? {})) {
+    const list = (w.manifest as { rest_days?: unknown } | null | undefined)
+      ?.rest_days;
+    if (!Array.isArray(list)) continue;
+    for (const d of list) if (typeof d === "string") out.add(d);
+  }
+  return out;
+}
+
 /** The week record covering a date, or undefined.
  *
  * Week keys ARE Mondays -- the manifests open on Monday and `week_start` names
@@ -67,6 +96,36 @@ export function runsByDate(payload: Payload): Map<string, RunResult[]> {
  */
 export function weekFor(payload: Payload, date: string): Week | undefined {
   return (payload.weeks ?? {})[mondayOf(date)];
+}
+
+/** What a week actually came to -- its measured running time and distance.
+ *
+ * `facts` IS LOOSE IN THE PAYLOAD SCHEMA ON PURPOSE (the graders emit hundreds
+ * of fields and declaring them all would recreate the transcription problem
+ * the schema exists to remove), so each view pulls out what it prints, in one
+ * place, rather than through an inline cast inside a component --
+ * `views/WeekView/data/facts.ts` is the same shape and this is the Calendar's
+ * two fields of it.
+ *
+ * `facts`, NOT `judged_facts`. This is what HAPPENED, including a run uploaded
+ * this morning; `judged_facts` is what may be SCORED and is a day behind on a
+ * live week. The week editor puts these beside the week's PLANNED time and
+ * mileage, and a reader comparing plan to actual wants the actual.
+ *
+ * NULL IS NOT ZERO. A week with no adherence record has no number at all;
+ * `0.0` miles on a week that was lived and not run is a measurement, and the
+ * two must not render the same.
+ */
+export function weekTotals(
+  payload: Payload,
+  weekStart: string,
+): { miles: number | null; seconds: number | null } {
+  const facts = (payload.weeks ?? {})[weekStart]?.adherence?.facts as
+    | { miles?: unknown; seconds?: unknown }
+    | null
+    | undefined;
+  const one = (v: unknown) => (typeof v === "number" ? v : null);
+  return { miles: one(facts?.miles), seconds: one(facts?.seconds) };
 }
 
 /** The busiest day on record, in STEPS, which is what the bars are scaled to.

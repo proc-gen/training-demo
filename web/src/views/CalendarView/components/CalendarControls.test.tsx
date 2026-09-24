@@ -15,57 +15,74 @@ const controls = (over: Partial<Parameters<typeof CalendarControls>[0]> = {}) =>
       onLastDay={() => {}}
       onWeeks={() => {}}
       onStep={() => {}}
+      onStepWeek={() => {}}
       {...over}
     />,
   );
 
 const input = (c: HTMLElement) => c.querySelector<HTMLInputElement>("input[type=date]")!;
-/* SCOPED TO THE PRESET STRIP. The control carries two rows of `.tab` now -- the
-   week counts and the stepper -- and an unscoped query would count the arrows
-   as week choices. The `WeekCard` tablist lesson, one control over. */
-const pills = (c: HTMLElement) =>
-  [...c.querySelectorAll<HTMLButtonElement>(".range-presets .tab")];
+const lengths = (c: HTMLElement) => c.querySelector<HTMLSelectElement>("select")!;
+/* BY EXACT NAME. Four arrows now, and two of them start with the same words --
+   `Move backward by 4 weeks` and `Move backward by 1 week` -- so a prefix match
+   would find whichever came first and the fine pair would be untested while
+   looking tested. */
 const arrow = (c: HTMLElement, name: string) =>
   [...c.querySelectorAll<HTMLButtonElement>(".stepper button")].find(
-    (b) => (b.getAttribute("aria-label") ?? "").startsWith(name),
+    (b) => b.getAttribute("aria-label") === name,
   )!;
+/** The arrows in DOM order: coarse back, fine back, fine forward, coarse
+ *  forward. By position, because at `1 week` the two pairs carry the SAME name
+ *  -- they do the same thing there -- and a name lookup would silently answer
+ *  about the coarse one in every case that is about the fine one. */
+const arrows = (c: HTMLElement) => [
+  ...c.querySelectorAll<HTMLButtonElement>(".stepper button"),
+];
 
 describe("CalendarControls", () => {
   it("shows the window's last day", () => {
     expect(input(controls().container).value).toBe("2026-08-15");
   });
 
-  it("offers every week count, with the unit on each pill", () => {
-    // `1 2 3 4 5 6` beside a date field reads as a day of the month.
-    const labels = pills(controls().container).map((b) => b.textContent);
-    expect(labels).toEqual(WEEK_CHOICES.map((w) => `${w}w`));
+  it("offers every week count, in order, with the unit spelled out", () => {
+    /* `1 2 3 4 5 6` beside a date field reads as a day of the month. The pills
+     * abbreviated to `4w` because six had to fit on one line; a dropdown has
+     * room for the word. */
+    const labels = [...lengths(controls().container).options].map((o) => o.textContent);
+    expect(labels).toEqual(WEEK_CHOICES.map((w) => (w === 1 ? "1 week" : `${w} weeks`)));
   });
 
-  it("presses exactly the current count", () => {
-    const pressed = pills(controls({ weeks: 2 }).container).filter(
-      (b) => b.getAttribute("aria-pressed") === "true",
-    );
-    expect(pressed).toHaveLength(1);
-    expect(pressed[0].textContent).toBe("2w");
+  it("shows exactly the current count", () => {
+    expect(lengths(controls({ weeks: 2 }).container).value).toBe("2");
   });
 
-  it("IS NOT A TABLIST", () => {
-    /* These buttons filter the grid that is already showing; they disclose no
-     * panel, and `role="tab"` would announce something untrue. */
+  it("IS A DROPDOWN, not a strip of anything", () => {
+    /* The athlete's instruction (2026-09-07), the same call `AggPicker` and
+     * `PeriodPicker` already record. No pills means no `aria-pressed` and no
+     * second `role="group"` to name. */
     const { container } = controls();
     expect(container.querySelectorAll('[role="tab"]')).toHaveLength(0);
-    /* NAMED, not just "the first group on the control" -- the stepper is a
-       `role="group"` too and sits before this one in the DOM. Once there are
-       two of a thing, every query has to say which one it is about. */
-    expect(
-      container.querySelector('.range-presets[role="group"]')!.getAttribute("aria-label"),
-    ).toBe("Weeks shown");
+    expect(container.querySelectorAll("[aria-pressed]")).toHaveLength(0);
+    expect(container.querySelectorAll('[role="group"]')).toHaveLength(1);
   });
 
-  it("reports a chosen week count", () => {
+  it("labels the dropdown, since a bare select names nothing", () => {
+    const { container } = controls();
+    expect(lengths(container).closest("label")!.textContent).toContain("Weeks shown");
+  });
+
+  it("reports a chosen week count as a NUMBER", () => {
+    // A select's value is a string, and `clampWeeks` takes a number.
     const onWeeks = vi.fn();
-    fireEvent.click(pills(controls({ onWeeks }).container)[0]);
+    const { container } = controls({ onWeeks });
+    fireEvent.change(lengths(container), { target: { value: "1" } });
     expect(onWeeks).toHaveBeenCalledWith(1);
+  });
+
+  it("carries autoComplete=off on the dropdown too", () => {
+    /* The same hazard the date field has: a browser restores a control's value
+     * across a reload and React will not correct it, so the dropdown and the
+     * grid under it can disagree about how many weeks are showing. */
+    expect(lengths(controls().container).getAttribute("autocomplete")).toBe("off");
   });
 
   it("reports a chosen last day", () => {
@@ -97,7 +114,7 @@ describe("CalendarControls", () => {
   });
 });
 
-describe("the stepper moves by WHATEVER THE PILLS SAY", () => {
+describe("the COARSE stepper moves by whatever the dropdown says", () => {
   /* The athlete: *"if 2 weeks is selected, move back and forth by 2 week
    * increments. if 4 weeks is selected, move back and forth by 4 weeks."* The
    * component reports a step COUNT; `CalendarView` resolves it against the
@@ -105,41 +122,36 @@ describe("the stepper moves by WHATEVER THE PILLS SAY", () => {
 
   it("reports a step back", () => {
     const onStep = vi.fn();
-    fireEvent.click(arrow(controls({ onStep }).container, "Back"));
+    fireEvent.click(arrow(controls({ onStep }).container, "Move backward by 4 weeks"));
     expect(onStep).toHaveBeenCalledWith(-1);
   });
 
   it("reports a step forward", () => {
     const onStep = vi.fn();
-    fireEvent.click(arrow(controls({ onStep }).container, "Forward"));
+    fireEvent.click(arrow(controls({ onStep }).container, "Move forward by 4 weeks"));
     expect(onStep).toHaveBeenCalledWith(1);
   });
 
   it("reports the same COUNT whatever the increment", () => {
-    // The count is steps, not weeks -- the width is the pills' business.
+    // The count is steps, not weeks -- the width is the dropdown's business.
     const onStep = vi.fn();
-    fireEvent.click(arrow(controls({ weeks: 6, onStep }).container, "Back"));
+    const { container } = controls({ weeks: 6, onStep });
+    fireEvent.click(arrow(container, "Move backward by 6 weeks"));
     expect(onStep).toHaveBeenCalledWith(-1);
   });
 
-  it.each([2, 3, 4, 5, 6])("names the increment at %iw", (weeks) => {
+  it.each([2, 3, 4, 5, 6])("names the increment at %i weeks", (weeks) => {
     // The glyphs cannot show it and the increment is the whole point: the same
-    // two buttons mean a week at 1w and a month at 4w.
+    // two buttons mean a week at 1 and a month at 4.
     const { container } = controls({ weeks });
-    expect(arrow(container, "Back").getAttribute("aria-label")).toBe(
-      `Back ${weeks} weeks`,
-    );
-    expect(arrow(container, "Forward").getAttribute("aria-label")).toBe(
-      `Forward ${weeks} weeks`,
-    );
+    expect(arrow(container, `Move backward by ${weeks} weeks`)).toBeTruthy();
+    expect(arrow(container, `Move forward by ${weeks} weeks`)).toBeTruthy();
   });
 
-  it("says WEEK, singular, at 1w", () => {
+  it("says WEEK, singular, at 1 week", () => {
     const { container } = controls({ weeks: 1 });
-    expect(arrow(container, "Back").getAttribute("aria-label")).toBe("Back 1 week");
-    expect(arrow(container, "Forward").getAttribute("aria-label")).toBe(
-      "Forward 1 week",
-    );
+    expect(arrow(container, "Move backward by 1 week")).toBeTruthy();
+    expect(arrow(container, "Move forward by 1 week")).toBeTruthy();
   });
 
   it("is LIVE at both ends of the record", () => {
@@ -147,29 +159,106 @@ describe("the stepper moves by WHATEVER THE PILLS SAY", () => {
      * date field, which has never been bounded either. Stepping past the record
      * draws empty cells, which says more than a dead button can. */
     const { container } = controls();
-    expect(arrow(container, "Back").disabled).toBe(false);
-    expect(arrow(container, "Forward").disabled).toBe(false);
+    expect(arrow(container, "Move backward by 4 weeks").disabled).toBe(false);
+    expect(arrow(container, "Move forward by 4 weeks").disabled).toBe(false);
   });
 
   it("is dead only when there is no window at all", () => {
     const { container } = controls({ lastDay: null });
-    expect(arrow(container, "Back").disabled).toBe(true);
-    expect(arrow(container, "Forward").disabled).toBe(true);
+    for (const b of container.querySelectorAll<HTMLButtonElement>(".stepper button")) {
+      expect(b.disabled).toBe(true);
+    }
   });
 
   it("BRACKETS the date rather than trailing it", () => {
-    /* `<< [date] >>`, so each arrow is on the side it takes you. The pills stay
-     * OUTSIDE the bracket: the date is what the window IS, and they are how
-     * long it runs. */
+    /* `<< < [date] > >>`, so each arrow is on the side it takes you. The
+     * dropdown stays OUTSIDE the bracket: the date is what the window IS, and
+     * it is how long the window runs. */
     const { container } = controls();
     const kids = [...container.querySelector(".stepper")!.children];
     expect(kids.map((el) => el.tagName.toLowerCase())).toEqual([
       "button",
+      "button",
       "label",
       "button",
+      "button",
     ]);
-    expect(kids[0].getAttribute("aria-label")).toBe("Back 4 weeks");
-    expect(kids[2].getAttribute("aria-label")).toBe("Forward 4 weeks");
-    expect(container.querySelector(".stepper .range-presets")).toBeNull();
+    expect(kids.map((el) => el.getAttribute("aria-label"))).toEqual([
+      "Move backward by 4 weeks",
+      "Move backward by 1 week",
+      null,
+      "Move forward by 1 week",
+      "Move forward by 4 weeks",
+    ]);
+    expect(container.querySelector(".stepper select")).toBeNull();
+  });
+});
+
+describe("the FINE arrows move ONE WEEK, whatever is showing", () => {
+  /* The athlete: *"add `<` and `>` that only move the calendar by a week
+   * instead of the selected amount of time showing."* */
+
+  it("reports a week back", () => {
+    const onStepWeek = vi.fn();
+    const { container } = controls({ onStepWeek });
+    fireEvent.click(arrow(container, "Move backward by 1 week"));
+    expect(onStepWeek).toHaveBeenCalledWith(-1);
+  });
+
+  it("reports a week forward", () => {
+    const onStepWeek = vi.fn();
+    const { container } = controls({ onStepWeek });
+    fireEvent.click(arrow(container, "Move forward by 1 week"));
+    expect(onStepWeek).toHaveBeenCalledWith(1);
+  });
+
+  it("NEVER moves the coarse step, whatever the count says", () => {
+    const onStep = vi.fn();
+    const onStepWeek = vi.fn();
+    const { container } = controls({ weeks: 6, onStep, onStepWeek });
+    fireEvent.click(arrow(container, "Move backward by 1 week"));
+    expect(onStepWeek).toHaveBeenCalledWith(-1);
+    expect(onStep).not.toHaveBeenCalled();
+  });
+
+  it.each([1, 2, 4, 6])("KEEPS ITS NAME at %i weeks shown", (weeks) => {
+    /* It is a week at every width, so the name never moves with the dropdown.
+     * BY POSITION, since at 1 the coarse pair answers to the same words. */
+    const [, fineBack, fineFwd] = arrows(controls({ weeks }).container);
+    expect(fineBack.getAttribute("aria-label")).toBe("Move backward by 1 week");
+    expect(fineFwd.getAttribute("aria-label")).toBe("Move forward by 1 week");
+  });
+
+  it("STAYS AND STAYS LIVE at 1 week, where it duplicates the coarse pair", () => {
+    /* The athlete's call: the row does not change shape as the count moves, so
+     * nothing jumps under the cursor between 2 weeks and 1. Both pairs then
+     * carry the same name, which is the truth about what they do. */
+    const { container } = controls({ weeks: 1 });
+    const four = arrows(container);
+    expect(four).toHaveLength(4);
+    expect(four.map((b) => b.disabled)).toEqual([false, false, false, false]);
+    expect(four.map((b) => b.getAttribute("aria-label"))).toEqual([
+      "Move backward by 1 week",
+      "Move backward by 1 week",
+      "Move forward by 1 week",
+      "Move forward by 1 week",
+    ]);
+  });
+
+  it("still reports the FINE callback at 1 week, not the coarse one", () => {
+    // The one thing the identical names could hide.
+    const onStep = vi.fn();
+    const onStepWeek = vi.fn();
+    const [, fineBack] = arrows(controls({ weeks: 1, onStep, onStepWeek }).container);
+    fireEvent.click(fineBack);
+    expect(onStepWeek).toHaveBeenCalledWith(-1);
+    expect(onStep).not.toHaveBeenCalled();
+  });
+
+  it("fires nothing with no window at all", () => {
+    const onStepWeek = vi.fn();
+    const { container } = controls({ lastDay: null, onStepWeek });
+    fireEvent.click(arrow(container, "Move backward by 1 week"));
+    expect(onStepWeek).not.toHaveBeenCalled();
   });
 });

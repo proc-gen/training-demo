@@ -3,6 +3,7 @@
  "load_error": null,
  "manifest": {
   "phase": "Return to Workouts",
+  "rest_days": [],
   "runs": [
    {
     "date": "2024-12-30",
@@ -14,7 +15,7 @@
     "date": "2024-12-31",
     "key": "2024-12-31-wu",
     "prescribed": "warmup for the repetition set",
-    "role": "volume_only"
+    "role": "warmup"
    },
    {
     "date": "2024-12-31",
@@ -26,7 +27,7 @@
     "date": "2024-12-31",
     "key": "2024-12-31-cd",
     "prescribed": "cooldown",
-    "role": "volume_only"
+    "role": "cooldown"
    },
    {
     "date": "2025-01-01",
@@ -44,7 +45,7 @@
     "date": "2025-01-03",
     "key": "2025-01-03-wu",
     "prescribed": "warmup, on the treadmill",
-    "role": "volume_only"
+    "role": "warmup"
    },
    {
     "date": "2025-01-03",
@@ -56,7 +57,7 @@
     "date": "2025-01-03",
     "key": "2025-01-03-cd",
     "prescribed": "cooldown, on the treadmill",
-    "role": "volume_only"
+    "role": "cooldown"
    },
    {
     "date": "2025-01-04",

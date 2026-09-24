@@ -3,6 +3,7 @@
  "load_error": null,
  "manifest": {
   "phase": "General Prep",
+  "rest_days": [],
   "runs": [
    {
     "date": "2026-09-21",
@@ -18,9 +19,21 @@
    },
    {
     "date": "2026-09-22",
+    "key": "2026-09-22-pm-wu",
+    "prescribed": "warmup for the repetition session",
+    "role": "warmup"
+   },
+   {
+    "date": "2026-09-22",
     "key": "2026-09-22-pm",
     "prescribed": "PM: 3x4x200m w/ 200m jog between reps and 400m between sets",
     "role": "repetition"
+   },
+   {
+    "date": "2026-09-22",
+    "key": "2026-09-22-pm-cd",
+    "prescribed": "cooldown for the repetition session",
+    "role": "cooldown"
    },
    {
     "date": "2026-09-23",

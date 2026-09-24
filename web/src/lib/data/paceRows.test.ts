@@ -97,7 +97,7 @@ describe("raceRows", () => {
      * a new band vanishing -- so taking `tempo` off the order list alone would
      * have moved it from the middle of the race table to the end of it. */
     const rows = raceRows(null, {
-      race_paces: { tempo: { display: "6:12-6:27/mi" }, "800m": {} },
+      race_paces: { threshold: { display: "6:12-6:27/mi" }, "800m": {} },
     });
     expect(rows.map((r) => r.key)).toEqual(["800m"]);
   });
@@ -111,17 +111,17 @@ describe("tempo is a TRAINING pace filed under race_paces", () => {
   it("appears in the training-pace rows", () => {
     const rows = bandRows(null, {
       bands: { easy: band("8:17-8:58/mi") },
-      race_paces: { tempo: { display: "6:12-6:27/mi" } },
+      race_paces: { threshold: { display: "6:12-6:27/mi" } },
     });
-    expect(rows.map((r) => r.key)).toEqual(["tempo", "easy"]);
+    expect(rows.map((r) => r.key)).toEqual(["threshold", "easy"]);
     expect(rows[0].current!.display).toBe("6:12-6:27/mi");
   });
 
   it("HEADS the list, because the list runs fastest to slowest", () => {
     /* 6:12-6:27/mi against 1 min reps at 6:25-6:38/mi. One ordering rule, not
        two. */
-    expect(BAND_ORDER[0]).toBe("tempo");
-    expect(BAND_ORDER.indexOf("tempo")).toBeLessThan(
+    expect(BAND_ORDER[0]).toBe("threshold");
+    expect(BAND_ORDER.indexOf("threshold")).toBeLessThan(
       BAND_ORDER.indexOf("rep_1min"),
     );
   });
@@ -207,15 +207,65 @@ describe("over the committed tree", () => {
       for (const [k, v] of Object.entries(c!.race_paces ?? {})) {
         if (k.startsWith("_") || typeof v !== "object") continue;
         // `tempo` lives in this block and is a TRAINING pace -- see above.
-        const order = k === "tempo" ? BAND_ORDER : RACE_ORDER;
+        const order = k === "threshold" ? BAND_ORDER : RACE_ORDER;
         expect(order, `${k} is unordered`).toContain(k);
       }
     }
   });
 
   it.skipIf(!charts.length)("and tempo is on exactly ONE of the two", () => {
-    expect(BAND_ORDER).toContain("tempo");
-    expect(RACE_ORDER).not.toContain("tempo");
+    expect(BAND_ORDER).toContain("threshold");
+    expect(RACE_ORDER).not.toContain("threshold");
+  });
+
+  it.skipIf(!charts.length)("carries NO `long` band and NO `gap_zone` key", () => {
+    /* A DELETION NOTHING GUARDS IS A DELETION SOMEBODY RE-ADDS. The Python suite
+       holds this same absence over `snapshots/`, the fixture athlete and
+       `published/`; this is its half over the tree the APP actually reads.
+
+       The `long` band was 68-72% of vVO2max and reached no score -- a long run
+       is graded exactly as an easy run is, on heart rate -- so it was retired on
+       2026-09-18 and `CONTINUOUS_BAND["long"]` is `"easy"`. `gap_zone` was
+       defined as its fast end to `rep_15min`'s slow end and nothing read it, so
+       it went with it.
+
+       NON-VACUOUS on both sides: the case is gated on `charts.length` rather
+       than passing on an empty loop, and the pin above already asserts these same
+       charts carry bands at all. The long ROLE, `is_long`, the long EMPHASIS and
+       the "Long run" weekly total are untouched -- this is the BAND only. */
+    for (const c of charts) {
+      const keys = Object.keys(c!.bands ?? {});
+      expect(keys.length, `${c!.week_ending} carries no bands`).toBeGreaterThan(0);
+      expect(keys, `${c!.week_ending} carries a long band`).not.toContain("long");
+      expect(c, `${c!.week_ending} carries a gap_zone`).not.toHaveProperty(
+        "gap_zone",
+      );
+    }
+  });
+
+  it.skipIf(!PUBLISHED)("and no planned readout still POINTS at a `long` band", () => {
+    /* The other end of the same deletion, and the one that fails quietly: a
+       readout is resolved BY NAME through `paceChartBand`, so a row left naming
+       `long` would resolve to nothing and simply render no band -- with nothing
+       on the page saying why. `planned.role` is deliberately NOT checked: the
+       long ROLE is alive and every long run wears it. */
+    const rows = Object.values(PUBLISHED!.weeks).flatMap((w) => [
+      ...(w.adherence?.results ?? []),
+      ...(w.adherence?.planned ?? []),
+    ]);
+    expect(rows.length).toBeGreaterThan(0);
+    let withBand = 0;
+    for (const r of rows) {
+      const p = r.planned;
+      if (!p) continue;
+      if (p.band) withBand += 1;
+      expect(p.band, `${r.key} names the long band`).not.toBe("long");
+      for (const s of p.sets ?? []) {
+        expect(s.band, `${r.key} has a set on the long band`).not.toBe("long");
+      }
+    }
+    // Non-vacuous: rows really do name bands, so `not.toBe` is doing work.
+    expect(withBand).toBeGreaterThan(0);
   });
 
   it.skipIf(!charts.length)("and every ordered key is really on a chart", () => {

@@ -938,3 +938,181 @@ describe("TrendPanel, race marks on a moded panel", () => {
     expect(toggleBox(render(modeMarked()).container)).toBeTruthy();
   });
 });
+
+/* ------------------------------------------------ the windowed VO2max panel */
+
+/** Two windows over three days, each point carrying its projected rows. */
+const WINDOW_POINTS: Panel["points"] = [
+  {
+    date: "2026-08-01",
+    label: "8/1",
+    value: null,
+    vo2max: 57.5,
+    values: { w42: 57.5, w30: 57.2 },
+    extra: () => [
+      { k: "Projected", v: "42 d · 30 d" },
+      { k: "5000m", v: "18:10 · 18:16" },
+    ],
+  },
+  {
+    date: "2026-08-02",
+    label: "8/2",
+    value: null,
+    vo2max: 57.6,
+    values: { w42: 57.6, w30: null },
+    extra: () => [
+      { k: "Projected", v: "42 d · 30 d" },
+      { k: "5000m", v: "18:08 · --" },
+    ],
+  },
+  {
+    date: "2026-08-03",
+    label: "8/3",
+    value: null,
+    vo2max: 57.7,
+    values: { w42: 57.7, w30: 57.4 },
+    extra: () => [
+      { k: "Projected", v: "42 d · 30 d" },
+      { k: "5000m", v: "18:06 · 18:12" },
+    ],
+  },
+];
+
+const WINDOW_RANGE: Range = { from: "2026-08-01", to: "2026-08-03" };
+
+const windowed = (over: Partial<Panel> = {}): Panel =>
+  panel({
+    key: "vo2max",
+    title: "Effective VO2max",
+    cadence: "day",
+    windowed: true,
+    points: WINDOW_POINTS,
+    series: [
+      { key: "w42", label: "42 d", color: "var(--cat-1)" },
+      { key: "w30", label: "30 d", color: "var(--cat-2)" },
+    ],
+    seriesTitle: "VO2max",
+    places: 2,
+    format: (v) => v.toFixed(2),
+    ...over,
+  });
+
+const renderWindowed = (
+  props: { customWindow?: number | null; onCustomWindow?: (d: number | null) => void } = {},
+  p: Panel = windowed(),
+) => wrap(<TrendPanel panel={p} shown={p.points} range={WINDOW_RANGE} {...props} />);
+
+const tipRows = () =>
+  [...document.body.querySelectorAll(".tooltip .row")].map((r) => r.textContent);
+
+describe("TrendPanel, the windowed VO2max panel", () => {
+  it("offers the window box ONLY when handed the state -- a choice must exist", () => {
+    const bare = renderWindowed();
+    expect(bare.container.querySelector("input.window-days")).toBeNull();
+    cleanup();
+    const given = renderWindowed({ customWindow: null, onCustomWindow: () => {} });
+    expect(given.container.querySelector("input.window-days")).toBeTruthy();
+    expect(given.q.getByLabelText("Custom window (days)")).toBeTruthy();
+  });
+
+  it("shows no box on an ordinary multi-series panel rendered without the props", () => {
+    /* The props are the gate at `TrendsView`, where the panel flag decides.
+       This asserts the other half: nothing appears uninvited. */
+    const { container } = render(multi());
+    expect(container.querySelector("input.window-days")).toBeNull();
+  });
+
+  it("reports a committed window and a cleared one", () => {
+    const seen: (number | null)[] = [];
+    const { container } = renderWindowed({
+      customWindow: null,
+      onCustomWindow: (d) => seen.push(d),
+    });
+    const input = container.querySelector<HTMLInputElement>("input.window-days")!;
+    fireEvent.change(input, { target: { value: "60" } });
+    fireEvent.keyDown(input, { key: "Enter" });
+    fireEvent.change(input, { target: { value: "x" } });
+    fireEvent.blur(input);
+    expect(seen).toEqual([60, null]);
+  });
+
+  it("seeds the box from the committed window", () => {
+    const { container } = renderWindowed({ customWindow: 90, onCustomWindow: () => {} });
+    expect(container.querySelector<HTMLInputElement>("input.window-days")!.value).toBe("90");
+  });
+
+  it("draws one line per window and a checkbox per window", () => {
+    /* Every window filled on every day here: the fixture's 8/2 has `w30`
+       null, which breaks that line into two runs of one -- no segment at all,
+       by `MultiLineChart`'s own rule -- and that case is asserted below. */
+    const full = windowed({
+      points: WINDOW_POINTS.map((p) => ({
+        ...p,
+        values: { w42: p.values!.w42, w30: p.values!.w30 ?? 57.3 },
+      })),
+    });
+    const { container } = renderWindowed({}, full);
+    expect(container.querySelectorAll("path.series-line")).toHaveLength(2);
+    const names = [...container.querySelectorAll(".series-item")].map((e) => e.textContent);
+    expect(names).toEqual(["42 d", "30 d"]);
+  });
+
+  it("BREAKS a window's line where that window is empty, and keeps the other", () => {
+    const { container } = renderWindowed();
+    // w42 runs through all three days; w30's runs of one draw no segment.
+    expect(container.querySelectorAll("path.series-line")).toHaveLength(1);
+  });
+
+  it("SHOWS THE PROJECTED ROWS on hover, after the VO2max note and the series rows", () => {
+    const { container } = renderWindowed();
+    fireEvent.mouseEnter(hits(container)[0], { clientX: 1, clientY: 1 });
+    expect(tipRows()).toEqual([
+      "VO2max57.50",
+      "42 d57.50",
+      "30 d57.20",
+      "Projected42 d · 30 d",
+      "5000m18:10 · 18:16",
+    ]);
+  });
+
+  it("keeps the rows on a day one window is empty, with that column dashed", () => {
+    const { container } = renderWindowed();
+    fireEvent.mouseEnter(hits(container)[1], { clientX: 1, clientY: 1 });
+    const rows = tipRows();
+    expect(rows).toContain("30 d--");
+    expect(rows).toContain("5000m18:08 · --");
+  });
+
+  it("carries `extra` THROUGH the axis densifier -- a slot keeps its rows", () => {
+    /* `axisPoints` spreads each point; a rebuilt point that lost the thunk
+       would hover with no projections and no other symptom. */
+    const gapped: Panel["points"] = [WINDOW_POINTS[0], WINDOW_POINTS[2]];
+    const { container } = renderWindowed({}, windowed({ points: gapped }));
+    // Three slots on the axis (8/2 densified in), two hit columns.
+    expect(hits(container)).toHaveLength(2);
+    fireEvent.mouseEnter(hits(container)[1], { clientX: 1, clientY: 1 });
+    expect(tipRows()).toContain("5000m18:06 · 18:12");
+  });
+
+  it("prices nothing until the reader points", () => {
+    let calls = 0;
+    const lazy = windowed({
+      points: WINDOW_POINTS.map((p) => ({
+        ...p,
+        extra: () => {
+          calls += 1;
+          return [];
+        },
+      })),
+    });
+    const { container } = renderWindowed({}, lazy);
+    expect(calls).toBe(0);
+    fireEvent.mouseEnter(hits(container)[2], { clientX: 1, clientY: 1 });
+    expect(calls).toBe(1);
+  });
+
+  it("counts the days as points, whatever the window box says", () => {
+    const { container } = renderWindowed({ customWindow: 60, onCustomWindow: () => {} });
+    expect(container.querySelector(".sm-range")!.textContent).toContain("3 of 3 points");
+  });
+});

@@ -29,24 +29,35 @@ export function chartVo2max(chart: PaceChart | null | undefined): number | null 
  *
  * A CONSTANT, BECAUSE THE RECORD IS SORTED ALPHABETICALLY. `publish.py` writes
  * with `sort_keys` for determinism, so the chart arrives as
- * `easy, long, recovery, rep_10min, rep_15min, rep_1min, ...` -- neither the
- * training order nor a pace order, and a reader scanning for "the 3-minute
- * band" would find it in the middle of the easy zones.
+ * `easy, recovery, rep_10min, rep_15min, rep_1min, ...` -- neither the training
+ * order nor a pace order, and a reader scanning for "the 3-minute band" would
+ * find it in the middle of the easy zones.
  */
 export const BAND_ORDER = [
-  // TEMPO IS A TRAINING PACE, and it heads the list because the list runs
+  // THRESHOLD IS A TRAINING PACE, and it heads the list because the list runs
   // fastest to slowest -- 6:12-6:27/mi against 1 min reps at 6:25-6:38/mi.
   // Athlete's call, 2026-08-14. It lives under `race_paces` in the chart JSON
   // because that is where it was recorded, but it is the only entry there with
   // no `seconds`: it is the Daniels 60-80 minute RANGE, a pace reference, not
   // a prediction. Rendering it beside 5000m invited reading it as one.
-  "tempo",
+  //
+  // KEYED `tempo` UNTIL 2026-09-10, when the athlete renamed the band -- *"we
+  // already have the needed band for threshold that's currently named tempo.
+  // we can rename that pace to threshold so it's properly logged."* The value
+  // never moved; all 89 charts were migrated key-only. The `tempo` RUN ROLE is
+  // untouched, because a continuous run at this pace is still a tempo run.
+  "threshold",
   "rep_1min",
   "rep_3min",
   "rep_6min",
   "rep_10min",
   "rep_15min",
-  "long",
+  // THE `long` BAND IS RETIRED (2026-09-18), not merely unordered: it was
+  // 68-72% of vVO2max, it reached no score, and a long run's reference band is
+  // `easy` now -- `CONTINUOUS_BAND["long"] = "easy"` in `prescription.py`. It is
+  // stripped from every committed chart, so listing it here would fail the
+  // every-ordered-key-is-really-on-a-chart half of the corpus pin below. The
+  // long ROLE, the long EMPHASIS and `is_long` are all untouched.
   "easy",
   "recovery",
 ];
@@ -81,10 +92,9 @@ export const PACE_LABEL: Record<string, string> = {
   rep_6min: "6 min reps",
   rep_10min: "10 min reps",
   rep_15min: "15 min reps",
-  long: "Long",
   easy: "Easy",
   recovery: "Recovery",
-  tempo: "Tempo",
+  threshold: "Threshold",
   "1609m": "Mile",
   "15000m": "15K",
   "16093m": "10 miles",
@@ -152,9 +162,9 @@ function rows<T>(
  */
 export function trainingPaces(chart: PaceChart | null | undefined) {
   const bands = chart?.bands;
-  const tempo = chart?.race_paces?.["tempo"];
-  if (!tempo || typeof tempo !== "object") return bands;
-  return { ...(bands ?? {}), tempo } as Record<string, Band>;
+  const threshold = chart?.race_paces?.["threshold"];
+  if (!threshold || typeof threshold !== "object") return bands;
+  return { ...(bands ?? {}), threshold } as Record<string, Band>;
 }
 
 /** Training-pace rows. `week` is undefined for a week with no chart of its own. */
@@ -165,18 +175,18 @@ export function bandRows(
   return rows(BAND_ORDER, trainingPaces(week), trainingPaces(current));
 }
 
-/** Estimated-race-time rows. `tempo` is deliberately not among them.
+/** Estimated-race-time rows. `threshold` is deliberately not among them.
  *
  * STRIPPED, not merely left out of `RACE_ORDER`. An unordered key is APPENDED
  * rather than dropped -- that is the rule that stops a new band vanishing -- so
- * taking `tempo` off the order list alone would have moved it from the middle of
- * the race table to the end of it.
+ * taking it off the order list alone would have moved it from the middle of the
+ * race table to the end of it.
  */
 export function racePaces(chart: PaceChart | null | undefined) {
   const rp = chart?.race_paces;
   if (!rp) return rp;
   return Object.fromEntries(
-    Object.entries(rp).filter(([k]) => k !== "tempo"),
+    Object.entries(rp).filter(([k]) => k !== "threshold"),
   ) as typeof rp;
 }
 

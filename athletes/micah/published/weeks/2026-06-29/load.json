@@ -1,26 +1,30 @@
 {
- "acwr_mech": 1.0937886493422648,
+ "acwr_mech": 1.0942189270359286,
  "acwr_mech_on": "2026-07-05",
- "bg_trimp": 74.03484957871441,
  "ceiling_inputs": {
   "background_source": "baseline",
   "background_steps": 2813.0,
+  "background_trimp_budget": 10,
   "background_window_days": 28,
   "cadence_source": "measured",
   "cadence_spm": 169.0,
   "default_cadence_spm": 172,
   "margin": 1.05,
-  "run_step_weight": 2.5
+  "run_step_weight": 2.5,
+  "walk_reference_spm": 110
  },
  "days": [
   {
-   "atl": 73.0346969642394,
-   "bg_trimp": 4.174975605044699,
+   "atl": 72.9429391517394,
+   "bg_trimp": 2.7813220061162744,
    "bg_trimp_hr_rest_source": "measured",
-   "ceiling": 2953.65,
+   "bg_trimp_source": "nominal-cadence",
+   "ceiling": 5631.8541921985425,
+   "ceiling_background_source": "budget",
+   "ceiling_background_steps": 5631.8541921985425,
    "ceiling_source": "prescribed",
    "completeness": "full",
-   "ctl": 59.286196426795506,
+   "ctl": 59.25111905902827,
    "date": "2026-06-29",
    "pct": 100.0,
    "prescribed_run_seconds": 0.0,
@@ -30,15 +34,18 @@
    "trimp": 0.0
   },
   {
-   "atl": 73.30602272317955,
-   "bg_trimp": 20.599282725452284,
+   "atl": 73.23720436380455,
+   "bg_trimp": 13.72301152736864,
    "bg_trimp_hr_rest_source": "measured",
-   "ceiling": 29571.15,
+   "bg_trimp_source": "nominal-cadence",
+   "ceiling": 32249.35419219854,
+   "ceiling_background_source": "budget",
+   "ceiling_background_steps": 5631.8541921985425,
    "ceiling_source": "prescribed",
    "completeness": "full",
-   "ctl": 59.97614077903758,
+   "ctl": 59.94269491674789,
    "date": "2026-06-30",
-   "pct": 91.87581557198781,
+   "pct": 100.0,
    "prescribed_run_seconds": 3600.0,
    "prescribed_run_steps": 10140.0,
    "role": "easy",
@@ -46,13 +53,16 @@
    "trimp": 74.12
   },
   {
-   "atl": 74.75451704238466,
-   "bg_trimp": 3.791276294858774,
+   "atl": 74.7029032728534,
+   "bg_trimp": 2.5485019898165975,
    "bg_trimp_hr_rest_source": "measured",
-   "ceiling": 29571.15,
+   "bg_trimp_source": "nominal-cadence",
+   "ceiling": 32043.040201753996,
+   "ceiling_background_source": "budget",
+   "ceiling_background_steps": 5425.540201753995,
    "ceiling_source": "prescribed",
    "completeness": "full",
-   "ctl": 60.86562260326839,
+   "ctl": 60.833732362480546,
    "date": "2026-07-01",
    "pct": 100.0,
    "prescribed_run_seconds": 3600.0,
@@ -62,13 +72,16 @@
    "trimp": 79.1
   },
   {
-   "atl": 87.4883877817885,
-   "bg_trimp": 11.756464018639642,
+   "atl": 87.44967745464005,
+   "bg_trimp": 8.03494808721307,
    "bg_trimp_hr_rest_source": "measured",
+   "bg_trimp_source": "nominal-cadence",
    "ceiling": null,
+   "ceiling_background_source": null,
+   "ceiling_background_steps": null,
    "ceiling_source": null,
    "completeness": "full",
-   "ctl": 63.880709924046606,
+   "ctl": 63.850302950272145,
    "date": "2026-07-02",
    "pct": null,
    "prescribed_run_seconds": null,
@@ -78,15 +91,18 @@
    "trimp": 125.69
   },
   {
-   "atl": 78.47379083634138,
-   "bg_trimp": 11.549349127199571,
+   "atl": 78.44475809098005,
+   "bg_trimp": 7.95426503377922,
    "bg_trimp_hr_rest_source": "measured",
-   "ceiling": 20698.65,
+   "bg_trimp_source": "nominal-cadence",
+   "ceiling": 22629.42361865087,
+   "ceiling_background_source": "budget",
+   "ceiling_background_steps": 4884.423618650872,
    "ceiling_source": "prescribed",
    "completeness": "full",
-   "ctl": 63.30160713688164,
+   "ctl": 63.27261444095716,
    "date": "2026-07-03",
-   "pct": 99.75493385382781,
+   "pct": 100.0,
    "prescribed_run_seconds": 2400.0,
    "prescribed_run_steps": 6760.0,
    "role": "easy",
@@ -94,15 +110,18 @@
    "trimp": 51.43
   },
   {
-   "atl": 72.41784312725603,
-   "bg_trimp": 14.616531879553252,
+   "atl": 72.39606856823504,
+   "bg_trimp": 10.066694422704733,
    "bg_trimp_hr_rest_source": "measured",
-   "ceiling": 25134.9,
+   "bg_trimp_source": "nominal-cadence",
+   "ceiling": 27065.67361865087,
+   "ceiling_background_source": "budget",
+   "ceiling_background_steps": 4884.423618650872,
    "ceiling_source": "prescribed",
    "completeness": "full",
-   "ctl": 62.88060215377087,
+   "ctl": 62.85295795533125,
    "date": "2026-07-04",
-   "pct": 97.71561862182914,
+   "pct": 100.0,
    "prescribed_run_seconds": 3000.0,
    "prescribed_run_steps": 8450.0,
    "role": "easy",
@@ -110,13 +129,16 @@
    "trimp": 54.25
   },
   {
-   "atl": 80.55088234544202,
-   "bg_trimp": 7.546969927966197,
+   "atl": 80.53455142617628,
+   "bg_trimp": 5.197747366354031,
    "bg_trimp_hr_rest_source": "measured",
-   "ceiling": 38443.65,
+   "bg_trimp_source": "nominal-cadence",
+   "ceiling": 40374.42361865087,
+   "ceiling_background_source": "budget",
+   "ceiling_background_steps": 4884.423618650872,
    "ceiling_source": "prescribed",
    "completeness": "full",
-   "ctl": 64.83731833266526,
+   "ctl": 64.81095991089724,
    "date": "2026-07-05",
    "pct": 100.0,
    "prescribed_run_seconds": 4800.0,
@@ -153,7 +175,7 @@
   {
    "status": "clear",
    "token": "background-load-spike",
-   "why": "20,017 SE background against a 25,744 SE baseline = 0.78x (fires above 1.3x)"
+   "why": "20,017 SE background against a 25,785 SE baseline = 0.78x (fires above 1.3x)"
   },
   {
    "status": "clear",
@@ -180,7 +202,7 @@
   {
    "status": "clear",
    "token": "strain-spike",
-   "why": "strain 392,656 SE against a 267,686 SE baseline = 1.47x (fires above 1.5x)"
+   "why": "strain 392,656 SE against a 267,785 SE baseline = 1.47x (fires above 1.5x)"
   },
   {
    "status": "clear",
@@ -189,7 +211,7 @@
   }
  ],
  "integrity": {
-  "earned": 140853.7,
+  "earned": 144107.0,
   "excluded": [
    "2026-07-02"
   ],

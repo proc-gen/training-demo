@@ -19,16 +19,24 @@
  * derived from `label`: a control whose only accessible name is a glyph is a
  * control nobody can identify, and four rows all called "expand" are worse than
  * none.
+ *
+ * `title` IS OPTIONAL AND IS NOT A SECOND SPELLING OF `ariaLabel`. The workout
+ * editor's table has no headers -- the athlete's instruction is that every
+ * control there says what it is on hover -- and a caret with no tooltip in that
+ * row would be the one exception. The runs table wants none, because its rows
+ * are labelled by the columns above them.
  */
 export function RowExpander({
   label,
   ariaLabel,
+  title,
   open,
   panelId,
   onToggle,
 }: {
   label?: React.ReactNode;
   ariaLabel: string;
+  title?: string;
   open: boolean;
   panelId: string;
   onToggle: () => void;
@@ -40,6 +48,7 @@ export function RowExpander({
       aria-expanded={open}
       aria-controls={panelId}
       aria-label={ariaLabel}
+      title={title}
       onClick={(e) => {
         e.stopPropagation();
         onToggle();

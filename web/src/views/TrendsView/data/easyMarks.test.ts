@@ -29,9 +29,10 @@ describe("easyMarks over the committed tree", () => {
   has(P)("takes ALL THREE ROLES and NOTHING ELSE, both directions", () => {
     /* Both directions, the `EMPHASIS_BY_ROLE` precedent: a role that stopped
        being emitted would leave this passing on a smaller corpus, and a role
-       that started being emitted would go unnoticed. `volume_only` is the one
-       most likely to creep in -- 139 rows of a workout's separately-recorded
-       warmup, which is real running that was never prescribed a pace. */
+       that started being emitted would go unnoticed. `warmup` and `cooldown`
+       are the ones most likely to creep in -- 141 rows of a workout's
+       separately-recorded legs, real running that was never prescribed a
+       pace. They were one `volume_only` token until 2026-09-12. */
     const seen = new Set(marks.map((m) => m.role));
     expect([...seen].sort()).toEqual([...EASY_ROLES].sort());
 
@@ -40,7 +41,8 @@ describe("easyMarks over the committed tree", () => {
         .filter((r) => !(EASY_ROLES as readonly string[]).includes(r.role ?? ""))
         .map((r) => r.role),
     );
-    expect(dropped).toContain("volume_only");
+    expect(dropped).toContain("warmup");
+    expect(dropped).toContain("cooldown");
     expect(dropped).toContain("subt");
     expect(dropped).toContain("race");
     const marked = new Set(marks.map((m) => `${m.date}|${m.role}`));
@@ -128,7 +130,8 @@ describe("easyMarks edges", () => {
   });
 
   it("DROPS EVERY OTHER ROLE, including a workout's own warmup", () => {
-    const other = ["volume_only", "subt", "race", "tempo", "progression", "walk"];
+    const other = ["warmup", "cooldown", "subt", "race", "tempo",
+                   "progression", "walk"];
     expect(easyMarks(payload(other.map((role) => run({ role }))))).toEqual([]);
   });
 

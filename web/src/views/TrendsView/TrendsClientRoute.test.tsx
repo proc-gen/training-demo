@@ -58,7 +58,12 @@ describe.skipIf(!slug)("querying the browser index", () => {
   it("drew a chart -- the comparison is not two empty divs", () => {
     const { container } = inIndex(<TrendsClientRoute />, { db, error: null });
     expect(container.querySelectorAll("svg").length).toBeGreaterThan(0);
-    expect(container.querySelectorAll("[aria-pressed]").length).toBeGreaterThan(0);
+    /* AND THE CONTROLS. It looked for `[aria-pressed]` until the preset strip
+       became a dropdown (2026-09-07) and there was none left on this page --
+       the marker has to be something the row actually renders, or the equality
+       test above it goes vacuous without saying so. */
+    expect(container.querySelectorAll(".stepper button").length).toBe(4);
+    expect(container.querySelectorAll("select").length).toBeGreaterThan(1);
   });
 });
 

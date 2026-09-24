@@ -79,6 +79,11 @@ function plannedShape(p: NonNullable<RunResult["planned"]>) {
     ceiling: has(p.ceiling),
     criterion: p.criterion ?? null,
     seconds: arity(p.prescribed_seconds),
+    // The OTHER unit a continuous run may be prescribed in. Null on every
+    // published block today -- no manifest states one yet -- and keyed here
+    // anyway: keying on more than the components read costs a render, keying
+    // on less is a silent gap.
+    miles: arity(p.prescribed_miles),
     reference: p.band_is_reference ?? null,
     chartUnconfirmed: p.chart_confirmed === false,
     carried: !!p.chart_is_carried_forward,
@@ -97,6 +102,9 @@ function plannedShape(p: NonNullable<RunResult["planned"]>) {
         groups: has(s.groups),
         groupSec: arity(s.group_float_seconds),
         groupDist: has(s.group_float_distance_m),
+        // `floatLength` names the between-group recovery's MODE beside its
+        // length, so two sets differing only in this word render differently.
+        groupMode: s.group_float_mode ?? null,
       })),
     ),
   };
@@ -124,6 +132,18 @@ function shapeOf(r: RunResult): string {
     hasCadence: r.cadence !== null && r.cadence !== undefined,
     hasDetail: det !== null,
     hasLaps: (det?.laps ?? []).length > 0,
+    // THE LENGTH ROWS `runWhy` BUILDS, one per unit the plan stated. Presence
+    // is not enough on its own: a report whose `factor` is null was REPORTED
+    // and not scored, which takes a different branch and prints a different
+    // cost cell. `distance` is null on every published row today.
+    duration: r.duration
+      ? { scored: r.duration.factor !== null && r.duration.factor !== undefined,
+          reason: !!r.duration.reason }
+      : null,
+    distance: r.distance
+      ? { scored: r.distance.factor !== null && r.distance.factor !== undefined,
+          reason: !!r.distance.reason }
+      : null,
     // A RACE'S OWN SEGMENT TABLE, which `role: "race"` alone does not describe.
     // `RaceSplitTable` and `raceChartPoints` branch on each of these, and until
     // 2026-08-30 nothing rendered `detail.race` at all -- so one race reached

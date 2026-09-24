@@ -20,6 +20,18 @@ const stepper = (over: Partial<Parameters<typeof Stepper>[0]> = {}) =>
     </Stepper>,
   );
 
+/** The same, carrying a fine pair. Its own helper rather than a flag, because
+ *  most of the cases below are about the control WITHOUT one -- `WeekPicker`
+ *  passes none and must keep rendering exactly two arrows. */
+const FINE = {
+  prev: "Move backward by 1 week",
+  next: "Move forward by 1 week",
+  onPrev: () => {},
+  onNext: () => {},
+};
+const twoSpeed = (fine: Partial<typeof FINE> & Record<string, unknown> = {}) =>
+  stepper({ fine: { ...FINE, ...fine } });
+
 /* THE ARROWS, and only the arrows. Scoped to DIRECT children: the slot holds
    whatever the caller puts in it, and a control with a button of its own would
    otherwise be counted as a third arrow. */
@@ -34,8 +46,13 @@ const order = (c: HTMLElement) =>
   );
 
 describe("Stepper", () => {
-  it("renders exactly two buttons", () => {
+  it("renders exactly two buttons with no fine pair", () => {
+    // `WeekPicker` is the caller that passes none: its step is already a week.
     expect(buttons(stepper().container)).toHaveLength(2);
+  });
+
+  it("renders FOUR with one", () => {
+    expect(buttons(twoSpeed().container)).toHaveLength(4);
   });
 
   it("shows the athlete's own glyphs, back first", () => {
@@ -81,6 +98,14 @@ describe("it BRACKETS its children rather than trailing them", () => {
 
   it("puts the back arrow FIRST, the children next, the forward arrow LAST", () => {
     expect(order(stepper().container)).toEqual(["<<", "input", ">>"]);
+  });
+
+  it("NESTS the fine pair inside the coarse one", () => {
+    /* `<< < [field] > >>`. The fine arrows bracket the field too -- they step
+     * the same window, just less of it -- so putting them outside would break
+     * the physical reading the athlete asked for, where each arrow is on the
+     * side it takes you. */
+    expect(order(twoSpeed().container)).toEqual(["<<", "<", "input", ">", ">>"]);
   });
 
   it("keeps that order with SEVERAL children", () => {
@@ -150,6 +175,113 @@ describe("the buttons are NAMED, because the glyph is not a name", () => {
     const group = container.querySelector("[role='group']")!;
     expect(group.getAttribute("aria-label")).toBe("Date range");
   });
+
+  it("SHOWS THE SAME WORDS ON HOVER, on every arrow", () => {
+    /* The athlete asked for the tooltips *"for clarity"*, and what needs
+     * clarifying is the increment -- four arrows in a row, two worth a week and
+     * two worth a window, cannot be told apart by looking. One string in both
+     * attributes, or the control reads one way to a pointer and another to a
+     * screen reader. */
+    const { container } = twoSpeed();
+    for (const b of buttons(container)) {
+      expect(b.getAttribute("title")).toBe(b.getAttribute("aria-label"));
+      expect(b.getAttribute("title")).toBeTruthy();
+    }
+  });
+});
+
+describe("the FINE pair steps the same window by less of it", () => {
+  /* The athlete: *"add `<` and `>` that only move the calendar by a week
+   * instead of the selected amount of time showing."* This component still
+   * moves nothing -- it reports which of four buttons was pressed. */
+
+  it("shows a single glyph, so the two speeds are distinguishable", () => {
+    expect(buttons(twoSpeed().container).map((b) => b.textContent)).toEqual([
+      "<<",
+      "<",
+      ">",
+      ">>",
+    ]);
+  });
+
+  it("names each side from the caller's own vocabulary", () => {
+    expect(
+      buttons(twoSpeed().container).map((b) => b.getAttribute("aria-label")),
+    ).toEqual([
+      "Previous week",
+      "Move backward by 1 week",
+      "Move forward by 1 week",
+      "Next week",
+    ]);
+  });
+
+  it("reports a fine step back, and NOT the coarse one", () => {
+    const onPrev = vi.fn();
+    const finePrev = vi.fn();
+    const { container } = stepper({
+      onPrev,
+      fine: { ...FINE, onPrev: finePrev },
+    });
+    fireEvent.click(named(container, "Move backward by 1 week"));
+    expect(finePrev).toHaveBeenCalledTimes(1);
+    expect(onPrev).not.toHaveBeenCalled();
+  });
+
+  it("reports a fine step forward, and NOT the coarse one", () => {
+    const onNext = vi.fn();
+    const fineNext = vi.fn();
+    const { container } = stepper({
+      onNext,
+      fine: { ...FINE, onNext: fineNext },
+    });
+    fireEvent.click(named(container, "Move forward by 1 week"));
+    expect(fineNext).toHaveBeenCalledTimes(1);
+    expect(onNext).not.toHaveBeenCalled();
+  });
+
+  it("GOES DEAD INDEPENDENTLY of the coarse pair", () => {
+    /* Trends is why: it steps a week on `All`, where there is no preset period
+     * to step by at all, so the outer pair is dead while the inner one is
+     * live. */
+    const { container } = stepper({
+      prevDisabled: true,
+      nextDisabled: true,
+      fine: FINE,
+    });
+    expect(buttons(container).map((b) => b.disabled)).toEqual([
+      true,
+      false,
+      false,
+      true,
+    ]);
+  });
+
+  it("disables per side within the fine pair too", () => {
+    const { container } = twoSpeed({ prevDisabled: true });
+    expect(buttons(container).map((b) => b.disabled)).toEqual([
+      false,
+      true,
+      false,
+      false,
+    ]);
+  });
+
+  it("fires nothing from a dead fine arrow", () => {
+    const finePrev = vi.fn();
+    const { container } = stepper({
+      fine: { ...FINE, onPrev: finePrev, prevDisabled: true },
+    });
+    fireEvent.click(named(container, "Move backward by 1 week"));
+    expect(finePrev).not.toHaveBeenCalled();
+  });
+
+  it("keeps the whole bracket in ONE group", () => {
+    // Four arrows and the field are one control, not two controls sharing a
+    // row: a second `role="group"` would announce a second thing to step.
+    const { container } = twoSpeed();
+    expect(container.querySelectorAll("[role='group']")).toHaveLength(1);
+    expect(container.querySelector("[role='group']")!.children).toHaveLength(5);
+  });
 });
 
 describe("it is an ACTION pair, not a toggle strip", () => {
@@ -163,8 +295,10 @@ describe("it is an ACTION pair, not a toggle strip", () => {
     expect(container.querySelectorAll("[role='tablist']")).toHaveLength(0);
   });
 
+  /* ALL FOUR ARROWS, so the fine pair cannot grow a second idea of what a
+     stepper button is. */
   it("carries no pressed or selected state", () => {
-    const { container } = stepper();
+    const { container } = twoSpeed();
     for (const b of buttons(container)) {
       expect(b.hasAttribute("aria-pressed")).toBe(false);
       expect(b.hasAttribute("aria-selected")).toBe(false);
@@ -172,12 +306,12 @@ describe("it is an ACTION pair, not a toggle strip", () => {
   });
 
   it("wears the shared pill class", () => {
-    const { container } = stepper();
+    const { container } = twoSpeed();
     for (const b of buttons(container)) expect(b.className).toBe("tab");
   });
 
   it("is a real button, so it is reachable by keyboard", () => {
-    const { container } = stepper();
+    const { container } = twoSpeed();
     for (const b of buttons(container)) expect(b.getAttribute("type")).toBe("button");
   });
 });

@@ -135,6 +135,13 @@ export function RepSetPanel({
             ? [
                 { label: "HR avg", num: true },
                 { label: "HR max", num: true },
+                // THE DROP TEST'S BASELINE, and it is here so the verdict in the
+                // last column can be checked. A recovery earns its seconds only
+                // if its own minimum fell `recovery_drop_bpm` below the END of
+                // the rep above it -- not below that rep's average, which is what
+                // it was until 2026-09-11 and which penalised the first recovery
+                // of every session. Neither `HR avg` nor `HR max` is that number.
+                { label: "HR end", num: true },
               ]
             : []),
           { label: "" },
@@ -163,6 +170,7 @@ export function RepSetPanel({
                 <>
                   <td className="num">{x.hr_avg ?? "--"}</td>
                   <td className="num">{x.hr_max ?? "--"}</td>
+                  <td className="num">{x.hr_end ?? "--"}</td>
                 </>
               ) : null}
               <td>

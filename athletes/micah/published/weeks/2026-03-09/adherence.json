@@ -8,15 +8,20 @@
   "long_run_share": 0.0,
   "miles": 10.115923009623797,
   "non_run_days": [],
+  "plan_miles_unpriceable": [],
   "plan_unpriceable": [],
+  "planned_miles": null,
+  "planned_miles_week": null,
   "planned_seconds": null,
   "planned_seconds_week": null,
   "prescribed_dates": 3,
   "prescribed_dates_due": 3,
+  "projected_miles": 10.115923009623797,
   "projected_seconds": 5119.0,
   "quality_days": 1,
   "quality_seconds": 1715,
   "quality_share": 0.3350263723383473,
+  "remaining_planned_miles": 0.0,
   "remaining_planned_seconds": 0.0,
   "rest_days": 4,
   "running_days": 3,
@@ -46,15 +51,20 @@
   "long_run_share": 0.0,
   "miles": 10.115923009623797,
   "non_run_days": [],
+  "plan_miles_unpriceable": [],
   "plan_unpriceable": [],
+  "planned_miles": null,
+  "planned_miles_week": null,
   "planned_seconds": null,
   "planned_seconds_week": null,
   "prescribed_dates": 3,
   "prescribed_dates_due": 3,
+  "projected_miles": 10.115923009623797,
   "projected_seconds": 5119.0,
   "quality_days": 1,
   "quality_seconds": 1715,
   "quality_share": 0.3350263723383473,
+  "remaining_planned_miles": 0.0,
   "remaining_planned_seconds": 0.0,
   "rest_days": 4,
   "running_days": 3,
@@ -108,6 +118,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": null,
    "duration_factor": 1.0,
    "earned": 1801.0,
@@ -143,6 +154,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "unplanned -- injury-window easy run (30 min)",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
     "role": "easy",
     "sets": null,
@@ -193,7 +205,6 @@
       "remainder_dur": 226
      }
     ],
-    "cooldown": null,
     "core_seconds": 1715,
     "data_quality": [
      "reps [6] dip >12 bpm below their neighbours — check strap"
@@ -330,7 +341,6 @@
       "work_seconds": 0
      }
     ],
-    "slivers": [],
     "suspect_seconds": 0,
     "treadmill_mph": null,
     "treadmill_warning": null,
@@ -360,6 +370,7 @@
      166
     ],
     "prescribed": "unplanned -- an attempt at the plan's 3x16:00, cut by the glute (45 min at HR 150)",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
     "role": "subt",
     "sets": [
@@ -372,6 +383,7 @@
       "float_mode": null,
       "float_seconds": null,
       "group_float_distance_m": null,
+      "group_float_mode": null,
       "group_float_seconds": null,
       "groups": null,
       "hr_ceiling": [
@@ -380,6 +392,7 @@
       ],
       "mode": "subt",
       "rep_distance_m": null,
+      "rep_rows": null,
       "rep_seconds": null,
       "reps": null,
       "reps_per_group": null,
@@ -432,6 +445,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": null,
    "duration_factor": 1.0,
    "earned": 602.0,
@@ -467,6 +481,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "unplanned -- ten-minute treadmill test of the glute",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
     "role": "easy",
     "sets": null,
@@ -510,6 +525,7 @@
    "long_run_share": true,
    "quality_days_met": true,
    "rest_days_met": null,
+   "volume_miles_vs_plan": null,
    "volume_vs_plan": null
   },
   "pct": 100.0,
@@ -517,6 +533,7 @@
    "long_run_share": "the long run was 0.0% of the running distance, against a 25% ceiling",
    "quality_days_met": "every quality session the plan scheduled on 2026-03-10 was completed",
    "rest_days_met": "the plan schedules no rest day, so this check does not apply and left the denominator",
+   "volume_miles_vs_plan": "the manifest states no planned_miles, so there is nothing to compare the week's running distance against",
    "volume_vs_plan": "the manifest states no planned_time_seconds, so there is nothing to compare the week's running time against"
   }
  },

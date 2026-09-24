@@ -1,12 +1,44 @@
 "use client";
 
+import { StepperArrow } from "./StepperArrow";
+
+/** A finer step of the SAME window, rendered inside the coarse pair. */
+export type FineStep = {
+  /** Accessible name and tooltip for the back button. */
+  prev: string;
+  /** Accessible name and tooltip for the forward button. */
+  next: string;
+  onPrev: () => void;
+  onNext: () => void;
+  prevDisabled?: boolean;
+  nextDisabled?: boolean;
+};
+
 /** A back/forward pair BRACKETING the control it steps.
  *
  * ONE IDIOM, THREE VIEWS. The week picker steps a week, the calendar steps by
  * however many weeks its grid is showing, and the trends range steps by its
  * preset's own period. Each of those is a different quantity and none of them
- * belongs in here -- this component moves nothing. It renders two buttons and
+ * belongs in here -- this component moves nothing. It renders the buttons and
  * reports which one was pressed.
+ *
+ * IT MAY CARRY A SECOND, FINER PAIR INSIDE THE FIRST -- `<< < [field] > >>`.
+ * The athlete asked for arrows that *"only move the calendar by a week instead
+ * of the selected amount of time showing"*, on both the Calendar and Trends.
+ * The two pairs step the SAME window at two speeds, which is why this is one
+ * `fine` prop on this component rather than a second Stepper beside it: two
+ * groups would announce two controls, and the inner arrows would be bracketing
+ * nothing.
+ *
+ * IT IS NOT THE CALLER'S SLOT, THOUGH THE SLOT COULD HOLD IT. Two callers
+ * hand-rolling the same two buttons is two copies free to drift in their
+ * accessibility wiring -- the half nobody re-checks after copying, which is the
+ * whole reason this component exists at all rather than three copies of the
+ * outer pair.
+ *
+ * THE FINE PAIR IS OPTIONAL AND `WeekPicker` PASSES NONE. Its step is already
+ * one week, so an inner pair there would be two buttons doing what the two
+ * beside them do.
  *
  * IT BRACKETS ITS CHILDREN RATHER THAN TRAILING THEM: `<< [field] >>`. It
  * rendered as a bare pair AFTER the date control for one day, and the athlete
@@ -38,23 +70,16 @@
  * accessibility wiring -- the half nobody re-checks after copying, which is the
  * same reasoning that lifted `Tabs` down here.
  *
- * `prev` AND `next` ARE ACCESSIBLE NAMES AND ARE REQUIRED. `<<` is a glyph, not
- * a name: a screen reader announcing "less than less than, button" has told the
- * reader nothing, and three unnamed pairs on one page are indistinguishable.
- * Each caller says what its own step MEANS -- `Previous week`, `Back 4 weeks`,
- * `Back 1 month` -- so the name states the increment the pill cannot.
+ * EVERY NAME IS THE CALLER'S, AND EVERY ONE IS REQUIRED. A glyph is not a name,
+ * and a page carrying two of these pairs -- four buttons, now eight -- is
+ * indistinguishable without them. Each caller says what its own step MEANS
+ * (`Previous week`, `Move backward by 4 weeks`, `Move backward by 1 month`), so
+ * the name states the increment the glyph cannot. `StepperArrow` is what turns
+ * one of those into a label and a tooltip at once.
  *
- * IT BORROWS `.tab` CHROME AND CARRIES NO PRESSED STATE. `CalendarControls` and
- * `RangePicker` already dress their strips as pills, and growing a second
- * definition of a control that shape is what `globals.css` keeps one rule for.
- * But these are ACTIONS rather than toggles: there is no `aria-pressed` and no
- * `aria-selected`, because neither is true of a button that moves a window and
- * springs back.
- *
- * DISABLING IS PER SIDE. A window at the start of the record can still go
- * forward, and `disabled` on a real `<button>` is what takes it out of the tab
- * order -- a `.tab` that merely looked dimmed would still be focusable and still
- * fire.
+ * DISABLING IS PER SIDE, AND NOW PER PAIR. A window at the start of the record
+ * can still go forward, and the two pairs go dead independently: Trends steps a
+ * week on `All`, where there is no preset period to step by at all.
  */
 export function Stepper({
   label,
@@ -64,48 +89,60 @@ export function Stepper({
   onNext,
   prevDisabled,
   nextDisabled,
+  fine,
   children,
 }: {
   /** Accessible name for the group, since a page carries more than one. */
   label: string;
-  /** Accessible name for the back button — it must state the increment. */
+  /** Accessible name AND tooltip for the back button — it must state the
+   *  increment, which is the whole reason the tooltip is there. */
   prev: string;
-  /** Accessible name for the forward button. */
+  /** Accessible name and tooltip for the forward button. */
   next: string;
   onPrev: () => void;
   onNext: () => void;
   prevDisabled?: boolean;
   nextDisabled?: boolean;
-  /** The control being stepped. Rendered BETWEEN the two arrows. */
+  /** An optional second pair, INSIDE the first, stepping the same window by a
+   *  smaller amount. Absent on a caller whose only step is already the fine
+   *  one. */
+  fine?: FineStep;
+  /** The control being stepped. Rendered BETWEEN the arrows. */
   children: React.ReactNode;
 }) {
   return (
     <div className="stepper" role="group" aria-label={label}>
-      <button
-        type="button"
-        className="tab"
-        aria-label={prev}
+      <StepperArrow
+        name={prev}
+        glyph="<<"
         disabled={prevDisabled}
         onClick={onPrev}
-      >
-        {/* The glyph is decoration; `aria-label` above is the name. `<<` and
-            `>>` as the athlete asked for them, rather than the `«`/`»` a
-            typographer would reach for -- they were named that way and the
-            ASCII pair is what the reader is expecting to find. */}
-        <span aria-hidden="true">{"<<"}</span>
-      </button>
+      />
+      {fine ? (
+        <StepperArrow
+          name={fine.prev}
+          glyph="<"
+          disabled={fine.prevDisabled}
+          onClick={fine.onPrev}
+        />
+      ) : null}
 
       {children}
 
-      <button
-        type="button"
-        className="tab"
-        aria-label={next}
+      {fine ? (
+        <StepperArrow
+          name={fine.next}
+          glyph=">"
+          disabled={fine.nextDisabled}
+          onClick={fine.onNext}
+        />
+      ) : null}
+      <StepperArrow
+        name={next}
+        glyph=">>"
         disabled={nextDisabled}
         onClick={onNext}
-      >
-        <span aria-hidden="true">{">>"}</span>
-      </button>
+      />
     </div>
   );
 }

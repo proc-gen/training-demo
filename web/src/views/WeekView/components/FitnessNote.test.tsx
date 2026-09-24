@@ -96,12 +96,18 @@ describe("FitnessNote", () => {
 
   describe("the background estimate", () => {
     it("is reported beside the measurement and LABELLED", () => {
-      /* The label is the whole instrument. A nominal walking cadence and a
-       * nominal fraction of hr_max printed as a peer of a stream-integrated
-       * TRIMP would be a model published as a measurement. */
+      /* The label is the whole instrument. A walking heart rate nobody has
+       * measured, printed as a peer of a stream-integrated TRIMP, would be a
+       * model published as a measurement.
+       *
+       * The two halves are labelled SEPARATELY on purpose since 2026-09-09:
+       * the minutes ARE measured wherever the export covers the day, and the
+       * heart rate is not. Calling the whole thing uncalibrated understated
+       * what is known; calling it measured would overstate it. */
       const t = text(load(FIT, { bg_trimp: 30.2 }));
       expect(t).toContain("30");
-      expect(t).toContain("uncalibrated estimate");
+      expect(t).toMatch(/measured/i);
+      expect(t).toMatch(/guess/i);
       expect(t).toContain("non-run steps");
     });
 
@@ -112,7 +118,7 @@ describe("FitnessNote", () => {
     });
 
     it("says nothing at all when no day priced one", () => {
-      expect(text(load(FIT))).not.toMatch(/uncalibrated/i);
+      expect(text(load(FIT))).not.toMatch(/non-run steps/i);
     });
   });
 

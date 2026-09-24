@@ -24,7 +24,7 @@
  * by the move.
  */
 
-import { clock, pct } from "@/lib/data/format";
+import { clock, num, pct } from "@/lib/data/format";
 import type { RepSet, RunResult } from "@/lib/data/payload";
 import type { Ledger, Loss } from "../LossRow";
 
@@ -52,24 +52,63 @@ function row(
   return { key, label, why, cost: null, pct: null, ...opts };
 }
 
-/** The length row, from `duration`. Null when the run had no prescription --
- *  which holds it harmless rather than scoring it against a clock nobody set. */
-function durationRow(r: RunResult): Loss | null {
-  const d = r.duration;
-  if (!d) return null;
+/** `5.50` -> `5.50 mi`; `[5, 6]` -> `5.00–6.00 mi`. The mileage sibling of
+ *  `prescribedClock`, with the unit stated once at the end. */
+function prescribedMiles(v: number | number[] | null | undefined): string {
+  if (v === null || v === undefined) return "--";
+  if (!Array.isArray(v)) return `${num(v, 2)} mi`;
+  if (v.length === 2 && v[0] === v[1]) return `${num(v[0], 2)} mi`;
+  return `${v.map((m) => num(m, 2)).join("–")} mi`;
+}
+
+/** The length rows: one per unit the plan stated, so a run prescribed in both
+ *  shows both.
+ *
+ *  EXACTLY ONE OF THEM CARRIES THE COST. A run states a duration or a distance
+ *  and only one scores -- time wins where the plan states both -- and the
+ *  grader marks the other with `factor: null`. So the unscored row reads
+ *  *reported, not scored* rather than *full credit*: a deviation that was
+ *  described and one that was forgiven are different things, and printing
+ *  `full credit` on both would say the run was the length it was meant to be
+ *  when it plainly was not.
+ *
+ *  Empty when the run had no prescription at all, which holds it harmless
+ *  rather than scoring it against a clock nobody set. */
+function lengthRows(r: RunResult): Loss[] {
   const f = r.duration_factor;
   const full = f === null || f === undefined || f >= 1;
-  const bits = [`${clock(d.actual)} ran of ${prescribedClock(d.prescribed)}`];
-  // 0.0 is the best outcome and MUST render.
-  if (d.pct !== null && d.pct !== undefined)
-    bits.push(`${d.pct > 0 ? "+" : ""}${d.pct.toFixed(1)}%`);
-  if (d.reason) bits.push(d.reason);
-  return row("duration", "Length", bits.join(" · "), {
-    cost: full
-      ? "full credit"
-      : `credit ×${(f as number).toFixed(2)}`,
-    verdict: full,
-  });
+  const one = (
+    key: string,
+    label: string,
+    d: NonNullable<RunResult["duration"]>,
+    stated: string,
+  ): Loss => {
+    const bits = [stated];
+    // 0.0 is the best outcome and MUST render.
+    if (d.pct !== null && d.pct !== undefined)
+      bits.push(`${d.pct > 0 ? "+" : ""}${d.pct.toFixed(1)}%`);
+    if (d.reason) bits.push(d.reason);
+    const scored = d.factor !== null && d.factor !== undefined;
+    return row(key, label, bits.join(" · "), {
+      cost: !scored
+        ? "reported, not scored"
+        : full
+          ? "full credit"
+          : `credit ×${(f as number).toFixed(2)}`,
+      verdict: scored ? full : null,
+    });
+  };
+
+  const out: Loss[] = [];
+  if (r.duration)
+    out.push(one("duration", "Length", r.duration,
+                 `${clock(r.duration.actual)} ran of ` +
+                 prescribedClock(r.duration.prescribed)));
+  if (r.distance)
+    out.push(one("distance", "Distance", r.distance,
+                 `${num(r.distance.actual, 2)} mi ran of ` +
+                 prescribedMiles(r.distance.prescribed)));
+  return out;
 }
 
 /** The effort row for a scored continuous run. */
@@ -112,11 +151,66 @@ function setRow(s: RepSet, i: number): Loss {
   });
 }
 
+/** The sprint cadence verdict, or null where the grader asked no such question.
+ *
+ * COMPOSED HERE AND NOT STORED, the rule that took 509 of 510 load-flag
+ * sentences out of the published tree: every word below comes from
+ * `cadence_check`'s four fields, so the record carries the measurement and the
+ * page carries the prose.
+ *
+ * `verdict: null` IS THE LOSS ROW'S "not a pass/fail" and is what
+ * `not-evaluable` gets -- a verdict of `false` there would render a session the
+ * criterion does not apply to as one that failed, which is the exact confusion
+ * the gate exists to prevent. The two costs of getting it wrong are not
+ * symmetric: a missed pass is a puzzle, a phantom failure is a session the
+ * athlete would try to "fix".
+ *
+ * IT NEVER CARRIES A `pct`. The verdict scores nothing, and a percentage on this
+ * row would put it in the same visual language as the rows that do.
+ */
+function cadenceRow(r: RunResult): Loss | null {
+  const c = r.cadence_check;
+  if (!c) return null;
+  const peak = c.peak_spm;
+  const line = c.target_spm;
+  const measured =
+    peak === null || peak === undefined
+      ? "no cadence was recorded"
+      : `cadence peaked at ${peak} spm`;
+  if (c.verdict === "not-evaluable") {
+    // WHICH nothing it is, from the fields rather than from a stored sentence.
+    const because =
+      peak === null || peak === undefined
+        ? "the file carries no cadence samples"
+        : c.rep_seconds === null || c.rep_seconds === undefined
+          ? "this session prescribes no sprint-length reps, so the sprint " +
+            "cadence line does not apply to it"
+          : "the criterion is not stated";
+    return row("cadence", "Sprint cadence", `${measured} — ${because}`, {
+      verdict: null,
+    });
+  }
+  const met = c.verdict === "met";
+  return row(
+    "cadence",
+    "Sprint cadence",
+    `${measured}${line === null || line === undefined ? "" :
+      `, ${met ? "over" : "not over"} the ${line} spm line`}` +
+      " — reported, and it moves no score",
+    { verdict: met },
+  );
+}
+
 /** A run that is reported rather than scored, with the grader's own reason. */
 function reported(r: RunResult, why: string): Ledger {
   const rows: Loss[] = [];
-  const dur = durationRow(r);
-  if (dur) rows.push(dur);
+  rows.push(...lengthRows(r));
+  // THE PURE `neuromuscular` PATH. It has no score at all, so it returns from
+  // here and never reaches the main assembly -- which is why this call and the
+  // one in `runWhy` are both needed and neither is redundant. The other is for a
+  // `mixed` run, which carries a sprint set AND a scored one.
+  const cadence = cadenceRow(r);
+  if (cadence) rows.push(cadence);
   return {
     rows,
     total: {
@@ -156,7 +250,9 @@ const REPORTED_REASON: Record<string, string> = {
     "near zero for doing exactly what was intended.",
   neuromuscular:
     "Reps of a few seconds: heart rate lags them entirely and no date pace " +
-    "exists for the distance. Reported by design, not by a detection failure.",
+    "exists for the distance. Reported by design, not by a detection failure. " +
+    "A sprint session does carry a cadence verdict, shown above — it reaches no " +
+    "score either way.",
   volume_only:
     "A separately-recorded warmup or cooldown. Counted as mileage, and scored " +
     "as part of no session — its seconds belong to a workout graded in " +
@@ -210,8 +306,7 @@ export function runWhy(r: RunResult): Ledger {
   // --- scored continuous
   if (r.hr_pct !== null && r.hr_pct !== undefined) {
     rows.push(effortRow(r));
-    const dur = durationRow(r);
-    if (dur) rows.push(dur);
+    rows.push(...lengthRows(r));
   }
 
   // --- progression, judged on getting faster
@@ -239,12 +334,18 @@ export function runWhy(r: RunResult): Ledger {
             `the plan did not state a count, so it was cut into ` +
             `${prog.segments_assumed} equal slices`),
       );
-    const dur = durationRow(r);
-    if (dur) rows.push(dur);
+    rows.push(...lengthRows(r));
   }
 
   // --- quality sets
   for (const [i, s] of (detail?.sets ?? []).entries()) rows.push(setRow(s, i));
+
+  // --- the sprint cadence verdict, for a run that DOES score. A `mixed` run
+  // pairing 4x6s hill sprints with a sub-T block reaches here rather than
+  // `reported`, and its sprints are judged on cadence while its block is judged
+  // on heart rate. See the matching call inside `reported`.
+  const cadence = cadenceRow(r);
+  if (cadence) rows.push(cadence);
 
   // --- session-level context a quality run carries
   if (detail?.recoveries)

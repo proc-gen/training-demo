@@ -8,15 +8,20 @@
   "long_run_share": 0.0,
   "miles": 24.78028314642488,
   "non_run_days": [],
+  "plan_miles_unpriceable": [],
   "plan_unpriceable": [],
+  "planned_miles": null,
+  "planned_miles_week": null,
   "planned_seconds": null,
   "planned_seconds_week": null,
   "prescribed_dates": 6,
   "prescribed_dates_due": 6,
+  "projected_miles": 24.78028314642488,
   "projected_seconds": 11554.0,
   "quality_days": 0,
   "quality_seconds": 0,
   "quality_share": 0.0,
+  "remaining_planned_miles": 0.0,
   "remaining_planned_seconds": 0.0,
   "rest_days": 1,
   "running_days": 6,
@@ -46,15 +51,20 @@
   "long_run_share": 0.0,
   "miles": 24.78028314642488,
   "non_run_days": [],
+  "plan_miles_unpriceable": [],
   "plan_unpriceable": [],
+  "planned_miles": null,
+  "planned_miles_week": null,
   "planned_seconds": null,
   "planned_seconds_week": null,
   "prescribed_dates": 6,
   "prescribed_dates_due": 6,
+  "projected_miles": 24.78028314642488,
   "projected_seconds": 11554.0,
   "quality_days": 0,
   "quality_seconds": 0,
   "quality_share": 0.0,
+  "remaining_planned_miles": 0.0,
   "remaining_planned_seconds": 0.0,
   "rest_days": 1,
   "running_days": 6,
@@ -108,6 +118,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": null,
    "duration_factor": 1.0,
    "earned": 388.0,
@@ -143,6 +154,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "unplanned -- injury-window easy run (30 min)",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
     "role": "easy",
     "sets": null,
@@ -205,6 +217,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": null,
    "duration_factor": 1.0,
    "earned": 1539.0,
@@ -240,6 +253,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "unplanned -- injury-window easy run (26 min)",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
     "role": "easy",
     "sets": null,
@@ -311,6 +325,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": null,
    "duration_factor": 1.0,
    "earned": 658.0,
@@ -346,6 +361,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "unplanned -- injury-window easy run (39 min)",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
     "role": "easy",
     "sets": null,
@@ -417,6 +433,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": null,
    "duration_factor": 1.0,
    "earned": 216.0,
@@ -452,6 +469,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "unplanned -- injury-window easy run (30 min)",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
     "role": "easy",
     "sets": null,
@@ -505,6 +523,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": null,
    "duration_factor": 1.0,
    "earned": 380.0,
@@ -540,6 +559,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "unplanned -- injury-window easy run (20 min)",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
     "role": "easy",
     "sets": null,
@@ -629,6 +649,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": null,
    "duration_factor": 1.0,
    "earned": 138.0,
@@ -664,6 +685,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "unplanned -- injury-window run (47 min)",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
     "role": "easy",
     "sets": null,
@@ -707,6 +729,7 @@
    "long_run_share": true,
    "quality_days_met": null,
    "rest_days_met": null,
+   "volume_miles_vs_plan": null,
    "volume_vs_plan": null
   },
   "pct": 100.0,
@@ -714,6 +737,7 @@
    "long_run_share": "the long run was 0.0% of the running distance, against a 25% ceiling",
    "quality_days_met": "the plan schedules no quality day, so this check does not apply and left the denominator",
    "rest_days_met": "the plan schedules no rest day, so this check does not apply and left the denominator",
+   "volume_miles_vs_plan": "the manifest states no planned_miles, so there is nothing to compare the week's running distance against",
    "volume_vs_plan": "the manifest states no planned_time_seconds, so there is nothing to compare the week's running time against"
   }
  },

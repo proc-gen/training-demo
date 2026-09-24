@@ -8,15 +8,20 @@
   "long_run_share": 0.0,
   "miles": 30.677095760757176,
   "non_run_days": [],
+  "plan_miles_unpriceable": [],
   "plan_unpriceable": [],
+  "planned_miles": null,
+  "planned_miles_week": null,
   "planned_seconds": null,
   "planned_seconds_week": null,
   "prescribed_dates": 5,
   "prescribed_dates_due": 5,
+  "projected_miles": 30.677095760757176,
   "projected_seconds": 16595.0,
   "quality_days": 1,
   "quality_seconds": 0,
   "quality_share": 0.0,
+  "remaining_planned_miles": 0.0,
   "remaining_planned_seconds": 0.0,
   "rest_days": 2,
   "running_days": 5,
@@ -32,9 +37,9 @@
    "why": "no complaint word in the week's 1 note(s); Runalyze daily notes and activity descriptions are NOT searched"
   },
   {
-   "status": "clear",
+   "status": "not-evaluable",
    "token": "consecutive-compromised",
-   "why": "0 of 2 quality sessions compromised"
+   "why": "1 quality session(s) this week; the flag needs two to find two in a row"
   }
  ],
  "judged_facts": {
@@ -46,15 +51,20 @@
   "long_run_share": 0.0,
   "miles": 30.677095760757176,
   "non_run_days": [],
+  "plan_miles_unpriceable": [],
   "plan_unpriceable": [],
+  "planned_miles": null,
+  "planned_miles_week": null,
   "planned_seconds": null,
   "planned_seconds_week": null,
   "prescribed_dates": 5,
   "prescribed_dates_due": 5,
+  "projected_miles": 30.677095760757176,
   "projected_seconds": 16595.0,
   "quality_days": 1,
   "quality_seconds": 0,
   "quality_share": 0.0,
+  "remaining_planned_miles": 0.0,
   "remaining_planned_seconds": 0.0,
   "rest_days": 2,
   "running_days": 5,
@@ -100,22 +110,23 @@
    "planned": {
     "band": null,
     "band_is_reference": false,
-    "ceiling": "none (volume_only)",
+    "ceiling": "none (warmup)",
     "ceiling_kind": "none",
-    "ceiling_role": "volume_only",
+    "ceiling_role": "warmup",
     "ceiling_tiers": null,
     "criterion": null,
     "hr_ceiling": null,
     "prescribed": "warmup",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
-    "role": "volume_only",
+    "role": "warmup",
     "sets": null,
     "target_display": null,
     "target_sec_per_mi": null,
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "role": "volume_only",
+   "role": "warmup",
    "runalyze_id": 184469211,
    "score_bucket": null,
    "seconds": 971,
@@ -130,9 +141,6 @@
    "cadence": 179,
    "date": "2026-06-16",
    "detail": {
-    "autolaps": [],
-    "core_seconds": 0,
-    "detected_reps": 0,
     "laps": [
      {
       "cad": 180,
@@ -161,17 +169,7 @@
       "index": 3,
       "start": 329
      }
-    ],
-    "prescribed_reps": null,
-    "sets": [],
-    "slivers": [
-     {
-      "dist_km": 0.009,
-      "dur": 2,
-      "index": 1
-     }
-    ],
-    "unscorable": "no interval structure detected"
+    ]
    },
    "earned": null,
    "emphasis": [
@@ -184,53 +182,24 @@
    "ordinal": 1,
    "planned": {
     "band": null,
-    "band_is_reference": false,
-    "ceiling": "162/166",
-    "ceiling_kind": "hr",
+    "band_is_reference": true,
+    "ceiling": "none (time trial)",
+    "ceiling_kind": "none",
+    "ceiling_role": "time_trial",
     "ceiling_tiers": null,
-    "criterion": "hr",
-    "hr_ceiling": [
-     162,
-     166
-    ],
-    "prescribed": "unplanned -- work block 1 of the five-file session (7:34 at HR 168)",
+    "criterion": null,
+    "hr_ceiling": null,
+    "prescribed": "unplanned -- 1 mile time trial, then recovery on a watch nobody stopped (7:34 at HR 168)",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
-    "role": "subt",
-    "sets": [
-     {
-      "band": null,
-      "band_how": "ambiguous",
-      "ceiling": "162/166",
-      "ceiling_kind": "hr",
-      "float_distance_m": null,
-      "float_mode": null,
-      "float_seconds": null,
-      "group_float_distance_m": null,
-      "group_float_seconds": null,
-      "groups": null,
-      "hr_ceiling": [
-       162,
-       166
-      ],
-      "mode": "subt",
-      "rep_distance_m": null,
-      "rep_seconds": null,
-      "reps": null,
-      "reps_per_group": null,
-      "scored_on": "hr",
-      "target_display": null,
-      "target_pace": null,
-      "target_sec_per_mi": null,
-      "target_seconds": null,
-      "target_tolerance_seconds": null
-     }
-    ],
+    "role": "time_trial",
+    "sets": null,
     "target_display": null,
     "target_sec_per_mi": null,
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "role": "subt",
+   "role": "time_trial",
    "runalyze_id": 184469243,
    "score_bucket": null,
    "seconds": 454,
@@ -266,38 +235,58 @@
      }
     ]
    },
-   "earned": null,
+   "distance": null,
+   "duration": null,
+   "duration_factor": 1.0,
+   "earned": 96.0,
    "emphasis": [],
+   "excursions": {
+    "above_seconds": 496,
+    "excursions": 2,
+    "longest_above_seconds": 342,
+    "sustained_above_seconds": 496
+   },
    "hr_avg": 140,
    "hr_max": 145,
+   "hr_pace_response": {
+    "block_seconds": 180,
+    "blocks": 4,
+    "r": 0.010933347593836872
+   },
+   "hr_pct": 16.216216216216218,
    "key": "2026-06-16-jog",
    "km": 1.72,
    "ordinal": 2,
    "planned": {
-    "band": null,
-    "band_is_reference": false,
-    "ceiling": "none (volume_only)",
-    "ceiling_kind": "none",
-    "ceiling_role": "volume_only",
-    "ceiling_tiers": null,
-    "criterion": null,
+    "band": "easy",
+    "band_is_reference": true,
+    "ceiling": "137",
+    "ceiling_kind": "hr",
+    "ceiling_tiers": [
+     [
+      null,
+      137
+     ]
+    ],
+    "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "jog between work blocks",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
-    "role": "volume_only",
+    "role": "easy",
     "sets": null,
     "target_display": null,
     "target_sec_per_mi": null,
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "role": "volume_only",
+   "role": "easy",
    "runalyze_id": 184469267,
-   "score_bucket": null,
+   "score_bucket": "easy",
    "seconds": 592,
-   "session": null,
+   "session": "pm",
    "status": "completed",
-   "total": null,
+   "total": 592,
    "volume_km": 1.72,
    "volume_seconds": 592,
    "volume_source": "file"
@@ -457,7 +446,6 @@
     ],
     "prescribed_reps": null,
     "sets": [],
-    "slivers": [],
     "unscorable": "no interval structure detected"
    },
    "earned": null,
@@ -481,6 +469,7 @@
      166
     ],
     "prescribed": "unplanned -- work block 2 (15 min at HR 162)",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
     "role": "subt",
     "sets": [
@@ -493,6 +482,7 @@
       "float_mode": null,
       "float_seconds": null,
       "group_float_distance_m": null,
+      "group_float_mode": null,
       "group_float_seconds": null,
       "groups": null,
       "hr_ceiling": [
@@ -501,6 +491,7 @@
       ],
       "mode": "subt",
       "rep_distance_m": null,
+      "rep_rows": null,
       "rep_seconds": null,
       "reps": null,
       "reps_per_group": null,
@@ -563,22 +554,23 @@
    "planned": {
     "band": null,
     "band_is_reference": false,
-    "ceiling": "none (volume_only)",
+    "ceiling": "none (cooldown)",
     "ceiling_kind": "none",
-    "ceiling_role": "volume_only",
+    "ceiling_role": "cooldown",
     "ceiling_tiers": null,
     "criterion": null,
     "hr_ceiling": null,
     "prescribed": "cooldown",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
-    "role": "volume_only",
+    "role": "cooldown",
     "sets": null,
     "target_display": null,
     "target_sec_per_mi": null,
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "role": "volume_only",
+   "role": "cooldown",
    "runalyze_id": 184469285,
    "score_bucket": null,
    "seconds": 1041,
@@ -677,6 +669,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": null,
    "duration_factor": 1.0,
    "earned": 4540.0,
@@ -712,6 +705,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "unplanned -- easy run (76 min)",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
     "role": "easy",
     "sets": null,
@@ -801,6 +795,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": null,
    "duration_factor": 1.0,
    "earned": 3319.0,
@@ -836,6 +831,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "unplanned -- easy run (57 min)",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
     "role": "easy",
     "sets": null,
@@ -907,6 +903,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": null,
    "duration_factor": 1.0,
    "earned": 2436.0,
@@ -942,6 +939,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "unplanned -- easy run while travelling (43 min)",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
     "role": "easy",
     "sets": null,
@@ -1004,6 +1002,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": null,
    "duration_factor": 1.0,
    "earned": 1825.0,
@@ -1039,6 +1038,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "unplanned -- easy run while travelling (34 min)",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
     "role": "easy",
     "sets": null,
@@ -1061,16 +1061,16 @@
  ],
  "scores": {
   "easy": {
-   "earned": 12120.0,
-   "total": 12626
+   "earned": 12216.0,
+   "total": 13218
   },
   "recorded": {
-   "earned": 12120.0,
-   "total": 12626
+   "earned": 12216.0,
+   "total": 13218
   },
   "week": {
-   "earned": 12120.0,
-   "total": 12626
+   "earned": 12216.0,
+   "total": 13218
   },
   "workout": {
    "earned": 0,
@@ -1082,6 +1082,7 @@
    "long_run_share": true,
    "quality_days_met": true,
    "rest_days_met": null,
+   "volume_miles_vs_plan": null,
    "volume_vs_plan": null
   },
   "pct": 100.0,
@@ -1089,6 +1090,7 @@
    "long_run_share": "the long run was 0.0% of the running distance, against a 25% ceiling",
    "quality_days_met": "every quality session the plan scheduled on 2026-06-16 was completed",
    "rest_days_met": "the plan schedules no rest day, so this check does not apply and left the denominator",
+   "volume_miles_vs_plan": "the manifest states no planned_miles, so there is nothing to compare the week's running distance against",
    "volume_vs_plan": "the manifest states no planned_time_seconds, so there is nothing to compare the week's running time against"
   }
  },

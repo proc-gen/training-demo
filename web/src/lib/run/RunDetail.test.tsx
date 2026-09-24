@@ -438,6 +438,43 @@ describe("RunDetail", () => {
       expect(container.textContent).toMatch(/reference and not what scored/i);
     });
 
+    it("resolves a LONG run's band, which is easy's since the `long` band went", () => {
+      /* A long run is scored exactly as an easy run is -- heart rate, against
+         the tiered ceiling -- so `CONTINUOUS_BAND["long"]` is `"easy"` and the
+         readout names easy's band. The `long` band (68-72% of vVO2max) reached
+         no score and is retired from every chart as of 2026-09-18, so a chart
+         carrying only `bands.easy` is what a long run now resolves against.
+
+         NO CODE CHANGED FOR THIS and that is what is being pinned: `RunDetail`
+         looks the band up BY NAME through `paceChartBand`, so had it kept
+         pointing at `long` the pace view would have silently lost its band on
+         every long run -- a band that resolves to nothing renders as no band at
+         all, with nothing saying why. */
+      const chart = {
+        bands: { easy: { fast_sec_per_mi: 497, slow_sec_per_mi: 538 } },
+      } as unknown as Parameters<typeof RunDetail>[0]["chart"];
+      const { container } = wrap(
+        <RunDetail
+          run={run({
+            role: "long",
+            detail: LAPS,
+            planned: {
+              ...PLANNED_BLOCK,
+              role: "long",
+              prescribed: "14 mi long run",
+              ceiling: "142/146/150",
+              ceiling_tiers: [[null, 150]],
+            } as unknown as RunResult["planned"],
+          })}
+          chart={chart}
+        />,
+      );
+      expect(container.textContent).toMatch(
+        /pace view shows the band the plan intended/i,
+      );
+      expect(container.textContent).toMatch(/reference and not what scored/i);
+    });
+
     it("says nothing about a band when the chart has none", () => {
       const { container } = wrap(
         <RunDetail

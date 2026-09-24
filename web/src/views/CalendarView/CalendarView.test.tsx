@@ -24,6 +24,17 @@ const D = PUBLISHED;
 const empty = { days: [], weeks: {} } as unknown as Payload;
 
 const cells = (c: HTMLElement) => [...c.querySelectorAll(".cal-cell")];
+/** Ask for `n` weeks, through the control the reader uses. A dropdown since
+ *  2026-09-07 — the athlete's instruction, over the pill strip — and it
+ *  NAVIGATES: the count is `?weeks=`, not state. */
+const showWeeks = (c: HTMLElement, n: number) =>
+  fireEvent.change(c.querySelector<HTMLSelectElement>(".field.trailing select")!, {
+    target: { value: String(n) },
+  });
+/** The arrows in DOM order: coarse back, fine back, fine forward, coarse
+ *  forward. */
+const arrows = (c: HTMLElement) =>
+  [...c.querySelectorAll<HTMLButtonElement>(".stepper button")];
 
 /** The default window, as the route would hand it over. */
 const anchor = () => {
@@ -39,12 +50,30 @@ const anchor = () => {
   );
 };
 
-/** `<CalendarView>` with the two props the route supplies. */
-const view = (payload: Payload, lastDay?: string) => (
+/** The date the Plan grid marks up to. Fixed, so no case here depends on when
+ *  it runs. */
+const TODAY = "2026-09-07";
+
+/** `<CalendarView>` with the props the route supplies. View mode unless a case
+ *  says otherwise -- it is the default and everything below it predates the
+ *  split. */
+const view = (
+  payload: Payload,
+  lastDay?: string,
+  mode: "view" | "plan" = "view",
+  weeks: number = DEFAULT_WEEKS,
+) => (
   <CalendarView
     payload={payload}
     lastDay={lastDay ?? (D ? anchor() : "2026-08-30")}
     maxSteps={maxSteps(payload.days ?? [])}
+    mode={mode}
+    weeks={weeks}
+    /* PINNED, NEVER A CLOCK. The app reads its one wall clock on the server and
+       hands it down as a prop exactly so this file can name a date -- otherwise
+       every Plan-mode case would assert against the day the suite happens to
+       run. `data/dayDone.ts` carries the whole reasoning. */
+    today={TODAY}
   />
 );
 
@@ -60,13 +89,45 @@ describe("CalendarView", () => {
     expect(labels).toHaveLength(rows.length);
   });
 
-  has(D)("changes how many weeks it shows", () => {
+  has(D)("draws as many weeks as the route asked for", () => {
+    for (const n of [1, 2, 6]) {
+      const { container } = wrap(view(D!, undefined, "view", n));
+      expect(cells(container)).toHaveLength(n * 7);
+      cleanup();
+    }
+  });
+
+  has(D)("CHANGING THE COUNT NAVIGATES, because the count is `?weeks=`", () => {
+    /* It was `useState` until 2026-09-07, and `CalendarRoute` keys this view on
+     * the anchor -- so every step of the window reset it to four. The athlete
+     * found it through the week arrows: *"clicking on one of the move by 1 week
+     * buttons is resetting the dropdown choice back to the 4 week default."* */
     const { container } = wrap(view(D!));
-    const pill = [...container.querySelectorAll<HTMLButtonElement>(".tab")].find(
-      (b) => b.textContent === "1w",
-    )!;
-    fireEvent.click(pill);
-    expect(cells(container)).toHaveLength(7);
+    showWeeks(container, 2);
+    expect(push).toHaveBeenCalledTimes(1);
+    expect(push.mock.calls[0][0]).toBe(`/calendar?end=${anchor()}&weeks=2`);
+  });
+
+  has(D)("LEAVES THE DEFAULT OUT OF THE URL", () => {
+    // A parameter appears only where it says something -- `calendarHref`'s rule
+    // for `?mode=` from the start.
+    const { container } = wrap(view(D!, undefined, "view", 2));
+    showWeeks(container, DEFAULT_WEEKS);
+    expect(push.mock.calls[0][0]).toBe(`/calendar?end=${anchor()}`);
+  });
+
+  has(D)("KEEPS THE COUNT THROUGH A STEP, which is the whole point", () => {
+    const { container } = wrap(view(D!, undefined, "view", 2));
+    fireEvent.click(arrows(container)[1]);
+    expect(push.mock.calls[0][0]).toMatch(/&weeks=2$/);
+  });
+
+  has(D)("keeps it through a DATE EDIT too", () => {
+    const { container } = wrap(view(D!, undefined, "view", 6));
+    fireEvent.change(container.querySelector("input[type=date]")!, {
+      target: { value: "2026-08-12" },
+    });
+    expect(push.mock.calls[0][0]).toMatch(/&weeks=6$/);
   });
 
   has(D)("MOVES THE WINDOW FORWARD ONTO THE PLAN", () => {
@@ -90,18 +151,51 @@ describe("CalendarView", () => {
     expect(push.mock.calls[0][0]).toMatch(/^\/calendar\?end=\d{4}-\d{2}-\d{2}$/);
   });
 
-  has(D)("STEPS BY WHATEVER THE PILLS SAY, and steps by navigating", () => {
-    const { container } = wrap(view(D!));
-    const back = [...container.querySelectorAll<HTMLButtonElement>(".stepper button")]
-      .find((b) => b.getAttribute("aria-label") === `Back ${DEFAULT_WEEKS} weeks`)!;
-    fireEvent.click(back);
+  /** How many days back the one `push` moved the anchor.
+   *
+   * PARSED AS A URL, NOT SPLIT ON `end=`. Since `?weeks=` joined it (2026-09-07)
+   * the tail of that split is `2026-09-13&weeks=6`, which `Date` reads as NaN —
+   * and a NaN difference is not equal to anything, so the case fails rather than
+   * passing wrongly. Still worth parsing properly: the next parameter would do
+   * the same to whoever added it. */
+  const steppedBack = () => {
     expect(push).toHaveBeenCalledTimes(1);
-    const to = push.mock.calls[0][0] as string;
-    const days =
+    const to = new URL(push.mock.calls[0][0] as string, "https://x").searchParams.get(
+      "end",
+    )!;
+    return (
       (new Date(anchor() + "T12:00:00").getTime() -
-        new Date(to.split("end=").pop()! + "T12:00:00").getTime()) /
-      86400000;
-    expect(days).toBe(7 * DEFAULT_WEEKS);
+        new Date(to + "T12:00:00").getTime()) /
+      86400000
+    );
+  };
+
+  has(D)("STEPS BY WHATEVER THE DROPDOWN SAYS, and steps by navigating", () => {
+    const { container } = wrap(view(D!));
+    fireEvent.click(arrows(container)[0]);
+    expect(steppedBack()).toBe(7 * DEFAULT_WEEKS);
+  });
+
+  has(D)("STEPS ONE WEEK on the finer arrows, whatever the dropdown says", () => {
+    /* The athlete: *"add `<` and `>` that only move the calendar by a week
+     * instead of the selected amount of time showing."* At the default four
+     * weeks, this is a quarter of what the pair outside it moves. */
+    const { container } = wrap(view(D!));
+    fireEvent.click(arrows(container)[1]);
+    expect(steppedBack()).toBe(7);
+  });
+
+  has(D)("keeps the week step at SEVEN DAYS with six weeks showing", () => {
+    // The count arrives from the route, so this is one navigation, not two.
+    const { container } = wrap(view(D!, undefined, "view", 6));
+    fireEvent.click(arrows(container)[1]);
+    expect(steppedBack()).toBe(7);
+  });
+
+  has(D)("moves the window FORWARD a week too", () => {
+    const { container } = wrap(view(D!));
+    fireEvent.click(arrows(container)[2]);
+    expect(steppedBack()).toBe(-7);
   });
 
   has(D)("outlines a day only when it breached a measured ceiling", () => {
@@ -140,14 +234,17 @@ describe("CalendarView", () => {
       return bar?.style.width ?? null;
     };
     const before = widthOf();
-    const pill = [...container.querySelectorAll<HTMLButtonElement>(".tab")].find(
-      (b) => b.textContent === "6w",
-    )!;
-    fireEvent.click(pill);
+    cleanup();
+    /* THE COUNT IS A PROP NOW, so the wider window is a re-render from the
+       route rather than a click -- which is what the reader gets after the
+       navigation the dropdown fires. */
+    const wide = wrap(view(D!, undefined, "view", 6));
+    const wideWidth = (wide.container.querySelector(".cal-bar i") as HTMLElement | null)
+      ?.style.width ?? null;
     // The first drawn bar belongs to an earlier week now, so compare the day
     // that is in BOTH windows: the last cell, which is the window's own end.
     expect(before).not.toBeNull();
-    expect(widthOf()).not.toBeNull();
+    expect(wideWidth).not.toBeNull();
   });
 
   has(D)("names its six colours over TWO rows -- the bar, then the cell", () => {
@@ -208,10 +305,17 @@ describe("CalendarView", () => {
 
   has(D)("THE DAY TABLE IS GONE and the card stands in its place", () => {
     /* Seventy-six rows to discharge a concern about one cell. The cells carry
-     * their own numbers now and the card carries the whole day. */
+     * their own numbers now and the card carries the whole day.
+     *
+     * SCOPED TO `.page-main`, because the paces rail is a table too and it
+     * arrived beside this view on 2026-09-06. The claim is about the CONTENT
+     * column having no day table, which is what it always was -- `container`
+     * happened to be the same thing until the rail moved in. */
     const { q, container } = wrap(view(D!));
     expect(q.getByText("Select a day above.")).toBeTruthy();
-    expect(container.querySelectorAll("tbody tr")).toHaveLength(0);
+    expect(
+      container.querySelectorAll(".page-main tbody tr"),
+    ).toHaveLength(0);
   });
 
   has(D)("opens a day's card when its cell is clicked", () => {
@@ -254,6 +358,14 @@ describe("CalendarView", () => {
   });
 
   it("draws the plan alone for an athlete with a manifest and no exports", () => {
+    /* THE ANCHOR IS PINNED, like the `2019-01-06` case above it. The payload
+     * here is entirely synthetic, so taking the window from `anchor()` -- the
+     * COMMITTED tree's newest measured day -- made a self-contained case depend
+     * on how far the record had grown. It read as passing for as long as
+     * `2026-08-25` happened to fall inside the four weeks ending there, and it
+     * stopped the week the record reached 2026-09-21: the window moved to
+     * 2026-08-31..2026-09-27 and the one planned day fell out the back. A case
+     * whose subject is a hand-built payload must name its own last day. */
     const p = {
       days: [],
       weeks: {
@@ -265,8 +377,146 @@ describe("CalendarView", () => {
         },
       },
     } as unknown as Payload;
-    const { container } = wrap(view(p));
+    const { container } = wrap(view(p, "2026-08-30"));
     expect(cells(container)).toHaveLength(DEFAULT_WEEKS * 7);
     expect(container.textContent).toContain("Not yet completed");
+  });
+});
+
+describe("CalendarView, the two modes", () => {
+  /* The athlete asked for a View/Plan strip on this card, View by default:
+   * the Calendar is the RECORD and it is where the plan is AUTHORED, and those
+   * two jobs want different cells. */
+
+  const strip = (c: HTMLElement) =>
+    [...c.querySelectorAll<HTMLElement>("[role='tab']")];
+
+  has(D)("offers both modes, with the current one selected", () => {
+    const { container } = wrap(view(D!));
+    expect(strip(container).map((t) => t.textContent)).toEqual(["View", "Plan"]);
+    expect(strip(container)[0].getAttribute("aria-selected")).toBe("true");
+
+    cleanup();
+    const planned = wrap(view(D!, undefined, "plan"));
+    expect(strip(planned.container)[1].getAttribute("aria-selected")).toBe("true");
+  });
+
+  has(D)("NAVIGATES, carrying the window with it", () => {
+    /* The mode is a query parameter because this component is keyed on the
+       window: state here would reset every time the reader stepped a week,
+       which in Plan mode is the whole workflow. */
+    const { container } = wrap(view(D!));
+    fireEvent.click(strip(container)[1]);
+    expect(push).toHaveBeenCalledTimes(1);
+    expect(push.mock.calls[0][0]).toBe(
+      `/calendar?end=${anchor()}&mode=plan`,
+    );
+  });
+
+  has(D)("writes no mode for View, which is the default", () => {
+    const { container } = wrap(view(D!, undefined, "plan"));
+    fireEvent.click(strip(container)[0]);
+    expect(push.mock.calls[0][0]).toBe(`/calendar?end=${anchor()}`);
+  });
+
+  has(D)("STEPPING THE WINDOW KEEPS THE MODE", () => {
+    /* The defect this exists for: an arrow that dropped `?mode=plan` would put
+       the reader back in the record on every step. One `calendarHref`, three
+       controls. */
+    const { container } = wrap(view(D!, undefined, "plan"));
+    fireEvent.click([...container.querySelectorAll(".stepper .tab")][0]);
+    expect(push).toHaveBeenCalledTimes(1);
+    expect(push.mock.calls[0][0]).toMatch(
+      /^\/calendar\?end=\d{4}-\d{2}-\d{2}&mode=plan$/,
+    );
+  });
+
+  has(D)("names the card for the job it is doing", () => {
+    const { container } = wrap(view(D!));
+    expect(container.querySelector(".card-head h2")!.textContent).toBe(
+      "Daily load",
+    );
+    cleanup();
+    const planned = wrap(view(D!, undefined, "plan"));
+    expect(planned.container.querySelector(".card-head h2")!.textContent).toBe(
+      "Plan",
+    );
+  });
+
+  has(D)("Plan mode drops the measurements and the day card", () => {
+    const { container } = wrap(view(D!, undefined, "plan"));
+    expect(container.querySelectorAll(".cal-cell").length).toBeGreaterThan(0);
+    expect(container.querySelector(".cal-bar")).toBeNull();
+    expect(container.querySelector(".cal-foot")).toBeNull();
+    expect(container.querySelector(".cal-scores")).toBeNull();
+    // No day card at all -- the athlete asked for hover only.
+    expect(container.textContent).not.toContain("Select a day above.");
+  });
+
+  has(D)("Plan mode drops the step legend and keeps the tint key", () => {
+    /* A key to a bar that is not drawn is a key to nothing. The tint key stays:
+       what the plan asked for is exactly Plan mode's subject. */
+    const { container } = wrap(view(D!, undefined, "plan"));
+    const legends = container.textContent!;
+    expect(legends).not.toContain("run steps");
+    expect(legends).not.toContain("over the day's ceiling");
+    expect(legends).toContain("long run");
+    expect(legends).toContain("quality work");
+  });
+
+  has(D)("Plan mode says what its cells hold", () => {
+    const { container } = wrap(view(D!, undefined, "plan"));
+    const note = container.querySelector(".note")!.textContent!;
+    expect(note).toContain("prescription");
+    expect(note).not.toContain("step count");
+  });
+
+  has(D)("KEEPS the pencils in both modes", () => {
+    // Plan mode edits the plan and View mode edits the notes; both need the
+    // dialogs, so neither strips the controls that open them.
+    for (const mode of ["view", "plan"] as const) {
+      const { container } = wrap(view(D!, undefined, mode));
+      expect(container.querySelectorAll(".cal-edit").length).toBeGreaterThan(0);
+      cleanup();
+    }
+  });
+
+  has(D)("keeps the week-count dropdown working in Plan mode", () => {
+    /* IT NAVIGATES AND MUST NOT DROP THE MODE. Changing the count used to be
+       pure state; now that it is `?weeks=`, an href that forgot `&mode=plan`
+       would drop the athlete back into the record mid-authoring -- the defect
+       `calendarHref` exists to make impossible. */
+    const { container } = wrap(view(D!, undefined, "plan"));
+    showWeeks(container, 2);
+    expect(push).toHaveBeenCalledTimes(1);
+    expect(push.mock.calls[0][0]).toBe(`/calendar?end=${anchor()}&mode=plan&weeks=2`);
+  });
+
+  has(D)("draws the asked-for count in Plan mode", () => {
+    const { container } = wrap(view(D!, undefined, "plan", 2));
+    expect(container.querySelectorAll(".cal-cell")).toHaveLength(14);
+  });
+});
+
+describe("CalendarView, the paces rail", () => {
+  has(D)("sits beside the grid, naming the ANCHOR week", () => {
+    /* The window's last week is the one the reader is looking at, and its
+       targets are what the sessions on screen were graded against. */
+    const { container } = wrap(view(D!));
+    const rail = container.querySelector(".page-layout > .rail");
+    expect(rail).toBeTruthy();
+    expect(rail!.querySelector("h2")!.textContent).toBe("Paces");
+    expect(rail!.textContent).toContain("This week");
+  });
+
+  has(D)("renders in Plan mode too -- the targets are what the plan is for", () => {
+    const { container } = wrap(view(D!, undefined, "plan"));
+    expect(container.querySelector(".rail")).toBeTruthy();
+  });
+
+  has(D)("leaves the grid in the main column", () => {
+    const { container } = wrap(view(D!));
+    expect(container.querySelector(".page-main .cal-weeks")).toBeTruthy();
+    expect(container.querySelector(".page-main .rail")).toBeNull();
   });
 });

@@ -28,7 +28,7 @@ import { trendPanels } from "@/views/TrendsView/data/panels";
 import { runDays } from "@/views/TrendsView/data/runDays";
 import { seDays } from "@/views/TrendsView/data/seDays";
 import { metresOf, workoutMarks } from "@/views/TrendsView/data/workoutMarks";
-import { weekEnding } from "../data/weekDates";
+import { mondayOf, weekEnding } from "../data/weekDates";
 import { Payload } from "../data/payload";
 import { openIndex } from "../db/open";
 import { assemblePayload } from "./queries";
@@ -272,6 +272,45 @@ describe.skipIf(!slug)("the calendar slice", () => {
   });
 
   it("is MEASURABLY smaller than shipping every week's runs", () => {
+    const { payload } = calendarSlice(db!, anchor());
+    expect(JSON.stringify(payload).length).toBeLessThan(
+      JSON.stringify(full).length / 5,
+    );
+  });
+});
+
+describe.skipIf(!slug)("the paces rail's chart reaches every route", () => {
+  /* THE RAIL SITS BESIDE ALL FOUR ROUTES since 2026-09-06, so the newest
+   * confirmed chart is no longer the week slice's alone. It is ONE chart --
+   * about 3 KB against the calendar's 130 and the trends slice's 665. */
+
+  const anchor = () => shell!.defaultCalendarAnchor!;
+
+  it("the calendar slice carries it, identical to the full payload's", () => {
+    const { payload } = calendarSlice(db!, anchor());
+    const p = Payload.parse(payload);
+    expect(p.pace_chart_current).toBeTruthy();
+    expect(p.pace_chart_current).toEqual(full!.pace_chart_current);
+  });
+
+  it("the trends slice carries it too", () => {
+    const p = Payload.parse(trendsSlice(db!));
+    expect(p.pace_chart_current).toBeTruthy();
+    expect(p.pace_chart_current).toEqual(full!.pace_chart_current);
+  });
+
+  it("the calendar's ANCHOR WEEK brings its own chart, for the week column", () => {
+    /* The rail's "This week" column is the anchor week's own confirmed chart,
+       which `weekFromRow` has always joined -- so the column costs nothing
+       beyond what the slice already sends. */
+    const { payload } = calendarSlice(db!, anchor());
+    const p = Payload.parse(payload);
+    const week = p.weeks[mondayOf(anchor())];
+    expect(week).toBeTruthy();
+    expect(week.pace_chart).toEqual(full!.weeks[mondayOf(anchor())]!.pace_chart);
+  });
+
+  it("adding it did not make the calendar slice large again", () => {
     const { payload } = calendarSlice(db!, anchor());
     expect(JSON.stringify(payload).length).toBeLessThan(
       JSON.stringify(full).length / 5,

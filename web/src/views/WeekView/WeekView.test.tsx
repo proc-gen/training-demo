@@ -143,3 +143,42 @@ describe("WeekView", () => {
     }
   });
 });
+
+describe("WeekView, the paces rail after it moved to lib/paces", () => {
+  /* IT LEFT THIS VIEW on 2026-09-06 and sits beside all four routes -- no view
+   * may import a sibling view, and the Calendar and Trends needed it. Nothing
+   * about the WEEK page's own rail changed, which is what these pin. */
+
+  has(found)("still shows both columns, because there IS a week here", () => {
+    const [, w] = found!;
+    const { container } = wrap(
+      <WeekView
+        week={w}
+        banners={[]}
+        paceChartCurrent={PUBLISHED!.pace_chart_current}
+      />,
+    );
+    const rail = container.querySelector(".page-layout > .rail")!;
+    expect(rail).toBeTruthy();
+    expect(rail.textContent).toContain("This week");
+    expect(rail.textContent).toContain("Current");
+  });
+
+  has(found)("keeps the card in the main column and the banners above the layout", () => {
+    /* A banner is about the whole record failing to build, not about the column
+       it would otherwise sit in -- so it spans the page as it always did. */
+    const [, w] = found!;
+    const { container } = wrap(
+      <WeekView
+        week={w}
+        banners={["a skill is not installed"]}
+        paceChartCurrent={null}
+      />,
+    );
+    expect(container.querySelector(".page-main > .card")).toBeTruthy();
+    expect(container.querySelector(".page-main .banner")).toBeNull();
+    expect(container.querySelector(".banner")!.textContent).toContain(
+      "not installed",
+    );
+  });
+});

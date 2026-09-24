@@ -3,6 +3,7 @@
  "load_error": null,
  "manifest": {
   "phase": "Block",
+  "rest_days": [],
   "runs": [
    {
     "date": "2025-07-07",
@@ -20,7 +21,7 @@
     "date": "2025-07-08",
     "key": "2025-07-08-wu",
     "prescribed": "warmup",
-    "role": "volume_only"
+    "role": "warmup"
    },
    {
     "date": "2025-07-08",
@@ -32,7 +33,7 @@
     "date": "2025-07-08",
     "key": "2025-07-08-cd",
     "prescribed": "cooldown",
-    "role": "volume_only"
+    "role": "cooldown"
    },
    {
     "date": "2025-07-09",

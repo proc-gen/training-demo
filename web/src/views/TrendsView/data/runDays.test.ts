@@ -28,7 +28,19 @@ describe("the ported constants", () => {
   it("mirror their Python sources", () => {
     // grade_week.py NON_RUN_ROLES / analyze_session.py QUALITY_ROLES.
     expect(NON_RUN_ROLES).toEqual(["walk", "cross"]);
-    expect(QUALITY_ROLES).toEqual(["subt", "interval", "repetition", "goal_pace", "mixed"]);
+    expect(QUALITY_ROLES).toEqual([
+      "subt",
+      "interval",
+      "repetition",
+      "goal_pace",
+      "mixed",
+      // Joined 2026-09-10 with their criteria. Pinned in ORDER, matching
+      // `analyze_session.QUALITY_ROLES` -- the committed-tree case above
+      // catches a MISSING role, and this catches a stale or reordered one.
+      "vo2max",
+      "critical_velocity",
+      "threshold",
+    ]);
   });
 });
 

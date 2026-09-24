@@ -44,8 +44,21 @@ import { addDays } from "./dates";
 /** grade_week.py `NON_RUN_ROLES`. */
 export const NON_RUN_ROLES = ["walk", "cross"];
 
-/** analyze_session.py `QUALITY_ROLES`. */
-export const QUALITY_ROLES = ["subt", "interval", "repetition", "goal_pace", "mixed"];
+/** analyze_session.py `QUALITY_ROLES`. A PORT, so it moves when that does --
+ * `vo2max`, `critical_velocity` and `threshold` joined it on 2026-09-10 when
+ * their criteria were defined, and leaving them out here silently dropped
+ * their core seconds from every quality share. The committed-tree case in
+ * `runDays.test.ts` is what caught it. */
+export const QUALITY_ROLES = [
+  "subt",
+  "interval",
+  "repetition",
+  "goal_pace",
+  "mixed",
+  "vo2max",
+  "critical_velocity",
+  "threshold",
+];
 
 export type RunDay = {
   /** Running miles — `volume_miles` where a walking recovery shrank it. */

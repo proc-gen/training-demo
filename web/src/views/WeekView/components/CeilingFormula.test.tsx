@@ -22,7 +22,12 @@ const INPUTS = {
   background_source: "baseline",
   background_window_days: 28,
   margin: 1.05,
+  background_trimp_budget: 10,
+  walk_reference_spm: 110,
 };
+
+const withDays = (days: unknown[]): Week =>
+  ({ load: { ceiling_inputs: INPUTS, days } }) as unknown as Week;
 
 const text = (w: Week) => wrap(<CeilingFormula week={w} />).container.textContent!;
 
@@ -40,10 +45,21 @@ describe("CeilingFormula", () => {
 
   it("gives every constant its own bullet", () => {
     /* The athlete's instruction, 2026-08-15: the cadence and the background
-     * amount get separate line items. Four constants, four bullets -- the
-     * other two are in the formula too and a reader cannot tell which of the
-     * four is a measurement without being told. */
+     * amount get separate line items. A reader cannot tell which of them is a
+     * measurement without being told.
+     *
+     * FIVE since 2026-09-09 -- the background floor is a fifth decision and the
+     * one that changed most recently, so it gets its own rather than being
+     * appended to the median's. The count is asserted because a bullet quietly
+     * appearing or vanishing is how this panel stops matching the formula
+     * above it. */
     const { container } = wrap(<CeilingFormula week={week(INPUTS)} />);
+    expect(container.querySelectorAll("li")).toHaveLength(5);
+  });
+
+  it("drops the floor's bullet when the grader stated no budget", () => {
+    const { background_trimp_budget: _b, ...noBudget } = INPUTS;
+    const { container } = wrap(<CeilingFormula week={week(noBudget)} />);
     expect(container.querySelectorAll("li")).toHaveLength(4);
   });
 
@@ -129,5 +145,68 @@ describe("CeilingFormula", () => {
     expect(t).toContain(
       ci.cadence_source === "measured" ? "measured" : "population default",
     );
+  });
+
+  describe("the background floor", () => {
+    it("states the budget as an IMPULSE and the margin as multiplying the run", () => {
+      /* The formula line is the only place a reader can see that the two terms
+       * are combined with `max` rather than added, and that the margin reaches
+       * one of them. It said `(run + background) x margin` until 2026-09-09 and
+       * would have kept saying so with a correct grader underneath. */
+      const t = text(week(INPUTS));
+      expect(t).toContain("× 1.05 + max(");
+      expect(t).toContain("10 TRIMP of walking");
+      expect(t).toMatch(/run term alone/);
+    });
+
+    it("names the range the WEEK used and which side of the max won", () => {
+      /* The budget converts at each day's own resting heart rate, so one line
+       * cannot state what any given day was allowed. Without this the `max(...)`
+       * above reads as undecided and the day table's ceilings look
+       * unexplained. */
+      const t = text(
+        withDays([
+          { ceiling_background_steps: 4884, ceiling_background_source: "budget" },
+          { ceiling_background_steps: 5233, ceiling_background_source: "budget" },
+        ]),
+      );
+      expect(t).toMatch(/4,884–5,233 SE/);
+      expect(t).toContain("from the budget");
+    });
+
+    it("collapses the range when every day landed on one number", () => {
+      const t = text(
+        withDays([
+          { ceiling_background_steps: 4884, ceiling_background_source: "budget" },
+        ]),
+      );
+      expect(t).toMatch(/4,884 SE/);
+      expect(t).not.toMatch(/4,884–4,884/);
+    });
+
+    it("names BOTH sides when a week used each", () => {
+      const t = text(
+        withDays([
+          { ceiling_background_steps: 4884, ceiling_background_source: "budget" },
+          { ceiling_background_steps: 6000, ceiling_background_source: "median" },
+        ]),
+      );
+      expect(t).toContain("budget and median");
+    });
+
+    it("says the conversion never reads how the day was actually walked", () => {
+      /* The property that keeps this a ceiling. A reader who believes the
+       * budget is priced from the day's own walking will not understand why a
+       * slow errand day did not earn more room. */
+      expect(text(week(INPUTS))).toMatch(
+        /never[\s\S]*how the day was actually walked/,
+      );
+      expect(text(week(INPUTS))).toContain("110 spm");
+    });
+
+    it("says nothing about a budget the grader did not state", () => {
+      const { background_trimp_budget: _b, ...noBudget } = INPUTS;
+      expect(text(week(noBudget))).not.toMatch(/TRIMP of walking/);
+    });
   });
 });

@@ -271,6 +271,40 @@ describe("PlannedReadout", () => {
       expect(text).toMatch(/scored on\s+time at or below its heart-rate ceiling/i);
     });
 
+    it("gives a LONG run easy's band, and still calls it a reference", () => {
+      /* THE `long` PACE BAND IS RETIRED (2026-09-18). It was 68-72% of vVO2max,
+         nothing was ever graded against it, and a long run is scored exactly as
+         an easy run is -- heart rate, against the tiered `hr.long_tiers`
+         ceiling. So `CONTINUOUS_BAND["long"]` is `"easy"` in `prescription.py`
+         and the readout arrives naming easy's band by name.
+
+         THIS COMPONENT NEEDED NO CHANGE FOR IT, which is the point of asserting
+         it: the band is resolved BY NAME in Python and printed here, so a long
+         run's row reads the same way an easy run's does and the reference caveat
+         goes with it. A long run's ROLE, its emphasis tint and `is_long` are all
+         untouched -- what moved is which band it points at. */
+      const { container } = render(
+        <PlannedReadout
+          planned={planned({
+            role: "long",
+            prescribed: "14 mi long run",
+            prescribed_miles: 14,
+            ceiling: "142/146/150",
+            band: "easy",
+            band_display: "8:17-8:58/mi",
+            band_is_reference: true,
+            sets: null,
+          })}
+        />,
+      );
+      const text = container.textContent!;
+      expect(text).toContain("Reference pace");
+      expect(text).toContain("8:17-8:58/mi");
+      expect(text).toMatch(/reference, not the criterion/i);
+      // And it says nothing about a `long` band, which no chart carries now.
+      expect(text).not.toContain("Long");
+    });
+
     it("does NOT call a sub-T set's band a reference", () => {
       /* Its reps genuinely are prescribed at it, so the caveat would be false
        * and would train the reader to ignore it where it is true. */
@@ -366,6 +400,66 @@ describe("PlannedReadout", () => {
         />,
       );
       expect(container.textContent).toContain("4:49-5:44/mi");
+    });
+  });
+
+  describe("the two units a continuous run may be prescribed in", () => {
+    const cont = (over: Partial<Planned>) =>
+      planned({
+        role: "easy",
+        prescribed: "5-6 mi easy",
+        criterion: "hr",
+        ceiling: "137",
+        sets: null,
+        ...over,
+      } as Partial<Planned>);
+
+    it("states a mileage goal as its own row", () => {
+      const { container } = render(
+        <PlannedReadout planned={cont({ prescribed_miles: [5, 6] })} />,
+      );
+      const text = container.textContent!;
+      expect(text).toContain("Distance");
+      expect(text).toContain("5.00–6.00 mi");
+    });
+
+    it("states a scalar goal without inventing a range", () => {
+      const { container } = render(
+        <PlannedReadout planned={cont({ prescribed_miles: 3.5 })} />,
+      );
+      expect(container.textContent).toContain("3.50 mi");
+    });
+
+    it("shows BOTH rows when the plan states both, never one merged cell", () => {
+      /* A run may carry a duration and a distance, and only one of them
+       * scores -- collapsing them would make the reader guess which. */
+      const { container } = render(
+        <PlannedReadout
+          planned={cont({
+            prescribed_seconds: [3600, 4200],
+            prescribed_miles: [5, 6],
+          })}
+        />,
+      );
+      const text = container.textContent!;
+      expect(text).toContain("Duration");
+      expect(text).toContain("1:00:00");
+      expect(text).toContain("Distance");
+      expect(text).toContain("5.00–6.00 mi");
+    });
+
+    it("shows no Distance row at all when the plan states no mileage", () => {
+      const { container } = render(
+        <PlannedReadout planned={cont({ prescribed_seconds: 3600 })} />,
+      );
+      expect(container.textContent).not.toContain("Distance");
+    });
+
+    it("treats an explicit NULL as absent, which every published row is", () => {
+      const { container } = render(
+        <PlannedReadout planned={cont({ prescribed_miles: null })} />,
+      );
+      expect(container.textContent).not.toContain("Distance");
     });
   });
 

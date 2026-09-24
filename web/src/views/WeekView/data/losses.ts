@@ -94,7 +94,13 @@ function easyWhy(r: RunResult): string {
   if (r.hr_avg !== null && r.hr_avg !== undefined) bits.push(`${r.hr_avg} avg`);
   const f = r.duration_factor;
   if (f !== null && f !== undefined && f !== 1) {
-    const d = r.duration?.pct;
+    // WHICHEVER UNIT THE PLAN STATED. `duration_factor` is the applied
+    // multiplier either way, and the report carrying a non-null `factor` is
+    // the one that produced it -- so a run prescribed only in miles names its
+    // own deviation here instead of a bare `credit x0.83`.
+    const d = (r.duration?.factor === null || r.duration?.factor === undefined
+      ? r.distance
+      : r.duration)?.pct;
     bits.push(
       `credit ×${f.toFixed(2)}` +
         (d === null || d === undefined ? "" : ` (${pct(d, 1)} off the prescription)`),

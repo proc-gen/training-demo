@@ -66,6 +66,13 @@ export const RepRow = z.looseObject({
   hr_avg: num,
   hr_max: num,
   hr_min: num,
+  /** The segment's FINAL heart-rate sample, and on a rep it is scored: the
+   *  recovery that follows earns its seconds only if its `hr_min` fell
+   *  `recovery_drop_bpm` below this. It was the rep's `hr_avg` until 2026-09-11,
+   *  which penalised the first recovery of every session -- rep 1 is the only rep
+   *  that starts cold, so its average sits well under where it actually ended.
+   *  Carried so the page can SHOW the number the verdict was computed from. */
+  hr_end: num,
   /** The rep's own name where it has one -- "400m", "1000m". A prescription
    *  states a distance, so showing it beats re-deriving one from `dist_km`,
    *  which lands on "0.40 mi" for a lap the plan calls a 400. */
@@ -252,7 +259,6 @@ export const SessionDetail = z.looseObject({
   laps_recovered: z.boolean().nullable().optional(),
   rep_paces: z.array(z.number()).nullable().optional(),
   rep_hr: z.array(z.number()).nullable().optional(),
-  slivers: z.array(z.unknown()).nullable().optional(),
   data_quality: z.array(z.unknown()).nullable().optional(),
   autolaps: z.array(z.unknown()).nullable().optional(),
   /** The grader's OWN SENTENCE saying why this session was not scored --
@@ -292,16 +298,36 @@ export const PlannedSet = z.looseObject({
    *  recovery that is not running, and one a reader shown `2:00-3:00` with no
    *  other word will read as a jog. It prices zero in both skills. */
   float_mode: str,
+  /** A LINE PER REP WHERE THE REPS DIFFER, and null where they do not.
+   *
+   *  A rep may state its own length, recovery, target and MODE since
+   *  2026-09-05, so a set no longer always has one answer -- and a set of mixed
+   *  rep LENGTHS never did, which is why `12x600m` states `2:27-2:32` and
+   *  2026-07-07's `400, 600, 400, 200` used to state only a pace. Each row is
+   *  the same shape a set row is, computed by the same helpers on a one-rep
+   *  set, so a rep's printed target and the target its scorer reads cannot come
+   *  apart. `LOOSE` for the reason every record here is: the grader owns the
+   *  shape. */
+  rep_rows: z.array(z.looseObject({ index: z.number() })).nullable().optional(),
   /** THE GROUPING. `3x3x200m` is three sets of three, and `reps` is the TOTAL
    *  -- nine -- with `groups` 3. Splitting it the other way would have moved
-   *  four scoring paths to fix a display; this is purely additive. */
-  groups: num,
+   *  four scoring paths to fix a display; this is purely additive.
+   *
+   *  A RANGE since 2026-09-05, the shape `reps` already has: `3-4 groups of 3`
+   *  is how an OPTIONAL GROUP is stated, and one number cannot say it -- with
+   *  `groups: 3` a ranged `reps` means 3 groups of 3-4 reps, a different
+   *  session. */
+  groups: z.union([z.number(), z.array(z.number())]).nullable().optional(),
   reps_per_group: z.union([z.number(), z.array(z.number())]).nullable().optional(),
   group_float_seconds: z
     .union([z.number(), z.array(z.number())])
     .nullable()
     .optional(),
   group_float_distance_m: num,
+  /** What the BETWEEN-GROUP recovery is, for the reason `float_mode` above is
+   *  carried: `400m` with no other word reads as a jog, and a walk or a
+   *  standing rest between groups prices zero in both skills. */
+  group_float_mode: str,
   target_pace: str,
   /** WHAT TO RUN TO. A distance-prescribed rep is run to a clock, not to a
    *  pace, so `12x600m` states `2:27-2:32` rather than `6:33-6:47/mi` alone.
@@ -335,11 +361,37 @@ export const PlannedSet = z.looseObject({
  * reads as a criterion, and a reader who believes an easy run is pace-scored
  * will "fix" a run that was executed correctly.
  */
+/** How far a run strayed from what the plan asked for, in whichever unit the
+ *  plan asked in. ONE SHAPE, TWO MEMBERS on a result -- `duration` over
+ *  seconds and `distance` over miles -- which is why it is named for the
+ *  question rather than for a unit. `docs/data-model.md` draws it as
+ *  `Deviation` for the same reason. */
+export const Deviation = z.looseObject({
+  actual: num,
+  /** A range as often as a scalar -- the plan states "50-60 min" constantly,
+   *  and treating that as unscorable is what the widening fixed. */
+  prescribed: z.union([z.number(), z.array(z.number())]).nullable().optional(),
+  /** NULL MEANS REPORTED AND NOT SCORED, which is a different thing from a
+   *  deviation forgiven at 1.0. See `RunResult.distance`. */
+  factor: num,
+  /** 0.0 means the run landed INSIDE its prescription. It is falsy, and
+   *  filtering on it is what once hid every run that was bang on. */
+  pct: num,
+  reason: str,
+});
+
 export const Planned = z.looseObject({
   role: str,
   prescribed: str,
   /** Verbatim off the manifest, NOT normalised to a pair -- see `RunResult`. */
   prescribed_seconds: z
+    .union([z.number(), z.array(z.number())])
+    .nullable()
+    .optional(),
+  /** THE OTHER UNIT A CONTINUOUS RUN MAY BE PRESCRIBED IN, verbatim off the
+   *  manifest the same way. `5-6 mi easy` is the same prescription shape
+   *  `60-70 min easy` is. */
+  prescribed_miles: z
     .union([z.number(), z.array(z.number())])
     .nullable()
     .optional(),
@@ -456,6 +508,25 @@ export const RunResult = z.looseObject({
   /** The run's own average cadence in spm, display factor applied. On every
    *  role, so a column of it is never structurally absent. */
   cadence: num,
+  /** THE SPRINT CADENCE VERDICT, and ABSENT on every run the grader does not
+   *  ask -- which is the opposite convention from `cadence` directly above, on
+   *  purpose. That one is a measurement every role has; this is a question only
+   *  a sprint session is put, so a block present on an easy run would read as a
+   *  criterion nobody stated.
+   *
+   *  `verdict` is `met` / `not-met` / `not-evaluable` and the block is REPORTED:
+   *  it reaches no score, so `earned`, `total` and `score_bucket` stay exactly
+   *  as they were. `target_spm` is the athlete's line, carried so a reader can
+   *  check the verdict without a second record -- see `grade_week.cadence_check`
+   *  for why that copy was taken. */
+  cadence_check: z
+    .looseObject({
+      verdict: str,
+      peak_spm: num,
+      rep_seconds: num,
+      target_spm: num,
+    })
+    .nullish(),
   /** THE BELT, on an indoor run. Authored on the manifest and carried here
    *  verbatim: `reps[i]` is the i-th rep's set speed in mph and `other` is
    *  everything else.
@@ -498,20 +569,13 @@ export const RunResult = z.looseObject({
   /** 0.0 is a real, meaningful value here: dead-on prescription. */
   pct: num,
   duration_factor: num,
-  duration: z
-    .looseObject({
-      actual: num,
-      /** A range as often as a scalar -- the plan states "50-60 min" constantly,
-       *  and treating that as unscorable is what the widening fixed. */
-      prescribed: z.union([z.number(), z.array(z.number())]).nullable().optional(),
-      factor: num,
-      /** 0.0 means the run landed INSIDE its prescription. It is falsy, and
-       *  filtering on it is what once hid every run that was bang on. */
-      pct: num,
-      reason: str,
-    })
-    .nullable()
-    .optional(),
+  duration: Deviation.nullable().optional(),
+  /** THE SAME SHAPE OVER MILES (2026-09-04). A continuous run may be
+   *  prescribed in either unit and EXACTLY ONE of the two scores -- time wins
+   *  where the plan states both -- so the one that did NOT score is still
+   *  described here with `factor: null`. That null is what says which
+   *  criterion applied; there is deliberately no third key to say it. */
+  distance: Deviation.nullable().optional(),
   detail: SessionDetail.nullable().optional(),
 });
 
@@ -660,20 +724,36 @@ export const LoadDay = z.looseObject({
   ctl: num,
   atl: num,
   tsb: num,
-  /** The day's NON-RUN steps priced as an impulse. AN UNCALIBRATED EXPERIMENT,
-   *  added 2026-08-15, and it must never be displayed as a peer of `trimp`
-   *  without saying so: that one is integrated from measured heart rate, this
-   *  one runs a nominal walking cadence and a nominal fraction of hr_max
-   *  through the same formula. It is scored by nothing and deliberately does
-   *  NOT feed `ctl`/`atl`/`tsb` -- see `scripts/training-load/model.json` ->
-   *  `trimp.background`.
+  /** The day's NON-RUN steps priced as an impulse. It must never be displayed
+   *  as a peer of `trimp` without saying so: that one is integrated from
+   *  measured heart rate, this one prices step counts at a WALKING heart rate
+   *  nobody has measured on this athlete. It is scored by nothing and
+   *  deliberately does NOT feed `ctl`/`atl`/`tsb` -- see
+   *  `scripts/training-load/model.json` -> `trimp.background`.
    *
    *  `null` is a day the export did not cover. `0` is a day nobody moved, which
    *  is a measurement -- and `0` is falsy, so never test truthiness here. */
   bg_trimp: num,
+  /** `cadence-profile` / `nominal-cadence` / `none` -- which TIER priced it.
+   *  `cadence-profile` integrates the day's own measured per-minute step rates
+   *  and is the measurement; `nominal-cadence` divides the day's total by a
+   *  nominal walking cadence and charges every minute the full walk heart rate,
+   *  which OVERSTATES by about 1.47x and up to 1.76x.
+   *
+   *  MARK ANYTHING THAT IS NOT `cadence-profile`, keyed on "not the
+   *  measurement" rather than on the estimate tier by name, so a tier added
+   *  later is marked by default. Same rule as `trimp_source`. */
+  bg_trimp_source: str,
   /** `measured` / `default` / `none` -- which resting heart rate denominated
    *  it, the same label every row of `derived/trimp.csv` carries. */
   bg_trimp_hr_rest_source: str,
+  /** The background half of THIS day's ceiling, and which side of the `max`
+   *  produced it -- `median` for the week's trailing figure, `budget` for the
+   *  impulse floor. Both are needed on the DAY because the budget converts at
+   *  the day's own resting heart rate, so it differs across a week while
+   *  `ceiling_inputs.background_steps` does not. */
+  ceiling_background_steps: num,
+  ceiling_background_source: str,
 });
 
 /** How every ceiling in the week was built. Carried so a reader can check the
@@ -695,6 +775,14 @@ export const CeilingInputs = z.looseObject({
    *  over, without which "median daily non-run steps" names no window. */
   default_cadence_spm: num,
   background_window_days: num,
+  /** The FLOOR under the background allowance, stated as the impulse it is
+   *  rather than as the steps it becomes -- the steps move with the day's own
+   *  resting heart rate, so they live on `LoadDay.ceiling_background_steps` and
+   *  this is the one constant behind all of them. `walk_reference_spm` is the
+   *  walking cadence the conversion happens at, which is what makes the budget
+   *  a property of the PLAN rather than of how the day was actually walked. */
+  background_trimp_budget: num,
+  walk_reference_spm: num,
 });
 
 export const Readiness = z.looseObject({
@@ -820,10 +908,17 @@ export const Load = z.looseObject({
 /** A pace band. The ONLY place rep band numbers exist.
  *
  * Not a `[lo, hi]` pair -- an object, and one whose two ends are not reliably
- * ordered: `gap_zone` on 2026-07-20 carries fast 478.7 against slow 447.6,
- * which is inverted, because a FASTER pace is a SMALLER number of seconds per
- * mile. `paceChartBand()` therefore min/maxes rather than trusting the names,
- * exactly as `bandRange()` in the old viewer did.
+ * ordered. A chart is hand-authored or proposed by `propose_chart.py` and then
+ * confirmed, so a transcribed band can arrive the wrong way round: a FASTER pace
+ * is a SMALLER number of seconds per mile, which is the one ordering nobody
+ * types correctly by reflex. `paceChartBand()` therefore min/maxes rather than
+ * trusting the names, exactly as `bandRange()` in the old viewer did.
+ *
+ * THE RECORD CARRIED A REAL INVERTED PAIR UNTIL 2026-09-18 -- `gap_zone` on
+ * 2026-07-20, fast 478.7 against slow 447.6 -- and `gap_zone` is retired with
+ * the `long` band it was anchored on. The guard and its tests STAY, now pinned
+ * against SYNTHETIC inverted bands: the shape is a property of how charts are
+ * authored, not of the one key that happened to exhibit it.
  */
 export const Band = z.looseObject({
   display: str,
@@ -877,8 +972,13 @@ export const PaceChart = z.looseObject({
   provenance: str,
   captured: str,
   confirmed_by_athlete: z.boolean().nullable().optional(),
+  /* `gap_zone` WAS DECLARED HERE AND IS RETIRED (2026-09-18). It was defined as
+     the fast end of `long` to the slow end of `rep_15min`, it reached no score,
+     and it went with the `long` band it was anchored on -- stripped from every
+     committed chart and from `publish.py`'s `CHART_KEYS`. `looseObject` would
+     have carried it silently either way; the declaration is gone so nothing
+     reads it back by name. */
   bands: z.record(z.string(), Band).nullable().optional(),
-  gap_zone: Band.nullable().optional(),
 });
 
 /** One pace model's race table at the current anchor.
@@ -917,9 +1017,11 @@ export const Week = z.looseObject({
   /* `week_end` LEFT THIS RECORD ON 2026-08-29 -- it is `week_start + 6` and it
    * was stored here AND on `adherence.json`, which is the copy `live_weeks()`
    * and `WeekCard` read. The unread arithmetic went. */
-  /** PROJECTED, not the whole manifest: `week_start`, `week_type`, `phase` and
-   *  each run's `key`, `date`, `role` and `prescribed`. Seven fields out of
-   *  forty, which is what the app renders -- see `project_manifest()` in
+  /** PROJECTED, not the whole manifest: `week_start`, `week_type`, `phase`,
+   *  `rest_days`, and each run's `key`, `date`, `role`, `prescribed` and
+   *  `alternates` -- the last itself projected to each stand-in's `role` and
+   *  `prescribed`, for the Plan grid's `Alt:` lines. A handful of fields out
+   *  of forty, which is what the app renders -- see `project_manifest()` in
    *  publish.py and its pin in `tests/test_publish.py`. */
   manifest: z.looseObject({}).nullable().optional(),
   pace_chart: PaceChart.nullable().optional(),

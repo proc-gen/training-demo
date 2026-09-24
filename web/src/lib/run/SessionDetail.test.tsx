@@ -7,10 +7,20 @@ import { SessionDetail } from "./SessionDetail";
 
 afterEach(cleanup);
 
+/** Two bands, the second SYNTHETIC and deliberately INVERTED.
+ *
+ * The second band is only ever "a band that is not the first one" here -- what
+ * these cases are about is one panel per set, each resolved against its OWN
+ * band, and a set title showing the band's name rather than blanking a key the
+ * component does not recognise. It was keyed `gap_zone` with these numbers until
+ * 2026-09-18, when that key was retired with the `long` band it was anchored on;
+ * the inversion is kept because a hand-authored chart really can arrive with its
+ * two ends the wrong way round, and `paceChartBand()` min/maxes for that reason.
+ */
 const CHART = {
   bands: {
     rep_3min: { fast_sec_per_mi: 396, slow_sec_per_mi: 409 },
-    gap_zone: { fast_sec_per_mi: 478.7, slow_sec_per_mi: 447.6 },
+    inverted_zone: { fast_sec_per_mi: 478.7, slow_sec_per_mi: 447.6 },
   },
 } as unknown as PaceChart;
 
@@ -26,27 +36,27 @@ describe("SessionDetail", () => {
   it("renders a panel per set", () => {
     // A session can carry more than one: an alternation is two, and a workout
     // inside a longer continuous run is one block among several.
-    const sets = [set("rep_3min", [398, 400]), set("gap_zone", [460, 465])];
+    const sets = [set("rep_3min", [398, 400]), set("inverted_zone", [460, 465])];
     const { container } = wrap(<SessionDetail sets={sets} chart={CHART} />);
     expect(container.querySelectorAll(".sm-title")).toHaveLength(2);
   });
 
   it("keeps the sets in the grader's order", () => {
-    const sets = [set("gap_zone", [460]), set("rep_3min", [398])];
+    const sets = [set("inverted_zone", [460]), set("rep_3min", [398])];
     const { container } = wrap(<SessionDetail sets={sets} chart={CHART} />);
     const titles = [...container.querySelectorAll(".sm-title")].map((t) => t.textContent);
-    expect(titles[0]).toContain("gap_zone");
+    expect(titles[0]).toContain("inverted_zone");
   });
 
   it("resolves each set against its OWN band", () => {
     // Two sets in one session have different bands, and a rep in-band for one
     // is out of band for the other.
-    const sets = [set("rep_3min", [398]), set("gap_zone", [398])];
+    const sets = [set("rep_3min", [398]), set("inverted_zone", [398])];
     const { container } = wrap(<SessionDetail sets={sets} chart={CHART} />);
     const panels = [...container.querySelectorAll("div > div")];
     expect(panels.length).toBeGreaterThan(0);
     expect(container.textContent).toContain("rep_3min");
-    expect(container.textContent).toContain("gap_zone");
+    expect(container.textContent).toContain("inverted_zone");
   });
 
   it("renders nothing for no sets", () => {
@@ -55,7 +65,7 @@ describe("SessionDetail", () => {
   });
 
   it("skips a set with no rows without disturbing the others", () => {
-    const sets = [set("rep_3min", []), set("gap_zone", [460, 465])];
+    const sets = [set("rep_3min", []), set("inverted_zone", [460, 465])];
     const { container } = wrap(<SessionDetail sets={sets} chart={CHART} />);
     expect(container.querySelectorAll(".sm-title")).toHaveLength(1);
   });

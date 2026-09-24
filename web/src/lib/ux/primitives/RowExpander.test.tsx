@@ -74,6 +74,25 @@ describe("RowExpander", () => {
     expect(container.querySelector(".row-expander-label")).toBeNull();
   });
 
+  it("carries NO tooltip unless asked for one", () => {
+    /* The runs table wants none -- its rows are labelled by the columns above
+     * them -- and a `title` echoing `ariaLabel` would be a second spelling of
+     * the name a screen reader already reads. */
+    const { container } = wrap(<RowExpander {...base} />);
+    expect(btn(container).getAttribute("title")).toBeNull();
+  });
+
+  it("takes one where the surrounding table has no headers", () => {
+    /* The workout editor's standing rule: every control there says what it is
+     * on hover, because there are no column headings to read it off. */
+    const { container } = wrap(
+      <RowExpander {...base} title="Fold set 1 — 3x200m w/ 200m recovery" />,
+    );
+    expect(btn(container).getAttribute("title")).toBe(
+      "Fold set 1 — 3x200m w/ 200m recovery",
+    );
+  });
+
   it("renders a visible label when given one", () => {
     const { container } = wrap(<RowExpander {...base} label="Mon 8/3" />);
     expect(

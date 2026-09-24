@@ -4,10 +4,6 @@
    "fast_sec_per_mi": 517,
    "slow_sec_per_mi": 558
   },
-  "long": {
-   "fast_sec_per_mi": 488,
-   "slow_sec_per_mi": 517
-  },
   "recovery": {
    "fast_sec_per_mi": 558,
    "slow_sec_per_mi": 606
@@ -64,7 +60,7 @@
    "sec_per_mi": 311,
    "seconds": 154
   },
-  "tempo": {
+  "threshold": {
    "fast_sec_per_mi": 387,
    "slow_sec_per_mi": 394
   }

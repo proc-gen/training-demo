@@ -1,7 +1,9 @@
 import { cleanup, fireEvent } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 
+import { clock } from "@/lib/data/format";
 import type { Payload } from "@/lib/data/payload";
+import { modelRacePaces } from "@/lib/pacemodels/tables";
 import { PUBLISHED, has } from "@/test/payload";
 import { wrap } from "@/test/render";
 import { TrendsView } from "./TrendsView";
@@ -37,10 +39,21 @@ const SYNTH = {
 const select = (c: HTMLElement) => c.querySelector("select") as HTMLSelectElement;
 const range = (c: HTMLElement) => c.querySelector(".sm-range")!.textContent!;
 const title = (c: HTMLElement) => c.querySelector(".sm-title")!.textContent!;
-const pill = (c: HTMLElement, label: string) =>
-  [...c.querySelectorAll("button.tab")].find((b) => b.textContent === label)!;
+/** The window-length dropdown. NOT `select(c)`, which is the graph picker and
+ *  is deliberately first in the row. */
+const presets = (c: HTMLElement) =>
+  c.querySelector<HTMLSelectElement>(".field.trailing select")!;
+/** Choose a preset by its visible label, so a case reads as the reader's act. */
+const choose = (c: HTMLElement, label: string) => {
+  const option = [...presets(c).options].find((o) => o.textContent === label)!;
+  fireEvent.change(presets(c), { target: { value: option.value } });
+};
 const dates = (c: HTMLElement) =>
   [...c.querySelectorAll('input[type="date"]')] as HTMLInputElement[];
+/** The arrows in DOM order: coarse back, fine back, fine forward, coarse
+ *  forward. */
+const arrows = (c: HTMLElement) =>
+  [...c.querySelectorAll<HTMLButtonElement>(".stepper button")];
 
 describe("TrendsView", () => {
   has(D)("renders a chart without throwing", () => {
@@ -276,7 +289,7 @@ describe("choosing a graph", () => {
      * switches; a range that re-resolved per panel would answer a different
      * question each time. */
     const { container } = wrap(<TrendsView payload={SYNTH} />);
-    fireEvent.click(pill(container, "All"));
+    choose(container, "All");
     const before = dates(container).map((i) => i.value);
     fireEvent.change(select(container), { target: { value: "hrv" } });
     expect(dates(container).map((i) => i.value)).toEqual(before);
@@ -294,28 +307,23 @@ describe("the window", () => {
 
   it("widens to the whole span on `All`", () => {
     const { container } = wrap(<TrendsView payload={SYNTH} />);
-    fireEvent.click(pill(container, "All"));
+    choose(container, "All");
     expect(range(container)).toContain("2026-01-05 → 2026-08-15");
     expect(range(container)).toContain("3 of 3 points");
   });
 
-  it("marks the preset that is showing", () => {
+  it("shows the preset that is showing", () => {
     const { container } = wrap(<TrendsView payload={SYNTH} />);
-    expect(pill(container, "1 month").getAttribute("aria-pressed")).toBe("true");
-    fireEvent.click(pill(container, "6 months"));
-    expect(pill(container, "6 months").getAttribute("aria-pressed")).toBe("true");
-    expect(pill(container, "1 month").getAttribute("aria-pressed")).toBe("false");
+    expect(presets(container).value).toBe("1m");
+    choose(container, "6 months");
+    expect(presets(container).value).toBe("6m");
   });
 
-  it("drops to `custom` when a date is typed, marking NO preset", () => {
+  it("drops to `custom` when a date is typed", () => {
     const { container } = wrap(<TrendsView payload={SYNTH} />);
     fireEvent.change(dates(container)[0], { target: { value: "2026-02-01" } });
     expect(range(container)).toContain("2026-02-01 → 2026-08-15");
-    expect(
-      [...container.querySelectorAll("button.tab")].filter(
-        (b) => b.getAttribute("aria-pressed") === "true",
-      ),
-    ).toHaveLength(0);
+    expect(presets(container).value).toBe("custom");
   });
 
   it("says a window holds nothing rather than drawing a blank plot", () => {
@@ -331,9 +339,64 @@ describe("the window", () => {
   it("recovers from an empty window when the dates move back", () => {
     const { container } = wrap(<TrendsView payload={SYNTH} />);
     fireEvent.change(dates(container)[1], { target: { value: "2020-01-01" } });
-    fireEvent.click(pill(container, "All"));
+    choose(container, "All");
     expect(container.querySelector("svg.chart")).toBeTruthy();
     expect(range(container)).toContain("3 of 3 points");
+  });
+});
+
+describe("the WEEK arrows, which work where the preset arrows will not", () => {
+  /* The athlete asked for arrows that *"only move the calendar by a week instead
+   * of the selected amount of time showing"*, on this page as well as the
+   * Calendar. `TrendsView` owns what a week-step does to the LABEL. */
+
+  const back = (c: HTMLElement) => fireEvent.click(arrows(c)[1]);
+  const forward = (c: HTMLElement) => fireEvent.click(arrows(c)[2]);
+
+  it("moves the window seven days and KEEPS a length preset", () => {
+    /* `1 month` names the window's LENGTH, not its position, and a week-step
+     * preserves it -- the same reason a period-step keeps it. */
+    const { container } = wrap(<TrendsView payload={SYNTH} />);
+    expect(range(container)).toContain("2026-07-15 → 2026-08-15");
+    back(container);
+    expect(range(container)).toContain("2026-07-08 → 2026-08-08");
+    expect(presets(container).value).toBe("1m");
+  });
+
+  it("steps repeatedly without drifting", () => {
+    const { container } = wrap(<TrendsView payload={SYNTH} />);
+    for (let i = 0; i < 3; i += 1) back(container);
+    expect(range(container)).toContain("2026-06-24 → 2026-07-25");
+    for (let i = 0; i < 3; i += 1) forward(container);
+    expect(range(container)).toContain("2026-07-15 → 2026-08-15");
+  });
+
+  it("IS LIVE ON `All`, where the preset arrows are dead", () => {
+    const { container } = wrap(<TrendsView payload={SYNTH} />);
+    choose(container, "All");
+    const [coarseBack, fineBack, fineFwd, coarseFwd] = arrows(container);
+    expect([coarseBack.disabled, coarseFwd.disabled]).toEqual([true, true]);
+    expect([fineBack.disabled, fineFwd.disabled]).toEqual([false, false]);
+  });
+
+  it("DROPS `All` TO `Custom`, because the window is no longer all the data", () => {
+    /* The one preset a step cannot survive: `All` claims the window IS the
+     * record, which stops being true the moment it moves. */
+    const { container } = wrap(<TrendsView payload={SYNTH} />);
+    choose(container, "All");
+    expect(range(container)).toContain("2026-01-05 → 2026-08-15");
+    back(container);
+    expect(presets(container).value).toBe("custom");
+    expect(range(container)).toContain("2025-12-29 → 2026-08-08");
+  });
+
+  it("stays in `custom` and still moves", () => {
+    const { container } = wrap(<TrendsView payload={SYNTH} />);
+    fireEvent.change(dates(container)[0], { target: { value: "2026-02-01" } });
+    expect(presets(container).value).toBe("custom");
+    forward(container);
+    expect(presets(container).value).toBe("custom");
+    expect(range(container)).toContain("2026-02-08 → 2026-08-22");
   });
 });
 
@@ -342,7 +405,7 @@ describe("a year of the real record", () => {
    * four labels between them and the wash hung below the zero rule. */
   const year = () => {
     const r = wrap(<TrendsView payload={D!} />);
-    fireEvent.click(pill(r.container, "1 year"));
+    choose(r.container, "1 year");
     return r.container;
   };
   const labels = (c: HTMLElement) =>
@@ -435,10 +498,7 @@ describe("the pace graphs", () => {
        survive whatever the legend's boxes do. Widen to the full window so the
        committed races are in view. */
     const r = pick("Projected race times");
-    const all = [
-      ...r.container.querySelectorAll<HTMLButtonElement>(".range-presets button"),
-    ].find((b) => b.textContent === "All")!;
-    fireEvent.click(all);
+    choose(r.container, "All");
     const raceDots = () =>
       [...r.container.querySelectorAll("circle.marker")].filter(
         (d) => d.getAttribute("fill") === "var(--text-primary)",
@@ -470,7 +530,7 @@ describe("the pace graphs", () => {
       x.closest("label")?.textContent?.includes("Paces"),
     )!;
     expect([...sel.querySelectorAll("option")].map((o) => o.textContent)).toEqual([
-      "Tempo & repetition",
+      "Threshold & repetition",
       "Sub-threshold",
       "Easy / recovery",
     ]);
@@ -487,7 +547,7 @@ describe("the pace graphs", () => {
     const names = [...container.querySelectorAll(".series-picker .series-item")].map(
       (x) => x.textContent,
     );
-    expect(names).toEqual(["Repetition", "Tempo"]);
+    expect(names).toEqual(["Repetition", "Threshold"]);
     expect(container.querySelector(".sm-range")!.textContent).toBe(window);
   });
 
@@ -599,5 +659,166 @@ describe("the pace graphs", () => {
       fireEvent.mouseLeave(dot.closest("g")!);
     }
     expect(seen.some((t) => t.includes("2026-08-25"))).toBe(true);
+  });
+});
+
+describe("TrendsView, the paces rail", () => {
+  /* THE RAIL SITS BESIDE EVERY PAGE since 2026-09-06. This one is about no week
+   * in particular, so it shows the CURRENT chart and no week column at all. */
+
+  has(D)("renders beside the card, with no week column", () => {
+    const { container } = wrap(<TrendsView payload={D!} />);
+    const rail = container.querySelector(".page-layout > .rail")!;
+    expect(rail).toBeTruthy();
+    expect(rail.querySelector("h2")!.textContent).toBe("Paces");
+    expect(rail.textContent).toContain("Current");
+    /* A column of dashes headed "This week" would invent a week this page does
+       not have -- which is a different state from a week whose chart has not
+       been confirmed, and reads as a measurement that went missing. */
+    expect(rail.textContent).not.toContain("This week");
+  });
+
+  has(D)("leaves the graph in the main column", () => {
+    const { container } = wrap(<TrendsView payload={D!} />);
+    expect(container.querySelector(".page-main > .card")).toBeTruthy();
+    expect(container.querySelector(".page-main .rail")).toBeNull();
+  });
+
+  it("renders beside the EMPTY card too", () => {
+    // The no-panels branch is its own return, and a rail that appeared on one
+    // of the two would be a layout that depends on whether there is data.
+    const { container } = wrap(
+      <TrendsView payload={{ weeks: {}, days: [] } as unknown as Payload} />,
+    );
+    expect(container.querySelector(".page-main > .card")).toBeTruthy();
+  });
+});
+
+/* ------------------------------------------------ the effective VO2max graph */
+
+describe("the effective VO2max graph", () => {
+  const pick = () => {
+    const r = wrap(<TrendsView payload={D!} />);
+    fireEvent.change(r.container.querySelector("select")!, { target: { value: "vo2max" } });
+    return r;
+  };
+  const seriesNames = (c: HTMLElement) =>
+    [...c.querySelectorAll(".series-picker .series-item")].map((e) => e.textContent);
+  const box = (c: HTMLElement) => c.querySelector<HTMLInputElement>("input.window-days")!;
+  const type = (c: HTMLElement, text: string) => {
+    fireEvent.change(box(c), { target: { value: text } });
+    fireEvent.keyDown(box(c), { key: "Enter" });
+  };
+  const tipRows = () =>
+    [...document.body.querySelectorAll(".tooltip .row")].map((r) => r.textContent!);
+  const LABELS = ["800m", "1500m", "3000m", "5000m", "10000m", "Half marathon", "Marathon"];
+
+  has(D)("is offered in the picker, ahead of the two pace panels", () => {
+    const { container } = wrap(<TrendsView payload={D!} />);
+    // The GRAPH picker's options only; the page has four other selects.
+    const options = [...select(container).querySelectorAll("option")].map(
+      (o) => o.textContent,
+    );
+    const at = options.indexOf("Effective VO2max");
+    expect(at).toBeGreaterThan(-1);
+    expect(options.slice(at)).toEqual([
+      "Effective VO2max",
+      "Projected race times",
+      "Target paces",
+    ]);
+  });
+
+  has(D)("opens on the athlete's 42 d and the model's 30 d, both ticked", () => {
+    const { container } = pick();
+    expect(title(container)).toBe("Effective VO2max");
+    expect(seriesNames(container)).toEqual(["42 d", "30 d"]);
+    expect(container.querySelectorAll("path.series-line").length).toBeGreaterThan(0);
+  });
+
+  has(D)("offers the window box HERE and on no other graph", () => {
+    const { container } = pick();
+    expect(box(container)).toBeTruthy();
+    for (const p of trendPanels(D!)) {
+      if (p.key === "vo2max") continue;
+      fireEvent.change(container.querySelector("select")!, { target: { value: p.key } });
+      expect(container.querySelector("input.window-days"), p.key).toBeNull();
+    }
+  });
+
+  has(D)("ADDS A THIRD LINE at the typed window, and keeps the first two", () => {
+    const { container } = pick();
+    type(container, "60");
+    expect(seriesNames(container)).toEqual(["42 d", "30 d", "60 d"]);
+    expect(container.querySelectorAll("path.series-line").length).toBeGreaterThanOrEqual(3);
+  });
+
+  has(D)("removes it again on a cleared or invalid entry", () => {
+    const { container } = pick();
+    type(container, "60");
+    type(container, "");
+    expect(seriesNames(container)).toEqual(["42 d", "30 d"]);
+    type(container, "60");
+    type(container, "never");
+    expect(seriesNames(container)).toEqual(["42 d", "30 d"]);
+  });
+
+  has(D)("does not add a duplicate of a line already drawn", () => {
+    const { container } = pick();
+    type(container, "30");
+    expect(seriesNames(container)).toEqual(["42 d", "30 d"]);
+  });
+
+  has(D)("keeps the typed window through a detour to another graph", () => {
+    /* The state rides above the `key={panel.key}` remount, beside the
+       aggregation, for the same reason. */
+    const { container } = pick();
+    type(container, "90");
+    fireEvent.change(container.querySelector("select")!, { target: { value: "volume" } });
+    expect(title(container)).toBe("Weekly volume");
+    fireEvent.change(container.querySelector("select")!, { target: { value: "vo2max" } });
+    expect(seriesNames(container)).toEqual(["42 d", "30 d", "90 d"]);
+    expect(box(container).value).toBe("90");
+  });
+
+  has(D)("DOES NOT MOVE THE DATE WINDOW when a line is added", () => {
+    const { container } = pick();
+    const before = range(container);
+    type(container, "120");
+    expect(range(container)).toBe(before);
+    const want = defaultRange(trendPanels(D!))!;
+    expect(dates(container).map((i) => i.value)).toEqual([want.from, want.to]);
+  });
+
+  has(D)("lists a projected time per window for every rail distance on hover", () => {
+    const { container } = pick();
+    type(container, "60");
+    choose(container, "All");
+    const hits = [...container.querySelectorAll("rect[fill='transparent']")];
+    expect(hits.length).toBeGreaterThan(100);
+    fireEvent.mouseEnter(hits[hits.length - 1], { clientX: 1, clientY: 1 });
+    const rows = tipRows();
+    expect(rows.some((r) => r.startsWith("Projected42 d · 30 d · 60 d"))).toBe(true);
+    for (const label of LABELS) {
+      const row = rows.find((r) => r.startsWith(label))!;
+      expect(row, label).toBeTruthy();
+      // Three clock values, one per window, e.g. `18:06 · 18:12 · 18:20`.
+      expect(row.slice(label.length).split(" · ")).toHaveLength(3);
+      expect(row.slice(label.length)).toMatch(/^(\d+:)?\d+:\d\d( · (\d+:)?\d+:\d\d){2}$/);
+    }
+  });
+
+  has(D)("prices the 42 d column through the function the rail's dropdown column uses", () => {
+    /* The rail's own anchor is the CONFIRMED chart's, a Sunday, so the two
+       agree only where the curve's day IS that Sunday. This compares the same
+       function at the same number instead, which is the contract. */
+    const { container } = pick();
+    choose(container, "All");
+    const hits = [...container.querySelectorAll("rect[fill='transparent']")];
+    fireEvent.mouseEnter(hits[hits.length - 1], { clientX: 1, clientY: 1 });
+    const rows = tipRows();
+    const anchor = Number(rows.find((r) => r.startsWith("42 d"))!.slice(4));
+    const table = modelRacePaces("daniels_gilbert", anchor)!;
+    const five = rows.find((r) => r.startsWith("5000m"))!.slice(5).split(" · ")[0];
+    expect(five).toBe(clock(table["5000m"].seconds!));
   });
 });

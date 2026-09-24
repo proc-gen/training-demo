@@ -2,6 +2,7 @@
 
 import { dayName, num, pct, signed } from "@/lib/data/format";
 import { unscoredReason } from "@/lib/data/loadDay";
+import { roleLabel } from "@/lib/manifest/labels";
 import type { Payload } from "@/lib/data/payload";
 import { RUN_COLUMNS } from "@/lib/run/data/runColumns";
 import { prescriptionByKey } from "@/lib/run/data/runs";
@@ -101,7 +102,7 @@ export function DayCard({
       <h3>Load and wellness</h3>
       {m || d ? (
         <Table headers={[{ label: "Measure" }, { label: "Value" }]}>
-          <Row2 k="role" v={m?.role || "unstated"} />
+          <Row2 k="role" v={roleLabel(m?.role) || "unstated"} />
           <Row2 k="steps" v={num(d?.total_steps)} />
           <Row2 k="run steps" v={num(d?.run_steps)} />
           <Row2 k="background steps" v={num(d?.nonrun_steps)} />
@@ -125,11 +126,21 @@ export function DayCard({
             }
           />
           <Row2 k="run TRIMP" v={num(m?.trimp, 1)} />
-          {/* AN UNCALIBRATED ESTIMATE sitting beside a measurement, and the
-              label is the instrument: one is integrated from measured heart
-              rate, the other runs a nominal walking cadence through the same
-              formula. */}
-          <Row2 k="background TRIMP (estimate)" v={num(m?.bg_trimp, 1)} />
+          {/* A PRICED FIGURE sitting beside a measurement, and the label is the
+              instrument: run TRIMP is integrated from measured heart rate,
+              this one prices step counts at a walking heart rate nobody has
+              measured on this athlete. `≈` additionally marks the day whose
+              MINUTES were not measured either -- keyed on "not
+              `cadence-profile`", so a tier added later is marked by default. */}
+          <Row2
+            k="background TRIMP (estimate)"
+            v={
+              m?.bg_trimp == null
+                ? num(null, 1)
+                : (m.bg_trimp_source !== "cadence-profile" ? "≈" : "") +
+                  num(m.bg_trimp, 1)
+            }
+          />
           <Row2 k="CTL" v={num(m?.ctl)} />
           <Row2 k="ATL" v={num(m?.atl)} />
           <Row2 k="TSB" v={signed(m?.tsb)} />

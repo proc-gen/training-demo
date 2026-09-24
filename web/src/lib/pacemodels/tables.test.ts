@@ -19,8 +19,8 @@
 import { describe, expect, it } from "vitest";
 
 import REFERENCE from "@/test/paceModelReference.json";
-import { MODEL_NAMES } from "./registry";
-import { modelsAt, roundTarget } from "./tables";
+import { MODEL_NAMES, type ModelName } from "./registry";
+import { modelRacePaces, modelsAt, roundTarget } from "./tables";
 
 type Tables = {
   effective_vo2max: number;
@@ -90,7 +90,7 @@ describe("modelsAt reproduces propose_chart.models_at", () => {
   it("gives tempo a RANGE and every race a single pace", () => {
     const tables = modelsAt(55.9)!;
     for (const table of Object.values(tables.models)) {
-      expect(table.race_paces.tempo).toEqual({
+      expect(table.race_paces.threshold).toEqual({
         fast_sec_per_mi: expect.any(Number),
         slow_sec_per_mi: expect.any(Number),
       });
@@ -98,6 +98,66 @@ describe("modelsAt reproduces propose_chart.models_at", () => {
         "sec_per_mi",
         "seconds",
       ]);
+    }
+  });
+});
+
+describe("modelRacePaces, one model's table", () => {
+  /* THE SAME EXPRESSION AS THE RAIL'S COLUMN, by construction: `modelsAt`
+   * calls this. The Trends VO2max tooltip prices each drawn window through it,
+   * so a time there and the same time in the dropdown column are one
+   * computation rather than two that agree today. */
+  it("equals the matching entry of modelsAt, model for model, at every pinned anchor", () => {
+    expect(CASES.length).toBeGreaterThan(0);
+    for (const c of CASES) {
+      const all = modelsAt(c.vo2max)!;
+      for (const name of MODEL_NAMES) {
+        expect(modelRacePaces(name, c.vo2max), `${name} @ ${c.vo2max}`).toEqual(
+          all.models[name].race_paces,
+        );
+      }
+    }
+  });
+
+  it("agrees with the fixture directly, not only through modelsAt", () => {
+    for (const c of CASES) {
+      for (const [name, table] of Object.entries(c.tables.models)) {
+        expect(modelRacePaces(name as ModelName, c.vo2max)).toEqual(table.race_paces);
+      }
+    }
+  });
+
+  it("returns null for an absent, non-numeric or out-of-band anchor", () => {
+    expect(modelRacePaces("daniels_gilbert", null)).toBeNull();
+    expect(modelRacePaces("daniels_gilbert", undefined)).toBeNull();
+    expect(modelRacePaces("daniels_gilbert", "55.9")).toBeNull();
+    expect(modelRacePaces("daniels_gilbert", NaN)).toBeNull();
+    expect(modelRacePaces("daniels_gilbert", Infinity)).toBeNull();
+    expect(modelRacePaces("daniels_gilbert", 19.9)).toBeNull();
+    expect(modelRacePaces("daniels_gilbert", 90.1)).toBeNull();
+    expect(modelRacePaces("daniels_gilbert", 20)).toBeTruthy();
+    expect(modelRacePaces("daniels_gilbert", 90)).toBeTruthy();
+  });
+
+  it("prices every RACE_DISTANCES key plus tempo, in whole seconds", () => {
+    const table = modelRacePaces("daniels_gilbert", 57.81)!;
+    const keys = Object.keys(table).sort();
+    expect(keys).toEqual(
+      ["800m", "1500m", "3000m", "5000m", "10000m", "21097m", "42195m", "threshold"].sort(),
+    );
+    for (const k of keys) {
+      if (k === "threshold") continue;
+      expect(Number.isInteger(table[k].seconds), k).toBe(true);
+      expect(Number.isInteger(table[k].sec_per_mi), k).toBe(true);
+    }
+  });
+
+  it("is monotonic in fitness -- a higher VO2max is never slower", () => {
+    const lo = modelRacePaces("daniels_gilbert", 50)!;
+    const hi = modelRacePaces("daniels_gilbert", 60)!;
+    for (const k of Object.keys(lo)) {
+      if (k === "threshold") continue;
+      expect(hi[k].seconds!, k).toBeLessThan(lo[k].seconds!);
     }
   });
 });

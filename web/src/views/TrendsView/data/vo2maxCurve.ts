@@ -106,6 +106,13 @@ export function shape(
  * unstated value would draw a plausible curve nobody configured, which is
  * exactly the shape of the `hr.tempo` fallback this repo refuses. A null here
  * draws no curve, and no curve is a question rather than a wrong answer.
+ *
+ * THE VO2MAX PANEL DRAWING THE MODEL'S 30 BESIDE THIS IS NOT THAT SUBSTITUTION.
+ * `vo2maxPanel` draws `DEFAULT_SHAPE_WINDOW_DAYS` as a line LABELLED with its
+ * own length, beside the athlete's -- a comparison the athlete asked for
+ * (2026-09-09) -- and is not offered at all when this returns null. A line that
+ * says what it is differs from a default standing in for a measurement nobody
+ * made; nothing anywhere reads 30 in place of an unstated window.
  */
 export function windowDays(payload: Payload): number | null {
   const vo2max = (payload.thresholds as { vo2max?: unknown } | null | undefined)

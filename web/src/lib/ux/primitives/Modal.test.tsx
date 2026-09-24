@@ -82,6 +82,20 @@ describe("the stylesheet keeps the dialog centred", () => {
     expect(body).toMatch(/^\s*font-size:/m);
     expect(body).toMatch(/^\s*font-weight:/m);
   });
+
+  it("gives `wide` a WIDER box that still clamps to the viewport", () => {
+    /* THE ONLY THING THAT CHECKS THE `wide` PROP DOES ANYTHING. jsdom applies
+     * no CSS, so the component test below can see the class land and not that
+     * the class is worth anything -- a typo in the selector would ship a
+     * `wide` dialog at the default width past a green suite.
+     *
+     * The clamp is the half worth pinning rather than the number: a fixed
+     * `76rem` would overflow a narrow window, which is exactly the failure the
+     * default rule's own `min()` exists to avoid. */
+    const body = bodyOf("dialog.modal.wide");
+    expect(body).toMatch(/width:\s*min\(/);
+    expect(body).toMatch(/100vw\s*-\s*2rem/);
+  });
 });
 
 describe("jsdom's dialog support", () => {
@@ -113,6 +127,27 @@ describe("Modal", () => {
     );
     expect(q.getByRole("heading", { name: "Custom Laps" })).toBeTruthy();
     expect(q.getByText("body")).toBeTruthy();
+  });
+
+  it("is the DEFAULT width unless asked for the wider box", () => {
+    /* An exception for the one form that needs it -- the workout editor's rep
+     * row is twelve controls -- and not a new default: Custom Laps and the week
+     * editor keep 60rem. */
+    const { container } = wrap(
+      <Modal open onClose={() => {}} title="Custom Laps">
+        <p>body</p>
+      </Modal>,
+    );
+    expect(container.querySelector("dialog")!.className).toBe("modal");
+  });
+
+  it("takes the wider box when asked", () => {
+    const { container } = wrap(
+      <Modal open wide onClose={() => {}} title="Plan for 2026-09-01">
+        <p>body</p>
+      </Modal>,
+    );
+    expect(container.querySelector("dialog")!.className).toBe("modal wide");
   });
 
   it("is labelled BY its own title rather than merely containing one", () => {

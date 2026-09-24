@@ -1,7 +1,8 @@
 "use client";
 
 import type { PaceChart, Week } from "@/lib/data/payload";
-import { PaceRail } from "./components/PaceRail";
+import { PaceRail } from "@/lib/paces/PaceRail";
+import { RailLayout } from "@/lib/ux/primitives/RailLayout";
 import { WeekBanners } from "./components/WeekBanners";
 import { WeekCard } from "./components/WeekCard";
 
@@ -43,11 +44,15 @@ export function WeekView({
           from Training and checked against Overall -- and a tab would hide it
           from three quarters of the page. Below the breakpoint the grid
           collapses and it follows the card, which is the right order: the card
-          is what the reader came for. */}
-      <div className="week-layout">
+          is what the reader came for.
+
+          `RailLayout` HOLDS THE GRID SINCE THE RAIL WENT APP-WIDE. It is the
+          same markup this file carried inline; three views share it now, and
+          the banners stay ABOVE it, spanning the page, because a grader that
+          failed is not a fact about the content column. */}
+      <RailLayout rail={<PaceRail week={week} current={paceChartCurrent} />}>
         <WeekCard week={week} />
-        <PaceRail week={week} current={paceChartCurrent} />
-      </div>
+      </RailLayout>
     </>
   );
 }

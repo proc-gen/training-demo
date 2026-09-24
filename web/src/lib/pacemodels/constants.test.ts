@@ -12,11 +12,16 @@
 import { describe, expect, it } from "vitest";
 
 import REFERENCE from "@/test/paceModelReference.json";
-import { RACE_DISTANCES, TEMPO_DURATIONS_SECONDS } from "./constants";
+import {
+  DEFAULT_SHAPE_WINDOW_DAYS,
+  RACE_DISTANCES,
+  TEMPO_DURATIONS_SECONDS,
+} from "./constants";
 
 const FROM_MODEL = REFERENCE.constants as {
   race_distances: Record<string, number>;
   tempo_durations_seconds: number[];
+  default_shape_window_days: number;
   labels: Record<string, string>;
 };
 
@@ -37,6 +42,15 @@ describe("the constants match scripts/pace-models/model.json", () => {
     expect([...TEMPO_DURATIONS_SECONDS]).toEqual(
       FROM_MODEL.tempo_durations_seconds,
     );
+  });
+
+  it("carries the model's default VO2max window", () => {
+    /* The comparison line on the effective-VO2max panel. A copy that drifted
+     * would draw a "30 d" line smoothed over some other number of days and
+     * label it the model's default. */
+    expect(DEFAULT_SHAPE_WINDOW_DAYS).toBe(FROM_MODEL.default_shape_window_days);
+    expect(Number.isInteger(DEFAULT_SHAPE_WINDOW_DAYS)).toBe(true);
+    expect(DEFAULT_SHAPE_WINDOW_DAYS).toBeGreaterThan(0);
   });
 
   it("states the two long distances OFFICIALLY, not as the charts do", () => {

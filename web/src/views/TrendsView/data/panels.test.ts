@@ -672,19 +672,29 @@ describe("drawn", () => {
 });
 
 describe("the pace panels join the graph list", () => {
-  it("appends both, after everything measured", () => {
+  it("appends all three, after everything measured, the anchor first", () => {
     if (!PUBLISHED) return;
     const keys = trendPanels(PUBLISHED).map((p) => p.key);
+    expect(keys).toContain("vo2max");
     expect(keys).toContain("race-times");
     expect(keys).toContain("target-paces");
     // Last, because they answer what the athlete is CAPABLE of rather than what
-    // they did -- and because the picker's order is the reading order.
-    expect(keys.slice(-2)).toEqual(["race-times", "target-paces"]);
+    // they did -- and because the picker's order is the reading order. The
+    // VO2max panel leads the three: it is the number the other two derive from.
+    expect(keys.slice(-3)).toEqual(["vo2max", "race-times", "target-paces"]);
+  });
+
+  it("flags EXACTLY the VO2max panel as windowed", () => {
+    if (!PUBLISHED) return;
+    const flagged = trendPanels(PUBLISHED)
+      .filter((p) => p.windowed)
+      .map((p) => p.key);
+    expect(flagged).toEqual(["vo2max"]);
   });
 
   it("gives series only to the multi-series panels", () => {
     if (!PUBLISHED) return;
-    const multi = new Set(["race-times", "target-paces", "fitness"]);
+    const multi = new Set(["vo2max", "race-times", "target-paces", "fitness"]);
     for (const p of trendPanels(PUBLISHED)) {
       expect(Boolean(p.series), p.key).toBe(multi.has(p.key));
     }

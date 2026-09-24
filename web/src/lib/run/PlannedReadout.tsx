@@ -67,6 +67,20 @@ export function PlannedReadout({ planned }: { planned: Planned }) {
             }
           />
         ) : null}
+        {/* THE OTHER UNIT, and it gets its own row rather than sharing the one
+            above: a run may state both, and collapsing them would make the
+            reader guess which one the grader scored. */}
+        {planned.prescribed_miles !== null &&
+        planned.prescribed_miles !== undefined ? (
+          <Row2
+            k="Distance"
+            v={
+              (Array.isArray(planned.prescribed_miles)
+                ? planned.prescribed_miles.map((m: number) => num(m, 2)).join("–")
+                : num(planned.prescribed_miles, 2)) + " mi"
+            }
+          />
+        ) : null}
       </Table>
 
       {sets.length ? (
@@ -81,9 +95,9 @@ export function PlannedReadout({ planned }: { planned: Planned }) {
             { label: "Criterion" },
           ]}
         >
-          {sets.map((s: PlannedSet, i: number) => (
+          {sets.flatMap((s: PlannedSet, i: number) => [
             <tr key={i}>
-              <td>{s.mode || "set"}</td>
+              <td>{s.mode || (s.rep_rows?.length ? "mixed" : "set")}</td>
               {/* A RANGE MUST NEVER PRINT AS ONE NUMBER -- `8-10x600m` is a real
                   prescription, and showing it as `8` states a requirement the
                   plan did not make. A GROUPED set prints `3 × 3`, because
@@ -102,8 +116,28 @@ export function PlannedReadout({ planned }: { planned: Planned }) {
                   second formatter of a target. */}
               <td>{s.target_display || s.band_display || bandPair(s) || "--"}</td>
               <td>{s.ceiling || "--"}</td>
-            </tr>
-          ))}
+            </tr>,
+            /* A LINE PER REP WHERE THE REPS DIFFER -- the athlete's own choice
+               for this table. A set states what its reps share and then names
+               the ones that vary, rather than a span nobody can tie to a rep;
+               and it is what finally gives 2026-07-07's `400, 600, 400, 200`
+               a target TIME per rep, which no single set line could state. */
+            ...(s.rep_rows ?? []).map((r) => (
+              <tr key={`${i}-${r.index}`} className="rep-line">
+                <td>rep {String(r.index)}</td>
+                <td className="num">1</td>
+                <td className="num">{repLength(r as PlannedSet)}</td>
+                <td className="num">{floatLength(r as PlannedSet)}</td>
+                <td>
+                  {(r as PlannedSet).target_display ||
+                    (r as PlannedSet).band_display ||
+                    bandPair(r as PlannedSet) ||
+                    "--"}
+                </td>
+                <td>{(r as PlannedSet).ceiling || "--"}</td>
+              </tr>
+            )),
+          ])}
         </Table>
       ) : null}
 
@@ -203,9 +237,10 @@ export function floatLength(s: {
   float_seconds?: number | number[] | null;
   float_distance_m?: number | null;
   float_mode?: string | null;
-  groups?: number | null;
+  groups?: number | number[] | null;
   group_float_seconds?: number | number[] | null;
   group_float_distance_m?: number | null;
+  group_float_mode?: string | null;
 }): string {
   let out = "--";
   if (s.float_seconds !== null && s.float_seconds !== undefined) {
@@ -218,15 +253,27 @@ export function floatLength(s: {
   return between ? `${out} (${between} between sets)` : out;
 }
 
+/** THE BETWEEN-GROUP RECOVERY NAMES ITS MODE TOO, for the reason the rep
+ * recovery beside it does: a walk or a standing rest between groups prices zero
+ * in both skills, and `400m` with no other word reads as a jog. The readout did
+ * not carry `group_float_mode` at all until 2026-09-05, so the one committed
+ * set that walks between its groups described itself as jogging. */
 function groupFloat(s: {
   group_float_seconds?: number | number[] | null;
   group_float_distance_m?: number | null;
+  group_float_mode?: string | null;
 }): string | null {
+  let out: string | null = null;
   if (s.group_float_seconds !== null && s.group_float_seconds !== undefined) {
-    return clockRange(s.group_float_seconds);
+    out = clockRange(s.group_float_seconds);
+  } else if (
+    s.group_float_distance_m !== null &&
+    s.group_float_distance_m !== undefined
+  ) {
+    out = `${s.group_float_distance_m}m`;
   }
-  const d = s.group_float_distance_m;
-  return d === null || d === undefined ? null : `${d}m`;
+  if (out === null) return null;
+  return s.group_float_mode ? `${out} ${s.group_float_mode}` : out;
 }
 
 /** `3 × 3` for a grouped set, `9` for a flat one, `8–10` for a range.
@@ -236,17 +283,21 @@ function groupFloat(s: {
  */
 export function repsText(s: {
   reps?: number | number[] | null;
-  groups?: number | null;
+  groups?: number | number[] | null;
   reps_per_group?: number | number[] | null;
 }): string {
   const flat = Array.isArray(s.reps) ? s.reps.join("–") : num(s.reps, 0);
   if (!s.groups || s.reps_per_group === null || s.reps_per_group === undefined) {
     return flat;
   }
+  /* A RANGED GROUP COUNT reads `3–4 × 3` -- an optional group, which is the
+     only way the manifest can state one. `groups` is a number or a pair for
+     exactly the reason `reps` is. */
+  const groups = Array.isArray(s.groups) ? s.groups.join("–") : s.groups;
   const per = Array.isArray(s.reps_per_group)
     ? s.reps_per_group.join("–")
     : String(s.reps_per_group);
-  return `${s.groups} × ${per}`;
+  return `${groups} × ${per}`;
 }
 
 /** A pace-scored set has no band NAME to look up, so the grader emits the pair

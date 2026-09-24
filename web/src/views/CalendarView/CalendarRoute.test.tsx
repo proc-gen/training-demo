@@ -35,11 +35,16 @@ const loaded = (): Loaded & { ok: true; maxSteps: number } => ({
   maxSteps: 30000,
 });
 
+/* THE DATE THE PLAN GRID MARKS UP TO, PINNED. The app reads its one wall
+   clock on the server and hands it down as a prop precisely so a test can
+   do this -- see `data/dayDone.ts`. */
+const TODAY = "2026-09-07";
+
 const cells = (c: HTMLElement) => [...c.querySelectorAll<HTMLElement>(".cal-cell")];
 
 describe("rendering one window", () => {
   has(D)("draws the window it was asked for", () => {
-    const { container } = wrap(<CalendarRoute end={anchor()} loaded={loaded()} />);
+    const { container } = wrap(<CalendarRoute end={anchor()} mode="view" weeks={DEFAULT_WEEKS} today={TODAY} loaded={loaded()} />);
     expect(cells(container).length).toBeGreaterThan(0);
   });
 
@@ -47,7 +52,7 @@ describe("rendering one window", () => {
     /* A blank calendar and a calendar of days nobody measured look identical,
        and only one of them is a problem. */
     const { container } = wrap(
-      <CalendarRoute end="2026-08-30" loaded={{ ok: false, error: "no athlete" }} />,
+      <CalendarRoute end="2026-08-30" mode="view" weeks={DEFAULT_WEEKS} today={TODAY} loaded={{ ok: false, error: "no athlete" }} />,
     );
     expect(container.querySelector(".banner.stop")?.textContent).toContain("no athlete");
     expect(cells(container)).toHaveLength(0);
@@ -62,12 +67,12 @@ describe("rendering one window", () => {
       (c.querySelector(".cal-bar i") as HTMLElement | null)?.style.width ?? null;
 
     const narrow = wrap(
-      <CalendarRoute end={anchor()} loaded={{ ...loaded(), maxSteps: 100000 }} />,
+      <CalendarRoute end={anchor()} mode="view" weeks={DEFAULT_WEEKS} today={TODAY} loaded={{ ...loaded(), maxSteps: 100000 }} />,
     );
     const first = widthOf(narrow.container);
     cleanup();
     const wide = wrap(
-      <CalendarRoute end={anchor()} loaded={{ ...loaded(), maxSteps: 10000 }} />,
+      <CalendarRoute end={anchor()} mode="view" weeks={DEFAULT_WEEKS} today={TODAY} loaded={{ ...loaded(), maxSteps: 10000 }} />,
     );
     expect(first).toBeTruthy();
     expect(widthOf(wide.container)).not.toBe(first);
@@ -84,13 +89,13 @@ describe("what must not survive an anchor change", () => {
        Without it `selected` survives, and the card stays open for a date the
        new window may not even contain. */
     const { q, container, rewrap } = wrap(
-      <CalendarRoute end={anchor()} loaded={loaded()} />,
+      <CalendarRoute end={anchor()} mode="view" weeks={DEFAULT_WEEKS} today={TODAY} loaded={loaded()} />,
     );
     fireEvent.click(openable(container));
     expect(container.querySelector(".cal-cell.is-selected")).toBeTruthy();
 
     const moved = stepLastDay(anchor(), DEFAULT_WEEKS, -1);
-    rewrap(<CalendarRoute end={moved} loaded={loaded()} />);
+    rewrap(<CalendarRoute end={moved} mode="view" weeks={DEFAULT_WEEKS} today={TODAY} loaded={loaded()} />);
     expect(container.querySelector(".cal-cell.is-selected")).toBeNull();
     expect(q.getByText("Select a day above.")).toBeTruthy();
   });
@@ -99,11 +104,26 @@ describe("what must not survive an anchor change", () => {
     // Guards the guard: a component that never selected anything would satisfy
     // the case above without the `key` doing a thing.
     const { container, rewrap } = wrap(
-      <CalendarRoute end={anchor()} loaded={loaded()} />,
+      <CalendarRoute end={anchor()} mode="view" weeks={DEFAULT_WEEKS} today={TODAY} loaded={loaded()} />,
     );
     fireEvent.click(openable(container));
     expect(container.querySelector(".cal-cell.is-selected")).toBeTruthy();
-    rewrap(<CalendarRoute end={anchor()} loaded={loaded()} />);
+    rewrap(<CalendarRoute end={anchor()} mode="view" weeks={DEFAULT_WEEKS} today={TODAY} loaded={loaded()} />);
     expect(container.querySelector(".cal-cell.is-selected")).toBeTruthy();
+  });
+
+  has(D)("KEEPS IT OPEN ACROSS A WEEK-COUNT CHANGE, which is NOT in the key", () => {
+    /* Widening the grid must not close the day card. `?weeks=` exists because
+       a reset on every step was the defect; a card that closed because the
+       reader asked for two more weeks would be that same reset one state
+       along. The anchor has not moved, so the date is still on screen. */
+    const { container, rewrap } = wrap(
+      <CalendarRoute end={anchor()} mode="view" weeks={2} today={TODAY} loaded={loaded()} />,
+    );
+    fireEvent.click(openable(container));
+    expect(container.querySelector(".cal-cell.is-selected")).toBeTruthy();
+    rewrap(<CalendarRoute end={anchor()} mode="view" weeks={6} today={TODAY} loaded={loaded()} />);
+    expect(container.querySelector(".cal-cell.is-selected")).toBeTruthy();
+    expect(cells(container)).toHaveLength(42);
   });
 });

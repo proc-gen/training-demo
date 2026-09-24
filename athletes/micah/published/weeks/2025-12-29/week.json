@@ -3,6 +3,9 @@
  "load_error": null,
  "manifest": {
   "phase": "Rebuild",
+  "rest_days": [
+   "2025-12-31"
+  ],
   "runs": [
    {
     "date": "2025-12-29",

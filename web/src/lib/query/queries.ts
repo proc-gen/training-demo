@@ -59,6 +59,32 @@ export function singleton(db: Db, key: string): unknown {
   return JSON.parse(row.doc);
 }
 
+/** What the graders said about one week, for the plan editor's save readback.
+ *
+ * `published/`'s contract is ABSENCE IS THE SIGNAL: a grader that failed
+ * wrote no record and its reason sits in `week.json` beside the gap. A save
+ * that just ran `publish.py` needs exactly that reason back -- so the editor
+ * can surface a manifest the deep validator refused -- and nothing more; the
+ * page itself re-reads the index like every other request. `found: false`
+ * means the whole week published no record at all, which after a save is
+ * itself worth a sentence.
+ */
+export function weekStatus(
+  db: Db,
+  weekStart: string,
+): { found: boolean; adherence_error: unknown; load_error: unknown } {
+  const row = db
+    .prepare("select week_json from week where week_start = ?")
+    .get(weekStart) as { week_json: string } | undefined;
+  if (!row) return { found: false, adherence_error: null, load_error: null };
+  const week = JSON.parse(row.week_json) as Record<string, unknown>;
+  return {
+    found: true,
+    adherence_error: week.adherence_error ?? null,
+    load_error: week.load_error ?? null,
+  };
+}
+
 /** One chart by its `week_ending`. Null for no key -- null in, null out.
  *
  * A key that names no row is a BROKEN INDEX rather than an absent chart, so it

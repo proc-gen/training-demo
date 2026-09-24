@@ -178,10 +178,15 @@ describe("paceChartBand", () => {
   const chart = {
     bands: {
       rep_3min: { fast_sec_per_mi: 380, slow_sec_per_mi: 400 },
-      // INVERTED, as `gap_zone` on 2026-07-20 really is: a faster pace is a
-      // SMALLER number of seconds, so the field names cannot be trusted to
-      // arrive in order.
-      gap_zone: { fast_sec_per_mi: 478.7, slow_sec_per_mi: 447.6 },
+      /* INVERTED: a faster pace is a SMALLER number of seconds, so the field
+         names cannot be trusted to arrive in order. SYNTHETIC since 2026-09-18,
+         and deliberately still here -- the record's one real inverted pair was
+         `gap_zone` on 2026-07-20 (fast 478.7 against slow 447.6), which is
+         retired with the `long` band it was anchored on. The trap belongs to how
+         a chart is AUTHORED -- by hand, or proposed and then confirmed -- not to
+         the one key that exhibited it, so the case is kept with the numbers that
+         found it and no chart behind it. */
+      inverted_zone: { fast_sec_per_mi: 478.7, slow_sec_per_mi: 447.6 },
       half_measured: { fast_sec_per_mi: 0, slow_sec_per_mi: 400 },
     },
   };
@@ -191,7 +196,7 @@ describe("paceChartBand", () => {
   });
 
   it("orders an inverted band rather than trusting the field names", () => {
-    expect(paceChartBand(chart, "gap_zone")).toEqual([447.6, 478.7]);
+    expect(paceChartBand(chart, "inverted_zone")).toEqual([447.6, 478.7]);
   });
 
   it("is null with no chart, no band, or an unknown band", () => {

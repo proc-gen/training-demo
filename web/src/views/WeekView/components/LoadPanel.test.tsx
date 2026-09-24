@@ -87,8 +87,9 @@ describe("LoadPanel", () => {
       clientX: 1,
       clientY: 1,
     });
+    // LABELLED, not the token -- `dayRoleLabel`, which also knows `rest`.
     expect(container.querySelector(".tooltip")!.textContent).toContain(
-      "recovery",
+      "Recovery",
     );
   });
 

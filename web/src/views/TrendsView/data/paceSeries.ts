@@ -90,21 +90,6 @@ export const CAT = [
  * surfaces, mode-aware for free, and visibly not a series. */
 export const RACE_MARK = "var(--text-primary)";
 
-/** Bands that are NOT plotted on the target-paces panel, and why.
- *
- * `long` is the athlete's own call, 2026-08-23: *"drop long, since it isn't
- * actually used by anything."* True in the sense that matters -- nothing is
- * GRADED against it. `prescription.py`'s `CONTINUOUS_BAND` maps a long run's role
- * to it for the planned readout, which is display only and published with
- * `band_is_reference` set. The band stays in every chart file and stays on the
- * paces rail; it is this one graph it leaves.
- *
- * IT LEAVES A REAL 51-64 s/mi GAP in the ribbon between the 15-minute rep band
- * and Easy, because `long` is exactly what spans it. That gap is honest and is
- * not a rendering fault.
- */
-const UNPLOTTED_BANDS = new Set(["long"]);
-
 /** REPETITION PACE, which is a zone the charts do not store and every chart can
  *  answer: from 800 m race pace to 3000 m race pace.
  *
@@ -133,10 +118,16 @@ const REPETITION = { key: "repetition", label: "Repetition", fast: "800m", slow:
  *
  * The athlete's own division, 2026-08-24. It exists because the zones do not
  * share a scale: ticked together they span **282 s/mi** with two large empty
- * gaps inside -- 36 s/mi between repetition and tempo, and 57 s/mi where `long`
- * is not drawn -- so the sub-threshold ladder rendered into a quarter of the
- * plot and its five zones, which overlap their neighbours by a third of a band,
- * blended into nine colours. Split this way each group spans 55-85 s/mi.
+ * gaps inside -- 36 s/mi between repetition and tempo, and 57 s/mi between the
+ * 15-minute rep band and Easy -- so the sub-threshold ladder rendered into a
+ * quarter of the plot and its five zones, which overlap their neighbours by a
+ * third of a band, blended into nine colours. Split this way each group spans
+ * 55-85 s/mi.
+ *
+ * THE SECOND GAP IS SIMPLY THE DISTANCE BETWEEN TWO BANDS, and it is honest
+ * rather than a rendering fault. A `long` band (68-72% of vVO2max) sat inside it
+ * until 2026-09-18 and was never drawn here; it is retired outright now -- see
+ * `BAND_ORDER` -- so there is no longer a zone missing from the ribbon at all.
  *
  * FASTEST FIRST, matching `BAND_ORDER` and the paces rail, which is the reverse
  * of the order the athlete happened to list them in. One convention for pace
@@ -149,7 +140,12 @@ const REPETITION = { key: "repetition", label: "Repetition", fast: "800m", slow:
  * athlete's call.
  */
 const GROUPS: { key: string; label: string; keys: string[] }[] = [
-  { key: "speed", label: "Tempo & repetition", keys: [REPETITION.key, "tempo"] },
+  {
+    key: "speed",
+    label: "Threshold & repetition",
+    // `race_paces.threshold`, named `tempo` before 2026-09-10.
+    keys: [REPETITION.key, "threshold"],
+  },
   {
     key: "subt",
     label: "Sub-threshold",
@@ -163,10 +159,15 @@ const DEFAULT_GROUP = "subt";
 
 /** A band's two ends, ordered.
  *
- * MIN/MAXED, NEVER TRUSTED BY NAME. `gap_zone` on 2026-07-20 carries fast 478.7
- * against slow 447.6 -- inverted, because a FASTER pace is a SMALLER number of
- * seconds per mile. `paceChartBand()` in `payload.ts` min/maxes for exactly this
- * reason and this is the same rule, not a second opinion about it.
+ * MIN/MAXED, NEVER TRUSTED BY NAME. A chart is hand-authored or script-proposed,
+ * and a transcribed band can arrive with its two ends the wrong way round --
+ * inverted, because a FASTER pace is a SMALLER number of seconds per mile, which
+ * is the one ordering nobody types correctly by reflex. `paceChartBand()` in
+ * `payload.ts` min/maxes for exactly this reason and this is the same rule, not a
+ * second opinion about it. No chart in the record is inverted today; the tree
+ * carried one until `gap_zone` was retired on 2026-09-18, so the guard is kept
+ * against SYNTHETIC inverted bands rather than deleted with the record that
+ * motivated it.
  */
 function ends(b: Band | undefined): [number, number] | null {
   if (!b) return null;
@@ -269,8 +270,12 @@ const race = (chart: PaceChart, key: string): RacePace | null => {
  * of the zones -- which of them belong on one scale together -- so a new band
  * appearing in the charts should NOT silently join a group and take a colour. It
  * is filtered against what the charts carry so a group cannot claim a zone that
- * is not there, and `UNPLOTTED_BANDS` is applied here so `long` cannot re-enter
- * through a group definition.
+ * is not there.
+ *
+ * THERE IS NO UNPLOTTED LIST ANY MORE. One existed for `long` alone, which was
+ * drawn nowhere while it sat in every chart file; the band is retired at the
+ * source now, so the two halves of "a band is drawn here" -- the charts carry it
+ * and a group declares it -- are the whole rule again.
  */
 export function groupKeys(all: { chart: PaceChart }[], keys: string[]): string[] {
   const present = new Set<string>();
@@ -280,7 +285,7 @@ export function groupKeys(all: { chart: PaceChart }[], keys: string[]): string[]
       present.add(REPETITION.key);
     }
   }
-  return keys.filter((k) => present.has(k) && !UNPLOTTED_BANDS.has(k));
+  return keys.filter((k) => present.has(k));
 }
 
 /** SYNTHESIZED LABELS STAY HERE, not in `PACE_LABEL`. That map is the paces
@@ -315,11 +320,12 @@ function seriesOf(mark: WorkoutMark): string | null {
  *  mapping, and the same reason it lives here rather than there.
  *
  * **A LONG RUN IS DRAWN AS AN EASY RUN.** The athlete's instruction, 2026-08-26:
- * *"treat long runs as easy runs for color."* The `long` band left this graph on
- * 2026-08-23 -- see `UNPLOTTED_BANDS` -- and this does NOT bring it back: there
- * is no long zone drawn, no long series and no eighth colour taken. What the
- * mapping decides is which existing series' dot a long run is, and the mark's
- * own `kind` still reads `long` so the tooltip says which it was.
+ * *"treat long runs as easy runs for color."* THIS IS THE ROLE, NOT A BAND. The
+ * `long` PACE BAND left this graph on 2026-08-23 and was retired outright on
+ * 2026-09-18 -- a long run's reference band IS `easy` now -- so there is no long
+ * zone to draw, no long series and no eighth colour taken. What the mapping
+ * decides is which existing series' dot a long run is, and the mark's own `kind`
+ * still reads `long` so the tooltip says which it was.
  *
  * TOTAL OVER `EASY_ROLES`, and a role outside it returns null rather than
  * falling through to `easy`: a run this file has no zone for must produce no

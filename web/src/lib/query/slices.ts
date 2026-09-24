@@ -360,6 +360,11 @@ export function trendsSlice(db: Db): unknown {
     weeks,
     days,
     vo2max,
+    /* THE PACES RAIL, WHICH SITS BESIDE EVERY PAGE NOW. One chart of ~3 KB
+       against this slice's 665, and it is the ONLY thing the rail reads here:
+       Trends is about no week in particular, so there is no week column to
+       fill and no per-week chart to join. */
+    pace_chart_current: chart(db, newestChartKey(db)),
     thresholds: window === undefined
       ? {}
       : { vo2max: { shape_window_days: window } },
@@ -411,7 +416,15 @@ export function calendarSlice(
   ).map((r) => JSON.parse(r.doc));
 
   return {
-    payload: { ...envelope(db), weeks, days },
+    /* `pace_chart_current` IS THE RAIL'S, and the ANCHOR WEEK's own chart is
+       already here -- `weekFromRow` joins one per week, so the rail's "This
+       week" column costs nothing extra on this route. */
+    payload: {
+      ...envelope(db),
+      weeks,
+      days,
+      pace_chart_current: chart(db, newestChartKey(db)),
+    },
     /* THE BAR SCALE IS OVER THE WHOLE RECORD, NOT THE WINDOW, and it therefore
      * cannot come out of the windowed payload. Scaling to the busiest day on
      * screen would make every bar jump the moment the reader changed the week

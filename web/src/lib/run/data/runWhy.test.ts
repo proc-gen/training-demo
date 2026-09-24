@@ -162,6 +162,72 @@ describe("runWhy: a scored continuous run", () => {
     const r = run({ ...easy, duration: null });
     expect(labels(r)).not.toContain("Length");
   });
+
+  describe("a run prescribed in MILES instead", () => {
+    const byMiles = () =>
+      run({
+        ...easy,
+        duration: null,
+        duration_factor: 0.87,
+        distance: { actual: 6.21, prescribed: 5.5, factor: 0.87, pct: 12.9 },
+      });
+
+    it("shows a Distance row with both numbers and the applied credit", () => {
+      const l = runWhy(byMiles());
+      expect(labels(byMiles())).toContain("Distance");
+      const d = l.rows.find((x) => x.key === "distance")!;
+      expect(d.why).toContain("6.21 mi ran of 5.50 mi");
+      expect(d.why).toContain("+12.9%");
+      expect(d.cost).toBe("credit ×0.87");
+    });
+
+    it("collapses a [lo, lo] range and keeps a real one", () => {
+      const one = run({
+        ...easy,
+        duration: null,
+        distance: { actual: 5.0, prescribed: [5, 5], factor: 1, pct: 0 },
+      });
+      expect(whys(one)).toContain("of 5.00 mi");
+      const range = run({
+        ...easy,
+        duration: null,
+        distance: { actual: 5.5, prescribed: [5, 6], factor: 1, pct: 0 },
+      });
+      expect(whys(range)).toContain("of 5.00–6.00 mi");
+    });
+
+    it("shows BOTH rows when the plan stated both, and only one bears a cost", () => {
+      /* Time wins where a run states both, so the distance is described with
+       * a null factor -- and printing `full credit` on a row that plainly
+       * missed its prescription would say the run was the length it was meant
+       * to be. */
+      const r = run({
+        ...easy,
+        duration_factor: 1,
+        duration: { actual: 3600, prescribed: 3600, factor: 1, pct: 0 },
+        distance: { actual: 6.21, prescribed: 5.5, factor: null, pct: 12.9 },
+      });
+      const l = runWhy(r);
+      expect(l.rows.map((x) => x.key)).toEqual(
+        expect.arrayContaining(["duration", "distance"]),
+      );
+      expect(l.rows.find((x) => x.key === "duration")?.cost).toBe("full credit");
+      const d = l.rows.find((x) => x.key === "distance")!;
+      expect(d.cost).toBe("reported, not scored");
+      expect(d.verdict).toBeNull();
+    });
+
+    it("carries the forgiveness reason the way its duration twin does", () => {
+      const r = run({
+        ...easy,
+        duration: null,
+        duration_factor: 1,
+        distance: { actual: 1.2, prescribed: 13, factor: 1, pct: -90.8,
+                    reason: "illness" },
+      });
+      expect(whys(r)).toContain("illness");
+    });
+  });
 });
 
 describe("runWhy: reported rather than scored", () => {
@@ -209,6 +275,126 @@ describe("runWhy: reported rather than scored", () => {
             pct: null }),
     );
     expect(l.total?.why).toContain("MEANT to run above");
+  });
+
+  describe("the sprint cadence verdict", () => {
+    /* REPORTED AND SCORING NOTHING, 2026-09-10. The athlete's criterion: *"as
+     * long as at any point in the workout it read over 200 spm, it passes."*
+     * Every sentence is composed from `cadence_check`'s four fields, so the
+     * record carries the measurement and none of the prose. */
+    const sprints = (cadence_check: Record<string, unknown>) =>
+      run({
+        planned: planned("none (neuromuscular)", "none", "neuromuscular"),
+        pct: null,
+        cadence_check: cadence_check as RunResult["cadence_check"],
+      });
+    const cadenceRowOf = (r: RunResult) =>
+      runWhy(r).rows.find((x) => x.key === "cadence");
+
+    it("states the peak, the line and that it moves no score", () => {
+      const x = cadenceRowOf(sprints({
+        verdict: "met", peak_spm: 224, rep_seconds: 6, target_spm: 200,
+      }));
+      expect(x?.label).toBe("Sprint cadence");
+      expect(x?.why).toContain("224 spm");
+      expect(x?.why).toContain("over the 200 spm line");
+      expect(x?.why).toContain("moves no score");
+      expect(x?.verdict).toBe(true);
+    });
+
+    it("a miss reads as a miss and still carries the line", () => {
+      const x = cadenceRowOf(sprints({
+        verdict: "not-met", peak_spm: 198, rep_seconds: 6, target_spm: 200,
+      }));
+      expect(x?.why).toContain("198 spm");
+      expect(x?.why).toContain("not over the 200 spm line");
+      expect(x?.verdict).toBe(false);
+    });
+
+    it("NOT-EVALUABLE IS NOT A FAILURE, and `verdict` must be null", () => {
+      /* THE ASYMMETRY THAT DECIDES THIS. A `false` here renders a session the
+       * criterion does not apply to as one that FAILED -- and the athlete's
+       * whole reason for narrowing the gate was to stop 20-30 second rep
+       * sessions being failed for running what was prescribed. A missed pass is
+       * a puzzle; a phantom failure is a session somebody tries to fix. */
+      const x = cadenceRowOf(sprints({
+        verdict: "not-evaluable", peak_spm: 224, rep_seconds: null,
+        target_spm: 200,
+      }));
+      expect(x?.verdict).toBeNull();
+      expect(x?.why).toContain("no sprint-length reps");
+      expect(x?.why).not.toContain("moves no score");
+    });
+
+    it("distinguishes NO CADENCE DATA from NO SPRINT PRESCRIPTION", () => {
+      /* One spelling per fact, the `run_step_source` rule. Both are
+       * `not-evaluable` and they are different things: a six-second sprint the
+       * watch never sampled, versus a session that is not sprint work. */
+      const noData = cadenceRowOf(sprints({
+        verdict: "not-evaluable", peak_spm: null, rep_seconds: 6,
+        target_spm: 200,
+      }));
+      expect(noData?.why).toContain("no cadence was recorded");
+      expect(noData?.why).toContain("no cadence samples");
+
+      const notSprints = cadenceRowOf(sprints({
+        verdict: "not-evaluable", peak_spm: 194, rep_seconds: null,
+        target_spm: 200,
+      }));
+      expect(notSprints?.why).toContain("194 spm");
+      expect(notSprints?.why).toContain("does not apply");
+      expect(noData?.why).not.toBe(notSprints?.why);
+    });
+
+    it("NEVER carries a pct, because the verdict scores nothing", () => {
+      /* A percentage here would put this row in the same visual language as the
+       * rows that do move a score. */
+      for (const v of ["met", "not-met", "not-evaluable"]) {
+        const x = cadenceRowOf(sprints({
+          verdict: v, peak_spm: 224, rep_seconds: 6, target_spm: 200,
+        }));
+        expect(x?.pct).toBeNull();
+        expect(x?.cost).toBeNull();
+      }
+    });
+
+    it("a run with NO block gets no row at all", () => {
+      /* ABSENT, not empty. The question is only put to a sprint session, and a
+       * row on an easy run would read as a criterion nobody stated. */
+      const l = runWhy(run({
+        planned: planned("137", "hr", "easy"), pct: 93.6, hr_pct: 93.6,
+      }));
+      expect(l.rows.find((x) => x.key === "cadence")).toBeUndefined();
+    });
+
+    it("reaches a SCORED run too, which is what the plan needs", () => {
+      /* 2026-09-11 and 09-18 pair 4x6s hill sprints with a sub-T block in ONE
+       * run. That reaches the scored assembly rather than the reported early
+       * return, so the row has to be pushed in both places. */
+      const l = runWhy(run({
+        pct: 97.9, earned: 1631, total: 1666, role: "mixed",
+        detail: { sets: [{ mode: "subt", pct: 97.9 } as never] },
+        cadence_check: {
+          verdict: "met", peak_spm: 234, rep_seconds: 6, target_spm: 200,
+        } as RunResult["cadence_check"],
+      }));
+      const x = l.rows.find((r) => r.key === "cadence");
+      expect(x?.why).toContain("234 spm");
+      // And the run's own score is untouched beside it.
+      expect(l.total?.why).toContain("earned");
+    });
+
+    it("the reported sentence points at the verdict rather than denying it", () => {
+      /* `REPORTED_REASON.neuromuscular` said the session is graded by nothing.
+       * That is still true of the SCORE and became misleading about the page the
+       * moment a verdict appeared above it. */
+      const l = runWhy(sprints({
+        verdict: "met", peak_spm: 224, rep_seconds: 6, target_spm: 200,
+      }));
+      expect(l.total?.why).toContain("cadence verdict");
+      expect(l.total?.why).toContain("reaches no score");
+      expect(l.total?.label).toBe("Not scored");
+    });
   });
 
   it("carries the grader's OWN sentence verbatim when there is one", () => {

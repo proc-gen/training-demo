@@ -12,6 +12,7 @@ import { describe, expect, it } from "vitest";
 
 import { PUBLISHED, has } from "@/test/payload";
 import {
+  BAND_ORDER,
   RACE_ORDER,
   chartVo2max,
   orderedKeys,
@@ -293,8 +294,8 @@ describe("which race distances become lines", () => {
   });
 
   has(P)("STRIPS tempo -- it is a training pace filed under race_paces", () => {
-    expect(raceKeys(all)).not.toContain("tempo");
-    expect(race!.series!.map((s) => s.key)).not.toContain("tempo");
+    expect(raceKeys(all)).not.toContain("threshold");
+    expect(race!.series!.map((s) => s.key)).not.toContain("threshold");
   });
 
   has(P)("orders them shortest first, never alphabetically", () => {
@@ -308,14 +309,14 @@ describe("the pace groups", () => {
   has(P)("splits the zones into three, fastest first", () => {
     expect(groups.map((x) => x.key)).toEqual(["speed", "subt", "easy"]);
     expect(groups.map((x) => x.label)).toEqual([
-      "Tempo & repetition",
+      "Threshold & repetition",
       "Sub-threshold",
       "Easy / recovery",
     ]);
   });
 
   has(P)("gives each group the membership the athlete named", () => {
-    expect(g("speed").series.map((s) => s.key)).toEqual(["repetition", "tempo"]);
+    expect(g("speed").series.map((s) => s.key)).toEqual(["repetition", "threshold"]);
     expect(g("subt").series.map((s) => s.key)).toEqual([
       "rep_1min",
       "rep_3min",
@@ -333,8 +334,20 @@ describe("the pace groups", () => {
     expect(keys).toContain("recovery");
   });
 
-  has(P)("drops `long` from EVERY group, not just the one it would sit in", () => {
+  has(P)("yields no `long` series -- the BAND is retired, not merely unplotted", () => {
+    /* It was dropped from this panel on 2026-08-23 while every chart still
+       carried it, and retired outright on 2026-09-18: a long run's reference
+       band IS `easy` now. BOTH ENDS, because either alone reads as the other's
+       consequence -- no group offers the series, and no chart in the record
+       carries the band for a group to pick up. The long ROLE, the long EMPHASIS
+       and a long run's dot on the Easy series are all untouched; see
+       `easySeriesOf`. */
     for (const x of groups) expect(x.series.map((s) => s.key)).not.toContain("long");
+    expect(all.length).toBeGreaterThan(0);
+    for (const { date, chart } of all) {
+      expect(Object.keys(chart.bands ?? {}), `${date} carries a long band`)
+        .not.toContain("long");
+    }
   });
 
   has(P)("KEEPS THEM ON COMPARABLE SCALES, which is the whole point", () => {
@@ -370,10 +383,38 @@ describe("the pace groups", () => {
     expect(bands!.points).toBe(d.points);
   });
 
-  has(P)("declares group membership rather than discovering it", () => {
-    /* A band present in the charts but in no group stays out -- `long` is the
-       live case, and a NEW band must not silently join and take a colour. */
-    expect(groupKeys(all, ["long"])).toEqual([]);
+  it("declares group membership rather than discovering it", () => {
+    /* A band the charts carry but no GROUP names stays out: a group is an
+       editorial division of the zones, so a new band must not silently join one
+       and take a colour.
+
+       SYNTHETIC, and it has to be. `long` was the live case until it was retired
+       on 2026-09-18, and every band the record carries today is declared by some
+       group -- which is the state this rule keeps us in, not evidence that it
+       holds. Asserting it against the tree would pass vacuously. */
+    const chart = {
+      week_ending: "2026-07-20",
+      bands: {
+        easy: { display: "", fast_sec_per_mi: 497, slow_sec_per_mi: 538 },
+        recovery: { display: "", fast_sec_per_mi: 538, slow_sec_per_mi: 580 },
+        rep_20min: { display: "", fast_sec_per_mi: 430, slow_sec_per_mi: 450 },
+      },
+    } as unknown as PaceChart;
+    const one = paceSeries({
+      weeks: { "2026-07-14": { week_start: "2026-07-14", pace_chart: chart } },
+    } as never);
+    const panel = one.find((p) => p.key === "target-paces")!;
+    expect(panel.groups!.length).toBeGreaterThan(0);
+    for (const x of panel.groups!) {
+      expect(x.series.map((s) => s.key)).not.toContain("rep_20min");
+    }
+    /* THE OPPOSITE RULE HOLDS ONE TABLE OVER, which is what makes this a real
+       distinction rather than "the app ignores keys it does not know":
+       `orderedKeys` APPENDS an unordered band so the paces rail still shows it. */
+    expect(orderedKeys(BAND_ORDER, chart.bands)).toContain("rep_20min");
+  });
+
+  has(P)("and a group cannot claim a zone the charts do not carry", () => {
     expect(groupKeys(all, ["rep_1min", "not_a_band"])).toEqual(["rep_1min"]);
   });
 });
@@ -444,8 +485,11 @@ describe("the values", () => {
   });
 
   has(P)("MIN/MAXES rather than trusting the names -- an inverted band survives", () => {
-    // Built to the shape `gap_zone` really carries on 2026-07-20: fast SLOWER
-    // than slow, which is inverted because a faster pace is a smaller number.
+    // Fast SLOWER than slow, which is inverted because a faster pace is a
+    // smaller number of seconds per mile. SYNTHETIC since 2026-09-18 -- these
+    // are the numbers `gap_zone` really carried on 2026-07-20, and that key is
+    // retired with the `long` band it was anchored on. A chart is hand-authored
+    // or proposed and then confirmed, so the shape outlives the one key.
     const inverted = {
       week_ending: "2026-07-20",
       bands: {
@@ -839,9 +883,11 @@ describe("the executed continuous runs", () => {
 
   has(P)("puts a LONG RUN ON THE EASY SERIES, and still calls it a long run", () => {
     /* The athlete's instruction, 2026-08-26: *"treat long runs as easy runs for
-       color."* So there is no long series and no long band -- `long` left this
-       graph on 08-23 and stays gone -- and the noun is what says which it was.
-       Colour is never the only channel. */
+       color."* So there is no long series and no long band -- the band left this
+       graph on 08-23 and was retired outright on 2026-09-18 -- and the noun is
+       what says which it was. Colour is never the only channel. THE ROLE IS
+       UNTOUCHED BY THAT RETIREMENT: `kind` is read off the run, not off a
+       chart. */
     const [m] = at("2026-08-16");
     expect(m.key).toBe("easy");
     expect(m.kind).toBe("long");

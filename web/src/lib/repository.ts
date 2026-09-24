@@ -1,12 +1,14 @@
 /* The data-access boundary: which athlete, and the payload for them.
  *
- * THE APP RUNS NO PYTHON. It used to spawn `publish.py --collect` on every
+ * RENDERING RUNS NO PYTHON. It used to spawn `publish.py --collect` on every
  * request, which welded the two toolchains together: the page could not render
  * without a working interpreter and `npm run check` could not pass without one.
  * `python scripts/publish.py` now writes `athletes/<slug>/published/`
  * ahead of time and this reads it. Change a manifest, a note or a threshold,
  * re-run that command, refresh -- the index revalidates against the records on
- * every access, so nothing needs restarting.
+ * every access, so nothing needs restarting. (The one spawn in the app is the
+ * plan editor's explicit save -- `lib/manifest/publishRunner.ts` -- which runs
+ * that same command so a saved manifest regrades; no render path touches it.)
  *
  * THE DATABASE LANDED (see lib/db/). `published/` is still the tracked,
  * diffable, exportable source of truth; `lib/db` builds an in-memory SQLite

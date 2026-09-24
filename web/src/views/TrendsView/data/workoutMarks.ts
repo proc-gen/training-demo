@@ -50,7 +50,9 @@ import { weekKeys } from "@/lib/data/weeks";
  *
  * The athlete's scope, 2026-08-25: *"only focus on sub-t and repetition paces
  * for now."* `threshold` and `interval` exist in the record and are deliberately
- * out; `neuromuscular` is graded by nothing at all.
+ * out; `neuromuscular` has no PACE zone to be drawn against at all -- there is
+ * no date pace for a six-second sprint, which is why it is judged on cadence
+ * instead (2026-09-10) and why that verdict has nothing to do with this chart.
  */
 export const MARKED_MODES = new Set(["subt", "repetition"]);
 

@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { dayName, num, pct, shortDate } from "@/lib/data/format";
 import type { Week } from "@/lib/data/payload";
+import { dayRoleLabel } from "@/lib/manifest/labels";
 import { ColumnChart } from "@/lib/ux/charts/ColumnChart";
 import { Legend } from "@/lib/ux/primitives/Legend";
 import { Tabs } from "@/lib/ux/primitives/Tabs";
@@ -77,7 +78,7 @@ export function LoadPanel({ week }: { week: Week }) {
           tip: () => (
             <>
               <b>
-                {dayName(d.date)} {d.date} · {d.role || "unstated"}
+                {dayName(d.date)} {d.date} · {dayRoleLabel(d.role) || "unstated"}
               </b>
               <TipRow k="run SE" v={num(d.run_se)} />
               <TipRow k="background SE" v={num(d.nonrun_se)} />

@@ -56,10 +56,14 @@ export function FitnessNote({ load }: { load: Load }) {
       {load.bg_trimp == null ? null : (
         <>
           {" "}
-          A further <b>{num(load.bg_trimp)}</b> from non-run steps, which is an{" "}
-          <b>uncalibrated estimate</b> — a nominal walking cadence and a nominal
-          fraction of maximum heart rate, scored by nothing and deliberately
-          kept out of the CTL/ATL/TSB columns.
+          A further <b>{num(load.bg_trimp)}</b> from non-run steps. Those
+          minutes are <b>measured</b> wherever the step export covers the day —
+          each priced at a heart rate set by how fast it was actually stepped —
+          but the walking heart rate itself is a <b>guess</b>, since no walk has
+          ever been recorded as an activity. Scored by nothing and deliberately
+          kept out of the CTL/ATL/TSB columns. A day marked <b>≈</b> in the
+          table below fell back to pricing its step total at one nominal
+          cadence, which overstates.
         </>
       )}
       {/* "Highest fitness N over the M days we hold" was the other branch here

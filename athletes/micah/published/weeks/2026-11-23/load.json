@@ -5,13 +5,15 @@
  "bg_trimp": null,
  "ceiling_inputs": {
   "background_source": "baseline",
-  "background_steps": 1699.0,
+  "background_steps": 1661.5,
+  "background_trimp_budget": 10,
   "background_window_days": 28,
   "cadence_source": "measured",
-  "cadence_spm": 175.0,
+  "cadence_spm": 176.0,
   "default_cadence_spm": 172,
   "margin": 1.05,
-  "run_step_weight": 2.5
+  "run_step_weight": 2.5,
+  "walk_reference_spm": 110
  },
  "days": [],
  "fitness": null,
@@ -41,7 +43,7 @@
   {
    "status": "clear",
    "token": "resting-hr-rise",
-   "why": "trailing resting-HR mean -0.3 bpm (fires at +5)"
+   "why": "trailing resting-HR mean -0.4 bpm (fires at +5)"
   },
   {
    "status": "clear",
@@ -72,7 +74,7 @@
  "overall": null,
  "readiness": {
   "available": 0,
-  "hrv_baseline": 65,
+  "hrv_baseline": 70,
   "hrv_baseline_source": "snapshot",
   "per_day": [],
   "resting_hr_ceiling": 47

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import { dayIndex } from "./dates";
 import type { TrendPoint } from "./panels";
 import {
   DEFAULT_PRESET,
@@ -12,9 +13,14 @@ import {
   presetRange,
   shiftMonths,
   shiftRange,
+  shiftWeeks,
   spanOf,
 } from "./range";
 import type { PresetKey, Range } from "./range";
+
+/** How many days a window spans, so "keeps its length" is a measurement rather
+ *  than a restatement of the expected values beside it. */
+const span = (r: Range) => dayIndex(r.to)! - dayIndex(r.from)!;
 
 /** A panel-shaped thing: only its points matter here. */
 const P = (...dates: string[]) => ({
@@ -409,5 +415,74 @@ describe("shiftRange", () => {
       from: "2026-07-01",
       to: "2026-07-15",
     });
+  });
+});
+
+describe("shiftWeeks", () => {
+  const R: Range = { from: "2026-07-15", to: "2026-08-15" };
+
+  it("moves both ends back seven days", () => {
+    expect(shiftWeeks(R, -1)).toEqual({ from: "2026-07-08", to: "2026-08-08" });
+  });
+
+  it("moves them forward seven days", () => {
+    expect(shiftWeeks(R, 1)).toEqual({ from: "2026-07-22", to: "2026-08-22" });
+  });
+
+  it("takes MANY steps at once", () => {
+    expect(shiftWeeks(R, -4)).toEqual({ from: "2026-06-17", to: "2026-07-18" });
+  });
+
+  it("is identity for a zero step", () => {
+    expect(shiftWeeks(R, 0)).toEqual(R);
+  });
+
+  it("is its own inverse", () => {
+    expect(shiftWeeks(shiftWeeks(R, -3), 3)).toEqual(R);
+  });
+
+  it("KEEPS THE WINDOW'S LENGTH, so repeated stepping cannot drift", () => {
+    // `shiftRange`'s rule, and it matters more here: a week is the step
+    // somebody presses ten times in a row.
+    let at = R;
+    for (let i = 0; i < 10; i += 1) at = shiftWeeks(at, -1);
+    expect(at).toEqual({ from: "2026-05-06", to: "2026-06-06" });
+    expect(span(at)).toBe(span(R));
+  });
+
+  it("TAKES NO PRESET AND CANNOT REFUSE, unlike shiftRange", () => {
+    /* That is the whole difference: `All` and a typed window have no PERIOD to
+     * step by, and a week is a week whatever the window is. It is why the fine
+     * arrows are live in both states. */
+    expect(shiftRange(R, "all", -1)).toBeNull();
+    expect(shiftWeeks(R, -1)).toEqual({ from: "2026-07-08", to: "2026-08-08" });
+  });
+
+  it("crosses a MONTH boundary as plain days, with no clamp", () => {
+    /* `shiftMonths` has to clamp a day-of-month and would make a week mean
+     * something different in February. Seven days is seven days. */
+    expect(shiftWeeks({ from: "2026-02-25", to: "2026-03-05" }, 1)).toEqual({
+      from: "2026-03-04",
+      to: "2026-03-12",
+    });
+  });
+
+  it("crosses a LEAP DAY", () => {
+    // 2028-02-29 exists, so 02-23 + 7 is 03-01 in 2026 and 02-29 + 1 in 2028.
+    expect(shiftWeeks({ from: "2028-02-23", to: "2028-02-23" }, 1)).toEqual({
+      from: "2028-03-01",
+      to: "2028-03-01",
+    });
+  });
+
+  it("crosses a YEAR boundary", () => {
+    expect(shiftWeeks({ from: "2025-12-29", to: "2026-01-04" }, 1)).toEqual({
+      from: "2026-01-05",
+      to: "2026-01-11",
+    });
+  });
+
+  it("IS NOT BOUNDED BY THE DATA either", () => {
+    expect(shiftWeeks(R, -500)).toEqual({ from: "2016-12-14", to: "2017-01-14" });
   });
 });

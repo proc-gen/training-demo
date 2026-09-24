@@ -4,10 +4,6 @@
    "fast_sec_per_mi": 489,
    "slow_sec_per_mi": 528
   },
-  "long": {
-   "fast_sec_per_mi": 462,
-   "slow_sec_per_mi": 489
-  },
   "recovery": {
    "fast_sec_per_mi": 528,
    "slow_sec_per_mi": 573
@@ -33,7 +29,7 @@
    "slow_sec_per_mi": 411
   }
  },
- "confirmed_by_athlete": false,
+ "confirmed_by_athlete": true,
  "effective_vo2max": 57.08,
  "race_paces": {
   "10000m": {
@@ -64,7 +60,7 @@
    "sec_per_mi": 293,
    "seconds": 146
   },
-  "tempo": {
+  "threshold": {
    "fast_sec_per_mi": 366,
    "slow_sec_per_mi": 373
   }

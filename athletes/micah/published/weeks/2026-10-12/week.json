@@ -3,12 +3,19 @@
  "load_error": null,
  "manifest": {
   "phase": "General Prep",
+  "rest_days": [],
   "runs": [
    {
     "date": "2026-10-12",
     "key": "2026-10-12",
     "prescribed": "30 min recovery",
     "role": "recovery"
+   },
+   {
+    "date": "2026-10-14",
+    "key": "2026-10-14",
+    "prescribed": "60-70 min easy",
+    "role": "easy"
    }
   ],
   "week_start": "2026-10-12",

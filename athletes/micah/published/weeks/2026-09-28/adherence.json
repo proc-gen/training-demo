@@ -8,6 +8,53 @@
   "long_run_share": 0,
   "miles": 0.0,
   "non_run_days": [],
+  "plan_miles_unpriceable": [
+   [
+    "2026-09-28",
+    "2026-09-28",
+    "30 min recovery"
+   ],
+   [
+    "2026-09-29",
+    "2026-09-29-am",
+    "AM: 30 min recovery"
+   ],
+   [
+    "2026-09-29",
+    "2026-09-29-pm",
+    "PM: 5x800m w/ 200m jog at Sub-T"
+   ],
+   [
+    "2026-09-30",
+    "2026-09-30",
+    "60-70 min easy"
+   ],
+   [
+    "2026-10-01",
+    "2026-10-01",
+    "60-70 min easy"
+   ],
+   [
+    "2026-10-02",
+    "2026-10-02-am",
+    "AM: 30 min recovery"
+   ],
+   [
+    "2026-10-02",
+    "2026-10-02-pm",
+    "PM: 3x3:00 w/ 2:00 jog at Target Half Pace"
+   ],
+   [
+    "2026-10-03",
+    "2026-10-03",
+    "30 min recovery"
+   ],
+   [
+    "2026-10-04",
+    "2026-10-04",
+    "Local Half Marathon"
+   ]
+  ],
   "plan_unpriceable": [
    [
     "2026-09-29",
@@ -20,6 +67,8 @@
     "Local Half Marathon"
    ]
   ],
+  "planned_miles": null,
+  "planned_miles_week": null,
   "planned_seconds": null,
   "planned_seconds_week": [
    27000.0,
@@ -27,10 +76,12 @@
   ],
   "prescribed_dates": 7,
   "prescribed_dates_due": 0,
+  "projected_miles": 0.0,
   "projected_seconds": 15600.0,
   "quality_days": 0,
   "quality_seconds": 0,
   "quality_share": 0,
+  "remaining_planned_miles": 0.0,
   "remaining_planned_seconds": 15600.0,
   "rest_days": 0,
   "running_days": 0,
@@ -60,6 +111,53 @@
   "long_run_share": 0,
   "miles": 0.0,
   "non_run_days": [],
+  "plan_miles_unpriceable": [
+   [
+    "2026-09-28",
+    "2026-09-28",
+    "30 min recovery"
+   ],
+   [
+    "2026-09-29",
+    "2026-09-29-am",
+    "AM: 30 min recovery"
+   ],
+   [
+    "2026-09-29",
+    "2026-09-29-pm",
+    "PM: 5x800m w/ 200m jog at Sub-T"
+   ],
+   [
+    "2026-09-30",
+    "2026-09-30",
+    "60-70 min easy"
+   ],
+   [
+    "2026-10-01",
+    "2026-10-01",
+    "60-70 min easy"
+   ],
+   [
+    "2026-10-02",
+    "2026-10-02-am",
+    "AM: 30 min recovery"
+   ],
+   [
+    "2026-10-02",
+    "2026-10-02-pm",
+    "PM: 3x3:00 w/ 2:00 jog at Target Half Pace"
+   ],
+   [
+    "2026-10-03",
+    "2026-10-03",
+    "30 min recovery"
+   ],
+   [
+    "2026-10-04",
+    "2026-10-04",
+    "Local Half Marathon"
+   ]
+  ],
   "plan_unpriceable": [
    [
     "2026-09-29",
@@ -72,6 +170,8 @@
     "Local Half Marathon"
    ]
   ],
+  "planned_miles": null,
+  "planned_miles_week": null,
   "planned_seconds": null,
   "planned_seconds_week": [
    27000.0,
@@ -79,10 +179,12 @@
   ],
   "prescribed_dates": 7,
   "prescribed_dates_due": 0,
+  "projected_miles": 0.0,
   "projected_seconds": 15600.0,
   "quality_days": 0,
   "quality_seconds": 0,
   "quality_share": 0,
+  "remaining_planned_miles": 0.0,
   "remaining_planned_seconds": 15600.0,
   "rest_days": 0,
   "running_days": 0,
@@ -119,6 +221,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "30 min recovery",
+    "prescribed_miles": null,
     "prescribed_seconds": 1800,
     "role": "recovery",
     "sets": null,
@@ -163,6 +266,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "AM: 30 min recovery",
+    "prescribed_miles": null,
     "prescribed_seconds": 1800,
     "role": "recovery",
     "sets": null,
@@ -208,6 +312,7 @@
      166
     ],
     "prescribed": "PM: 5x800m w/ 200m jog at Sub-T",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
     "role": "subt",
     "sets": [
@@ -221,6 +326,7 @@
       "float_mode": null,
       "float_seconds": null,
       "group_float_distance_m": null,
+      "group_float_mode": null,
       "group_float_seconds": null,
       "groups": null,
       "hr_ceiling": [
@@ -229,31 +335,32 @@
       ],
       "mode": "subt",
       "rep_distance_m": 800,
+      "rep_rows": null,
       "rep_seconds": null,
       "reps": 5,
       "reps_per_group": null,
       "scored_on": "hr",
-      "target_display": "3:12-3:19 · 6:27-6:41/mi",
+      "target_display": "3:07-3:14 · 6:17-6:31/mi",
       "target_pace": null,
       "target_sec_per_mi": [
-       387,
-       401
+       377,
+       391
       ],
       "target_seconds": [
-       192,
-       199
+       187,
+       194
       ],
       "target_tolerance_seconds": null
      }
     ],
-    "target_display": "3:12-3:19 · 6:27-6:41/mi",
+    "target_display": "3:07-3:14 · 6:17-6:31/mi",
     "target_sec_per_mi": [
-     387,
-     401
+     377,
+     391
     ],
     "target_seconds": [
-     192,
-     199
+     187,
+     194
     ],
     "target_tolerance_seconds": null
    },
@@ -293,6 +400,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "60-70 min easy",
+    "prescribed_miles": null,
     "prescribed_seconds": [
      3600,
      4200
@@ -340,6 +448,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "60-70 min easy",
+    "prescribed_miles": null,
     "prescribed_seconds": [
      3600,
      4200
@@ -387,6 +496,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "AM: 30 min recovery",
+    "prescribed_miles": null,
     "prescribed_seconds": 1800,
     "role": "recovery",
     "sets": null,
@@ -421,11 +531,11 @@
    "ordinal": 1,
    "planned": {
     "band": null,
-    "band_display": "6:13/mi",
+    "band_display": "6:04/mi",
     "band_is_reference": false,
     "band_sec_per_mi": [
-     373,
-     373
+     364,
+     364
     ],
     "ceiling": "162/166",
     "ceiling_kind": "hr",
@@ -436,16 +546,17 @@
      166
     ],
     "prescribed": "PM: 3x3:00 w/ 2:00 jog at Target Half Pace",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
     "role": "subt",
     "sets": [
      {
       "band": null,
-      "band_display": "6:13/mi",
+      "band_display": "6:04/mi",
       "band_how": "target-pace",
       "band_sec_per_mi": [
-       373,
-       373
+       364,
+       364
       ],
       "ceiling": "162/166",
       "ceiling_kind": "hr",
@@ -453,6 +564,7 @@
       "float_mode": null,
       "float_seconds": 120,
       "group_float_distance_m": null,
+      "group_float_mode": null,
       "group_float_seconds": null,
       "groups": null,
       "hr_ceiling": [
@@ -461,18 +573,19 @@
       ],
       "mode": "subt",
       "rep_distance_m": null,
+      "rep_rows": null,
       "rep_seconds": 180,
       "reps": 3,
       "reps_per_group": null,
       "scored_on": "hr",
-      "target_display": "6:13/mi",
+      "target_display": "6:04/mi",
       "target_pace": "21097m",
       "target_sec_per_mi": null,
       "target_seconds": null,
       "target_tolerance_seconds": null
      }
     ],
-    "target_display": "6:13/mi",
+    "target_display": "6:04/mi",
     "target_sec_per_mi": null,
     "target_seconds": null,
     "target_tolerance_seconds": null
@@ -513,6 +626,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "30 min recovery",
+    "prescribed_miles": null,
     "prescribed_seconds": 1800,
     "role": "recovery",
     "sets": null,
@@ -547,7 +661,7 @@
    "ordinal": 0,
    "planned": {
     "band": "21097m",
-    "band_display": "1:21:36 @ 6:13/mi",
+    "band_display": "1:19:29 @ 6:04/mi",
     "band_is_reference": true,
     "ceiling": "none (race)",
     "ceiling_kind": "none",
@@ -556,6 +670,7 @@
     "criterion": null,
     "hr_ceiling": null,
     "prescribed": "Local Half Marathon",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
     "role": "race",
     "sets": null,
@@ -598,6 +713,7 @@
    "long_run_share": null,
    "quality_days_met": null,
    "rest_days_met": null,
+   "volume_miles_vs_plan": null,
    "volume_vs_plan": null
   },
   "pct": null,
@@ -605,6 +721,7 @@
    "long_run_share": "no day of this week is over yet, so this check left the denominator",
    "quality_days_met": "no day of this week is over yet, so this check left the denominator",
    "rest_days_met": "the plan schedules no rest day, so this check does not apply and left the denominator",
+   "volume_miles_vs_plan": "no day of this week is over yet, so this check left the denominator",
    "volume_vs_plan": "no day of this week is over yet, so this check left the denominator"
   }
  },

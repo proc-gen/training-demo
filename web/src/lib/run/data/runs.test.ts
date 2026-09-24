@@ -2,7 +2,12 @@ import { describe, expect, it } from "vitest";
 
 import type { Adherence, RunResult, Week } from "@/lib/data/payload";
 import { PUBLISHED } from "@/test/payload";
-import { dayBreaks, prescriptionByKey, sortedRuns } from "./runs";
+import {
+  alternatesByKey,
+  dayBreaks,
+  prescriptionByKey,
+  sortedRuns,
+} from "./runs";
 
 const run = (over: Partial<RunResult>): RunResult => over as RunResult;
 
@@ -224,5 +229,49 @@ describe("prescriptionByKey", () => {
         expect(m.has(r.key!), `${r.date} ${r.key}`).toBe(true);
       }
     }
+  });
+});
+
+describe("alternatesByKey", () => {
+  const week = (runs: unknown[]): Week =>
+    ({ manifest: { runs } }) as unknown as Week;
+
+  it("maps a run key to its alternates' words, in list order", () => {
+    const m = alternatesByKey(
+      week([
+        {
+          key: "2026-09-08-pm",
+          prescribed: "PM: 10x800m w/ 200m jog at Sub-T",
+          alternates: [
+            { role: "subt", prescribed: "11x3:00 w/ 1:00 jog at Sub-T" },
+            { role: "subt", prescribed: "35 min tempo effort" },
+          ],
+        },
+      ]),
+    );
+    expect(m.get("2026-09-08-pm")).toEqual([
+      "11x3:00 w/ 1:00 jog at Sub-T",
+      "35 min tempo effort",
+    ]);
+  });
+
+  it("leaves out a run with no alternates, and a wordless alternate", () => {
+    /* The string IS the display -- an alternate with no `prescribed` gives
+     * the cell nothing to say, so it does not earn an empty `Alt:` line. */
+    const m = alternatesByKey(
+      week([
+        { key: "a", prescribed: "60 min easy" },
+        { key: "b", alternates: [{ role: "subt" }] },
+        { key: "c", alternates: [{ role: "subt", prescribed: "Q" }] },
+      ]),
+    );
+    expect(m.has("a")).toBe(false);
+    expect(m.has("b")).toBe(false);
+    expect(m.get("c")).toEqual(["Q"]);
+  });
+
+  it("is empty when the manifest names no runs", () => {
+    expect(alternatesByKey({} as Week).size).toBe(0);
+    expect(alternatesByKey({ manifest: {} } as Week).size).toBe(0);
   });
 });

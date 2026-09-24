@@ -119,6 +119,30 @@ export function shiftRange(
   };
 }
 
+/** A window moved by whole WEEKS, `steps` negative for earlier.
+ *
+ * THE FINER OF THE TWO STEPS THIS PAGE OFFERS, and the one that always has an
+ * answer -- the athlete asked for arrows that *"only move the calendar by a week
+ * instead of the selected amount of time showing"*, on Trends as well as the
+ * Calendar. It takes no preset and cannot refuse, which is the whole difference
+ * from `shiftRange`: `All` and a typed window have no PERIOD to step by, and a
+ * week is a week whatever the window is.
+ *
+ * BOTH ENDS MOVE BY THE SAME AMOUNT, so the window keeps its length exactly and
+ * repeated stepping cannot drift -- `shiftRange`'s rule, and it matters more
+ * here because a week is the step somebody presses ten times in a row.
+ *
+ * IN DAYS, NOT MONTHS. `addDays` is plain ordinal arithmetic, so seven days is
+ * seven days at every boundary; `shiftMonths` has to clamp a day-of-month and
+ * would make a week mean something different in February.
+ */
+export function shiftWeeks(range: Range, steps: number): Range {
+  return {
+    from: addDays(range.from, 7 * steps),
+    to: addDays(range.to, 7 * steps),
+  };
+}
+
 /** The oldest and newest date ANY panel plots, or null when none plots one.
  *
  * Across every panel rather than per panel: one window governs the page, so a

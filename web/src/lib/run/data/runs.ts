@@ -84,3 +84,29 @@ export function prescriptionByKey(week: Week): Map<string, string> {
   }
   return byKey;
 }
+
+/** One planned session as the calendar shows it: the plan's own words, and the
+ * words of each pre-authored ALTERNATE under it. */
+export type PlanEntry = { text: string; alts: string[] };
+
+/** Run key -> the prescribed string of each of the run's alternates, in list
+ * order. `prescriptionByKey`'s sibling, reading the same projected manifest:
+ * the published alternate is `role` + `prescribed` by design, and the string
+ * is the display -- an alternate with no words has nothing for a cell to say
+ * and is left out. */
+export function alternatesByKey(week: Week): Map<string, string[]> {
+  const byKey = new Map<string, string[]>();
+  const runs = (
+    week.manifest as {
+      runs?: { key?: string; alternates?: { prescribed?: string }[] }[];
+    }
+  )?.runs;
+  for (const r of runs ?? []) {
+    if (!r.key || !Array.isArray(r.alternates)) continue;
+    const alts = r.alternates
+      .map((a) => (typeof a?.prescribed === "string" ? a.prescribed : ""))
+      .filter(Boolean);
+    if (alts.length) byKey.set(r.key, alts);
+  }
+  return byKey;
+}

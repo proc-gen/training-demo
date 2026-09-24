@@ -17,6 +17,22 @@
  * input, and the anchor comes from the chart the rail is already showing.
  */
 
+/** The model's DEFAULT effective-VO2max window, in days -- `vo2max.shape_window_days`.
+ *
+ * NOT A FALLBACK. `vo2maxCurve.windowDays()` still returns null for an athlete
+ * who states no window, and a null still draws nothing: substituting this for an
+ * unstated value would smooth a different athlete's curve. What it IS for is the
+ * effective-VO2max panel, which draws the model's window BESIDE the athlete's as
+ * a labelled comparison -- the athlete's own question, 2026-09-09: *"I have it
+ * set to use 42 days, but the default calculation is 30 days."* A comparison
+ * line that names its own length is a different thing from a default that
+ * stands in for a measurement nobody made.
+ *
+ * Athlete-agnostic, so it belongs here with the other two: swap the athlete and
+ * it stays 30. `tests/test_pace_models.py` holds it to the model file.
+ */
+export const DEFAULT_SHAPE_WINDOW_DAYS = 30;
+
 /** The chart schema's `race_paces` keys and the metres each is computed at.
  *
  * The two long entries are the OFFICIAL distances. The committed charts were

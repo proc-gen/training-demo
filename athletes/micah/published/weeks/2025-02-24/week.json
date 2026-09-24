@@ -3,6 +3,7 @@
  "load_error": null,
  "manifest": {
   "phase": "Return of Doubles",
+  "rest_days": [],
   "runs": [
    {
     "date": "2025-02-24",
@@ -20,19 +21,19 @@
     "date": "2025-02-25",
     "key": "2025-02-25-wu",
     "prescribed": "warmup",
-    "role": "volume_only"
+    "role": "warmup"
    },
    {
     "date": "2025-02-25",
     "key": "2025-02-25",
     "prescribed": "8-10x600m w/ 400m jog recovery -> Did 10",
-    "role": "vo2max"
+    "role": "critical_velocity"
    },
    {
     "date": "2025-02-25",
     "key": "2025-02-25-cd",
     "prescribed": "cooldown",
-    "role": "volume_only"
+    "role": "cooldown"
    },
    {
     "date": "2025-02-26",
@@ -56,7 +57,7 @@
     "date": "2025-02-28",
     "key": "2025-02-28-wu",
     "prescribed": "warmup",
-    "role": "volume_only"
+    "role": "warmup"
    },
    {
     "date": "2025-02-28",
@@ -68,7 +69,7 @@
     "date": "2025-02-28",
     "key": "2025-02-28-cd",
     "prescribed": "cooldown",
-    "role": "volume_only"
+    "role": "cooldown"
    },
    {
     "date": "2025-03-01",

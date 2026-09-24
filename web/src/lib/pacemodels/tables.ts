@@ -84,11 +84,48 @@ function racePaces(
     };
   }
   const [fastSeconds, slowSeconds] = TEMPO_DURATIONS_SECONDS;
-  out.tempo = {
+  // `threshold` since 2026-09-10; `propose_chart.race_paces` emits the same
+  // key, and `paceModelReference.json` pins the two together.
+  out.threshold = {
     fast_sec_per_mi: roundTarget(bound.paceForDuration(fastSeconds)),
     slow_sec_per_mi: roundTarget(bound.paceForDuration(slowSeconds)),
   };
   return out;
+}
+
+/** ONE model's race table at an effective VO2max, or null.
+ *
+ * SPLIT OUT OF `modelsAt` ON 2026-09-09 for the Trends VO2max panel, whose
+ * tooltip prices the seven distances at each drawn window's value. It is the
+ * identical expression -- `seedState`, then `racePaces` with its `roundTarget`
+ * over `RACE_DISTANCES` -- so a time on that tooltip and the same time in the
+ * rail's dropdown column cannot disagree by a second, which two implementations
+ * of "exact seconds, rounded once" eventually would.
+ *
+ * NULL FOR AN ABSENT OR OUT-OF-RANGE ANCHOR, the 20-90 `checkVo2max` band, and
+ * null again for a model that cannot be seeded or priced there. The caller
+ * renders a null as `--`, never as a fallback from a neighbouring model.
+ */
+export function modelRacePaces(
+  name: ModelName,
+  vo2max: unknown,
+): Record<string, ModelRacePace> | null {
+  if (typeof vo2max !== "number" || !isFinite(vo2max)) return null;
+  try {
+    checkVo2max(vo2max);
+  } catch {
+    return null;
+  }
+  const bound = seedState(name, vo2max);
+  if (!bound) return null;
+  try {
+    return racePaces(bound);
+  } catch {
+    // A model whose table cannot be priced at this anchor is a column the
+    // dropdown does not offer. The same refusal `seedState` makes one step
+    // earlier, for a failure that only shows up at a distance.
+    return null;
+  }
 }
 
 /** Every model's race table at an effective VO2max, or null when there is none.
@@ -108,27 +145,15 @@ export function modelsAt(vo2max: unknown): {
   models: Record<string, ModelTable>;
 } | null {
   if (typeof vo2max !== "number" || !isFinite(vo2max)) return null;
-  try {
-    checkVo2max(vo2max);
-  } catch {
-    return null;
-  }
   const models: Record<string, ModelTable> = {};
   for (const name of MODEL_NAMES) {
-    const bound = seedState(name as ModelName, vo2max);
-    if (!bound) continue;
-    try {
-      models[name] = {
-        label: LABELS[name as ModelName],
-        seeded_from: seededFrom(name as ModelName),
-        race_paces: racePaces(bound),
-      };
-    } catch {
-      // A model whose table cannot be priced at this anchor is a column the
-      // dropdown does not offer. The same refusal `seedState` makes one step
-      // earlier, for a failure that only shows up at a distance.
-      continue;
-    }
+    const race_paces = modelRacePaces(name as ModelName, vo2max);
+    if (!race_paces) continue;
+    models[name] = {
+      label: LABELS[name as ModelName],
+      seeded_from: seededFrom(name as ModelName),
+      race_paces,
+    };
   }
   return Object.keys(models).length
     ? { effective_vo2max: vo2max, models }

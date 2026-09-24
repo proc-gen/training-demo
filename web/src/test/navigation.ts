@@ -36,6 +36,10 @@ import { vi } from "vitest";
 /** Where `router.push()` calls land. Asserted directly by callers. */
 export const push = vi.fn();
 
+/** Where `router.refresh()` calls land -- the plan editor's post-save
+ * re-fetch of the server-rendered slice. */
+export const refresh = vi.fn();
+
 /** What `usePathname()` returns. Set it per case. */
 let pathname = "/";
 
@@ -53,6 +57,7 @@ export function setSearch(value: URLSearchParams | Record<string, string>): void
 /** Back to a bare `/` with no parameters and no recorded navigation. */
 export function resetNavigation(): void {
   push.mockClear();
+  refresh.mockClear();
   pathname = "/";
   search = new URLSearchParams();
 }
@@ -60,7 +65,7 @@ export function resetNavigation(): void {
 /** The module `next/navigation` is replaced with. */
 export function navigation() {
   return {
-    useRouter: () => ({ push }),
+    useRouter: () => ({ push, refresh }),
     usePathname: () => pathname,
     useSearchParams: () => search,
   };

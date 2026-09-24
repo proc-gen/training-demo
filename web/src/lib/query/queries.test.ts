@@ -18,7 +18,7 @@ import { describe, expect, it } from "vitest";
 
 import { assembleFromRecords } from "../db/records";
 import { openIndex } from "../db/open";
-import { assemblePayload } from "./queries";
+import { assemblePayload, weekStatus } from "./queries";
 import { SCHEMA_SQL } from "./schema";
 import { athleteSlugs } from "../repository";
 
@@ -155,6 +155,52 @@ describe("a broken index reports rather than guesses", () => {
       vo2max: [],
     });
     expect(() => assemblePayload(db)).toThrow(/history/);
+    db.close();
+  });
+});
+
+describe("weekStatus, the save readback", () => {
+  it.skipIf(!slug)("finds a real week and reports its grader errors verbatim", () => {
+    const p = fromDb as { weeks: Record<string, unknown> };
+    const start = Object.keys(p.weeks)[0];
+    const got = weekStatus(openIndex(slug), start);
+    expect(got.found).toBe(true);
+    const week = p.weeks[start] as {
+      adherence_error?: unknown;
+      load_error?: unknown;
+    };
+    expect(got.adherence_error).toEqual(week.adherence_error ?? null);
+    expect(got.load_error).toEqual(week.load_error ?? null);
+  });
+
+  it("reports a week that published no record at all as not found", () => {
+    const db = new DatabaseSync(":memory:");
+    db.exec(SCHEMA_SQL);
+    expect(weekStatus(db, "2031-01-06")).toEqual({
+      found: false,
+      adherence_error: null,
+      load_error: null,
+    });
+    db.close();
+  });
+
+  it("carries an error the grader wrote back to the saver", () => {
+    const db = new DatabaseSync(":memory:");
+    db.exec(SCHEMA_SQL);
+    db.prepare(
+      `insert into week (week_start, ordinal, week_json, trimp_json)
+       values (?, 0, ?, '[]')`,
+    ).run(
+      "2026-01-05",
+      JSON.stringify({
+        week_start: "2026-01-05",
+        adherence_error: "grade_week.py exited 1: unknown role",
+      }),
+    );
+    const got = weekStatus(db, "2026-01-05");
+    expect(got.found).toBe(true);
+    expect(got.adherence_error).toContain("unknown role");
+    expect(got.load_error).toBeNull();
     db.close();
   });
 });

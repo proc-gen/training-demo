@@ -1,7 +1,6 @@
 {
  "hr": {
   "abort_ceiling": 166,
-  "cooldown_elevated_threshold": 140,
   "easy": 137,
   "long_tiers": [
    {
@@ -21,7 +20,7 @@
   "recovery_drop_bpm": 5,
   "subt_rep_avg": 162,
   "subt_rep_peak": 166,
-  "tempo": 170,
+  "threshold": 173,
   "watch_alarm": 145
  },
  "load": {
@@ -33,6 +32,9 @@
    900,
    1200
   ]
+ },
+ "neuromuscular": {
+  "peak_cadence_spm": 200
  },
  "trimp": {
   "hr_max": 188,

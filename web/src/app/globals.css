@@ -37,12 +37,28 @@
 :root {
   color-scheme: light;
 
-  /* THE SHELL WIDTH, ONE COPY AND THREE READERS -- `.topbar`, `.filters` and
-     `main`. It was 1180px written out three times, and the Week view now hangs
-     a paces rail off the side of its card: widening two of the three would
-     misalign the header with the content under it, which is a defect a reader
-     sees before they see the rail. */
+  /* THE CONTENT COLUMN'S CAP. It was the whole shell's, written out three
+     times as 1180px, until the paces rail moved beside EVERY page rather than
+     only the Week card. The rail is now paid for on top rather than out of
+     this, which is the athlete's instruction: adding it must not shrink what
+     is already on the page. The Week card grows to match the other two as a
+     consequence -- it had been paying for the rail out of the shell. */
   --shell-max: 1440px;
+
+  /* THE RAIL'S GUARD, moved out of `.rail` so `--page-max` can be composed
+     from it. `max-content` means the rail asks for exactly what its widest
+     unwrapped row needs -- about 24rem once `3:46:15 @ 8:38/mi` is in it -- so
+     this only ever binds on a chart nobody has authored yet, and the 4rem of
+     headroom is deliberate. */
+  --rail-max: 28rem;
+
+  /* THE SHELL WIDTH, ONE COPY AND THREE READERS -- `.topbar`, `.filters` and
+     `main`. Widening two of the three would misalign the header with the
+     content under it, which is a defect a reader sees before they see the
+     rail. DERIVED rather than typed: a shell that did not track the two
+     figures above would silently start squeezing the content column the next
+     time either moved. The `1rem` is `.page-layout`'s own gap. */
+  --page-max: calc(var(--shell-max) + var(--rail-max) + 1rem);
 
   --surface-1: #fcfcfb;
   --page: #f9f9f7;
@@ -182,9 +198,12 @@
    *
    * EIGHT IS THE CEILING AND IT IS A HARD ONE. There is no ninth slot -- a ninth
    * series folds, facets, or merges, and re-stepping a documented palette is off
-   * the table. That ceiling is why the target-paces panel merges easy+recovery
-   * into one region and drops `long`, and why the race panel plots seven
-   * distances. A single-hue ordinal ramp was measured as the alternative and is
+   * the table. That ceiling is why the target-paces panel FACETS into three
+   * groups of at most five series rather than drawing every zone at once, and why
+   * the race panel plots seven distances. (Merging easy+recovery into one region
+   * was the earlier answer and the split replaced it; the `long` band was dropped
+   * from that panel and is retired outright since 2026-09-18.) A single-hue
+   * ordinal ramp was measured as the alternative and is
    * worse: the blue ramp steps by dL 0.047 against the validator's 0.06 floor, so
    * it carries five steps, not nine. */
   --cat-1: var(--series-1);      /* slot 1  blue */
@@ -271,7 +290,7 @@ body {
   justify-content: space-between;
   gap: 1rem;
   padding: 1.5rem clamp(1rem, 4vw, 2.5rem) 0.5rem;
-  max-width: var(--shell-max);
+  max-width: var(--page-max);
   margin: 0 auto;
 }
 
@@ -296,7 +315,7 @@ h1 { font-size: 1.4rem; margin: 0; letter-spacing: -0.01em; }
   align-items: end;
   gap: 1rem;
   padding: 0.5rem clamp(1rem, 4vw, 2.5rem) 1rem;
-  max-width: var(--shell-max);
+  max-width: var(--page-max);
   margin: 0 auto;
 }
 
@@ -329,6 +348,18 @@ h1 { font-size: 1.4rem; margin: 0; letter-spacing: -0.01em; }
   color: var(--text-primary);
 }
 .field input[type="date"]:disabled { opacity: 0.5; }
+/* THE CUSTOM-WINDOW BOX on the effective-VO2max panel: the date box's chrome,
+   sized for three digits. Its own rule for the date box's reason -- a control
+   holding `365` must not inherit the select's 15rem. */
+.field input.window-days {
+  font: inherit;
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface-1);
+  color: var(--text-primary);
+  width: 6rem;
+}
 
 /* A TAB STRIP IS A ROW OF CONTROLS AND HAS TO LOOK LIKE ONE.
  *
@@ -362,8 +393,9 @@ h1 { font-size: 1.4rem; margin: 0; letter-spacing: -0.01em; }
    keyboard. Same rule as `button.meter-row`, so the page has one focus idea. */
 .tab:focus-visible { outline: 2px solid var(--series-1); outline-offset: 1px; }
 /* A DISABLED PILL, which `.tab` had no state for until the steppers arrived.
-   Three of them can be dead at once — the week arrows at either end of the
-   record, and both trends arrows on `All` or a typed window.
+   Several can be dead at once — and since 2026-09-07 a stepper's two pairs go
+   dead SEPARATELY: on Trends' `All` the coarse arrows are grey beside two live
+   week arrows, because a week is an increment that window still has.
 
    SOURCE ORDER IS WHAT MAKES THIS WORK. `.tab:hover` and `.tab:disabled` have
    EQUAL specificity (0,2,0), so whichever is written last wins; this must sit
@@ -399,9 +431,10 @@ h1 { font-size: 1.4rem; margin: 0; letter-spacing: -0.01em; }
 /* In-card pills share a header row with the week's title, so they take a
    slightly tighter scale — the same step down `.card > h2` takes from `h1`. */
 .tabs.in-card .tab { font-size: 0.82rem; padding: 0.3rem 0.75rem; }
-/* THE BACK/FORWARD PAIR, shared by all three views. It BRACKETS the control it
-   steps — `<< [date] >>` — so the row it lays out is an arrow, one or two
-   labelled fields, and an arrow.
+/* THE BACK/FORWARD ARROWS, shared by all three views. They BRACKET the control
+   they step — `<< [date] >>`, or `<< < [date] > >>` where a second, finer pair
+   is nested inside the first — so the row it lays out is one or two arrows, one
+   or two labelled fields, and their mirror image.
 
    Its own class rather than `.tabs`, which carries `margin-left: auto` and would
    shove the arrows to the far margin away from the field they move.
@@ -441,27 +474,39 @@ h1 { font-size: 1.4rem; margin: 0; letter-spacing: -0.01em; }
 .tabs.table-toggle { margin: 1.1rem 0 0.6rem; }
 
 main {
-  max-width: var(--shell-max);
+  max-width: var(--page-max);
   margin: 0 auto;
   padding: 0 clamp(1rem, 4vw, 2.5rem);
   display: grid;
   gap: 1rem;
 }
 
-/* THE WEEK LAYOUT: the card, and the paces rail beside it.
+/* THE PAGE LAYOUT: the content, and the paces rail beside it.
    `minmax(0, 1fr)` and not `1fr` -- a grid track sizes to its content by
    default, so the runs table's own width would push the rail off the page
    rather than scrolling inside its container. */
 /* `auto` + `width: max-content` on the rail, NOT a fixed track. A guessed width
    was wrong the first time -- 19rem wrapped eight rows of eight -- and guessing
    again only moves the number at which it breaks. The rail asks for exactly the
-   width its widest unwrapped row needs; `max-width` is the guard that keeps a
-   pathological chart from eating the card. */
-.week-layout {
+   width its widest unwrapped row needs; `--rail-max` is the guard that keeps a
+   pathological chart from eating the content. */
+/* IT WAS `.week-layout` AND IT IS THREE VIEWS' NOW. Renamed rather than
+   aliased -- the rail sits beside every page, and a second name for one grid is
+   how two of the three come to be styled by whichever rule somebody found. */
+.page-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 1rem;
   align-items: start;
+}
+
+/* THE CONTENT COLUMN, which is usually SEVERAL cards -- the grid track holds
+   one child, so they stack here with the same 1rem `main` gives a page with no
+   rail. `min-width: 0` for the reason the track has `minmax(0, …)`. */
+.page-main {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
 }
 
 /* Sticky, because the rail is a reference read WHILE scrolling the card -- a
@@ -471,14 +516,13 @@ main {
   position: sticky;
   top: 1rem;
   width: max-content;
-  /* A GUARD, NOT A TARGET. `max-content` means the rail asks for exactly what
-     its widest unwrapped row needs -- about 24rem once `3:46:15 @ 8:38/mi` is
-     in it -- so this only ever binds on a chart nobody has authored yet, and
-     the 4rem of headroom is deliberate. The tables stay `raw`: wrapping them
-     in `.scroll-x` inside a `max-content` box makes the rail's own width
-     depend on a scroll container's intrinsic size, and a collapsed rail is a
-     worse failure than a few pixels of spill on a chart that does not exist. */
-  max-width: 28rem;
+  /* A GUARD, NOT A TARGET -- the reasoning is on `--rail-max`, which is where
+     the number moved so `--page-max` could be composed from it. The tables stay
+     `raw`: wrapping them in `.scroll-x` inside a `max-content` box makes the
+     rail's own width depend on a scroll container's intrinsic size, and a
+     collapsed rail is a worse failure than a few pixels of spill on a chart
+     that does not exist. */
+  max-width: var(--rail-max);
   background: var(--surface-1);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -503,7 +547,7 @@ main {
    rail is most of a narrow viewport, and the card is what the reader came for.
    Sticky goes with it -- a full-width sticky block would cover the page. */
 @media (max-width: 1024px) {
-  .week-layout { grid-template-columns: minmax(0, 1fr); }
+  .page-layout { grid-template-columns: minmax(0, 1fr); }
   .rail { position: static; }
 }
 
@@ -544,6 +588,10 @@ main {
   margin-bottom: 1rem;
 }
 .card-head > h3 { margin: 0; }
+/* A CARD WITH `actions` PUTS ITS OWN `<h2>` IN HERE, and `.card > h2` carries a
+   0.9rem bottom margin that would push the title off the strip's baseline. The
+   row owns the spacing; the heading owns none. */
+.card-head > h2 { margin: 0; }
 /* NO PER-SURFACE TAB OVERRIDE LIVES HERE, and that is the point of --accent.
    This block briefly swapped the selected pill's fill to --page inside a card,
    because the fill was a SURFACE colour and therefore meant something different
@@ -965,14 +1013,21 @@ details.prose > summary {
   gap: 1rem;
   margin-bottom: 1.1rem;
 }
-/* Pushed to the far end of the row: the two dates are what the window IS, and
-   these are shortcuts for filling them in. */
-.range-presets {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  margin-left: auto;
-}
+/* THE WINDOW-LENGTH DROPDOWN, on both the Calendar and Trends. Pushed to the far
+   end of the row: the date(s) are what the window IS, and this is how long it
+   runs.
+
+   IT REPLACED `.range-presets` (2026-09-07), which laid out the pill strip both
+   controls carried until the athlete asked for a dropdown -- the same call
+   `.agg-controls` records. The rule that strip carried was `margin-left: auto`
+   and this is where it went; the class is gone rather than left behind, which is
+   the half-a-deletion failure this file has paid for twice.
+
+   THE WIDTH IS ITS OWN, for the reason written above `.field input[type="date"]`:
+   `.field select`'s 15rem is right for eleven graph titles and is a third of the
+   row spent on air for `4 weeks`. */
+.field.trailing { margin-left: auto; }
+.field.trailing select { min-width: 9rem; }
 
 /* THE SERIES ROW IS THE LEGEND. A multi-series panel puts its checkboxes and
    its key in one control rather than shipping both -- two swatches on screen for
@@ -981,7 +1036,7 @@ details.prose > summary {
 
    `align-items: start` so a wrapped picker keeps the unit pills on the first
    line, beside the series they qualify; `margin-left: auto` on the toggle is the
-   same far-end placement `.range-presets` uses for the same reason. */
+   same far-end placement `.field.trailing` uses for the same reason. */
 .series-controls {
   display: flex;
   flex-wrap: wrap;
@@ -1041,6 +1096,9 @@ details.prose > summary {
   gap: 0.35rem;
   margin-left: auto;
 }
+/* THE WINDOW BOX SITS AT THE FAR END, where the unit pills sit on the panels
+   that have them -- no panel carries both, so the two never compete for it. */
+.series-controls .window-input { margin-left: auto; }
 
 /* THE AGGREGATION ROW: the mode and period dropdowns for the three summable
    series — dropdowns, not pills, the athlete's instruction (2026-09-02). Its
@@ -1110,6 +1168,38 @@ details.prose > summary {
    calendar states its own dates. Half a deletion is a failure mode this repo
    has paid for twice. */
 .cal-cell:hover { border-color: var(--axis); }
+
+/* A PLAN CELL IS NOT A CONTROL. It opens nothing -- the athlete asked for hover
+   only -- so the pointer must not claim otherwise; the pencil in the corner is
+   the one thing in the slot that IS clickable. The hover border stays: it is
+   what says which cell the tooltip belongs to.
+
+   It keeps `.cal-cell`'s button resets, which cost nothing on a div and would
+   otherwise have to be listed twice for the two elements this component
+   renders. `:focus-visible` because `useTip` makes it focusable -- a tooltip
+   must never be the only route to a value, and here it is the only route to the
+   UNCLIPPED prescription. */
+.cal-cell.plan { cursor: default; }
+.cal-cell.plan:focus-visible {
+  outline: 2px solid var(--series-1);
+  outline-offset: 1px;
+}
+
+/* A SCHEDULED REST DAY. Plan mode only, and it exists because the alternative
+   is an empty cell -- which means `unstated`, a date the manifest never
+   mentions, which both graders report differently from rest. It sits where the
+   step count does in View mode, so the cell's shape does not move. */
+/* `--text-secondary`, NOT `--text-muted`, though every other small label in a
+   cell is muted. Those are LABELS; this is the fact itself — the plan schedules
+   rest here — and muted lands at 3.50:1 on `--surface-1` in the light mode,
+   which is short of AA for text this size. Secondary is 7.73:1 / 9.72:1. */
+.cal-rest {
+  margin-top: auto;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
 /* THE SELECTED DAY, and the ring has to read on FOUR different fills -- the
    plain surface and the three tints. `--accent` is the one colour on the page
    that is mode-invariant and was measured against every surface it lands on;
@@ -1119,6 +1209,23 @@ details.prose > summary {
   box-shadow: inset 0 0 0 1px var(--accent);
 }
 .cal-cell .d { font-size: 0.7rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+
+/* THE DAY IS BEHIND YOU. Plan mode only, and it sits INSIDE `.d` rather than in
+   the cell's corner, which `.cal-slot .cal-edit` already occupies.
+
+   `--success-text`, NOT `--good`, AND THE DIFFERENCE IS MEASURED. `--good` is
+   the SATURATED green -- the 11px score dot, a mark on a wash -- and at 0.7rem
+   text weight on `--surface-1` it lands 3.36:1, short of AA and the same figure
+   `.cal-rest` rejected `--text-muted` for. `--success-text` is the token that
+   exists for green TEXT and steps per mode (#006300 light, #0ca30c dark):
+   7.37:1 and 7.09:1 on the plain cell. It still clears AA on all three tints,
+   which is what a 22% wash under it is for.
+
+   IT IS NOT `--accent`, which means "selected" everywhere on this page, and it
+   is not a verdict either -- the mark says the DATE has passed, not that the
+   session went well. The WORD `completed` is in the cell's `aria-label`, so
+   nothing here is carried by colour or by a glyph alone. */
+.cal-done { margin-left: 0.3rem; color: var(--success-text); font-weight: 700; }
 .cal-cell .v { font-size: 0.78rem; font-variant-numeric: tabular-nums; font-weight: 600; }
 
 /* WHAT THE DAY IS FOR. One line per run, each clipped to the cell -- a
@@ -1156,6 +1263,577 @@ details.prose > summary {
 /* A BREACH IS A BORDER, so it survives every tint underneath it. */
 .cal-cell.over { border-color: var(--critical); }
 
+/* --------------------------------------------- the plan editor (2026-09-03)
+ *
+ * THE SLOT EXISTS BECAUSE A CELL IS A BUTTON. The day's edit control cannot
+ * be the cell's child -- an interactive element inside another is invalid
+ * markup -- so each grid track holds a positioned wrapper with the cell and
+ * the pencil as siblings. `display: grid` so the cell stretches to fill the
+ * track exactly as it did when it WAS the track's item.
+ *
+ * `.cal-edit` gets a real resting fill (`--track` + border), the tab-strip
+ * lesson: a control with no resting chrome does not read as a control. It is
+ * NOT `--accent`, which means "selected" everywhere on this page. */
+.cal-slot { position: relative; display: grid; }
+.cal-slot .cal-edit { position: absolute; top: 3px; right: 3px; z-index: 1; }
+.cal-label .cal-edit { margin-left: 0.4rem; }
+.cal-edit {
+  font: inherit;
+  font-size: 0.68rem;
+  line-height: 1;
+  padding: 0.18rem 0.32rem;
+  background: var(--track);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.cal-edit:hover:not(:disabled) { border-color: var(--axis); color: inherit; }
+.cal-edit:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* The editor's form grid. `.field` supplies the label shape; the overrides
+ * exist because its `select` min-width was sized for the athlete picker and
+ * would blow a compact field row out of the dialog. Text inputs get the same
+ * chrome the date input already defines, written out because a new element
+ * inherits nothing worth having from the UA. */
+.edit-fields { display: flex; flex-wrap: wrap; gap: 0.6rem 0.9rem; margin: 0.5rem 0; }
+.edit-fields .field select { min-width: 0; }
+.edit-fields input[type="text"],
+.edit-fields input[type="number"],
+.edit-wide textarea,
+.edit-wide input[type="text"] {
+  font: inherit;
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface-1);
+  color: var(--text-primary);
+}
+.edit-fields input[type="text"],
+.edit-fields input[type="number"] { width: 8.5rem; }
+/* THE DAY'S NOTE IS A SENTENCE, not a duration, so it gets the row's whole
+   remaining width rather than the 8.5rem every other field takes. */
+.edit-fields input.wide[type="text"] { width: 22rem; max-width: 100%; }
+.edit-check { flex-direction: row; align-items: center; gap: 0.4rem; }
+
+/* WHAT THE WEEK ACTUALLY CAME TO, beside what was planned for it. Not an
+   input and deliberately not styled as one -- a disabled input reads as a
+   field somebody could have filled in, where these are measurements. Tabular
+   figures so the planned and actual columns line up digit for digit. */
+.edit-readonly {
+  font-variant-numeric: tabular-nums;
+  padding: 0.4rem 0;
+  color: var(--text-secondary);
+}
+
+/* THE DAY'S SESSIONS, STATED RATHER THAN EDITED -- View mode, where the note is
+   the subject and these are its context. Bare `<p>`s read as body prose, which
+   is what they looked like: the rule that gives them a left edge is what makes
+   them read as a LIST of sessions the reader is annotating.
+
+   `--track` and not `--surface-1`: this dialog IS `--surface-1`, and the two
+   neutral planes are 1.03:1 apart -- the same measurement that decided the tab
+   strip's fills. */
+.edit-sessions { margin: 0.4rem 0 1rem; }
+.edit-sessions > span {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+.edit-readonly-run {
+  margin: 0.35rem 0 0;
+  padding: 0.4rem 0.6rem;
+  border-left: 2px solid var(--border);
+  background: var(--track);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.edit-run {
+  /* A `<fieldset>` DEFAULTS TO `min-inline-size: min-content`, which is a UA
+     rule nothing else on this page relies on -- and it means the fieldset
+     refuses to shrink below its widest child, so `.wk-table`'s own
+     `overflow-x` never engages and a twelve-column rep row pushes the whole
+     dialog sideways instead. `anything a browser would normally supply has to
+     be written down`, one more time. */
+  min-inline-size: 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.6rem 0.75rem;
+  margin: 0 0 0.75rem;
+}
+/* THE CONTROLS GROUP AT THE RIGHT MARGIN; EVERYTHING ELSE STAYS LEFT.
+ *
+ * It was `justify-content: space-between`, which reads the same as this while
+ * the row holds THREE things and comes apart at four: adding `Save as template`
+ * spread the caret, the key and both buttons evenly across the width, so the
+ * key floated into the middle of the row and the two buttons sat apart. A
+ * `justify-content` is a statement about ALL the children and this row wants a
+ * statement about the last ones -- which is what `.wk-actions` next door already
+ * does, and why the actions take a wrapper rather than the head taking a
+ * different distribution. */
+.edit-run-head {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+.edit-run-actions {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+.edit-run-key {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+/* WHAT A FOLDED RUN SAYS -- `prescribed`, or a composed description where
+   nobody wrote one. `.edit-run-head` is an ordinary flex row, so this takes the
+   remaining width and clips; `min-width: 0` is what lets a flex item shrink
+   below its content at all, which is the same UA default `.edit-run`'s own
+   `min-inline-size` note is about. */
+.edit-run-summary {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* THE WORKOUT TABLE -- a row per rep, a row per group, a row per block.
+ *
+ * FLEX ROWS RATHER THAN A `<table>`, because the three row shapes share no
+ * columns: a block row states a mode and a between-group recovery, a group row
+ * is a checkbox and a label, a rep row is four controls and two buttons. A
+ * table would need the widest of them in every column and would still not line
+ * up, which is the layout the fields it replaced already had.
+ *
+ * COMPACT CONTROLS, because a rep row is eight elements inside a 60rem dialog
+ * -- the same `dialog.modal` the Custom Laps table uses, deliberately not
+ * widened for one form. `.wk-table` scrolls sideways at the narrowest widths
+ * rather than wrapping a rep across two lines, where the unit would land under
+ * the amount it qualifies. */
+.edit-sets { display: grid; gap: 0.5rem; margin-top: 0.5rem; }
+.edit-set { border-top: 1px dashed var(--border); padding-top: 0.5rem; }
+
+.wk-table { margin: 0.6rem 0 0; overflow-x: auto; }
+.wk-set {
+  border-top: 1px dashed var(--border);
+  padding: 0.35rem 0 0.15rem;
+}
+.wk-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.15rem 0;
+  min-width: max-content;
+}
+.wk-sethead { font-size: 0.85rem; }
+/* THE SET ROW IS LEFT-ALIGNED AND ITS REPS ARE TABBED IN -- the athlete's own
+   description of the shape. */
+.wk-rep { padding-left: 1.1rem; }
+.wk-setlabel {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+}
+/* `+ rep` SITS WITH ITS REPS AND `+ set` DOES NOT. The table-level button is
+   a sibling of the sets, so indenting it would read as belonging to the last
+   one. */
+.wk-set .wk-add { padding-left: 1.1rem; }
+.wk-table > .wk-add { padding-left: 0; padding-top: 0.4rem; }
+.wk-ord {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  width: 1.4rem;
+  text-align: right;
+}
+.wk-label { color: var(--text-muted); font-size: 0.78rem; }
+.wk-mode { font-weight: 600; }
+.wk-length, .wk-recovery, .wk-target {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.wk-table input[type="text"] {
+  font: inherit;
+  padding: 0.25rem 0.4rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface-1);
+  color: var(--text-primary);
+}
+.wk-table input.wk-num { width: 4.5rem; font-variant-numeric: tabular-nums; }
+/* EVERY SELECT SIZES TO ITS OWN VOCABULARY. Left to the UA they all take one
+   width, which put a 4-character unit picker and an EMPTY `—` recovery mode in
+   boxes the size of a real field -- so an unstated recovery read as an orphaned
+   control rather than as a blank.
+
+   THE TARGET'S KIND PICKER WAS 10.5rem AND ITS VOCABULARY HAD SHRUNK UNDER IT.
+   That width was sized when its longest label read `zone (800m–3000m)`; the
+   zone became two chosen paces on 2026-09-05 and the labels are now
+   `—/band/zone/race pace/rep time/pace`, nine characters at the widest. So the
+   box was ~4rem of empty and EVERY rep row paid for it -- which is what the
+   athlete saw as the dialog scrolling sideways. The rule above is why the
+   remaining three are spelled out rather than left to shrink-to-fit: `rep_10min`
+   and `21097m` are different lengths and one width for both wastes the wider. */
+.wk-table select { min-width: 0; padding: 0.25rem 0.3rem; }
+.wk-length select { width: 3.6rem; }
+.wk-recovery > select { width: 5.2rem; }
+/* THE LAST REP OF A SET THAT STATES ITS OWN RECOVERY has no control here --
+   what follows that rep is the SET's, stated on the row above. The cell still
+   HOLDS THE COLUMN so the rows below stay aligned, and it says `set` rather
+   than sitting empty: a blank there reads as a recovery nobody prescribed,
+   which is the opposite of what it means.
+
+   THE WIDTH IS THE SUM OF WHAT IT REPLACES, WRITTEN AS THAT SUM. The three
+   controls above plus the two gaps between them -- `.wk-label` is on both sides
+   and cancels. A round 14.5rem was 11px too wide and shifted every following
+   column on that one row, which is visible in a screenshot and invisible to
+   jsdom; spelling the arithmetic keeps it true when one of those widths moves. */
+.wk-recovery-set { color: var(--text-muted); }
+.wk-recovery-set .wk-fromset {
+  width: calc(4.5rem + 0.25rem + 3.6rem + 0.25rem + 5.2rem);
+  font-size: 0.78rem;
+  font-style: italic;
+}
+.wk-target > select:first-child { width: 6.5rem; }
+.wk-target select.wk-band { width: 7rem; }
+.wk-target select.wk-race { width: 5.6rem; }
+/* A REP ROW STATES ITS OWN PACE TYPE, so the mode select sits there and the
+   set row states what its reps share as a word. */
+.wk-rep > select { width: 7rem; }
+.wk-req { display: inline-flex; align-items: center; }
+.wk-actions { display: inline-flex; gap: 0.15rem; margin-left: auto; }
+.wk-actions .ghost { padding: 0.1rem 0.4rem; }
+
+/* WHAT A FOLDED SET SAYS, in place of the between-set recovery control that
+   folded away with the reps.
+
+   `max-width` IS LOAD-BEARING, not tidiness. `.wk-row` is `min-width:
+   max-content`, so an uncapped sentence sizes the row -- and the committed
+   `prescribed` strings run to 163 characters, which would put the sideways
+   scroll straight back on the one row that has room to spare. Clipped here and
+   carried whole in the control's `title`. */
+.wk-summary {
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  max-width: 34rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* A FIELD HOLDING PROSE. `.field`'s label-above-control shape, widened to the
+   dialog, for the two places the editor takes the plan's own words rather than
+   a value: the end-of-week note and a run's `prescribed`.
+
+   IT WAS `.edit-note` AND SERVED ONLY THE FIRST until 2026-09-04. `prescribed`
+   sat in the compact row at 8.5rem while the committed strings run to 163
+   characters, so the box showed about a tenth of the longest one -- and giving
+   it a second full-width rule of its own would have been a second definition
+   of the one shape. One name, two members.
+
+   THE `prescribed` CONTROL IS AN `input`, NEVER A `textarea`. The manifest
+   string is single-line and a textarea is an invitation to put a newline in
+   it; the width is what was missing, not the height. */
+.edit-wide { display: block; margin: 0.5rem 0 0; }
+.edit-wide > span {
+  display: block;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+}
+.edit-wide textarea { width: 100%; min-height: 4.5rem; resize: vertical; }
+.edit-wide input[type="text"] { width: 100%; }
+
+/* THE SAVE BAR. Banners are full-width blocks; only the control row is pushed
+   to the right margin -- right-aligning a paragraph and a <ul> of grader
+   issues would be unreadable, and the reason for a failure belongs ABOVE the
+   button you are about to press again. */
+.edit-savebar { margin-top: 0.9rem; }
+.edit-savebar pre { overflow-x: auto; font-size: 0.75rem; }
+.edit-saverow {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.edit-saverow > p { margin: 0; }
+
+/* ----------------------------------------------------- RUN TEMPLATES
+ *
+ * A saved prescription, reapplied to another day. Two entry points: the pair of
+ * add buttons under the day's runs, and `Save as template` in each run head.
+ *
+ * EVERYTHING HERE IS DECLARED RATHER THAN INHERITED, which is the lesson this
+ * page has now paid for three times (`dialog { margin: auto }`, `.modal-head >
+ * h2`, the list markers at the foot of the file): Tailwind's preflight is
+ * AUTHOR css and beats the user agent, so a `<dl>`, a `<dd>`'s indent and an
+ * `<h3>`'s size are all gone unless written down. */
+.edit-addrow { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+/* Beside the button, never inside it -- a control that resizes mid-save moves
+   the thing the reader is about to press again. */
+.edit-tpl-status {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  align-self: center;
+}
+.edit-tpl-status.stop { color: var(--critical); }
+
+/* WHICH TEMPLATE A RUN WAS BUILT FROM. Provenance, sitting where the runalyze
+   id does and reading like it: muted, small, and not a control -- nothing on
+   the form writes it, `runFromTemplate` stamped it once. */
+.edit-run-from { font-size: 0.78rem; color: var(--text-muted); }
+
+/* THE MANAGE BUTTON, at the foot of the Plan card. Its own row rather than an
+   `.edit-addrow`, because it is one control and it goes to the RIGHT: a card's
+   trailing action belongs where the reader's eye finishes, the same argument
+   `.edit-saverow` makes inside a dialog. */
+.tpl-manage-row { display: flex; justify-content: flex-end; margin-top: 0.6rem; }
+
+/* WHAT IS BEING EDITED, above the form. The name is derived (`templateLabel`),
+   so this is the prescription's own words -- and the id beside it is what the
+   file calls the row, which is the thing a hand edit or a `template_id` on a
+   run names. `<h3>` is sized here because Tailwind's preflight strips it, the
+   lesson `.tpl-detail > h3` records four rules up. */
+.tpl-manage-name {
+  margin: 0.9rem 0 0.4rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.tpl-manage-id {
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* THE LIST AND WHAT IT DESCRIBES, SIDE BY SIDE. Two similar `60-70 min easy`
+   entries are only distinguishable by what they prescribe, so the detail pane
+   is not an extra -- it is what makes the list usable. It collapses to one
+   column where there is no room for two. */
+.tpl-picker {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+@media (max-width: 40rem) {
+  .tpl-picker { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* A REAL `<select size>`, taking the chrome `.field select` defines and NOT its
+   `min-width: 15rem` -- this one is already stretched by the grid column, and a
+   floor would push the two panes apart at a narrow viewport. */
+.tpl-list {
+  font: inherit;
+  width: 100%;
+  padding: 0.25rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface-1);
+  color: var(--text-primary);
+}
+.tpl-list optgroup {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+/* The rows are the athlete's own prescriptions, some of them long. One line
+   each, clipped -- the `.wk-row` rule, for the same reason: a 163-character
+   string left to size the box would put a sideways scroll on it.
+
+   IT RESETS THE GROUP'S SMALL-CAPS, WHICH IT INHERITS. `text-transform` and
+   `letter-spacing` are inherited properties and an `option` is a CHILD of its
+   `optgroup`, so the heading treatment reached the rows and rendered `AM: 30
+   min recovery` as `AM: 30 MIN RECOVERY` -- shouting the athlete's own words
+   back at them. Every other small-caps label on this page is a `<span>` with no
+   text inside it to catch the transform, which is why this is the first place
+   it has bitten. */
+.tpl-list option {
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  padding: 0.15rem 0.35rem;
+  text-transform: none;
+  letter-spacing: normal;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+/* THE SELECTED ROW, IN OUR OWN NEUTRAL RATHER THAN THE BROWSER'S BLUE.
+ *
+ * Left alone, a list box paints the OS highlight -- a full-bleed saturated blue
+ * that has nothing to do with this palette and, at the width of a whole row,
+ * reads as an alarm rather than as a selection. The athlete, seeing it: *"the
+ * bright blue was a little blinding."*
+ *
+ * `--axis` IS THE ONE NEUTRAL THAT MOVES TOWARD PROMINENCE IN BOTH MODES, which
+ * is the property being asked for and is why the tab strip already uses it for
+ * hover. `--accent` is the token that MEANS selected everywhere else here, and
+ * it was the first answer -- but a `--accent` wash strong enough to mark a whole
+ * row is the brightness being complained about, and a weak one marks it weakly.
+ * `--track` was the other candidate and is wrong by its own definition: it is
+ * the resting fill of a control that is NOT selected.
+ *
+ * A GRADIENT OF FLAT STOPS, NOT `background-color`, AND THAT IS NOT STYLE.
+ * Chromium ignores `background-color` on a checked `<option>` and paints the
+ * system highlight over it; a background IMAGE is honoured.
+ *
+ * AND `-webkit-text-fill-color` BESIDE `color`, FOR THE SAME REASON ONE
+ * PROPERTY OVER. Chromium paints the ACTIVE row's text in the system
+ * highlight's own ink -- near-black, which is right on the blue it was going to
+ * draw and wrong on this grey, so the row went dark-on-grey in dark mode the
+ * moment it was selected. `color` alone does not win that, because the
+ * selection ink is applied at paint time rather than through the cascade;
+ * `-webkit-text-fill-color` is applied at the same point and does. `color`
+ * stays for Firefox, which honours it and does not implement the other.
+ *
+ * BOTH MODES CHECK OUT ON PAPER: `--text-primary` is #0b0b0b on #c3c2b7 in
+ * light and #ffffff on #383835 in dark. That is the whole reason the ink is a
+ * token and not a hex -- a fixed white would be invisible in light mode.
+ *
+ * COLOUR IS NOT THE ONLY CHANNEL, though the binary case would allow it: the
+ * detail pane beside the list names the selected template in full.
+ *
+ * UNVERIFIABLE BY `npm run check` -- jsdom applies no CSS and this is engine
+ * behaviour besides, so it is looked at in a browser like every other
+ * stylesheet change here, in BOTH modes. */
+.tpl-list option:checked {
+  background: linear-gradient(var(--axis), var(--axis));
+  color: var(--text-primary);
+  -webkit-text-fill-color: var(--text-primary);
+}
+
+/* THE BORDER RING ALONE, NO FILL. The dialog is already `--surface-1` and the
+   only neutral below it is `--page`, which sits 1.03:1 away -- the pair the
+   week card's tab strip was corrected for. A ring separates the pane at any
+   contrast; a wash that close does not, and `--track` is the resting fill of a
+   CONTROL, which this is not. */
+.tpl-detail {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.75rem 0.9rem;
+}
+.tpl-detail > h3 {
+  margin: 0 0 0.6rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+.tpl-detail dl { margin: 0; display: grid; gap: 0.3rem; }
+/* Label and value on one row, the label in the form's own small-caps so the
+   pane reads as part of the editor rather than as a paragraph in it. */
+.tpl-detail dl > div {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  gap: 0.5rem;
+  align-items: baseline;
+}
+.tpl-detail dt {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+.tpl-detail dd { margin: 0; font-size: 0.85rem; }
+
+/* THE FORM'S PRIMARY ACTION, AND THE ONE PLACE --accent IS NOT A SELECTION.
+ *
+ * It shipped as a bare <button>, which Tailwind's preflight strips to plain
+ * text -- the third time this page has paid for *a control with no resting
+ * fill does not read as a control*, after the tab strips and
+ * `.custom-laps-open`. The athlete could not tell it was clickable.
+ *
+ * `.custom-laps-open` REFUSED --accent on the grounds that an action is not a
+ * selection, and that reasoning still holds for a disclosure pill. This is a
+ * different thing: the submit of a form, in a dialog whose other three
+ * buttons are `.ghost`, so a `--track` pill would sit at the same weight as
+ * *Remove run*. Chosen with the athlete over the neutral pill.
+ *
+ * ONE RULE FOR BOTH MODES, because --accent is mode-invariant: white on it is
+ * 5.39:1 either way. --series-1 was not available -- white on it is 4.42:1
+ * light and 3.64:1 dark, both under AA, which the palette block above already
+ * records.
+ *
+ * THE FILL DOES NOT MOVE ON HOVER, and that is measured rather than lazy. A
+ * saturated fill has to darken on a light page and LIGHTEN on a dark one to
+ * move the same way -- the --axis/--grid problem -- and lightening --accent
+ * enough to notice takes the label under AA: mixing 10% toward
+ * --text-primary gives white-on-fill 4.42:1 in dark mode, and every larger
+ * step is worse. The label is what the fill exists to carry, so the hover is
+ * a translucent HALO outside the button instead, which reads on all four
+ * surfaces (1.9:1 light, 1.6:1 dark) and touches no text contrast.
+ * `.tab[aria-selected="true"]:hover` makes the same choice for the same
+ * colour; the two stay separate rules because they are different controls. */
+.save {
+  font: inherit;
+  font-weight: 600;
+  padding: 0.45rem 1.15rem;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+  cursor: pointer;
+}
+.save:hover {
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 45%, transparent);
+}
+/* BELOW the hover rule and written out with its own :hover, the same source
+   order `.tab:disabled` needs: equal specificity, so the last one wins, and
+   :hover still MATCHES on a disabled button -- the browser only suppresses
+   the click. */
+.save:disabled,
+.save:disabled:hover {
+  opacity: 0.45;
+  cursor: default;
+  box-shadow: none;
+}
+/* The same focus rule as `.tab`, `button.meter-row` and `.custom-laps-open`,
+   so the page has one focus idea rather than one per control. */
+.save:focus-visible { outline: 2px solid var(--series-1); outline-offset: 1px; }
+
+/* A PRIMARY ACTION THAT REMOVES SOMETHING. It is `.save`'s shape in
+   `--critical`, not a second button: the control does the same job in the same
+   place, and only what it does to the record differs.
+
+   IT IS ONLY EVER REACHED FROM A CONFIRM, so this is the SECOND thing the
+   reader sees about the action rather than the first -- the dialog's own
+   sentence already named what will happen. Colour is the reinforcement here,
+   never the message, which is why the button says `Delete` rather than `OK`.
+
+   THE HALO FOLLOWS THE FILL for the reason above: darkening a saturated fill
+   reads as a press on a light page and as nothing at all on a dark one.
+
+   `--accent-ink` ON `--critical` IS 4.81:1, which clears AA -- checked rather
+   than assumed, the way `--accent` itself was. Both tokens are mode-invariant,
+   so that figure holds in both. */
+.save.danger {
+  border-color: var(--critical);
+  background: var(--critical);
+}
+.save.danger:hover {
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--critical) 45%, transparent);
+}
+.save.danger:disabled,
+.save.danger:disabled:hover {
+  opacity: 0.45;
+  cursor: default;
+  box-shadow: none;
+}
+
 .tooltip {
   position: fixed;
   z-index: 50;
@@ -1171,6 +1849,16 @@ details.prose > summary {
 }
 .tooltip b { font-weight: 600; }
 .tooltip .row { display: flex; justify-content: space-between; gap: 1rem; }
+/* A PLAIN LINE, for a sentence rather than a `k: v` pair — the Calendar's Plan
+   mode lists a day's prescriptions and nothing else, and those are the plan's
+   own words. A HANGING INDENT because the strings run to 163 characters and
+   the box caps at 22rem, so several of them wrap: without it, a continuation
+   line starts flush and reads as the next session. */
+.tooltip .line {
+  margin-top: 0.15rem;
+  padding-left: 0.7rem;
+  text-indent: -0.7rem;
+}
 
 .empty-state {
   color: var(--text-muted);
@@ -1227,6 +1915,16 @@ dialog.modal {
   max-height: calc(100vh - 4rem);
   overflow: auto;
 }
+/* THE ONE FORM THAT EARNED A WIDER BOX. A workout's rep row is twelve controls
+   -- a required box, an ordinal, a length and its unit, a recovery with its own
+   length, unit and mode, a pace type, a target kind and up to two race paces,
+   then copy and remove -- and at 60rem it overflowed with the remove button off
+   the edge, which is what the athlete reported. Narrowing the target picker
+   (see `.wk-target` above) was measured and was ~4rem short on its own, so the
+   dialog takes the rest. Custom Laps and the WEEK editor keep the default: this
+   is an exception for a form that needs it, not a new default. Same
+   viewport clamp, so a narrow window still fits. */
+dialog.modal.wide { width: min(76rem, calc(100vw - 2rem)); }
 dialog.modal::backdrop { background: rgba(0, 0, 0, 0.55); }
 
 /* Roomier than a `.card`, because a dialog is a surface in its own right rather

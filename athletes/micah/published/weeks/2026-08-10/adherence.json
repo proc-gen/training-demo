@@ -8,7 +8,10 @@
   "long_run_share": 0.19422102375749686,
   "miles": 53.46029189533127,
   "non_run_days": [],
+  "plan_miles_unpriceable": [],
   "plan_unpriceable": [],
+  "planned_miles": null,
+  "planned_miles_week": null,
   "planned_seconds": [
    27000.0,
    27000.0
@@ -19,10 +22,12 @@
   ],
   "prescribed_dates": 7,
   "prescribed_dates_due": 7,
+  "projected_miles": 53.46029189533127,
   "projected_seconds": 27740.0,
   "quality_days": 2,
   "quality_seconds": 2457,
   "quality_share": 0.08857245854361932,
+  "remaining_planned_miles": 0.0,
   "remaining_planned_seconds": 0.0,
   "rest_days": 0,
   "running_days": 7,
@@ -38,9 +43,9 @@
    "why": "no complaint word in the week's 0 note(s); Runalyze daily notes and activity descriptions are NOT searched"
   },
   {
-   "status": "fired",
+   "status": "clear",
    "token": "consecutive-compromised",
-   "why": "2 of 2 quality sessions compromised (2026-08-11, 2026-08-14)"
+   "why": "0 of 2 quality sessions compromised"
   }
  ],
  "judged_facts": {
@@ -52,7 +57,10 @@
   "long_run_share": 0.19422102375749686,
   "miles": 53.46029189533127,
   "non_run_days": [],
+  "plan_miles_unpriceable": [],
   "plan_unpriceable": [],
+  "planned_miles": null,
+  "planned_miles_week": null,
   "planned_seconds": [
    27000.0,
    27000.0
@@ -63,10 +71,12 @@
   ],
   "prescribed_dates": 7,
   "prescribed_dates_due": 7,
+  "projected_miles": 53.46029189533127,
   "projected_seconds": 27740.0,
   "quality_days": 2,
   "quality_seconds": 2457,
   "quality_share": 0.08857245854361932,
+  "remaining_planned_miles": 0.0,
   "remaining_planned_seconds": 0.0,
   "rest_days": 0,
   "running_days": 7,
@@ -120,6 +130,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": {
     "actual": 1801,
     "factor": 1.0,
@@ -164,6 +175,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "30 min recovery",
+    "prescribed_miles": null,
     "prescribed_seconds": 1800,
     "role": "recovery",
     "sets": null,
@@ -226,6 +238,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": {
     "actual": 1801,
     "factor": 1.0,
@@ -270,6 +283,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "AM: 30 min recovery",
+    "prescribed_miles": null,
     "prescribed_seconds": 1800,
     "role": "recovery",
     "sets": null,
@@ -324,22 +338,23 @@
    "planned": {
     "band": null,
     "band_is_reference": false,
-    "ceiling": "none (volume_only)",
+    "ceiling": "none (warmup)",
     "ceiling_kind": "none",
-    "ceiling_role": "volume_only",
+    "ceiling_role": "warmup",
     "ceiling_tiers": null,
     "criterion": null,
     "hr_ceiling": null,
     "prescribed": "warmup for the 3x3x200m",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
-    "role": "volume_only",
+    "role": "warmup",
     "sets": null,
     "target_display": null,
     "target_sec_per_mi": null,
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "role": "volume_only",
+   "role": "warmup",
    "runalyze_id": 198850141,
    "score_bucket": null,
    "seconds": 933,
@@ -355,12 +370,6 @@
    "date": "2026-08-11",
    "detail": {
     "autolaps": [],
-    "cooldown": {
-     "above": 126,
-     "pct": 100.0,
-     "threshold": 140,
-     "total": 126
-    },
     "core_seconds": 1017,
     "data_quality": [],
     "detected_reps": 9,
@@ -450,6 +459,7 @@
         "dist_km": 0.199,
         "dur": 42,
         "hr_avg": 118,
+        "hr_end": 149,
         "hr_max": 149,
         "label": "200m",
         "ok": true,
@@ -475,6 +485,7 @@
         "dist_km": 0.199,
         "dur": 42,
         "hr_avg": 148,
+        "hr_end": 159,
         "hr_max": 159,
         "label": "200m",
         "ok": true,
@@ -500,6 +511,7 @@
         "dist_km": 0.198,
         "dur": 40,
         "hr_avg": 154,
+        "hr_end": 165,
         "hr_max": 165,
         "label": "200m",
         "ok": true,
@@ -525,6 +537,7 @@
         "dist_km": 0.202,
         "dur": 38,
         "hr_avg": 158,
+        "hr_end": 171,
         "hr_max": 171,
         "label": "200m",
         "ok": true,
@@ -550,6 +563,7 @@
         "dist_km": 0.2,
         "dur": 37,
         "hr_avg": 163,
+        "hr_end": 172,
         "hr_max": 172,
         "label": "200m",
         "ok": true,
@@ -575,6 +589,7 @@
         "dist_km": 0.201,
         "dur": 38,
         "hr_avg": 163,
+        "hr_end": 172,
         "hr_max": 172,
         "label": "200m",
         "ok": true,
@@ -600,6 +615,7 @@
         "dist_km": 0.203,
         "dur": 37,
         "hr_avg": 160,
+        "hr_end": 174,
         "hr_max": 174,
         "label": "200m",
         "ok": true,
@@ -625,6 +641,7 @@
         "dist_km": 0.201,
         "dur": 35,
         "hr_avg": 166,
+        "hr_end": 178,
         "hr_max": 178,
         "label": "200m",
         "ok": false,
@@ -650,6 +667,7 @@
         "dist_km": 0.202,
         "dur": 37,
         "hr_avg": 171,
+        "hr_end": 178,
         "hr_max": 178,
         "label": "200m",
         "ok": true,
@@ -679,7 +697,6 @@
       "work_seconds": 346
      }
     ],
-    "slivers": [],
     "suspect_seconds": 0,
     "treadmill_mph": null,
     "treadmill_warning": null,
@@ -709,6 +726,7 @@
     "criterion": "pace",
     "hr_ceiling": null,
     "prescribed": "PM: 3x3x200m w/ 200m jog between reps and 400m between sets",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
     "role": "repetition",
     "sets": [
@@ -726,11 +744,13 @@
       "float_mode": null,
       "float_seconds": null,
       "group_float_distance_m": 400,
+      "group_float_mode": null,
       "group_float_seconds": null,
       "groups": 3,
       "hr_ceiling": null,
       "mode": "repetition",
       "rep_distance_m": 200,
+      "rep_rows": null,
       "rep_seconds": null,
       "reps": 9,
       "reps_per_group": 3,
@@ -814,22 +834,23 @@
    "planned": {
     "band": null,
     "band_is_reference": false,
-    "ceiling": "none (volume_only)",
+    "ceiling": "none (cooldown)",
     "ceiling_kind": "none",
-    "ceiling_role": "volume_only",
+    "ceiling_role": "cooldown",
     "ceiling_tiers": null,
     "criterion": null,
     "hr_ceiling": null,
     "prescribed": "cooldown for the 3x3x200m",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
-    "role": "volume_only",
+    "role": "cooldown",
     "sets": null,
     "target_display": null,
     "target_sec_per_mi": null,
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "role": "volume_only",
+   "role": "cooldown",
    "runalyze_id": 198849999,
    "score_bucket": null,
    "seconds": 1421,
@@ -919,6 +940,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": {
     "actual": 4065,
     "factor": 1.0,
@@ -963,6 +985,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "60-70 min easy",
+    "prescribed_miles": null,
     "prescribed_seconds": [
      3600,
      4200
@@ -1064,6 +1087,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": {
     "actual": 4133,
     "factor": 1.0,
@@ -1108,6 +1132,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "60-70 min easy",
+    "prescribed_miles": null,
     "prescribed_seconds": [
      3600,
      4200
@@ -1173,6 +1198,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": {
     "actual": 1802,
     "factor": 1.0,
@@ -1217,6 +1243,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "AM: 30 min recovery",
+    "prescribed_miles": null,
     "prescribed_seconds": 1800,
     "role": "recovery",
     "sets": null,
@@ -1271,22 +1298,23 @@
    "planned": {
     "band": null,
     "band_is_reference": false,
-    "ceiling": "none (volume_only)",
+    "ceiling": "none (warmup)",
     "ceiling_kind": "none",
-    "ceiling_role": "volume_only",
+    "ceiling_role": "warmup",
     "ceiling_tiers": null,
     "criterion": null,
     "hr_ceiling": null,
     "prescribed": "warmup for the hill sprints + sub-T",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
-    "role": "volume_only",
+    "role": "warmup",
     "sets": null,
     "target_display": null,
     "target_sec_per_mi": null,
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "role": "volume_only",
+   "role": "warmup",
    "runalyze_id": 199624909,
    "score_bucket": null,
    "seconds": 930,
@@ -1299,6 +1327,12 @@
   },
   {
    "cadence": 104,
+   "cadence_check": {
+    "peak_spm": 224,
+    "rep_seconds": 6,
+    "target_spm": 200,
+    "verdict": "met"
+   },
    "date": "2026-08-14",
    "detail": {
     "laps": [
@@ -1400,6 +1434,7 @@
     "criterion": null,
     "hr_ceiling": null,
     "prescribed": "PM: 3-5x6s hill sprints w/ 2-3 min walking recovery",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
     "role": "neuromuscular",
     "sets": [
@@ -1415,11 +1450,13 @@
        180
       ],
       "group_float_distance_m": null,
+      "group_float_mode": null,
       "group_float_seconds": null,
       "groups": null,
       "hr_ceiling": null,
       "mode": "neuromuscular",
       "rep_distance_m": null,
+      "rep_rows": null,
       "rep_seconds": 6,
       "reps": [
        3,
@@ -1427,14 +1464,14 @@
       ],
       "reps_per_group": null,
       "scored_on": null,
-      "target_display": "90-95% of maximal speed",
+      "target_display": "90-95% of maximal speed · peak >200 spm",
       "target_pace": null,
       "target_sec_per_mi": null,
       "target_seconds": null,
       "target_tolerance_seconds": null
      }
     ],
-    "target_display": "90-95% of maximal speed",
+    "target_display": "90-95% of maximal speed · peak >200 spm",
     "target_sec_per_mi": null,
     "target_seconds": null,
     "target_tolerance_seconds": null
@@ -1470,12 +1507,6 @@
    "date": "2026-08-14",
    "detail": {
     "autolaps": [],
-    "cooldown": {
-     "above": 121,
-     "pct": 100.0,
-     "threshold": 140,
-     "total": 121
-    },
     "core_seconds": 1440,
     "data_quality": [],
     "detected_reps": 2,
@@ -1525,6 +1556,7 @@
         "dist_km": 2.357,
         "dur": 600,
         "hr_avg": 151,
+        "hr_end": 157,
         "hr_max": 161,
         "hr_min": 92,
         "ok": true,
@@ -1538,6 +1570,7 @@
         "dist_km": 0.386,
         "dur": 120,
         "hr_avg": 147,
+        "hr_end": 142,
         "hr_max": 157,
         "hr_min": 141,
         "ok": true,
@@ -1551,6 +1584,7 @@
         "dist_km": 2.285,
         "dur": 600,
         "hr_avg": 157,
+        "hr_end": 160,
         "hr_max": 164,
         "hr_min": 142,
         "ok": true,
@@ -1558,6 +1592,20 @@
         "reason": "",
         "suspect": false,
         "work": true
+       },
+       {
+        "cad": 174,
+        "dist_km": 0.373,
+        "dur": 120,
+        "hr_avg": 148,
+        "hr_end": 145,
+        "hr_max": 160,
+        "hr_min": 142,
+        "ok": null,
+        "pace": 517.7514209115282,
+        "reason": "after the last rep — not judged",
+        "suspect": false,
+        "work": false
        }
       ],
       "rep_seconds": [
@@ -1568,7 +1616,6 @@
       "work_seconds": 1200
      }
     ],
-    "slivers": [],
     "suspect_seconds": 0,
     "treadmill_mph": null,
     "treadmill_warning": null,
@@ -1597,6 +1644,7 @@
      166
     ],
     "prescribed": "PM: 2x10:00 w/ 2:00 jog at Sub-T",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
     "role": "subt",
     "sets": [
@@ -1610,6 +1658,7 @@
       "float_mode": null,
       "float_seconds": 120,
       "group_float_distance_m": null,
+      "group_float_mode": null,
       "group_float_seconds": null,
       "groups": null,
       "hr_ceiling": [
@@ -1618,6 +1667,7 @@
       ],
       "mode": "subt",
       "rep_distance_m": null,
+      "rep_rows": null,
       "rep_seconds": 600,
       "reps": 2,
       "reps_per_group": null,
@@ -1681,22 +1731,23 @@
    "planned": {
     "band": null,
     "band_is_reference": false,
-    "ceiling": "none (volume_only)",
+    "ceiling": "none (cooldown)",
     "ceiling_kind": "none",
-    "ceiling_role": "volume_only",
+    "ceiling_role": "cooldown",
     "ceiling_tiers": null,
     "criterion": null,
     "hr_ceiling": null,
     "prescribed": "cooldown for the hill sprints + sub-T",
+    "prescribed_miles": null,
     "prescribed_seconds": null,
-    "role": "volume_only",
+    "role": "cooldown",
     "sets": null,
     "target_display": null,
     "target_sec_per_mi": null,
     "target_seconds": null,
     "target_tolerance_seconds": null
    },
-   "role": "volume_only",
+   "role": "cooldown",
    "runalyze_id": 199624973,
    "score_bucket": null,
    "seconds": 1030,
@@ -1750,6 +1801,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": {
     "actual": 1801,
     "factor": 1.0,
@@ -1794,6 +1846,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "30 min recovery",
+    "prescribed_miles": null,
     "prescribed_seconds": 1800,
     "role": "recovery",
     "sets": null,
@@ -1919,6 +1972,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": {
     "actual": 5417,
     "factor": 1.0,
@@ -1953,7 +2007,7 @@
    "km": 16.71,
    "ordinal": 0,
    "planned": {
-    "band": "long",
+    "band": "easy",
     "band_is_reference": true,
     "ceiling": "137/140/143",
     "ceiling_kind": "hr",
@@ -1974,6 +2028,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "90 min easy/long",
+    "prescribed_miles": null,
     "prescribed_seconds": 5400,
     "role": "long",
     "sets": null,
@@ -2017,6 +2072,7 @@
    "long_run_share": true,
    "quality_days_met": true,
    "rest_days_met": null,
+   "volume_miles_vs_plan": null,
    "volume_vs_plan": true
   },
   "pct": 100.0,
@@ -2024,6 +2080,7 @@
    "long_run_share": "the long run was 19.4% of the running distance, against a 25% ceiling",
    "quality_days_met": "every quality session the plan scheduled on 2026-08-11, 2026-08-14 was completed",
    "rest_days_met": "the plan schedules no rest day, so this check does not apply and left the denominator",
+   "volume_miles_vs_plan": "the manifest states no planned_miles, so there is nothing to compare the week's running distance against",
    "volume_vs_plan": "7:42:20 run against a plan of 7:30:00, tolerance 5%"
   }
  },

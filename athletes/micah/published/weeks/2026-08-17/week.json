@@ -3,6 +3,7 @@
  "load_error": null,
  "manifest": {
   "phase": "General Prep",
+  "rest_days": [],
   "runs": [
    {
     "date": "2026-08-17",
@@ -20,7 +21,7 @@
     "date": "2026-08-18",
     "key": "2026-08-18-pm-wu",
     "prescribed": "warmup for the 10x800m",
-    "role": "volume_only"
+    "role": "warmup"
    },
    {
     "date": "2026-08-18",
@@ -32,7 +33,7 @@
     "date": "2026-08-18",
     "key": "2026-08-18-pm-cd",
     "prescribed": "cooldown for the 10x800m",
-    "role": "volume_only"
+    "role": "cooldown"
    },
    {
     "date": "2026-08-19",
@@ -56,7 +57,7 @@
     "date": "2026-08-21",
     "key": "2026-08-21-pm-wu",
     "prescribed": "warmup for the hill sprints + sub-T",
-    "role": "volume_only"
+    "role": "warmup"
    },
    {
     "date": "2026-08-21",
@@ -74,7 +75,7 @@
     "date": "2026-08-21",
     "key": "2026-08-21-pm-cd",
     "prescribed": "cooldown for the hill sprints + sub-T",
-    "role": "volume_only"
+    "role": "cooldown"
    },
    {
     "date": "2026-08-22",

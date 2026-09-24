@@ -16,6 +16,7 @@ import { MarksToggle } from "./MarksToggle";
 import { PeriodPicker } from "./PeriodPicker";
 import { SeriesPicker } from "./SeriesPicker";
 import { UnitToggle } from "./UnitToggle";
+import { WindowInput } from "./WindowInput";
 
 /** The plot box. `1000 x 320` rather than either chart's default -- see below. */
 const W = 1000;
@@ -59,6 +60,8 @@ export function TrendPanel({
   range,
   agg,
   onAgg,
+  customWindow,
+  onCustomWindow,
 }: {
   panel: Panel;
   shown: TrendPoint[];
@@ -70,6 +73,11 @@ export function TrendPanel({
    *  survive a graph switch exactly as the window does. */
   agg?: Agg;
   onAgg?: (agg: Agg) => void;
+  /** The committed custom window for a `windowed` panel, handed over ONLY for
+   *  that panel -- the same rule as `agg`, and the state lives above the
+   *  `key={panel.key}` remount for the same reason. */
+  customWindow?: number | null;
+  onCustomWindow?: (days: number | null) => void;
 }) {
   /* STATE PER PANEL, RESET BY THE KEY ABOVE. `TrendsView` renders this with
      `key={panel.key}`, so switching graph re-initialises both of these -- the
@@ -227,6 +235,11 @@ export function TrendPanel({
               onSelect={setMode}
             />
           ) : null}
+          {/* ONLY WHERE THERE IS A CHOICE -- `TrendsView` hands the setter to
+              the one `windowed` panel and to nothing else. */}
+          {onCustomWindow ? (
+            <WindowInput value={customWindow ?? null} onCommit={onCustomWindow} />
+          ) : null}
         </div>
       ) : null}
       {n ? (
@@ -257,6 +270,10 @@ export function TrendPanel({
                   : typeof p.vo2max === "number"
                     ? { k: "VO2max", v: num(p.vo2max, 2) }
                     : null,
+                /* ALREADY WORDED, in `data/` -- the VO2max panel's projected
+                   race times. Passed through untouched, because the rows and
+                   the values they were priced from live on the same point. */
+                extra: p.extra,
               }))}
             />
           ) : (

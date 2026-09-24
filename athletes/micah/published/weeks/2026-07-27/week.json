@@ -3,6 +3,7 @@
  "load_error": null,
  "manifest": {
   "phase": "General Prep",
+  "rest_days": [],
   "runs": [
    {
     "date": "2026-07-27",
@@ -14,7 +15,7 @@
     "date": "2026-07-28",
     "key": "2026-07-28-wu",
     "prescribed": "warmup for the 8x800m",
-    "role": "volume_only"
+    "role": "warmup"
    },
    {
     "date": "2026-07-28",
@@ -26,7 +27,7 @@
     "date": "2026-07-28",
     "key": "2026-07-28-cd",
     "prescribed": "cooldown for the 8x800m",
-    "role": "volume_only"
+    "role": "cooldown"
    },
    {
     "date": "2026-07-29",

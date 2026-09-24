@@ -10,6 +10,7 @@ import {
   defaultLastDay,
   isIsoDate,
   resolveAnchor,
+  resolveWeeks,
   stepLastDay,
   weekRowsEnding,
 } from "./window";
@@ -233,6 +234,51 @@ describe("clampWeeks", () => {
 
   it("the default is one of the choices", () => {
     expect(WEEK_CHOICES).toContain(DEFAULT_WEEKS);
+  });
+});
+
+describe("resolveWeeks", () => {
+  /* IT IS A QUERY PARAMETER SINCE 2026-09-07 and was component state, which
+   * reset on every step of the window because `CalendarRoute` keys the view on
+   * the anchor. The athlete found it through the week arrows. */
+
+  it("takes every offered choice", () => {
+    for (const w of WEEK_CHOICES) expect(resolveWeeks(String(w))).toBe(w);
+  });
+
+  it("DEFAULTS WHERE THE URL NAMES NONE, which is the canonical URL", () => {
+    // `calendarHref` omits the parameter at the default, so this is the case
+    // every ordinary link takes.
+    expect(resolveWeeks(undefined)).toBe(DEFAULT_WEEKS);
+    expect(resolveWeeks("")).toBe(DEFAULT_WEEKS);
+    expect(resolveWeeks("   ")).toBe(DEFAULT_WEEKS);
+  });
+
+  it("CLAMPS rather than refusing, unlike resolveAnchor", () => {
+    /* `?weeks=99` names a real intention badly, where `?end=2026-02-31` names a
+     * day that does not exist. */
+    expect(resolveWeeks("99")).toBe(WEEK_CHOICES[WEEK_CHOICES.length - 1]);
+    expect(resolveWeeks("0")).toBe(WEEK_CHOICES[0]);
+    expect(resolveWeeks("-4")).toBe(WEEK_CHOICES[0]);
+  });
+
+  it("falls back for a value that is not a number at all", () => {
+    // A typo in a query string is not a broken page -- `resolveMode`'s rule.
+    for (const bad of ["four", "2w", "{}", "1,2"]) {
+      expect(resolveWeeks(bad)).toBe(DEFAULT_WEEKS);
+    }
+  });
+
+  it("takes the FIRST where the parameter was repeated", () => {
+    // What somebody editing a URL by hand means by it -- `resolveAnchor` and
+    // `resolveMode` both read an array this way.
+    expect(resolveWeeks(["2", "6"])).toBe(2);
+  });
+
+  it("goes through clampWeeks rather than repeating it", () => {
+    for (const raw of ["0", "3.4", "400", "6"]) {
+      expect(resolveWeeks(raw)).toBe(clampWeeks(Number(raw)));
+    }
   });
 });
 

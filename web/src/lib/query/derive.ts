@@ -186,9 +186,16 @@ function bandPair(chart: unknown, band: unknown): [number, number] | null {
 /** `8:48-9:33/mi`, or a single pace for a race prognosis.
  *
  * NOT `Math.min`/`Math.max`: the Python writes `pair[0]` then `pair[1]`, and
- * the rule is the same EXPRESSION, not the same mathematics. A chart whose
- * stored string does not reproduce -- 2026-07-12's `long` is the one --
- * simply keeps it, because `_drop` refused to remove it.
+ * the rule is the same EXPRESSION, not the same mathematics.
+ *
+ * A RECORD WHOSE STORED STRING DOES NOT REPRODUCE SIMPLY KEEPS IT, because
+ * `_drop` refuses to remove a field its own formula does not fit -- so a formula
+ * that stops holding degrades to STORED rather than to WRONG. 2026-07-12's
+ * `long` was the cited case and that band is retired (2026-09-18), but the
+ * behaviour is unchanged and is still exercised: readouts naming no band at all,
+ * and race prognoses whose stored string is `1:01:15 @ 6:08/mi` rather than a
+ * pair of paces, keep what the grader wrote. The guarantee is about the formula,
+ * never about which records happen to fit it this week.
  */
 function bandDisplay(chart: unknown, band: unknown): string | null {
   const pair = bandPair(chart, band);

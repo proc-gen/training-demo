@@ -10,6 +10,7 @@ import {
   maxSteps,
   runsByDate,
   weekFor,
+  weekTotals,
 } from "./days";
 
 const day = (over: Partial<Day>): Day =>
@@ -245,5 +246,59 @@ describe("weekFor", () => {
     for (const key of Object.keys(PUBLISHED.weeks)) {
       expect(weekFor(PUBLISHED, key)).toBe(PUBLISHED.weeks[key]);
     }
+  });
+});
+
+describe("weekTotals", () => {
+  /* What the week editor shows beside the PLANNED time and mileage. `facts`
+   * is loose in the payload schema, so this is where the Calendar's two
+   * fields of it get pulled out -- one place, not an inline cast in a
+   * component. */
+  const withFacts = (facts: unknown) =>
+    payload({
+      weeks: {
+        "2026-08-03": { adherence: { facts } },
+      } as unknown as Payload["weeks"],
+    });
+
+  it("reads the measured time and distance", () => {
+    expect(weekTotals(withFacts({ miles: 52.008, seconds: 27978 }), "2026-08-03"))
+      .toEqual({ miles: 52.008, seconds: 27978 });
+  });
+
+  it("NULL for a week with no record, and ZERO where zero is measured", () => {
+    /* A week that was lived and not run really did cover 0.0 miles --
+     * 2026-03-16 is one -- and a week nobody graded has no number at all. A
+     * `?? 0` here would have made those two render identically. */
+    expect(weekTotals(payload({}), "2026-08-03"))
+      .toEqual({ miles: null, seconds: null });
+    expect(weekTotals(withFacts(null), "2026-08-03"))
+      .toEqual({ miles: null, seconds: null });
+    expect(weekTotals(withFacts({}), "2026-08-03"))
+      .toEqual({ miles: null, seconds: null });
+    expect(weekTotals(withFacts({ miles: 0, seconds: 0 }), "2026-08-03"))
+      .toEqual({ miles: 0, seconds: 0 });
+  });
+
+  it("refuses a non-number rather than passing it to a formatter", () => {
+    expect(weekTotals(withFacts({ miles: "52", seconds: null }), "2026-08-03"))
+      .toEqual({ miles: null, seconds: null });
+  });
+
+  it("agrees with the grader on every published week", () => {
+    if (!PUBLISHED) return;
+    let checked = 0;
+    for (const key of Object.keys(PUBLISHED.weeks)) {
+      const facts = PUBLISHED.weeks[key].adherence?.facts as
+        | { miles?: number; seconds?: number }
+        | undefined;
+      if (typeof facts?.miles !== "number") continue;
+      expect(weekTotals(PUBLISHED, key)).toEqual({
+        miles: facts.miles,
+        seconds: facts.seconds,
+      });
+      checked++;
+    }
+    expect(checked).toBeGreaterThan(50);
   });
 });

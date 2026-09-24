@@ -39,12 +39,20 @@ export function Modal({
   open,
   onClose,
   title,
+  wide,
   children,
 }: {
   open: boolean;
   onClose: () => void;
   /** Names the dialog. Rendered, and referenced by `aria-labelledby`. */
   title: string;
+  /** A WIDER BOX FOR A FORM THAT GENUINELY NEEDS ONE. The default 60rem was
+   * chosen for the Custom Laps table and is deliberately not widened for one
+   * form -- but the workout editor's rep row is twelve controls, and at 60rem
+   * it scrolled sideways with the remove button off the edge. Taken with the
+   * athlete after narrowing the controls alone was measured to be short.
+   * Custom Laps and the week editor stay at the default. */
+  wide?: boolean;
   children: React.ReactNode;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
@@ -79,7 +87,7 @@ export function Modal({
   return (
     <dialog
       ref={ref}
-      className="modal"
+      className={wide ? "modal wide" : "modal"}
       aria-labelledby={titleId}
       // Escape. The browser fires `cancel` and would close the element itself;
       // telling the caller keeps `open` the single source of truth, or the

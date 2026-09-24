@@ -80,11 +80,22 @@ export function LoadDayTable({ days }: { days: LoadDay[] }) {
             )}
           </td>
           <td className="num">{num(d.trimp, 1)}</td>
-          {/* AN UNCALIBRATED ESTIMATE sitting beside a measurement. The header
-              says which is which and `CeilingFormula`'s bullets say why; it is
-              here rather than folded into Run TRIMP precisely so the two can
-              never be added up by eye without noticing. */}
-          <td className="num">{num(d.bg_trimp, 1)}</td>
+          {/* A PRICED FIGURE sitting beside a measurement. It is here rather
+              than folded into Run TRIMP precisely so the two can never be added
+              up by eye without noticing.
+
+              `≈` MARKS THE ESTIMATE TIER, the same rule `RunRow` applies to
+              `trimp_source`: `cadence-profile` integrates the day's own
+              measured per-minute step rates, and anything else prices the day's
+              step TOTAL at one nominal cadence, overstating by about 1.47x.
+              Keyed on "not the measurement", so a tier added later defaults to
+              being marked. */}
+          <td className="num">
+            {d.bg_trimp == null
+              ? "--"
+              : (d.bg_trimp_source !== "cadence-profile" ? "≈" : "") +
+                num(d.bg_trimp, 1)}
+          </td>
           <td className="num sec">{num(d.ctl)}</td>
           <td className="num sec">{num(d.atl)}</td>
           <td className="num sec">{signed(d.tsb)}</td>

@@ -3,6 +3,7 @@
  "load_error": null,
  "manifest": {
   "phase": "Continue Build",
+  "rest_days": [],
   "runs": [
    {
     "date": "2025-01-13",
@@ -14,7 +15,7 @@
     "date": "2025-01-14",
     "key": "2025-01-14-wu",
     "prescribed": "warmup",
-    "role": "volume_only"
+    "role": "warmup"
    },
    {
     "date": "2025-01-14",
@@ -26,7 +27,7 @@
     "date": "2025-01-14",
     "key": "2025-01-14-cd",
     "prescribed": "cooldown",
-    "role": "volume_only"
+    "role": "cooldown"
    },
    {
     "date": "2025-01-15",
@@ -44,7 +45,7 @@
     "date": "2025-01-17",
     "key": "2025-01-17-wu",
     "prescribed": "warmup",
-    "role": "volume_only"
+    "role": "warmup"
    },
    {
     "date": "2025-01-17",
@@ -56,7 +57,7 @@
     "date": "2025-01-17",
     "key": "2025-01-17-cd",
     "prescribed": "cooldown",
-    "role": "volume_only"
+    "role": "cooldown"
    },
    {
     "date": "2025-01-18",

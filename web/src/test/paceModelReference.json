@@ -16,6 +16,7 @@
   "MILE_METRES": 1609.344
  },
  "constants": {
+  "default_shape_window_days": 30,
   "labels": {
    "cameron": "Cameron",
    "critical_speed": "Critical speed",
@@ -442,7 +443,7 @@
         "sec_per_mi": 341,
         "seconds": 170
        },
-       "tempo": {
+       "threshold": {
         "fast_sec_per_mi": 445,
         "slow_sec_per_mi": 452
        }
@@ -480,7 +481,7 @@
         "sec_per_mi": 293,
         "seconds": 146
        },
-       "tempo": {
+       "threshold": {
         "fast_sec_per_mi": 440,
         "slow_sec_per_mi": 442
        }
@@ -518,7 +519,7 @@
         "sec_per_mi": 360,
         "seconds": 179
        },
-       "tempo": {
+       "threshold": {
         "fast_sec_per_mi": 444,
         "slow_sec_per_mi": 452
        }
@@ -556,7 +557,7 @@
         "sec_per_mi": 377,
         "seconds": 188
        },
-       "tempo": {
+       "threshold": {
         "fast_sec_per_mi": 446,
         "slow_sec_per_mi": 453
        }
@@ -602,7 +603,7 @@
         "sec_per_mi": 285,
         "seconds": 142
        },
-       "tempo": {
+       "threshold": {
         "fast_sec_per_mi": 375,
         "slow_sec_per_mi": 382
        }
@@ -640,7 +641,7 @@
         "sec_per_mi": 236,
         "seconds": 118
        },
-       "tempo": {
+       "threshold": {
         "fast_sec_per_mi": 369,
         "slow_sec_per_mi": 370
        }
@@ -678,7 +679,7 @@
         "sec_per_mi": 300,
         "seconds": 149
        },
-       "tempo": {
+       "threshold": {
         "fast_sec_per_mi": 374,
         "slow_sec_per_mi": 381
        }
@@ -716,7 +717,7 @@
         "sec_per_mi": 315,
         "seconds": 157
        },
-       "tempo": {
+       "threshold": {
         "fast_sec_per_mi": 376,
         "slow_sec_per_mi": 382
        }
@@ -762,7 +763,7 @@
         "sec_per_mi": 283,
         "seconds": 141
        },
-       "tempo": {
+       "threshold": {
         "fast_sec_per_mi": 374,
         "slow_sec_per_mi": 380
        }
@@ -800,7 +801,7 @@
         "sec_per_mi": 235,
         "seconds": 117
        },
-       "tempo": {
+       "threshold": {
         "fast_sec_per_mi": 367,
         "slow_sec_per_mi": 369
        }
@@ -838,7 +839,7 @@
         "sec_per_mi": 298,
         "seconds": 148
        },
-       "tempo": {
+       "threshold": {
         "fast_sec_per_mi": 372,
         "slow_sec_per_mi": 379
        }
@@ -876,7 +877,7 @@
         "sec_per_mi": 313,
         "seconds": 156
        },
-       "tempo": {
+       "threshold": {
         "fast_sec_per_mi": 374,
         "slow_sec_per_mi": 381
        }
@@ -922,7 +923,7 @@
         "sec_per_mi": 251,
         "seconds": 125
        },
-       "tempo": {
+       "threshold": {
         "fast_sec_per_mi": 334,
         "slow_sec_per_mi": 340
        }
@@ -960,7 +961,7 @@
         "sec_per_mi": 202,
         "seconds": 101
        },
-       "tempo": {
+       "threshold": {
         "fast_sec_per_mi": 327,
         "slow_sec_per_mi": 328
        }
@@ -998,7 +999,7 @@
         "sec_per_mi": 265,
         "seconds": 132
        },
-       "tempo": {
+       "threshold": {
         "fast_sec_per_mi": 333,
         "slow_sec_per_mi": 339
        }
@@ -1036,7 +1037,7 @@
         "sec_per_mi": 278,
         "seconds": 138
        },
-       "tempo": {
+       "threshold": {
         "fast_sec_per_mi": 335,
         "slow_sec_per_mi": 340
        }
@@ -1082,7 +1083,7 @@
         "sec_per_mi": 208,
         "seconds": 103
        },
-       "tempo": {
+       "threshold": {
         "fast_sec_per_mi": 279,
         "slow_sec_per_mi": 285
        }
@@ -1120,7 +1121,7 @@
         "sec_per_mi": 159,
         "seconds": 79
        },
-       "tempo": {
+       "threshold": {
         "fast_sec_per_mi": 272,
         "slow_sec_per_mi": 274
        }
@@ -1158,7 +1159,7 @@
         "sec_per_mi": 220,
         "seconds": 109
        },
-       "tempo": {
+       "threshold": {
         "fast_sec_per_mi": 279,
         "slow_sec_per_mi": 284
        }
@@ -1196,7 +1197,7 @@
         "sec_per_mi": 230,
         "seconds": 114
        },
-       "tempo": {
+       "threshold": {
         "fast_sec_per_mi": 280,
         "slow_sec_per_mi": 284
        }

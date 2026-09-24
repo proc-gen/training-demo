@@ -3,6 +3,7 @@
  "load_error": null,
  "manifest": {
   "phase": "Injury",
+  "rest_days": [],
   "runs": [
    {
     "date": "2025-09-29",
@@ -44,7 +45,7 @@
     "date": "2025-10-05",
     "key": "2025-10-05-wu",
     "prescribed": "warmup",
-    "role": "volume_only"
+    "role": "warmup"
    },
    {
     "date": "2025-10-05",
@@ -56,7 +57,7 @@
     "date": "2025-10-05",
     "key": "2025-10-05-cd",
     "prescribed": "cooldown",
-    "role": "volume_only"
+    "role": "cooldown"
    }
   ],
   "week_start": "2025-09-29",

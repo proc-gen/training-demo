@@ -92,6 +92,41 @@ describe("RepSetPanel", () => {
     expect(bodyRows(container)[0].querySelector("td")!.textContent).toBe("?");
   });
 
+  it("renders the trailing recovery as a recovery with no verdict", () => {
+    /* THE ROW THE TABLE WAS MISSING until 2026-09-05. `score_intervals` sliced
+     * at the last rep, so the segment `core_seconds` was counting had no line:
+     * 2026-09-04's `2x12:00` showed a 26:01 table under a 28:01 clock, and the
+     * athlete found it. It arrives with `ok: null` -- the same shape a suspect
+     * row already used -- so it must read as a RECOVERY (not "suspect", which
+     * keys on the `suspect` flag) and carry the neutral verdict rather than a
+     * cross, because nothing judged it. */
+    const s = set({
+      rep_rows: [
+        { work: true, pace: 398, dur: 720, hr_avg: 159, hr_max: 168, ok: true },
+        { work: false, pace: 507, dur: 120, hr_avg: 155, hr_min: 148, ok: true },
+        {
+          work: false,
+          pace: 498,
+          dur: 120,
+          hr_avg: 154,
+          hr_min: 147,
+          ok: null,
+          reason: "after the last rep — not judged",
+        },
+      ],
+    } as Partial<RepSet>);
+    const { container } = wrap(<RepSetPanel set={s} chart={CHART} />);
+    const rows = bodyRows(container);
+    expect(rows).toHaveLength(3);
+    const last = rows[2];
+    /* `#` is blank and KIND is "recovery" -- a suspect row would read "?". */
+    expect([...last.querySelectorAll("td")].slice(0, 2).map((td) => td.textContent))
+      .toEqual(["", "recovery"]);
+    expect(last.textContent).toContain("–");
+    expect(last.textContent).toContain("not judged");
+    expect(last.textContent).not.toContain("✗");
+  });
+
   it("HAS NO HR MIN COLUMN AT ALL", () => {
     /* Inside a rep it is the lowest sample in the split, which on the opening
      * rep is the tail of the warmup -- rep 1 of 2026-07-28 reads 83 against a
@@ -216,8 +251,43 @@ describe("RepSetPanel", () => {
       (h) => h.textContent,
     );
     expect(headers).toEqual([
-      "#", "Kind", "Time", "Distance", "Pace", "Cadence", "HR avg", "HR max", "",
+      "#", "Kind", "Time", "Distance", "Pace", "Cadence",
+      /* `HR end` joined on 2026-09-11: it is the recovery drop test's BASELINE,
+       * so without it the last column's verdict on a recovery cannot be checked
+       * against anything on the row. Neither avg nor max is that number. */
+      "HR avg", "HR max", "HR end", "",
     ]);
+  });
+
+  it("renders each row's `hr_end`, the drop test's baseline, and `--` without one", () => {
+    /* A HEADER ALONE PROVES NOTHING. The recovery verdict in the last column is
+     * computed in Python from the preceding rep's END heart rate, so that number
+     * has to reach the cell -- a column that renders every row as `--` looks
+     * identical to one nobody wired up. The recovery row deliberately carries no
+     * `hr_end`, because a float's own end is not what anything is measured from. */
+    /* The three HR values are deliberately DISTINCT -- 149 / 162 / 160. A
+     * fixture whose max and end agree would pass this assertion with the cell
+     * never rendered, which is the vacuous-test shape this repo keeps paying
+     * for, so the position is asserted rather than the mere presence. */
+    const s = set({
+      scored_on: "hr",
+      rep_rows: [
+        { work: true, pace: 398, dur: 180, hr_avg: 149, hr_max: 162, hr_end: 160, ok: true },
+        { work: false, pace: 620, dur: 91, hr_avg: 150, hr_min: 146, ok: true },
+      ],
+    } as Partial<RepSet>);
+    const { container } = wrap(<RepSetPanel set={s} chart={CHART} />);
+    const headers = [...container.querySelectorAll("thead th")].map(
+      (h) => h.textContent,
+    );
+    const at = headers.indexOf("HR end");
+    expect(at).toBeGreaterThan(headers.indexOf("HR max"));
+    const cells = bodyRows(container).map((r) =>
+      [...r.querySelectorAll("td")].map((t) => t.textContent),
+    );
+    expect(cells[0][at]).toBe("160");
+    expect(cells[0][headers.indexOf("HR max")]).toBe("162");
+    expect(cells[1][at]).toBe("--");
   });
 
   it("DRIVES THE HR COLUMNS OFF `scored_on`, not off a mode list here", () => {

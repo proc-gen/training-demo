@@ -3,6 +3,7 @@
  "load_error": null,
  "manifest": {
   "phase": "Down",
+  "rest_days": [],
   "runs": [
    {
     "date": "2025-06-09",
@@ -26,7 +27,7 @@
     "date": "2025-06-10",
     "key": "2025-06-10-wu",
     "prescribed": "warmup",
-    "role": "volume_only"
+    "role": "warmup"
    },
    {
     "date": "2025-06-10",
@@ -38,7 +39,7 @@
     "date": "2025-06-10",
     "key": "2025-06-10-cd",
     "prescribed": "cooldown",
-    "role": "volume_only"
+    "role": "cooldown"
    },
    {
     "date": "2025-06-11",
@@ -68,7 +69,7 @@
     "date": "2025-06-14",
     "key": "2025-06-14-pre",
     "prescribed": "82-second pre-race blip",
-    "role": "volume_only"
+    "role": "warmup"
    },
    {
     "date": "2025-06-14",

@@ -8,10 +8,11 @@
  *
  * The marker is the `athletes/` directory. It used to be
  * `scripts/publish.py`, back when the very next thing this app did was
- * execute that script -- it runs no Python at all now, and marking the repo
- * with a file it never opens would be pointing at the wrong thing. `athletes/`
- * is the same marker `find_registry()` walks for, so both sides agree on what
- * "the repo" means.
+ * execute that script -- rendering runs no Python now (the one spawn left is
+ * the plan editor's explicit save, see lib/manifest/publishRunner.ts), and
+ * marking the repo with a single script would be pointing at the wrong thing.
+ * `athletes/` is the same marker `find_registry()` walks for, so both sides
+ * agree on what "the repo" means.
  */
 
 import fs from "node:fs";

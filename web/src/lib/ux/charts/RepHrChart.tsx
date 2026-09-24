@@ -16,6 +16,10 @@ import { TipRow } from "../tooltip/TipRow";
 export type HrPoint = {
   hr_avg?: number | null;
   hr_max?: number | null;
+  /** The segment's final sample. Shown because on a rep it is SCORED -- the
+   *  following recovery's drop is measured from it -- and a reader who cannot see
+   *  the input cannot check the verdict. */
+  hr_end?: number | null;
   /** Tri-state, and it is READ rather than re-derived. `null` means the grader
    *  could not judge this one -- suspect lap, no HR -- which is not a fail. */
   ok?: boolean | null;
@@ -174,8 +178,10 @@ export function RepHrChart({
                       {unit} {i + 1}
                     </b>
                     <TipRow
-                      k="HR avg / max"
-                      v={`${p.hr_avg ?? "--"} / ${p.hr_max ?? "--"}`}
+                      k="HR avg / max / end"
+                      v={`${p.hr_avg ?? "--"} / ${p.hr_max ?? "--"} / ${
+                        p.hr_end ?? "--"
+                      }`}
                     />
                     <TipRow k="split" v={clock(p.dur)} />
                     {p.pace ? <TipRow k="pace" v={`${pace(p.pace)}/mi`} /> : null}

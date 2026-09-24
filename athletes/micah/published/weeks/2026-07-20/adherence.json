@@ -8,7 +8,10 @@
   "long_run_share": 0.23158459680665505,
   "miles": 46.3107949574485,
   "non_run_days": [],
+  "plan_miles_unpriceable": [],
   "plan_unpriceable": [],
+  "planned_miles": null,
+  "planned_miles_week": null,
   "planned_seconds": [
    24300.0,
    24300.0
@@ -19,10 +22,12 @@
   ],
   "prescribed_dates": 6,
   "prescribed_dates_due": 6,
+  "projected_miles": 46.3107949574485,
   "projected_seconds": 24451.0,
   "quality_days": 0,
   "quality_seconds": 1649,
   "quality_share": 0.06744100445789539,
+  "remaining_planned_miles": 0.0,
   "remaining_planned_seconds": 0.0,
   "rest_days": 1,
   "running_days": 6,
@@ -52,7 +57,10 @@
   "long_run_share": 0.23158459680665505,
   "miles": 46.3107949574485,
   "non_run_days": [],
+  "plan_miles_unpriceable": [],
   "plan_unpriceable": [],
+  "planned_miles": null,
+  "planned_miles_week": null,
   "planned_seconds": [
    24300.0,
    24300.0
@@ -63,10 +71,12 @@
   ],
   "prescribed_dates": 6,
   "prescribed_dates_due": 6,
+  "projected_miles": 46.3107949574485,
   "projected_seconds": 24451.0,
   "quality_days": 0,
   "quality_seconds": 1649,
   "quality_share": 0.06744100445789539,
+  "remaining_planned_miles": 0.0,
   "remaining_planned_seconds": 0.0,
   "rest_days": 1,
   "running_days": 6,
@@ -156,6 +166,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": {
     "actual": 4171,
     "factor": 1.0,
@@ -200,6 +211,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "60-70 min easy",
+    "prescribed_miles": null,
     "prescribed_seconds": [
      3600,
      4200
@@ -301,6 +313,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": {
     "actual": 4275,
     "factor": 1.0,
@@ -345,6 +358,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "60-70 min easy",
+    "prescribed_miles": null,
     "prescribed_seconds": [
      3600,
      4200
@@ -446,6 +460,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": {
     "actual": 4037,
     "factor": 1.0,
@@ -490,6 +505,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "60-70 min easy",
+    "prescribed_miles": null,
     "prescribed_seconds": [
      3600,
      4200
@@ -555,6 +571,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": {
     "actual": 1801,
     "factor": 1.0,
@@ -599,6 +616,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "AM: 30 min recovery",
+    "prescribed_miles": null,
     "prescribed_seconds": 1800,
     "role": "recovery",
     "sets": null,
@@ -670,6 +688,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": {
     "actual": 2374,
     "factor": 1.0,
@@ -714,6 +733,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "PM: 40 min recovery",
+    "prescribed_miles": null,
     "prescribed_seconds": 2400,
     "role": "recovery",
     "sets": null,
@@ -794,6 +814,7 @@
      }
     ]
    },
+   "distance": null,
    "duration": {
     "actual": 2711,
     "factor": 1.0,
@@ -838,6 +859,7 @@
     "criterion": "hr",
     "hr_ceiling": null,
     "prescribed": "45 min easy",
+    "prescribed_miles": null,
     "prescribed_seconds": 2700,
     "role": "easy",
     "sets": null,
@@ -1020,6 +1042,7 @@
        "cad": 179,
        "dist_km": 1.609,
        "dur": 435,
+       "hr_end": null,
        "hr_max": 166,
        "ok": null,
        "pace": 435.09300186451213,
@@ -1029,6 +1052,7 @@
        "cad": 179,
        "dist_km": 1.609,
        "dur": 418,
+       "hr_end": null,
        "hr_max": 173,
        "ok": true,
        "pace": 418.0893673088875,
@@ -1038,6 +1062,7 @@
        "cad": 178,
        "dist_km": 1.609,
        "dur": 405,
+       "hr_end": null,
        "hr_max": 174,
        "ok": true,
        "pace": 405.08658794282167,
@@ -1047,6 +1072,7 @@
        "cad": 181,
        "dist_km": 1.609,
        "dur": 391,
+       "hr_end": null,
        "hr_max": 184,
        "ok": true,
        "pace": 391.0835947793661,
@@ -1056,6 +1082,7 @@
      "total": 1214
     }
    },
+   "distance": null,
    "duration": {
     "actual": 5082,
     "factor": 0.980246913580247,
@@ -1087,6 +1114,7 @@
     "criterion": null,
     "hr_ceiling": null,
     "prescribed": "2 miles warmup, 4 miles progression towards 10k pace, easy until 90 min",
+    "prescribed_miles": null,
     "prescribed_seconds": 5400,
     "role": "progression",
     "sets": null,
@@ -1134,6 +1162,7 @@
    "long_run_share": true,
    "quality_days_met": null,
    "rest_days_met": true,
+   "volume_miles_vs_plan": null,
    "volume_vs_plan": true
   },
   "pct": 100.0,
@@ -1141,6 +1170,7 @@
    "long_run_share": "the long run was 23.2% of the running distance, against a 25% ceiling",
    "quality_days_met": "the plan schedules no quality day, so this check does not apply and left the denominator",
    "rest_days_met": "the plan's scheduled rest day(s) 2026-07-20 were taken -- no run recorded on any of them",
+   "volume_miles_vs_plan": "the manifest states no planned_miles, so there is nothing to compare the week's running distance against",
    "volume_vs_plan": "6:47:31 run against a plan of 6:45:00, tolerance 5%"
   }
  },
