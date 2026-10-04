@@ -5,7 +5,7 @@
  "bg_trimp": null,
  "ceiling_inputs": {
   "background_source": "baseline",
-  "background_steps": 1661.5,
+  "background_steps": 1559.5,
   "background_trimp_budget": 10,
   "background_window_days": 28,
   "cadence_source": "measured",
@@ -43,7 +43,7 @@
   {
    "status": "clear",
    "token": "resting-hr-rise",
-   "why": "trailing resting-HR mean -0.4 bpm (fires at +5)"
+   "why": "trailing resting-HR mean +1.1 bpm (fires at +5)"
   },
   {
    "status": "clear",

@@ -1,1 +1,90 @@
-[]
+[
+ {
+  "activity_id": "211689313",
+  "avg_hr": "123",
+  "date": "2026-09-28",
+  "hr_rest": "43",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "1801",
+  "trimp": "30.89",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "211974759",
+  "avg_hr": "124",
+  "date": "2026-09-29",
+  "hr_rest": "43",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "1801",
+  "trimp": "32.08",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "212123021",
+  "avg_hr": "126",
+  "date": "2026-09-29",
+  "hr_rest": "43",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "946",
+  "trimp": "17.87",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "212123031",
+  "avg_hr": "155",
+  "date": "2026-09-29",
+  "hr_rest": "43",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "1340",
+  "trimp": "51.03",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "212123039",
+  "avg_hr": "128",
+  "date": "2026-09-29",
+  "hr_rest": "43",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "8",
+  "seconds": "965",
+  "trimp": "18.69",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "212391873",
+  "avg_hr": "125",
+  "date": "2026-09-30",
+  "hr_rest": "44",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "2700",
+  "trimp": "48.84",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "212504859",
+  "avg_hr": "123",
+  "date": "2026-10-01",
+  "hr_rest": "44",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "1801",
+  "trimp": "31.10",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "212645111",
+  "avg_hr": "140",
+  "date": "2026-10-01",
+  "hr_rest": "44",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "5",
+  "seconds": "2365",
+  "trimp": "62.94",
+  "trimp_source": "stream"
+ }
+]

@@ -64,11 +64,15 @@ const KIND_HELP: Record<TargetKind, string> = {
 export function TargetCell({
   target,
   what,
+  mode = "",
   onChange,
 }: {
   target: Target;
   /** Which rep this target belongs to, for the tooltips. */
   what: string;
+  /** The rep's set mode, which decides where a newly chosen zone starts and
+   * whether the rep needs a `rep_pace` at all -- see `defaultTargetFor`. */
+  mode?: string;
   onChange: (next: Target) => void;
 }) {
   const withUnknown = (list: string[], value: string) =>
@@ -81,7 +85,7 @@ export function TargetCell({
         title={`What ${what} is aimed at`}
         value={target.kind}
         onChange={(e) =>
-          onChange(defaultTargetFor(e.target.value as TargetKind, target))
+          onChange(defaultTargetFor(e.target.value as TargetKind, target, mode))
         }
       >
         {(Object.keys(KIND_LABEL) as TargetKind[]).map((k) => (

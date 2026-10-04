@@ -19,39 +19,51 @@
    },
    {
     "date": "2026-09-29",
+    "key": "2026-09-29-pm-wu",
+    "prescribed": "warmup for the threshold + CV session",
+    "role": "warmup"
+   },
+   {
+    "date": "2026-09-29",
     "key": "2026-09-29-pm",
-    "prescribed": "PM: 5x800m w/ 200m jog at Sub-T",
-    "role": "subt"
+    "prescribed": "PM: 2k at T, then 5x400mCV w/ 200m jog recovery",
+    "role": "mixed"
+   },
+   {
+    "date": "2026-09-29",
+    "key": "2026-09-29-pm-cd",
+    "prescribed": "cooldown for the threshold + CV session",
+    "role": "cooldown"
    },
    {
     "date": "2026-09-30",
     "key": "2026-09-30",
-    "prescribed": "60-70 min easy",
+    "prescribed": "45 min easy",
     "role": "easy"
    },
    {
     "date": "2026-10-01",
     "key": "2026-10-01",
-    "prescribed": "60-70 min easy",
-    "role": "easy"
+    "prescribed": "30 min recovery",
+    "role": "recovery"
+   },
+   {
+    "date": "2026-10-01",
+    "key": "2026-10-01-2",
+    "prescribed": "5x1:00 w/ 1:00 jog @ Sub-T",
+    "role": "subt"
    },
    {
     "date": "2026-10-02",
     "key": "2026-10-02-am",
-    "prescribed": "AM: 30 min recovery",
-    "role": "recovery"
-   },
-   {
-    "date": "2026-10-02",
-    "key": "2026-10-02-pm",
-    "prescribed": "PM: 3x3:00 w/ 2:00 jog at Target Half Pace",
-    "role": "subt"
+    "prescribed": "30 min easy",
+    "role": "easy"
    },
    {
     "date": "2026-10-03",
     "key": "2026-10-03",
-    "prescribed": "30 min recovery",
-    "role": "recovery"
+    "prescribed": "30 min easy",
+    "role": "easy"
    },
    {
     "date": "2026-10-04",

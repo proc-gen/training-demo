@@ -13,15 +13,18 @@ import {
   copyRep,
   copySet,
   countRange,
+  defaultTargetFor,
   expandRun,
   hasStructure,
   metresOf,
+  modeZone,
   removeRep,
   structureKeysOf,
   unitFor,
   type EditorSet,
   type Json,
   type RepRow,
+  type Target,
 } from "./structure";
 
 /** `collapse(expand(run))` -- the whole contract in one line. */
@@ -409,6 +412,153 @@ describe("the zone is two named paces", () => {
       slow: "3000m",
     });
     expect(trip(run, "repetition")).toEqual({ reps: 2, rep_distance_m: 200 });
+  });
+});
+
+describe("a vo2max / CV rep states its zone by naming nothing", () => {
+  /* 2026-09-29's `5x400m CV` named no target, which the grader reads as 5k-10k
+   * -- so the editor must show that zone, and write nothing back for it. */
+  const cases = [
+    ["critical_velocity", "5000m", "10000m"],
+    ["vo2max", "3000m", "5000m"],
+  ] as const;
+
+  for (const [mode, fast, slow] of cases) {
+    it(`${mode} with no target reads as ${fast}-${slow}`, () => {
+      const run = {
+        role: "mixed",
+        sets: [{ mode, reps: 5, rep_distance_m: 400 }],
+      };
+      expect(expandRun(run).sets[0].reps[0].target).toEqual({
+        kind: "zone",
+        fast,
+        slow,
+      });
+      expect(trip(run, "mixed")).toEqual(structureKeysOf(run));
+    });
+
+    it(`${mode} as a run-level ROLE reads the same zone`, () => {
+      const run = { role: mode, reps: 5, rep_distance_m: 400 };
+      expect(expandRun(run).sets[0].reps[0].target).toMatchObject({
+        kind: "zone",
+        fast,
+        slow,
+      });
+      expect(trip(run, mode)).toEqual({ reps: 5, rep_distance_m: 400 });
+    });
+
+    it(`${mode} with any OTHER pair writes it`, () => {
+      const run = {
+        role: "mixed",
+        sets: [
+          { mode, reps: 5, rep_distance_m: 400, target_pace: ["800m", "3000m"] },
+        ],
+      };
+      expect(trip(run, "mixed")).toEqual(structureKeysOf(run));
+    });
+
+    it(`${mode} keeps a stated rep_pace and rep_band verbatim`, () => {
+      for (const extra of [{ rep_pace: "3000m" }, { rep_band: "rep_3min" }]) {
+        const run = {
+          role: "mixed",
+          sets: [{ mode, reps: 5, rep_distance_m: 400, ...extra }],
+        };
+        expect(trip(run, "mixed")).toEqual(structureKeysOf(run));
+      }
+    });
+  }
+
+  it("a repetition set naming the CV zone still writes it", () => {
+    /* The default is the MODE's, not any zone that happens to be a default
+     * somewhere: 5k-10k on a repetition rep is a real statement. */
+    const run = {
+      role: "mixed",
+      sets: [
+        {
+          mode: "repetition",
+          reps: 4,
+          rep_distance_m: 800,
+          target_pace: ["5000m", "10000m"],
+        },
+      ],
+    };
+    expect(trip(run, "mixed")).toEqual(structureKeysOf(run));
+  });
+
+  it("a threshold set with no target is still `none`", () => {
+    const run = {
+      role: "mixed",
+      sets: [{ mode: "threshold", reps: 1, rep_distance_m: 2000 }],
+    };
+    expect(expandRun(run).sets[0].reps[0].target).toEqual({ kind: "none" });
+    expect(trip(run, "mixed")).toEqual(structureKeysOf(run));
+  });
+});
+
+describe("choosing a target supplies a price only where the load skill needs one", () => {
+  const none: Target = { kind: "none" };
+
+  it("a repetition zone still prices at its slow end", () => {
+    expect(defaultTargetFor("zone", none, "repetition")).toEqual({
+      kind: "zone",
+      fast: "800m",
+      slow: "3000m",
+      pricedAt: "3000m",
+    });
+  });
+
+  it("no mode at all keeps the old behaviour", () => {
+    expect(defaultTargetFor("race", none)).toEqual({
+      kind: "race",
+      race: "3000m",
+      pricedAt: "3000m",
+    });
+  });
+
+  for (const mode of ["threshold", "critical_velocity", "vo2max"]) {
+    for (const kind of ["zone", "race"] as const) {
+      it(`${mode}: a ${kind} supplies NO rep_pace`, () => {
+        expect(defaultTargetFor(kind, none, mode)).not.toHaveProperty(
+          "pricedAt",
+        );
+      });
+    }
+    it(`${mode}: a price the rep already had is carried`, () => {
+      expect(
+        defaultTargetFor("zone", { kind: "none", pricedAt: "5000m" }, mode),
+      ).toMatchObject({ pricedAt: "5000m" });
+    });
+  }
+
+  it("a CV zone STARTS at the CV zone", () => {
+    expect(defaultTargetFor("zone", none, "critical_velocity")).toEqual({
+      kind: "zone",
+      fast: "5000m",
+      slow: "10000m",
+    });
+  });
+
+  it("a vo2max race pace starts at the zone's slow end", () => {
+    expect(defaultTargetFor("race", none, "vo2max")).toEqual({
+      kind: "race",
+      race: "5000m",
+    });
+  });
+
+  it("a zone the rep already had is kept, whatever the mode", () => {
+    const prev: Target = { kind: "zone", fast: "1500m", slow: "5000m" };
+    expect(defaultTargetFor("zone", prev, "critical_velocity")).toEqual(prev);
+  });
+
+  it("the modeZone table", () => {
+    expect(modeZone("repetition")).toEqual({ fast: "800m", slow: "3000m" });
+    expect(modeZone("critical_velocity")).toEqual({
+      fast: "5000m",
+      slow: "10000m",
+    });
+    expect(modeZone("vo2max")).toEqual({ fast: "3000m", slow: "5000m" });
+    for (const m of ["threshold", "subt", "interval", "goal_pace", ""])
+      expect(modeZone(m)).toBeUndefined();
   });
 });
 

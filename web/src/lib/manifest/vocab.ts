@@ -114,6 +114,27 @@ export const REPETITION_ZONE = {
   default_target: "3000m",
 } as const;
 
+/** The zone a `vo2max` or `critical_velocity` rep is DEFINED at, from the
+ * adherence model's `pace_zones` -- what a set of either mode states by naming
+ * no `target_pace`, exactly as a repetition set states 800m-3000m. Pinned for
+ * the `REPETITION_ZONE` reason. */
+export const MODE_ZONES: Readonly<
+  Record<string, { fast_target: string; slow_target: string }>
+> = {
+  vo2max: { fast_target: "3000m", slow_target: "5000m" },
+  critical_velocity: { fast_target: "5000m", slow_target: "10000m" },
+};
+
+/** Modes the LOAD skill prices from the mode itself -- `load.pace_zones` for
+ * the two zones, the chart's `race_paces.threshold` range for `threshold` --
+ * so the editor supplies no `rep_pace` for them. It used to supply
+ * repetition's `3000m`, which priced 2026-09-29's 2k at T at 5:21/mi against
+ * a 5:56-6:03 prescription. */
+export const SELF_PRICED_MODES: readonly string[] = [
+  "threshold",
+  ...Object.keys(MODE_ZONES),
+];
+
 export type Role = (typeof ROLES)[number];
 export type SetMode = (typeof SET_MODES)[number];
 export type WeekType = (typeof WEEK_TYPES)[number];

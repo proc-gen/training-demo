@@ -36,7 +36,11 @@
  * reason a no-op save stays a no-op.
  */
 
-import { REPETITION_ZONE } from "@/lib/manifest/vocab";
+import {
+  MODE_ZONES,
+  REPETITION_ZONE,
+  SELF_PRICED_MODES,
+} from "@/lib/manifest/vocab";
 
 export type Json = Record<string, unknown>;
 
@@ -218,6 +222,24 @@ function lengthOf(distance: unknown, seconds: unknown): Length {
 
 /* ------------------------------------------------------------------ targets */
 
+/** The zone a rep of this mode states by naming NOTHING, or undefined.
+ *
+ * Repetition's 800m-3000m, and since 2026-09-29 the vo2max / CV zones: a CV
+ * set naming no `target_pace` is graded at 5k-10k, so the editor shows it as
+ * that zone rather than as `—`, which reads as a rep scored by nothing. */
+export function modeZone(
+  mode: string,
+): { fast: string; slow: string } | undefined {
+  if (mode === "repetition") {
+    return {
+      fast: REPETITION_ZONE.fast_target,
+      slow: REPETITION_ZONE.default_target,
+    };
+  }
+  const z = MODE_ZONES[mode];
+  return z ? { fast: z.fast_target, slow: z.slow_target } : undefined;
+}
+
 function targetOf(rep: Json, mode: string): Target {
   const pricedAt = typeof rep.rep_pace === "string" ? rep.rep_pace : undefined;
   const band = typeof rep.rep_band === "string" ? rep.rep_band : undefined;
@@ -251,16 +273,11 @@ function targetOf(rep: Json, mode: string): Target {
      scored on heart rate against `rep_band`'s zone -- and it is the PRICE
      either way, which is why it survives as `pricedBand` above. */
   if (band) return { kind: "band", band, ...priced() };
-  /* A REPETITION REP WITH NO TARGET IS THE MODEL'S OWN ZONE, which is what its
-     absence has always meant -- and `repKeys` writes nothing back for it. */
-  if (mode === "repetition") {
-    return {
-      kind: "zone",
-      fast: REPETITION_ZONE.fast_target,
-      slow: REPETITION_ZONE.default_target,
-      ...priced(),
-    };
-  }
+  /* A REP WITH NO TARGET IS ITS MODE'S OWN ZONE where the mode has one, which
+     is what its absence has always meant -- and `repKeys` writes nothing back
+     for it. */
+  const zone = modeZone(mode);
+  if (zone) return { kind: "zone", ...zone, ...priced() };
   return { kind: "none", ...priced() };
 }
 
@@ -270,13 +287,12 @@ function writeTarget(out: Json, t: Target, mode: string): void {
   if (t.kind === "band") out.rep_band = t.band;
   if (t.kind === "race") out.target_pace = t.race;
   if (t.kind === "zone") {
-    /* THE REPETITION DEFAULT STATES ITSELF BY SAYING NOTHING. Writing the pair
+    /* A MODE'S OWN ZONE STATES ITSELF BY SAYING NOTHING. Writing the pair
        would put a key into every committed repetition set to say what their
        absence already says, and `targetOf` reads it back the same way. */
+    const zone = modeZone(mode);
     const isDefault =
-      mode === "repetition" &&
-      t.fast === REPETITION_ZONE.fast_target &&
-      t.slow === REPETITION_ZONE.default_target;
+      zone !== undefined && t.fast === zone.fast && t.slow === zone.slow;
     if (!isDefault) out.target_pace = [t.fast, t.slow];
   }
   if (t.kind === "time") out.target_seconds = t.seconds;
@@ -293,8 +309,16 @@ function writeTarget(out: Json, t: Target, mode: string): void {
  * `zone` and `race` SUPPLY `rep_pace` when nothing else prices the rep, because
  * a distance rep with no price leaves the whole day without a load ceiling. A
  * zone prices at its SLOW end, which is what `"3000m"` already is on every
- * committed repetition set. */
-export function defaultTargetFor(kind: TargetKind, prev: Target): Target {
+ * committed repetition set.
+ *
+ * **EXCEPT FOR A SELF-PRICED MODE** -- `threshold`, `vo2max`,
+ * `critical_velocity` -- which the load skill prices from the mode, or from the
+ * `target_pace` this writes. A zone there also STARTS at the mode's own. */
+export function defaultTargetFor(
+  kind: TargetKind,
+  prev: Target,
+  mode = "",
+): Target {
   const carried: Priced = {};
   if (prev.pricedAt !== undefined) carried.pricedAt = prev.pricedAt;
   /* ONLY A BAND THAT WAS ALREADY A SEPARATE PRICE IS CARRIED. A band that WAS
@@ -306,7 +330,13 @@ export function defaultTargetFor(kind: TargetKind, prev: Target): Target {
   const band = prev.pricedBand;
   if (band !== undefined && kind !== "band") carried.pricedBand = band;
   const priceAt = (name: string): Priced =>
-    carried.pricedBand ? carried : { ...carried, pricedAt: name };
+    carried.pricedBand || SELF_PRICED_MODES.includes(mode)
+      ? carried
+      : { ...carried, pricedAt: name };
+  const zone = modeZone(mode) ?? {
+    fast: REPETITION_ZONE.fast_target,
+    slow: REPETITION_ZONE.default_target,
+  };
   switch (kind) {
     case "none":
       return { kind: "none", ...carried };
@@ -317,14 +347,12 @@ export function defaultTargetFor(kind: TargetKind, prev: Target): Target {
         ...carried,
       };
     case "zone": {
-      const fast = prev.kind === "zone" ? prev.fast : REPETITION_ZONE.fast_target;
-      const slow =
-        prev.kind === "zone" ? prev.slow : REPETITION_ZONE.default_target;
+      const fast = prev.kind === "zone" ? prev.fast : zone.fast;
+      const slow = prev.kind === "zone" ? prev.slow : zone.slow;
       return { kind: "zone", fast, slow, ...priceAt(slow) };
     }
     case "race": {
-      const race =
-        prev.kind === "race" ? prev.race : REPETITION_ZONE.default_target;
+      const race = prev.kind === "race" ? prev.race : zone.slow;
       return { kind: "race", race, ...priceAt(race) };
     }
     case "time":

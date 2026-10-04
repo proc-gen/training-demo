@@ -123,6 +123,7 @@ export function RepRow({
       <TargetCell
         target={row.target}
         what={where}
+        mode={mode}
         onChange={(target) => onChange({ ...row, target })}
       />
       <span className="wk-actions">

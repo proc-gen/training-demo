@@ -4,9 +4,11 @@ import VOCAB from "@/test/manifestVocab.json";
 import {
   DEVIATION_REASONS,
   FLOAT_MODES,
+  MODE_ZONES,
   REP_BANDS,
   REPETITION_ZONE,
   ROLES,
+  SELF_PRICED_MODES,
   SET_MODES,
   WEEK_TYPES,
 } from "./vocab";
@@ -32,6 +34,18 @@ describe("the vocabularies are the fixture's", () => {
    * living in a browser, uncalibrated on anybody. */
   it("the repetition zone's two ends", () =>
     expect({ ...REPETITION_ZONE }).toEqual(VOCAB.repetition_zone));
+
+  /* The vo2max / CV zones, the same kind of model number: what a set of
+   * either mode states by naming no target. */
+  it("each mode's own zone", () =>
+    expect({ ...MODE_ZONES }).toEqual(VOCAB.pace_zones));
+
+  it("every self-priced mode is a real set mode, and threshold is one", () => {
+    for (const m of SELF_PRICED_MODES) expect(SET_MODES).toContain(m);
+    expect(SELF_PRICED_MODES).toContain("threshold");
+    for (const m of Object.keys(MODE_ZONES))
+      expect(SELF_PRICED_MODES).toContain(m);
+  });
 
   it("is not vacuous -- the fixture actually carries tokens", () => {
     expect(VOCAB.roles.length).toBeGreaterThan(10);

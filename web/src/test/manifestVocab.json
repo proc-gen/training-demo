@@ -17,6 +17,16 @@
     "standing",
     "jog"
   ],
+  "pace_zones": {
+    "critical_velocity": {
+      "fast_target": "5000m",
+      "slow_target": "10000m"
+    },
+    "vo2max": {
+      "fast_target": "3000m",
+      "slow_target": "5000m"
+    }
+  },
   "rep_bands": [
     "rep_1min",
     "rep_3min",

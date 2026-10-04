@@ -642,23 +642,45 @@ describe("the pace graphs", () => {
   });
 
   has(D)("SHOWS A LIVE-WEEK WORKOUT at the default window -- the 2026-08-25 case", () => {
-    /* The mark that started this: run two days after the newest confirmed
-       chart and invisible until the carried segment existed. The caption's To
-       still reads the newest MEASUREMENT -- the axis reaching one Sunday past
-       it is the Calendar's whole-weeks rule, not a moved window. Durable in
-       both tree states: once the week's own chart lands, the mark is in-span
-       ordinarily. */
-    const { container } = pick("Target paces");
-    expect(container.querySelector(".sm-range")!.textContent).toContain(
-      `→ ${defaultRange(trendPanels(D!))!.to}`,
+    /* The mark that started this was 2026-08-25's: run two days after the
+       newest confirmed chart and invisible until the carried segment existed.
+       The caption's To still reads the newest MEASUREMENT -- the axis reaching
+       one Sunday past it is the Calendar's whole-weeks rule, not a moved window.
+
+       THE LIVE-WEEK MARKS ARE FOUND, NOT NAMED. This case pinned "2026-08-25"
+       and failed on 2026-09-27 for no fault in the component: the default
+       window is the LAST MONTH, so any hard-coded date slides out of it. A
+       live-week mark is one dated after the newest confirmed (non-carried)
+       chart, and every one of them must be hoverable at the default window.
+       NOT every in-window mark: this panel plots weekly, so a mark dated
+       before the window's first week-start slot has nowhere to land -- that is
+       the slot rule, not this case's subject. On a Monday before the live
+       week's first session `live` is empty and only the sanity floor holds. */
+    const panel = trendPanels(D!).find((p) => p.title === "Target paces")!;
+    const window = defaultRange(trendPanels(D!))!;
+    const confirmed = panel.points
+      .filter((p) => !p.carried)
+      .map((p) => p.date)
+      .sort()
+      .at(-1)!;
+    const inWindow = (panel.marks ?? []).filter(
+      (m) => m.date >= window.from && m.date <= window.to,
     );
+    const live = inWindow.filter((m) => m.date > confirmed);
+    expect(inWindow.length).toBeGreaterThan(0);
+
+    const { container } = pick("Target paces");
+    expect(container.querySelector(".sm-range")!.textContent).toContain(`→ ${window.to}`);
     const seen: string[] = [];
     for (const dot of container.querySelectorAll("circle.marker")) {
       fireEvent.mouseEnter(dot.closest("g")!, { clientX: 1, clientY: 1 });
       seen.push(document.body.textContent ?? "");
       fireEvent.mouseLeave(dot.closest("g")!);
     }
-    expect(seen.some((t) => t.includes("2026-08-25"))).toBe(true);
+    expect(seen.length).toBeGreaterThan(0);
+    for (const m of live) {
+      expect(seen.some((t) => t.includes(m.date)), m.date).toBe(true);
+    }
   });
 });
 
@@ -810,13 +832,22 @@ describe("the effective VO2max graph", () => {
   has(D)("prices the 42 d column through the function the rail's dropdown column uses", () => {
     /* The rail's own anchor is the CONFIRMED chart's, a Sunday, so the two
        agree only where the curve's day IS that Sunday. This compares the same
-       function at the same number instead, which is the contract. */
+       function at the same number instead, which is the contract.
+
+       THE NUMBER COMES FROM THE PANEL, NOT BACK OUT OF THE TOOLTIP. The tooltip
+       shows the anchor to two decimals and prices the UNROUNDED value, so
+       re-pricing the display agrees only while no rounding crosses a clock
+       second -- on 2026-09-25 it did (59.2769 prices a 5k at 17:14, 59.28 at
+       17:13). The display is still read, to tie the hovered day to this point. */
     const { container } = pick();
     choose(container, "All");
     const hits = [...container.querySelectorAll("rect[fill='transparent']")];
     fireEvent.mouseEnter(hits[hits.length - 1], { clientX: 1, clientY: 1 });
     const rows = tipRows();
-    const anchor = Number(rows.find((r) => r.startsWith("42 d"))!.slice(4));
+    const points = trendPanels(D!).find((p) => p.key === "vo2max")!.points;
+    const anchor = points[points.length - 1].values!.w42 as number;
+    const shown = Number(rows.find((r) => r.startsWith("42 d"))!.slice(4));
+    expect(Math.abs(shown - anchor)).toBeLessThanOrEqual(0.005 + 1e-9);
     const table = modelRacePaces("daniels_gilbert", anchor)!;
     const five = rows.find((r) => r.startsWith("5000m"))!.slice(5).split(" · ")[0];
     expect(five).toBe(clock(table["5000m"].seconds!));
