@@ -1,38 +1,38 @@
 {
  "facts": {
   "doubles": 2,
-  "easy_seconds": 15372,
+  "easy_seconds": 16332,
   "elapsed_days": 7,
   "graded_through": "2026-10-04",
   "long_run_miles": 0.0,
   "long_run_share": 0.0,
-  "miles": 34.88377873220393,
+  "miles": 49.79047363397757,
   "non_run_days": [],
   "plan_miles_unpriceable": [],
   "plan_unpriceable": [],
   "planned_miles": null,
   "planned_miles_week": null,
   "planned_seconds": [
-   27000.0,
-   27000.0
+   23400.0,
+   23400.0
   ],
   "planned_seconds_week": [
-   27000.0,
-   27000.0
+   23400.0,
+   23400.0
   ],
   "prescribed_dates": 7,
   "prescribed_dates_due": 7,
-  "projected_miles": 34.88377873220393,
-  "projected_seconds": 17320.0,
-  "quality_days": 2,
-  "quality_seconds": 1948,
-  "quality_share": 0.11247113163972286,
+  "projected_miles": 49.79047363397757,
+  "projected_seconds": 23241.0,
+  "quality_days": 3,
+  "quality_seconds": 6909,
+  "quality_share": 0.29727636504453336,
   "remaining_planned_miles": 0.0,
   "remaining_planned_seconds": 0.0,
-  "rest_days": 1,
-  "running_days": 6,
-  "seconds": 17320,
-  "volume_vs_plan": 0.6414814814814814,
+  "rest_days": 0,
+  "running_days": 7,
+  "seconds": 23241,
+  "volume_vs_plan": 0.9932051282051282,
   "walk_recovery_runs": 0,
   "walk_recovery_seconds": 0
  },
@@ -40,7 +40,7 @@
   {
    "status": "clear",
    "token": "unilateral-complaint",
-   "why": "no complaint word in the week's 0 note(s); Runalyze daily notes and activity descriptions are NOT searched"
+   "why": "no complaint word in the week's 1 note(s); Runalyze daily notes and activity descriptions are NOT searched"
   },
   {
    "status": "clear",
@@ -50,96 +50,42 @@
  ],
  "judged_facts": {
   "doubles": 2,
-  "easy_seconds": 15372,
-  "elapsed_days": 6,
-  "graded_through": "2026-10-03",
+  "easy_seconds": 16332,
+  "elapsed_days": 7,
+  "graded_through": "2026-10-04",
   "long_run_miles": 0.0,
   "long_run_share": 0.0,
-  "miles": 34.88377873220393,
+  "miles": 49.79047363397757,
   "non_run_days": [],
-  "plan_miles_unpriceable": [
-   [
-    "2026-10-04",
-    "2026-10-04",
-    "Local Half Marathon"
-   ]
-  ],
-  "plan_unpriceable": [
-   [
-    "2026-10-04",
-    "2026-10-04",
-    "Local Half Marathon"
-   ]
-  ],
+  "plan_miles_unpriceable": [],
+  "plan_unpriceable": [],
   "planned_miles": null,
   "planned_miles_week": null,
-  "planned_seconds": null,
+  "planned_seconds": [
+   23400.0,
+   23400.0
+  ],
   "planned_seconds_week": [
-   27000.0,
-   27000.0
+   23400.0,
+   23400.0
   ],
   "prescribed_dates": 7,
-  "prescribed_dates_due": 6,
-  "projected_miles": 34.88377873220393,
-  "projected_seconds": 17320.0,
-  "quality_days": 2,
-  "quality_seconds": 1948,
-  "quality_share": 0.11247113163972286,
+  "prescribed_dates_due": 7,
+  "projected_miles": 49.79047363397757,
+  "projected_seconds": 23241.0,
+  "quality_days": 3,
+  "quality_seconds": 6909,
+  "quality_share": 0.29727636504453336,
   "remaining_planned_miles": 0.0,
   "remaining_planned_seconds": 0.0,
   "rest_days": 0,
-  "running_days": 6,
-  "seconds": 17320,
-  "volume_vs_plan": null,
+  "running_days": 7,
+  "seconds": 23241,
+  "volume_vs_plan": 0.9932051282051282,
   "walk_recovery_runs": 0,
   "walk_recovery_seconds": 0
  },
- "planned": [
-  {
-   "cadence": null,
-   "date": "2026-10-04",
-   "detail": null,
-   "deviation_reason": null,
-   "earned": null,
-   "emphasis": [
-    "race"
-   ],
-   "hr_avg": null,
-   "hr_max": null,
-   "key": "2026-10-04",
-   "km": null,
-   "miss_forgiven": false,
-   "ordinal": 0,
-   "planned": {
-    "band": "21097m",
-    "band_display": "1:19:10 @ 6:02/mi",
-    "band_is_reference": true,
-    "ceiling": "none (race)",
-    "ceiling_kind": "none",
-    "ceiling_role": "race",
-    "ceiling_tiers": null,
-    "criterion": null,
-    "hr_ceiling": null,
-    "prescribed": "Local Half Marathon",
-    "prescribed_miles": null,
-    "prescribed_seconds": null,
-    "role": "race",
-    "sets": null,
-    "target_display": null,
-    "target_sec_per_mi": null,
-    "target_seconds": null,
-    "target_tolerance_seconds": null
-   },
-   "prescribed_denominator": null,
-   "prescribed_denominator_source": null,
-   "role": "race",
-   "runalyze_id": null,
-   "seconds": null,
-   "session": null,
-   "status": "pending",
-   "total": null
-  }
- ],
+ "planned": [],
  "results": [
   {
    "cadence": 175,
@@ -1615,6 +1561,265 @@
    "volume_km": 5.68,
    "volume_seconds": 1800,
    "volume_source": "file"
+  },
+  {
+   "cadence": 174,
+   "date": "2026-10-04",
+   "detail": {
+    "laps": [
+     {
+      "cad": 174,
+      "dist_km": 1.609,
+      "dur": 541,
+      "hr_avg": 126,
+      "hr_max": 139,
+      "index": 1,
+      "start": 0
+     },
+     {
+      "cad": 173,
+      "dist_km": 0.182,
+      "dur": 60,
+      "hr_avg": 134,
+      "hr_max": 136,
+      "index": 2,
+      "start": 541
+     }
+    ]
+   },
+   "earned": null,
+   "emphasis": [],
+   "hr_avg": 126,
+   "hr_max": 139,
+   "key": "2026-10-04-wu",
+   "km": 1.79,
+   "ordinal": 0,
+   "planned": {
+    "band": null,
+    "band_is_reference": false,
+    "ceiling": "none (warmup)",
+    "ceiling_kind": "none",
+    "ceiling_role": "warmup",
+    "ceiling_tiers": null,
+    "criterion": null,
+    "hr_ceiling": null,
+    "prescribed": "warmup for the Local Half Marathon",
+    "prescribed_miles": null,
+    "prescribed_seconds": null,
+    "role": "warmup",
+    "sets": null,
+    "target_display": null,
+    "target_sec_per_mi": null,
+    "target_seconds": null,
+    "target_tolerance_seconds": null
+   },
+   "role": "warmup",
+   "runalyze_id": 213329095,
+   "score_bucket": null,
+   "seconds": 601,
+   "session": null,
+   "status": "completed",
+   "total": null,
+   "volume_km": 1.79,
+   "volume_seconds": 601,
+   "volume_source": "file"
+  },
+  {
+   "cadence": 181,
+   "date": "2026-10-04",
+   "detail": {
+    "race": {
+     "halves": {
+      "delta_pct": 1.0944466963923793,
+      "first": 2467,
+      "second": 2494
+     },
+     "pace": 376.2772281259367,
+     "seconds": 4961,
+     "splits": [
+      {
+       "at_mi": 1.0,
+       "hr_avg": 153,
+       "hr_max": 168,
+       "partial": false,
+       "seconds": 369
+      },
+      {
+       "at_mi": 2.0,
+       "hr_avg": 172,
+       "hr_max": 175,
+       "partial": false,
+       "seconds": 366
+      },
+      {
+       "at_mi": 3.0,
+       "hr_avg": 173,
+       "hr_max": 176,
+       "partial": false,
+       "seconds": 367
+      },
+      {
+       "at_mi": 4.0,
+       "hr_avg": 173,
+       "hr_max": 175,
+       "partial": false,
+       "seconds": 373
+      },
+      {
+       "at_mi": 5.0,
+       "hr_avg": 174,
+       "hr_max": 176,
+       "partial": false,
+       "seconds": 374
+      },
+      {
+       "at_mi": 6.0,
+       "hr_avg": 173,
+       "hr_max": 175,
+       "partial": false,
+       "seconds": 394
+      },
+      {
+       "at_mi": 7.0,
+       "hr_avg": 172,
+       "hr_max": 175,
+       "partial": false,
+       "seconds": 384
+      },
+      {
+       "at_mi": 8.0,
+       "hr_avg": 173,
+       "hr_max": 176,
+       "partial": false,
+       "seconds": 392
+      },
+      {
+       "at_mi": 9.0,
+       "hr_avg": 173,
+       "hr_max": 176,
+       "partial": false,
+       "seconds": 368
+      },
+      {
+       "at_mi": 10.0,
+       "hr_avg": 174,
+       "hr_max": 177,
+       "partial": false,
+       "seconds": 376
+      },
+      {
+       "at_mi": 11.0,
+       "hr_avg": 175,
+       "hr_max": 178,
+       "partial": false,
+       "seconds": 378
+      },
+      {
+       "at_mi": 12.0,
+       "hr_avg": 176,
+       "hr_max": 180,
+       "partial": false,
+       "seconds": 378
+      },
+      {
+       "at_mi": 13.0,
+       "hr_avg": 179,
+       "hr_max": 183,
+       "partial": false,
+       "seconds": 377
+      },
+      {
+       "at_mi": 13.18,
+       "hr_avg": 182,
+       "hr_max": 183,
+       "length_mi": 0.184,
+       "partial": true,
+       "seconds": 65
+      }
+     ],
+     "total_mi": 13.184427940825579
+    }
+   },
+   "earned": null,
+   "emphasis": [
+    "race"
+   ],
+   "hr_avg": 172,
+   "hr_max": 183,
+   "key": "2026-10-04",
+   "km": 21.23,
+   "ordinal": 1,
+   "planned": {
+    "band": "21097m",
+    "band_display": "1:19:10 @ 6:02/mi",
+    "band_is_reference": true,
+    "ceiling": "none (race)",
+    "ceiling_kind": "none",
+    "ceiling_role": "race",
+    "ceiling_tiers": null,
+    "criterion": null,
+    "hr_ceiling": null,
+    "prescribed": "Local Half Marathon",
+    "prescribed_miles": null,
+    "prescribed_seconds": null,
+    "role": "race",
+    "sets": null,
+    "target_display": null,
+    "target_sec_per_mi": null,
+    "target_seconds": null,
+    "target_tolerance_seconds": null
+   },
+   "role": "race",
+   "runalyze_id": 213361835,
+   "score_bucket": null,
+   "seconds": 4961,
+   "session": null,
+   "status": "completed",
+   "total": null,
+   "volume_km": 21.23,
+   "volume_seconds": 4961,
+   "volume_source": "file"
+  },
+  {
+   "cadence": 175,
+   "date": "2026-10-04",
+   "detail": null,
+   "earned": null,
+   "emphasis": [],
+   "hr_avg": 132,
+   "hr_max": 139,
+   "key": "2026-10-04-cd",
+   "km": 0.97,
+   "ordinal": 2,
+   "planned": {
+    "band": null,
+    "band_is_reference": false,
+    "ceiling": "none (cooldown)",
+    "ceiling_kind": "none",
+    "ceiling_role": "cooldown",
+    "ceiling_tiers": null,
+    "criterion": null,
+    "hr_ceiling": null,
+    "prescribed": "cooldown for the Local Half Marathon",
+    "prescribed_miles": null,
+    "prescribed_seconds": null,
+    "role": "cooldown",
+    "sets": null,
+    "target_display": null,
+    "target_sec_per_mi": null,
+    "target_seconds": null,
+    "target_tolerance_seconds": null
+   },
+   "role": "cooldown",
+   "runalyze_id": 213369013,
+   "score_bucket": null,
+   "seconds": 359,
+   "session": null,
+   "status": "completed",
+   "total": null,
+   "volume_km": 0.97,
+   "volume_seconds": 359,
+   "volume_source": "file"
   }
  ],
  "scores": {
@@ -1641,15 +1846,15 @@
    "quality_days_met": true,
    "rest_days_met": null,
    "volume_miles_vs_plan": null,
-   "volume_vs_plan": null
+   "volume_vs_plan": true
   },
   "pct": 100.0,
   "why": {
-   "long_run_share": "the long run was 0.0% of the running distance through 2026-10-03, 6 of 7 days, against a 25% ceiling",
-   "quality_days_met": "every quality session the plan scheduled on 2026-09-29, 2026-10-01 was completed (2 of 3 scheduled quality days due through 2026-10-03)",
+   "long_run_share": "the long run was 0.0% of the running distance, against a 25% ceiling",
+   "quality_days_met": "every quality session the plan scheduled on 2026-09-29, 2026-10-01, 2026-10-04 was completed",
    "rest_days_met": "the plan schedules no rest day, so this check does not apply and left the denominator",
    "volume_miles_vs_plan": "the manifest states no planned_miles, so there is nothing to compare the week's running distance against",
-   "volume_vs_plan": "the week's 7:30:00 cannot be compared yet: the plan states no duration for 2026-10-04 Local Half Marathon, so what is still ahead cannot be priced and the check left the denominator rather than compare against a target that is short by an unknown amount"
+   "volume_vs_plan": "6:27:21 run against a plan of 6:30:00, tolerance 5%"
   }
  },
  "week_end": "2026-10-04",

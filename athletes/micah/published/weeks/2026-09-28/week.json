@@ -67,9 +67,21 @@
    },
    {
     "date": "2026-10-04",
+    "key": "2026-10-04-wu",
+    "prescribed": "warmup for the Local Half Marathon",
+    "role": "warmup"
+   },
+   {
+    "date": "2026-10-04",
     "key": "2026-10-04",
     "prescribed": "Local Half Marathon",
     "role": "race"
+   },
+   {
+    "date": "2026-10-04",
+    "key": "2026-10-04-cd",
+    "prescribed": "cooldown for the Local Half Marathon",
+    "role": "cooldown"
    }
   ],
   "week_start": "2026-09-28",
