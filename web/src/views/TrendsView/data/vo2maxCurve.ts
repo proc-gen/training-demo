@@ -55,15 +55,29 @@ export type CurvePoint = { date: string; vo2max: number; count: number };
 export function samples(rows: readonly Vo2maxRow[] | undefined): Sample[] {
   const out: Sample[] = [];
   for (const r of rows ?? []) {
-    const { date, vo2max: v, distance_km: km } = r;
-    if (typeof date !== "string" || !date) continue;
-    if (typeof v !== "number" || !isFinite(v)) continue;
-    if (typeof km !== "number" || !isFinite(km) || km <= 0) continue;
-    out.push({ date, vo2max: v, distanceKm: km });
+    if (!usableRow(r)) continue;
+    out.push({ date: r.date, vo2max: r.vo2max as number, distanceKm: r.distance_km as number });
   }
-  // ISO dates compare lexically, so no parsing is needed to order them.
-  out.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+  out.sort(byDate);
   return out;
+}
+
+/** Whether `samples()` keeps a row -- exported so `vo2maxSubset` filters with
+ *  the SAME rule rather than a second copy of it. */
+export function usableRow(r: Vo2maxRow): boolean {
+  const { date, vo2max: v, distance_km: km } = r;
+  if (typeof date !== "string" || !date) return false;
+  if (typeof v !== "number" || !isFinite(v)) return false;
+  return typeof km === "number" && isFinite(km) && km > 0;
+}
+
+/** ISO dates compare lexically, so no parsing is needed to order them.
+ *
+ * STABLE, and that is load-bearing: two activities on one date keep the
+ * file's own order, so every series built over the same rows sums them in the
+ * same order -- a float sum is not associative. */
+export function byDate(a: { date: string }, b: { date: string }): number {
+  return a.date < b.date ? -1 : a.date > b.date ? 1 : 0;
 }
 
 /** The port of `effective_vo2max.shape()`.

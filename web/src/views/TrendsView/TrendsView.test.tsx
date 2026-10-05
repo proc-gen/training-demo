@@ -734,6 +734,9 @@ describe("the effective VO2max graph", () => {
   const tipRows = () =>
     [...document.body.querySelectorAll(".tooltip .row")].map((r) => r.textContent!);
   const LABELS = ["800m", "1500m", "3000m", "5000m", "10000m", "Half marathon", "Marathon"];
+  /* The two windows, then the same two over workouts, long runs and races
+     (2026-10-05) -- a typed custom window comes after all four. */
+  const BASE = ["42 d", "30 d", "42 d (workouts + long)", "30 d (workouts + long)"];
 
   has(D)("is offered in the picker, ahead of the two pace panels", () => {
     const { container } = wrap(<TrendsView payload={D!} />);
@@ -750,10 +753,10 @@ describe("the effective VO2max graph", () => {
     ]);
   });
 
-  has(D)("opens on the athlete's 42 d and the model's 30 d, both ticked", () => {
+  has(D)("opens on the athlete's 42 d and the model's 30 d, plus both over workouts + long", () => {
     const { container } = pick();
     expect(title(container)).toBe("Effective VO2max");
-    expect(seriesNames(container)).toEqual(["42 d", "30 d"]);
+    expect(seriesNames(container)).toEqual(BASE);
     expect(container.querySelectorAll("path.series-line").length).toBeGreaterThan(0);
   });
 
@@ -767,27 +770,27 @@ describe("the effective VO2max graph", () => {
     }
   });
 
-  has(D)("ADDS A THIRD LINE at the typed window, and keeps the first two", () => {
+  has(D)("ADDS A LINE LAST at the typed window, and keeps the first four", () => {
     const { container } = pick();
     type(container, "60");
-    expect(seriesNames(container)).toEqual(["42 d", "30 d", "60 d"]);
-    expect(container.querySelectorAll("path.series-line").length).toBeGreaterThanOrEqual(3);
+    expect(seriesNames(container)).toEqual([...BASE, "60 d"]);
+    expect(container.querySelectorAll("path.series-line").length).toBeGreaterThanOrEqual(5);
   });
 
   has(D)("removes it again on a cleared or invalid entry", () => {
     const { container } = pick();
     type(container, "60");
     type(container, "");
-    expect(seriesNames(container)).toEqual(["42 d", "30 d"]);
+    expect(seriesNames(container)).toEqual(BASE);
     type(container, "60");
     type(container, "never");
-    expect(seriesNames(container)).toEqual(["42 d", "30 d"]);
+    expect(seriesNames(container)).toEqual(BASE);
   });
 
   has(D)("does not add a duplicate of a line already drawn", () => {
     const { container } = pick();
     type(container, "30");
-    expect(seriesNames(container)).toEqual(["42 d", "30 d"]);
+    expect(seriesNames(container)).toEqual(BASE);
   });
 
   has(D)("keeps the typed window through a detour to another graph", () => {
@@ -798,7 +801,7 @@ describe("the effective VO2max graph", () => {
     fireEvent.change(container.querySelector("select")!, { target: { value: "volume" } });
     expect(title(container)).toBe("Weekly volume");
     fireEvent.change(container.querySelector("select")!, { target: { value: "vo2max" } });
-    expect(seriesNames(container)).toEqual(["42 d", "30 d", "90 d"]);
+    expect(seriesNames(container)).toEqual([...BASE, "90 d"]);
     expect(box(container).value).toBe("90");
   });
 
@@ -819,13 +822,13 @@ describe("the effective VO2max graph", () => {
     expect(hits.length).toBeGreaterThan(100);
     fireEvent.mouseEnter(hits[hits.length - 1], { clientX: 1, clientY: 1 });
     const rows = tipRows();
-    expect(rows.some((r) => r.startsWith("Projected42 d · 30 d · 60 d"))).toBe(true);
+    expect(rows.some((r) => r.startsWith(`Projected${[...BASE, "60 d"].join(" · ")}`))).toBe(true);
     for (const label of LABELS) {
       const row = rows.find((r) => r.startsWith(label))!;
       expect(row, label).toBeTruthy();
-      // Three clock values, one per window, e.g. `18:06 · 18:12 · 18:20`.
-      expect(row.slice(label.length).split(" · ")).toHaveLength(3);
-      expect(row.slice(label.length)).toMatch(/^(\d+:)?\d+:\d\d( · (\d+:)?\d+:\d\d){2}$/);
+      // Five clock values, one per line, e.g. `18:06 · 18:12 · 18:31 · 18:33 · 18:20`.
+      expect(row.slice(label.length).split(" · ")).toHaveLength(5);
+      expect(row.slice(label.length)).toMatch(/^(\d+:)?\d+:\d\d( · (\d+:)?\d+:\d\d){4}$/);
     }
   });
 

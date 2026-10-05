@@ -10,10 +10,10 @@
  * number itself reached the page as one tooltip row. This draws it.
  *
  * THREE WINDOWS, IN A FIXED ORDER: the athlete's configured window first, the
- * model's default second, a typed custom one third. COLOUR IS BY POSITION in
- * `CAT`, the multi-series rule, and the order is fixed so that typing a custom
- * window ADDS a third line without repainting the two the reader has already
- * learned. Duplicates collapse by value -- an athlete configured to 30 gets one
+ * model's default second, a typed custom one LAST (fifth once the two subset
+ * lines below are drawn). COLOUR IS BY POSITION in `CAT`, the multi-series
+ * rule, and the order is fixed so that typing a custom window ADDS a line
+ * without repainting the ones the reader has already learned. Duplicates collapse by value -- an athlete configured to 30 gets one
  * line, not two on top of each other -- and the custom slot simply does not
  * exist when the typed number is one already drawn.
  *
@@ -27,6 +27,14 @@
  * prediction -- the athlete's choice over pricing the configured window alone.
  * Always Daniels-Gilbert: the scored model, and the one every confirmed chart
  * is built from. The rail's model dropdown is not shared with this view.
+ *
+ * TWO MORE LINES, 2026-10-05: THE SAME TWO WINDOWS OVER WORKOUTS, LONG RUNS AND
+ * RACES ONLY. The athlete wanted to see whether easy and recovery runs lift the
+ * number, without making that the method -- `vo2maxSubset.ts` says which
+ * activities count and why. They sit THIRD and FOURTH, after the two windows
+ * they restate, so the original two keep their colours; a typed custom window
+ * moves to fifth. Only the configured and default windows get one: the custom
+ * box is a what-if on the smoothing, not on the selection.
  *
  * THE LINE THIS MAY NOT CROSS. Every number here is a PROJECTION. The window
  * values are what the confirmed charts anchor on, but a chart is confirmed and
@@ -46,6 +54,12 @@ import { addDays } from "./dates";
 import { CAT } from "./paceSeries";
 import type { Panel, SeriesSpec, SeriesValue, TrendPoint } from "./panels";
 import { type Sample, samples, shape, windowDays } from "./vo2maxCurve";
+import {
+  activityClasses,
+  type SubsetSample,
+  subsetSamples,
+  subsetShape,
+} from "./vo2maxSubset";
 
 /** The longest window the text box accepts, in days.
  *
@@ -84,6 +98,44 @@ export function windowLengths(configured: number, custom: number | null): number
 export const windowKey = (days: number) => `w${days}`;
 export const windowLabel = (days: number) => `${days} d`;
 
+/** One drawn line: a window length, over every activity or the subset. */
+export type Line = { days: number; subset: boolean };
+
+/** Every activity, at each length -- the shape the panel had before the
+ *  subset lines, and what a caller with no subset to draw passes. */
+export const plainLines = (days: readonly number[]): Line[] =>
+  days.map((d) => ({ days: d, subset: false }));
+
+/** The subset line's key and label. No `·` in the label: the tooltip joins
+ *  its column headers with one, and a label carrying it would read as two. */
+export const subsetKey = (days: number) => `s${days}`;
+export const subsetLabel = (days: number) => `${days} d (workouts + long)`;
+
+export const lineKey = (l: Line) => (l.subset ? subsetKey(l.days) : windowKey(l.days));
+export const lineLabel = (l: Line) => (l.subset ? subsetLabel(l.days) : windowLabel(l.days));
+
+/** The lines drawn, in series order.
+ *
+ * The configured and default windows over everything, then the SAME two over
+ * the subset, then a custom window -- so the first two never repaint, and a
+ * custom window equal to one already drawn still collapses. `withSubset` false
+ * (nothing classified) drops the subset lines rather than drawing two lines
+ * that are null on every day.
+ */
+export function lineSpecs(
+  configured: number,
+  custom: number | null,
+  withSubset: boolean,
+): Line[] {
+  const fixed = windowLengths(configured, null);
+  const extra = windowLengths(configured, custom).filter((w) => !fixed.includes(w));
+  return [
+    ...plainLines(fixed),
+    ...(withSubset ? fixed.map((d) => ({ days: d, subset: true })) : []),
+    ...plainLines(extra),
+  ];
+}
+
 /** The race keys the tooltip lists, in the rail's own reading order.
  *
  * `RACE_DISTANCES`' seven keys -- the rail's card shows the confirmed chart's
@@ -105,14 +157,14 @@ export function projectedKeys(): string[] {
  * than shifting every later time one column left. And `--` again for a value
  * the model refuses (outside 20-90) -- never a neighbouring window's time. */
 export function projectedRows(
-  windows: readonly number[],
+  lines: readonly Line[],
   values: Readonly<Record<string, SeriesValue>>,
 ): { k: string; v: string }[] {
-  const tables = windows.map((w) => {
-    const v = values[windowKey(w)];
+  const tables = lines.map((l) => {
+    const v = values[lineKey(l)];
     return typeof v === "number" ? modelRacePaces("daniels_gilbert", v) : null;
   });
-  const rows = [{ k: "Projected", v: windows.map(windowLabel).join(" · ") }];
+  const rows = [{ k: "Projected", v: lines.map(lineLabel).join(" · ") }];
   for (const key of projectedKeys()) {
     rows.push({
       k: PACE_LABEL[key] ?? key,
@@ -139,18 +191,19 @@ export function projectedRows(
  * nothing on a day that window is empty, rather than borrowing another's. */
 export function windowPoints(
   sorted: readonly Sample[],
-  windows: readonly number[],
+  lines: readonly Line[],
   configured: number,
+  subset: readonly SubsetSample[] = [],
 ): TrendPoint[] {
-  if (!sorted.length || !windows.length) return [];
+  if (!sorted.length || !lines.length) return [];
   const out: TrendPoint[] = [];
   const last = sorted[sorted.length - 1].date;
   for (let d = sorted[0].date; d <= last; d = addDays(d, 1)) {
     const values: Record<string, SeriesValue> = {};
     let any = false;
-    for (const w of windows) {
-      const got = shape(sorted, d, w);
-      values[windowKey(w)] = got ? got.value : null;
+    for (const l of lines) {
+      const got = l.subset ? subsetShape(subset, d, l.days) : shape(sorted, d, l.days);
+      values[lineKey(l)] = got ? got.value : null;
       if (got) any = true;
     }
     if (!any) continue;
@@ -161,7 +214,7 @@ export function windowPoints(
       value: null,
       values,
       vo2max: typeof own === "number" ? own : null,
-      extra: () => projectedRows(windows, values),
+      extra: () => projectedRows(lines, values),
     });
   }
   return out;
@@ -180,10 +233,15 @@ export function vo2maxPanel(payload: Payload, custom: number | null): Panel | nu
   const sorted = samples(payload.vo2max);
   if (!sorted.length) return null;
 
-  const windows = windowLengths(configured, custom);
-  const series: SeriesSpec[] = windows.slice(0, CAT.length).map((w, i) => ({
-    key: windowKey(w),
-    label: windowLabel(w),
+  const subset = subsetSamples(payload.vo2max, activityClasses(payload));
+  const lines = lineSpecs(
+    configured,
+    custom,
+    subset.some((s) => s.included === true),
+  );
+  const series: SeriesSpec[] = lines.slice(0, CAT.length).map((l, i) => ({
+    key: lineKey(l),
+    label: lineLabel(l),
     color: CAT[i],
   }));
 
@@ -193,7 +251,7 @@ export function vo2maxPanel(payload: Payload, custom: number | null): Panel | nu
     cadence: "day",
     windowed: true,
     series,
-    points: windowPoints(sorted, windows, configured),
+    points: windowPoints(sorted, lines, configured, subset),
     seriesTitle: "VO2max",
     places: 2,
     format: (v) => num(v, 2),

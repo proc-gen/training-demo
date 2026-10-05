@@ -230,6 +230,10 @@ function trimRun(run: Record<string, unknown>) {
     volume_seconds: run.volume_seconds,
     distance_source: run.distance_source,
     treadmill_mph: run.treadmill_mph,
+    // The VO2max panel's subset lines join each estimate to its run by
+    // `runalyze_id` and classify it by `emphasis` (2026-10-05).
+    runalyze_id: run.runalyze_id,
+    emphasis: run.emphasis,
     detail: detail
       ? {
           race: detail.race,
@@ -325,8 +329,10 @@ export function trendsSlice(db: Db): unknown {
      shapes these into one effective-VO2max value per calendar day and the
      race-times panel draws the model's prediction at each -- which is why the
      panel is DAILY where it used to step through 87 confirmed Sundays.
-     `activity_id` and `estimate_source` are not read by any panel, so they stay
-     out; the same trimming `trimRun` does one field set over. */
+     `estimate_source` is not read by any panel, so it stays out; the same
+     trimming `trimRun` does one field set over. `activity_id` CAME BACK
+     2026-10-05: the VO2max panel's workouts-and-long-runs lines join each
+     estimate to the run that produced it. */
   /* NO `order by`, DELIBERATELY. `json_each` yields the array's own order, and
      the array's own order is `estimate_vo2max.py`'s sort -- decided by Python,
      once, exactly as `index.json` decides the order of weeks and days.
@@ -337,7 +343,7 @@ export function trendsSlice(db: Db): unknown {
      `slices.test.ts`'s projection-equals-payload check to fail and enough for
      a curve to disagree with itself between routes. */
   const vo2max = db
-    .prepare("select date, vo2max, distance_km from vo2max_row")
+    .prepare("select date, activity_id, vo2max, distance_km from vo2max_row")
     .all() as Record<string, unknown>[];
 
   /* THE ONE THRESHOLD A PANEL READS, and not the record it sits in.

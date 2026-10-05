@@ -13,9 +13,17 @@ import { addDays, dayIndex } from "./dates";
 import { CAT } from "./paceSeries";
 import { drawn } from "./panels";
 import { samples, shape, windowDays } from "./vo2maxCurve";
+import { activityClasses, subsetSamples, subsetShape } from "./vo2maxSubset";
 import {
+  type Line,
+  lineKey,
+  lineLabel,
+  lineSpecs,
   MAX_WINDOW_DAYS,
   parseWindow,
+  plainLines,
+  subsetKey,
+  subsetLabel,
   projectedKeys,
   projectedRows,
   vo2maxPanel,
@@ -158,7 +166,8 @@ describe("projectedKeys", () => {
 /* ---------------------------------------------------------- projectedRows */
 
 describe("projectedRows", () => {
-  const W = [42, 30, 60];
+  const WD = [42, 30, 60];
+  const W = plainLines(WD);
   const V = { w42: 57.81, w30: 57.6, w60: 58.02 };
 
   it("leads with a header naming the windows in series order", () => {
@@ -178,7 +187,7 @@ describe("projectedRows", () => {
   it("prices each window through the SAME expression as the rail's column", () => {
     const rows = projectedRows(W, V).slice(1);
     for (const [i, key] of projectedKeys().entries()) {
-      const want = W.map((w) =>
+      const want = WD.map((w) =>
         clock(modelRacePaces("daniels_gilbert", V[windowKey(w) as keyof typeof V])![key].seconds!),
       ).join(" · ");
       expect(rows[i].v, key).toBe(want);
@@ -186,7 +195,7 @@ describe("projectedRows", () => {
   });
 
   it("shows a faster time for the fitter window", () => {
-    const rows = projectedRows([42, 30], { w42: 60, w30: 50 }).slice(1);
+    const rows = projectedRows(plainLines([42, 30]), { w42: 60, w30: 50 }).slice(1);
     for (const r of rows) {
       const [fit, less] = r.v.split(" · ");
       expect(fit < less || fit.length < less.length, r.k).toBe(true);
@@ -205,7 +214,7 @@ describe("projectedRows", () => {
   });
 
   it("prints `--` for a value the model refuses, never a neighbour's time", () => {
-    const rows = projectedRows([42, 30], { w42: 19, w30: 57 });
+    const rows = projectedRows(plainLines([42, 30]), { w42: 19, w30: 57 });
     for (const r of rows.slice(1)) {
       expect(r.v.split(" · ")[0]).toBe("--");
       expect(r.v.split(" · ")[1]).not.toBe("--");
@@ -213,7 +222,7 @@ describe("projectedRows", () => {
   });
 
   it("handles a band value as absent rather than pricing an object", () => {
-    const rows = projectedRows([42], { w42: { lo: 50, hi: 60 } });
+    const rows = projectedRows(plainLines([42]), { w42: { lo: 50, hi: 60 } });
     for (const r of rows.slice(1)) expect(r.v).toBe("--");
   });
 
@@ -228,12 +237,12 @@ describe("windowPoints", () => {
   const S = samples(ROWS as Vo2maxRow[]);
 
   it("is empty with no samples or no windows", () => {
-    expect(windowPoints([], [42], 42)).toEqual([]);
-    expect(windowPoints(S, [], 42)).toEqual([]);
+    expect(windowPoints([], plainLines([42]), 42)).toEqual([]);
+    expect(windowPoints(S, plainLines([]), 42)).toEqual([]);
   });
 
   it("walks every calendar day from the first sample to the last", () => {
-    const pts = windowPoints(S, [42, 30], 42);
+    const pts = windowPoints(S, plainLines([42, 30]), 42);
     expect(pts[0].date).toBe("2026-01-01");
     expect(pts[pts.length - 1].date).toBe("2026-01-14");
     expect(pts).toHaveLength(14);
@@ -243,7 +252,7 @@ describe("windowPoints", () => {
   });
 
   it("carries each window's shape() value under its key, verbatim", () => {
-    const pts = windowPoints(S, [42, 30, 3], 42);
+    const pts = windowPoints(S, plainLines([42, 30, 3]), 42);
     for (const p of pts) {
       for (const w of [42, 30, 3]) {
         const want = shape(S, p.date, w);
@@ -257,7 +266,7 @@ describe("windowPoints", () => {
   it("leaves a NULL in a window that is empty on a day, and keeps the day", () => {
     /* A 3-day window empties between 01-05 and 01-13 while the 42-day one does
      * not: that one line breaks, the day stays a slot. */
-    const pts = windowPoints(S, [42, 3], 42);
+    const pts = windowPoints(S, plainLines([42, 3]), 42);
     const mid = pts.find((p) => p.date === "2026-01-08")!;
     expect(mid.values!.w3).toBeNull();
     expect(typeof mid.values!.w42).toBe("number");
@@ -265,7 +274,7 @@ describe("windowPoints", () => {
   });
 
   it("OMITS a day every window is empty on -- never carried forward", () => {
-    const pts = windowPoints(S, [3], 42);
+    const pts = windowPoints(S, plainLines([3]), 42);
     expect(pts.map((p) => p.date)).toEqual([
       "2026-01-01",
       "2026-01-02",
@@ -276,16 +285,16 @@ describe("windowPoints", () => {
   });
 
   it("stamps `vo2max` with the CONFIGURED window's value only", () => {
-    const pts = windowPoints(S, [42, 3], 42);
+    const pts = windowPoints(S, plainLines([42, 3]), 42);
     for (const p of pts) expect(p.vo2max).toBe(p.values!.w42);
-    const short = windowPoints(S, [42, 3], 3);
+    const short = windowPoints(S, plainLines([42, 3]), 3);
     const mid = short.find((p) => p.date === "2026-01-08")!;
     // Configured window empty that day: no note, not the other window's number.
     expect(mid.vo2max).toBeNull();
   });
 
   it("labels the point as the panel convention requires", () => {
-    const pts = windowPoints(S, [42], 42);
+    const pts = windowPoints(S, plainLines([42]), 42);
     for (const p of pts) {
       expect(p.value).toBeNull();
       expect(p.label).toBe(
@@ -295,17 +304,17 @@ describe("windowPoints", () => {
   });
 
   it("attaches the projected rows as a thunk over that day's own values", () => {
-    const pts = windowPoints(S, [42, 30], 42);
+    const pts = windowPoints(S, plainLines([42, 30]), 42);
     const p = pts[1];
     expect(typeof p.extra).toBe("function");
-    expect(p.extra!()).toEqual(projectedRows([42, 30], p.values!));
+    expect(p.extra!()).toEqual(projectedRows(plainLines([42, 30]), p.values!));
     expect(p.extra!()[0].v).toBe("42 d · 30 d");
   });
 
   it("does the whole thing again for a custom window at the far end of the record", () => {
     /* The custom slot is third, and its values are the same shape() the
      * others use. */
-    const pts = windowPoints(S, [42, 30, 7], 42);
+    const pts = windowPoints(S, plainLines([42, 30, 7]), 42);
     const last = pts[pts.length - 1];
     expect(Object.keys(last.values!)).toEqual(["w42", "w30", "w7"]);
     expect(last.values!.w7).toBe(shape(S, "2026-01-14", 7)!.value);
@@ -389,7 +398,7 @@ describe("vo2maxPanel", () => {
   it("points are windowPoints over samples(), no more and no less", () => {
     const P = payload(ROWS);
     const p = vo2maxPanel(P, 7)!;
-    const want = windowPoints(samples(P.vo2max), [42, 30, 7], 42);
+    const want = windowPoints(samples(P.vo2max), plainLines([42, 30, 7]), 42);
     expect(p.points.map((x) => ({ ...x, extra: undefined }))).toEqual(
       want.map((x) => ({ ...x, extra: undefined })),
     );
@@ -411,15 +420,165 @@ describe("vo2maxPanel", () => {
   });
 });
 
+/* ---------------------------------------------- the workouts + long lines */
+
+describe("lineSpecs", () => {
+  const sub = (days: number): Line => ({ days, subset: true });
+  const all = (days: number): Line => ({ days, subset: false });
+
+  it("draws both windows, then both again over the subset", () => {
+    expect(lineSpecs(42, null, true)).toEqual([all(42), all(30), sub(42), sub(30)]);
+  });
+
+  it("puts a custom window LAST, after the subset lines", () => {
+    expect(lineSpecs(42, 60, true)).toEqual([all(42), all(30), sub(42), sub(30), all(60)]);
+  });
+
+  it("collapses a custom window already drawn, subset or not", () => {
+    expect(lineSpecs(42, 42, true)).toEqual(lineSpecs(42, null, true));
+    expect(lineSpecs(42, 30, true)).toEqual(lineSpecs(42, null, true));
+  });
+
+  it("gives an athlete configured to 30 one plain line and one subset line", () => {
+    expect(lineSpecs(30, null, true)).toEqual([all(30), sub(30)]);
+    expect(lineSpecs(30, 60, true)).toEqual([all(30), sub(30), all(60)]);
+  });
+
+  it("drops the subset lines when nothing is classified", () => {
+    expect(lineSpecs(42, null, false)).toEqual(plainLines([42, 30]));
+    expect(lineSpecs(42, 60, false)).toEqual(plainLines([42, 30, 60]));
+  });
+
+  it("never exceeds the palette", () => {
+    for (const custom of [null, 1, 7, 60, MAX_WINDOW_DAYS]) {
+      expect(lineSpecs(42, custom, true).length).toBeLessThanOrEqual(CAT.length);
+    }
+  });
+
+  it("drops an unusable custom value", () => {
+    for (const bad of [0, -3, NaN, Infinity]) {
+      expect(lineSpecs(42, bad, true)).toEqual(lineSpecs(42, null, true));
+    }
+  });
+});
+
+describe("line keys and labels", () => {
+  it("key and label the subset apart from the plain window of the same length", () => {
+    expect(subsetKey(42)).toBe("s42");
+    expect(subsetLabel(42)).toBe("42 d (workouts + long)");
+    expect(lineKey({ days: 42, subset: true })).toBe("s42");
+    expect(lineKey({ days: 42, subset: false })).toBe(windowKey(42));
+    expect(lineLabel({ days: 30, subset: true })).toBe("30 d (workouts + long)");
+    expect(lineLabel({ days: 30, subset: false })).toBe(windowLabel(30));
+    expect(subsetKey(42)).not.toBe(windowKey(42));
+  });
+
+  it("puts no column separator inside a label", () => {
+    /* The tooltip joins its column headers with ` · `. */
+    for (const d of [1, 30, 42, 365]) expect(subsetLabel(d)).not.toContain("·");
+  });
+});
+
+describe("the subset lines in the panel", () => {
+  /* Three activities: a workout, an easy run, a long run. The easy run is
+     the fittest-looking, which is the athlete's whole question. */
+  const R = [
+    { ...row("2026-01-01", 56, 10), activity_id: 1 },
+    { ...row("2026-01-02", 62, 10), activity_id: 2 },
+    { ...row("2026-01-03", 55, 20), activity_id: 3 },
+  ];
+  const weeks = {
+    "2025-12-29": {
+      adherence: {
+        results: [
+          { runalyze_id: 1, role: "subt", emphasis: ["quality"] },
+          { runalyze_id: 2, role: "easy", emphasis: [] },
+          { runalyze_id: 3, role: "long", emphasis: ["long"] },
+        ],
+      },
+    },
+  };
+  const P = { ...payload(R), weeks } as unknown as Payload;
+
+  it("draws four lines, the original two keeping their colours", () => {
+    const p = vo2maxPanel(P, null)!;
+    expect(p.series!).toEqual([
+      { key: "w42", label: "42 d", color: CAT[0] },
+      { key: "w30", label: "30 d", color: CAT[1] },
+      { key: "s42", label: "42 d (workouts + long)", color: CAT[2] },
+      { key: "s30", label: "30 d (workouts + long)", color: CAT[3] },
+    ]);
+  });
+
+  it("moves a custom window to fifth", () => {
+    const p = vo2maxPanel(P, 60)!;
+    expect(p.series!.map((s) => s.key)).toEqual(["w42", "w30", "s42", "s30", "w60"]);
+    expect(p.series![4].color).toBe(CAT[4]);
+  });
+
+  it("leaves the easy run out of the subset value and in the plain one", () => {
+    const last = vo2maxPanel(P, null)!.points.at(-1)!;
+    expect(last.values!.w42).toBe((56 * 10 + 62 * 10 + 55 * 20) / 40);
+    expect(last.values!.s42).toBe((56 * 10 + 55 * 20) / 30);
+    expect(last.values!.s42 as number).toBeLessThan(last.values!.w42 as number);
+  });
+
+  it("is subsetShape() over subsetSamples(), day for day", () => {
+    const S = subsetSamples(P.vo2max, activityClasses(P));
+    for (const pt of vo2maxPanel(P, null)!.points) {
+      for (const w of [42, 30]) {
+        const want = subsetShape(S, pt.date, w);
+        expect(pt.values![subsetKey(w)], `${pt.date} ${w}`).toBe(want ? want.value : null);
+      }
+    }
+  });
+
+  it("leaves the configured window's own value as the point's vo2max", () => {
+    for (const pt of vo2maxPanel(P, null)!.points) expect(pt.vo2max).toBe(pt.values!.w42);
+  });
+
+  it("prices the subset lines in the tooltip too, in series order", () => {
+    const last = vo2maxPanel(P, null)!.points.at(-1)!;
+    const rows = last.extra!();
+    expect(rows[0].v).toBe("42 d · 30 d · 42 d (workouts + long) · 30 d (workouts + long)");
+    for (const r of rows.slice(1)) expect(r.v.split(" · ")).toHaveLength(4);
+  });
+
+  it("does not draw the subset lines with no graded week -- a payload with weeks: {}", () => {
+    expect(vo2maxPanel(payload(R), null)!.series!.map((s) => s.key)).toEqual(["w42", "w30"]);
+  });
+
+  it("does not draw them when every classified run is excluded", () => {
+    const easyOnly = {
+      ...payload(R),
+      weeks: {
+        w: { adherence: { results: [{ runalyze_id: 2, role: "easy", emphasis: [] }] } },
+      },
+    } as unknown as Payload;
+    expect(vo2maxPanel(easyOnly, null)!.series!.map((s) => s.key)).toEqual(["w42", "w30"]);
+  });
+
+  it("spans the same days with the subset lines as without them", () => {
+    const a = vo2maxPanel(payload(R), null)!.points.map((p) => p.date);
+    const b = vo2maxPanel(P, null)!.points.map((p) => p.date);
+    expect(b).toEqual(a);
+  });
+});
+
 /* --------------------------------------------------------- the real tree */
 
 describe("over the published tree", () => {
   const P = PUBLISHED;
 
-  has(P)("is offered, at the athlete's 42 and the model's 30", () => {
+  has(P)("is offered, at the athlete's 42 and the model's 30, each also over workouts + long", () => {
     const p = vo2maxPanel(P!, null)!;
     expect(p).toBeTruthy();
-    expect(p.series!.map((s) => s.label)).toEqual(["42 d", "30 d"]);
+    expect(p.series!.map((s) => s.label)).toEqual([
+      "42 d",
+      "30 d",
+      "42 d (workouts + long)",
+      "30 d (workouts + long)",
+    ]);
     expect(p.points.length).toBeGreaterThan(500);
   });
 
@@ -453,6 +612,16 @@ describe("over the published tree", () => {
     const p = vo2maxPanel(P!, null)!;
     const differ = p.points.filter((pt) => pt.values!.w42 !== pt.values!.w30).length;
     expect(differ).toBeGreaterThan(p.points.length / 2);
+  });
+
+  has(P)("draws both subset lines on the newest day, apart from the plain line", () => {
+    /* Non-vacuous: both subset lines carry a value at the end of the record.
+       No claim about WHICH is higher -- that is the athlete's question. */
+    const p = vo2maxPanel(P!, null)!;
+    const last = p.points[p.points.length - 1];
+    expect(typeof last.values!.s42).toBe("number");
+    expect(typeof last.values!.s30).toBe("number");
+    expect(last.values!.s42).not.toBe(last.values!.w42);
   });
 
   has(P)("stays inside the model's admissible band on every day", () => {
