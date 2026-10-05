@@ -1,17 +1,19 @@
-/* The committed `published/` tree, assembled once for the whole suite.
+/* The FIXTURE athlete's published tree, assembled once for the whole suite.
  *
- * WHY THE REAL PAYLOAD AND NOT A FIXTURE. Synthetic data cannot find the
- * defects real payloads find -- every regression this suite guards was a shape
- * nobody would have thought to write down: a band that is a NAME rather than a
- * pair, a duration delta of exactly 0.0, a pace chart whose two ends arrive
- * inverted. So the render tests assemble `athletes/<slug>/published/` through
- * the same `assemble()` the page uses, which exercises the repository as well
- * as the component.
+ * THE FIXTURE, NOT THE ATHLETE'S RECORDS (2026-10-05). `vitest.config.mts`
+ * points `TRAINING_REPO_ROOT` at `src/test/fixture/`, so `assemble()` here reads
+ * the fixture athlete published by `tests/fixtures/build_web_fixture.py` -- real
+ * weeks, cut to the cases the suite names (`FIXTURE_WEEKS`), published as of a
+ * pinned date. Until then this read the real `published/` tree, and a verdict
+ * that depended on when the athlete last published went red on a Monday
+ * morning. The athlete's ruling: *"json files of my activities are not test
+ * data."* See `docs/web-app.md` § *The test fixture*.
  *
- * It is also the RICH payload: published on the machine that has the gitignored
- * raw activity payloads, so it carries rep tables and per-run scores a checkout
- * without them cannot regenerate. Everything here therefore skips gracefully
- * when nothing has been published.
+ * STILL REAL SHAPES, which is why it is a subset of real weeks rather than
+ * hand-written: every regression this suite guards was a shape nobody would
+ * have thought to write down -- a band that is a NAME rather than a pair, a
+ * duration delta of exactly 0.0, a pace chart whose two ends arrive inverted.
+ * A case that needs one adds its week to the fixture.
  *
  * ASSEMBLED ONCE. `assemble()` reads a few hundred files; at ~60 test files
  * calling it per case that is the whole suite's runtime. The module is

@@ -1,0 +1,12 @@
+{
+ "completeness_run_absent": "run-steps-absent",
+ "hrv_baseline_floor_pct": 0.9,
+ "hrv_suppressed_consecutive_days": 3,
+ "load_monotony_cv_floor": 0.15,
+ "recovery_day_margin": 1.15,
+ "scoreable_completeness": [
+  "full",
+  "run-steps-absent"
+ ],
+ "sleep_debt_mean_floor_hours": 6.5
+}

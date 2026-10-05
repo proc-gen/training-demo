@@ -27,7 +27,7 @@
  */
 
 import { clock, num, pace, shortDate } from "@/lib/data/format";
-import { newestMeasuredDate } from "@/lib/data/measured";
+import { newestMeasuredDate } from "./measured";
 import {
   BAND_ORDER,
   PACE_LABEL,

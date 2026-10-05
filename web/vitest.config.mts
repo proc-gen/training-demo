@@ -23,6 +23,23 @@ export default defineConfig({
     },
   },
   test: {
+    // THE SUITE READS THE FIXTURE ATHLETE, NEVER THE REAL ONE (2026-10-05).
+    //
+    // `repoRoot()` honours `TRAINING_REPO_ROOT`, so pointing it here moves
+    // every reader at once -- `assemble()`, the SQLite index, the route
+    // handlers -- onto `src/test/fixture/athletes/fixture/published/`, built by
+    // `tests/fixtures/build_web_fixture.py` from the Python fixture athlete and
+    // held fresh by `tests/test_web_fixture.py`. The athlete's ruling: *"json
+    // files of my activities are not test data."* Until this line the web
+    // suite read the real `published/` tree, and a case went red every Monday
+    // morning -- here and in the demo's CI -- because its verdict depended on
+    // when the data was last published.
+    //
+    // Under `src/test/` because the demo export copies the app from
+    // `git ls-files web`: its copy of every test has to find the same fixture.
+    env: {
+      TRAINING_REPO_ROOT: path.resolve(import.meta.dirname, "src/test/fixture"),
+    },
     // Two environments, split by file extension.
     //
     // `.test.ts` is pure logic in node -- the formatters, the scales, the

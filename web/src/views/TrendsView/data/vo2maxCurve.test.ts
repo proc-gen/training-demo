@@ -103,7 +103,8 @@ describe("the published series", () => {
 
 describe("the curve reproduces the confirmed chart anchors", () => {
   has(PUBLISHED)("the corpus is there to compare against", () => {
-    expect(charts().length).toBeGreaterThan(80);
+    // No count of the record -- the suite reads the FIXTURE athlete, whose size is a function of its cases rather than of history.
+    expect(charts().length).toBeGreaterThan(0);
   });
 
   has(PUBLISHED)("every COMPUTED chart's anchor comes back", () => {

@@ -1,0 +1,57 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "General Prep",
+  "rest_days": [
+   "2026-07-20"
+  ],
+  "runs": [
+   {
+    "date": "2026-07-21",
+    "key": "2026-07-21",
+    "prescribed": "60-70 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-07-22",
+    "key": "2026-07-22",
+    "prescribed": "60-70 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-07-23",
+    "key": "2026-07-23",
+    "prescribed": "60-70 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-07-24",
+    "key": "2026-07-24-am",
+    "prescribed": "AM: 30 min recovery",
+    "role": "recovery"
+   },
+   {
+    "date": "2026-07-24",
+    "key": "2026-07-24-pm",
+    "prescribed": "PM: 40 min recovery",
+    "role": "recovery"
+   },
+   {
+    "date": "2026-07-25",
+    "key": "2026-07-25",
+    "prescribed": "45 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-07-26",
+    "key": "2026-07-26",
+    "prescribed": "2 miles warmup, 4 miles progression towards 10k pace, easy until 90 min",
+    "role": "progression"
+   }
+  ],
+  "week_start": "2026-07-20",
+  "week_type": "Recovery"
+ },
+ "week_start": "2026-07-20"
+}

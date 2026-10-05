@@ -524,13 +524,13 @@ describe("the two routes, on the real record", () => {
 
   has(P)("has blocks to compare, so the case above cannot pass vacuously", () => {
     /* An assertion over an empty set is indistinguishable from a passing one.
-       19 runs carry both routes today. */
-    expect(both.length).toBeGreaterThan(10);
+       No count of the record -- the suite reads the FIXTURE athlete, whose size is a function of its cases rather than of history. */
+    expect(both.length).toBeGreaterThan(0);
   });
 
   has(P)("recovers the treadmill sessions the grader could not detect reps in", () => {
     const belted = blocks().filter((b) => b.belt?.length && !b.measured.length);
-    expect(belted.length).toBeGreaterThan(5);
+    expect(belted.length).toBeGreaterThan(0);
   });
 });
 
@@ -547,7 +547,7 @@ describe("the long-rep guard, on the real record", () => {
   const off = P ? new Map(workoutMarks(P, null).map((m) => [key(m), m])) : new Map();
 
   has(P)("has something to diff, so nothing below passes vacuously", () => {
-    expect(on.size).toBeGreaterThan(50);
+    expect(on.size).toBeGreaterThan(0);
     expect(off.size).toBeGreaterThan(on.size);
   });
 

@@ -1,0 +1,85 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "Maintain Volume",
+  "rest_days": [],
+  "runs": [
+   {
+    "date": "2025-04-21",
+    "key": "2025-04-21-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-04-21",
+    "key": "2025-04-21-b",
+    "prescribed": "B - Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-04-22",
+    "key": "2025-04-22-wu",
+    "prescribed": "warmup",
+    "role": "warmup"
+   },
+   {
+    "date": "2025-04-22",
+    "key": "2025-04-22",
+    "prescribed": "5x1600m w/ 400m jog -> substituted: 4x(200m, 200m, 400m) all with equal distance jog recovery",
+    "role": "repetition"
+   },
+   {
+    "date": "2025-04-22",
+    "key": "2025-04-22-cd",
+    "prescribed": "cooldown",
+    "role": "cooldown"
+   },
+   {
+    "date": "2025-04-23",
+    "key": "2025-04-23-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-04-23",
+    "key": "2025-04-23-b",
+    "prescribed": "B - Easy 75 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-04-24",
+    "key": "2025-04-24-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-04-24",
+    "key": "2025-04-24-b",
+    "prescribed": "B - Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-04-25",
+    "key": "2025-04-25",
+    "prescribed": "4x1000m w/ 200m jog, 5x600m w/ 200m jog, 4x200m w/ 200m jog",
+    "role": "mixed"
+   },
+   {
+    "date": "2025-04-26",
+    "key": "2025-04-26",
+    "prescribed": "Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-04-27",
+    "key": "2025-04-27",
+    "prescribed": "Easy 105 min (Local Half Marathon) -> Easy 48 min before getting back to it next week",
+    "role": "easy"
+   }
+  ],
+  "week_start": "2025-04-21",
+  "week_type": "Intensity"
+ },
+ "week_start": "2025-04-21"
+}

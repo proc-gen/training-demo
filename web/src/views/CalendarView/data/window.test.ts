@@ -18,8 +18,14 @@ import {
 const payload = (over: Partial<Payload>): Payload =>
   ({ days: [], weeks: {}, ...over }) as unknown as Payload;
 
+/** Day records with a step total -- what a fully measured day looks like. */
 const days = (...dates: string[]) =>
-  dates.map((date) => ({ date })) as Payload["days"];
+  dates.map((date) => ({ date, total_steps: 10000 })) as Payload["days"];
+
+/** A day record with sleep/HRV and no step total -- a Monday morning before
+ *  that day's export lands. */
+const wellnessOnly = (date: string, total_steps: unknown = null) =>
+  ({ date, hrv: 61, resting_hr: 45, sleep_hours: 8.7, total_steps }) as Payload["days"][number];
 
 describe("isIsoDate", () => {
   it("accepts a real date", () => {
@@ -50,7 +56,7 @@ describe("isIsoDate", () => {
   });
 });
 
-// `newestMeasuredDate`'s cases moved to `lib/data/measured.test.ts` with the
+// `newestMeasuredDate`'s cases moved to `views/TrendsView/data/measured.test.ts` with the
 // function, when the Trends pace panel became its second consumer.
 
 describe("defaultLastDay", () => {
@@ -85,6 +91,47 @@ describe("defaultLastDay", () => {
 
   it("is null with no data and no plan at all", () => {
     expect(defaultLastDay(payload({}))).toBeNull();
+  });
+
+  it("IGNORES a newer wellness-only day -- the athlete's 2026-10-05 ruling", () => {
+    /* Sunday has steps, Monday has only last night's sleep: the calendar
+     * stays on the week just finished. */
+    const p = payload({ days: [...days("2026-10-04"), wellnessOnly("2026-10-05")] });
+    expect(defaultLastDay(p)).toBe("2026-10-04");
+  });
+
+  it("ignores it whether the missing total is null, undefined or absent", () => {
+    for (const missing of [null, undefined]) {
+      const p = payload({ days: [...days("2026-10-04"), wellnessOnly("2026-10-05", missing)] });
+      expect(defaultLastDay(p), String(missing)).toBe("2026-10-04");
+    }
+    const absent = payload({
+      days: [...days("2026-10-04"), { date: "2026-10-05", hrv: 61 } as Payload["days"][number]],
+    });
+    expect(defaultLastDay(absent)).toBe("2026-10-04");
+  });
+
+  it("counts a ZERO step total -- it is a measurement, not an absence", () => {
+    const p = payload({ days: [...days("2026-10-04"), wellnessOnly("2026-10-05", 0)] });
+    expect(defaultLastDay(p)).toBe("2026-10-05");
+  });
+
+  it("moves once the newer day's steps land", () => {
+    const p = payload({ days: days("2026-10-04", "2026-10-05") });
+    expect(defaultLastDay(p)).toBe("2026-10-05");
+  });
+
+  it("does not depend on the order the days arrive in", () => {
+    const p = payload({ days: [wellnessOnly("2026-10-05"), ...days("2026-10-04", "2026-09-30")] });
+    expect(defaultLastDay(p)).toBe("2026-10-04");
+  });
+
+  it("falls back to the plan when NO day carries steps -- wellness alone is not enough", () => {
+    const p = payload({
+      days: [wellnessOnly("2026-10-05")],
+      weeks: { "2026-09-28": {} } as unknown as Payload["weeks"],
+    });
+    expect(defaultLastDay(p)).toBe("2026-10-04");
   });
 });
 

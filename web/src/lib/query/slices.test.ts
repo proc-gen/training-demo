@@ -13,6 +13,8 @@
  * consumers it was cut for.
  */
 
+import { DatabaseSync } from "node:sqlite";
+
 import { describe, expect, it } from "vitest";
 
 import { maxSteps } from "@/views/CalendarView/data/days";
@@ -31,6 +33,8 @@ import { metresOf, workoutMarks } from "@/views/TrendsView/data/workoutMarks";
 import { mondayOf, weekEnding } from "../data/weekDates";
 import { Payload } from "../data/payload";
 import { openIndex } from "../db/open";
+import { buildInto } from "./build";
+import { type Bundle, bundleSource } from "./bundleSource";
 import { assemblePayload } from "./queries";
 import {
   CALENDAR_WEEKS,
@@ -81,10 +85,137 @@ describe.skipIf(!slug)("the shell slice", () => {
     expect(shell!.defaultWeek).toBeTruthy();
   });
 
-  it("anchors the calendar on the newest MEASURED date, never a clock", () => {
-    // `weekEnding` on top, because the anchor is a URL and must normalise.
-    expect(defaultLastDay(full!)).toBeTruthy();
-    expect(shell!.defaultCalendarAnchor).toBe(weekEnding(defaultLastDay(full!)!));
+});
+
+/* THE CALENDAR ANCHOR, ON SYNTHETIC RECORDS -- NEVER ON THE PUBLISHED TREE.
+ *
+ * This case read the committed tree until 2026-10-05, and that is exactly how
+ * it went red in this repo AND in the demo's CI on a sound build: the two
+ * implementations disagreed only when the newest day record was WELLNESS-ONLY
+ * (last night's sleep, no step export yet) and fell in a later week than the
+ * newest step total -- a state the tree is in every Monday morning and in no
+ * other. A test whose verdict depends on what time of the week the data was
+ * published is a test of the calendar, not of the code; the athlete's ruling is
+ * that the athlete's history is not test data.
+ *
+ * So the index is BUILT here, from a handful of records, through the same
+ * `buildInto` + `bundleSource` path the static export runs in the browser, and
+ * each scenario is a case the reader can see. Still a PORT COMPARISON: the SQL
+ * answer is held to the TypeScript reference on identical input, never to a
+ * date written out by hand -- except the one Monday-morning case, which also
+ * states the athlete's ruling outright (steps, not wellness, move the window).
+ */
+describe("the calendar anchor, SQL against its reference", () => {
+  type Day = { date: string } & Record<string, unknown>;
+
+  /** A real index over just these records. */
+  function indexOf(days: Day[], weekStarts: string[]): DatabaseSync {
+    const bundle: Bundle = {
+      "index.json": JSON.stringify({
+        schema: 2,
+        athlete: { slug: "synthetic", display_name: "Synthetic" },
+        banners: [],
+        weeks: weekStarts,
+        days: days.map((d) => d.date),
+        pace_charts: [],
+      }),
+      "history.json": "{}",
+      "vo2max.json": "[]",
+      "thresholds.json": "{}",
+      "load-model.json": "{}",
+    };
+    for (const w of weekStarts) {
+      bundle[`weeks/${w}/week.json`] = JSON.stringify({ week_start: w });
+      bundle[`weeks/${w}/trimp.json`] = "[]";
+    }
+    for (const d of days) bundle[`days/${d.date}.json`] = JSON.stringify(d);
+    const db = new DatabaseSync(":memory:");
+    buildInto(db, bundleSource(bundle));
+    return db;
+  }
+
+  /** The same records as the payload the reference reads. */
+  const payloadOf = (days: Day[], weekStarts: string[]) =>
+    ({
+      days,
+      weeks: Object.fromEntries(weekStarts.map((w) => [w, {}])),
+    }) as unknown as Payload;
+
+  /** Both answers, for one scenario. */
+  function anchors(days: Day[], weekStarts: string[]) {
+    const db = indexOf(days, weekStarts);
+    try {
+      const ref = defaultLastDay(payloadOf(days, weekStarts));
+      return {
+        sql: shellSlice(db).defaultCalendarAnchor,
+        // `weekEnding` on top, because the anchor is a URL and must normalise.
+        reference: ref === null ? null : weekEnding(ref),
+      };
+    } finally {
+      db.close();
+    }
+  }
+
+  const stepped = (date: string, total_steps = 12000): Day => ({
+    date,
+    total_steps,
+    run_steps: 8000,
+    nonrun_steps: total_steps - 8000,
+    hrv: 66,
+  });
+  const wellness = (date: string): Day => ({ date, total_steps: null, hrv: 61, sleep_hours: 8.7 });
+  const WEEKS = ["2026-09-21", "2026-09-28", "2026-10-05"];
+
+  it("agrees when every day carries steps", () => {
+    const got = anchors([stepped("2026-09-30"), stepped("2026-10-04")], WEEKS);
+    expect(got.sql).toBe(got.reference);
+    expect(got.sql).toBe("2026-10-04");
+  });
+
+  it("MONDAY MORNING: a wellness-only day in a NEW week does not move the anchor", () => {
+    /* The exact shape of 2026-10-05: Sunday stepped, Monday only slept. */
+    const got = anchors([stepped("2026-10-04"), wellness("2026-10-05")], WEEKS);
+    expect(got.sql).toBe(got.reference);
+    expect(got.sql).toBe("2026-10-04");
+  });
+
+  it("agrees when the wellness-only day shares the newest stepped day's week", () => {
+    const got = anchors([stepped("2026-09-30"), wellness("2026-10-01")], WEEKS);
+    expect(got.sql).toBe(got.reference);
+    expect(got.sql).toBe("2026-10-04");
+  });
+
+  it("agrees on a wellness day whose total key is ABSENT rather than null", () => {
+    const got = anchors(
+      [stepped("2026-10-04"), { date: "2026-10-05", hrv: 61 }],
+      WEEKS,
+    );
+    expect(got.sql).toBe(got.reference);
+    expect(got.sql).toBe("2026-10-04");
+  });
+
+  it("agrees that a ZERO step total is a measurement and moves the anchor", () => {
+    const got = anchors([stepped("2026-10-04"), stepped("2026-10-05", 0)], WEEKS);
+    expect(got.sql).toBe(got.reference);
+    expect(got.sql).toBe("2026-10-11");
+  });
+
+  it("agrees on the fallback to the plan when no day carries steps", () => {
+    const got = anchors([wellness("2026-10-05")], WEEKS);
+    expect(got.sql).toBe(got.reference);
+    expect(got.sql).toBe("2026-10-11");
+  });
+
+  it("agrees on null with no days and no weeks", () => {
+    const got = anchors([], []);
+    expect(got.sql).toBeNull();
+    expect(got.reference).toBeNull();
+  });
+
+  it("does not depend on the order the catalog lists the days in", () => {
+    const got = anchors([wellness("2026-10-05"), stepped("2026-10-04"), stepped("2026-09-29")], WEEKS);
+    expect(got.sql).toBe(got.reference);
+    expect(got.sql).toBe("2026-10-04");
   });
 });
 
@@ -218,8 +349,18 @@ describe.skipIf(!slug)("the trends slice feeds every panel identically", () => {
   });
 
   it("is MEASURABLY smaller, which is the only reason it exists", () => {
+    /* MEASURED ON THE WEEK RECORDS, which is where the projection cuts: the
+       lap tables, planned rows, manifests, TRIMP tables and note prose. The
+       daily series and the VO2max rows travel whole either way, so a
+       whole-payload ratio measured how much history sat beside the weeks
+       rather than the trimming -- it held on the real record and not on the
+       fixture, which keeps two years of days around 38 weeks. UNDER HALF is
+       the claim: a projection that kept most of each week would not be worth
+       a route of its own, and the exact ratio depends on which weeks are in
+       the tree -- a pinned `/3` was a fit to the real record. */
     const size = (x: unknown) => JSON.stringify(x).length;
-    expect(size(trends)).toBeLessThan(size(full) / 3);
+    expect(size(full!.weeks)).toBeGreaterThan(0);
+    expect(size(trends!.weeks)).toBeLessThan(size(full!.weeks) / 2);
   });
 });
 

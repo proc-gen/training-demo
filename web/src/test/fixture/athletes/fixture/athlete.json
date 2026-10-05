@@ -1,0 +1,6 @@
+{
+  "_comment": "Identity only, and DELIBERATELY NOT THE REAL ATHLETE'S. Everything else in this tree is a verbatim subset of real data -- see tests/fixtures/build_fixture_athlete.py -- but this file is what declares an athlete root, so it gets the fixture's own name rather than a copy of somebody's.",
+  "_generated": "tests/fixtures/build_fixture_athlete.py. Do not hand-edit; change the builder and rebuild.",
+  "slug": "fixture",
+  "display_name": "Fixture Athlete"
+}

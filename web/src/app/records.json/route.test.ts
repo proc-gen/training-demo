@@ -52,8 +52,19 @@ describe.skipIf(!slug)("what it serves", () => {
 
   it("carries the catalog and enough records to build an index", async () => {
     const body = (await GET().json()) as Record<string, string>;
-    expect(Object.keys(body).length).toBeGreaterThan(1000);
     expect(typeof body["index.json"]).toBe("string");
+    /* At least one record per catalog entry -- every week's two required
+     * files, every day, every chart -- DERIVED from the catalog it serves,
+     * never a count of the athlete's history (the suite reads the fixture). */
+    const index = JSON.parse(body["index.json"]) as {
+      weeks: string[];
+      days: string[];
+      pace_charts: string[];
+    };
+    expect(index.weeks.length).toBeGreaterThan(0);
+    expect(Object.keys(body).length).toBeGreaterThanOrEqual(
+      1 + 2 * index.weeks.length + index.days.length + index.pace_charts.length,
+    );
   });
 
   it("carries each record as TEXT, not as a parsed object", () => {

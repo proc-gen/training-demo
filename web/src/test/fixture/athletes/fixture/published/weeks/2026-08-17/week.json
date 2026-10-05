@@ -1,0 +1,97 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "General Prep",
+  "rest_days": [],
+  "runs": [
+   {
+    "date": "2026-08-17",
+    "key": "2026-08-17",
+    "prescribed": "30 min recovery",
+    "role": "recovery"
+   },
+   {
+    "date": "2026-08-18",
+    "key": "2026-08-18-am",
+    "prescribed": "AM: 30 min recovery",
+    "role": "recovery"
+   },
+   {
+    "date": "2026-08-18",
+    "key": "2026-08-18-pm-wu",
+    "prescribed": "warmup for the 10x800m",
+    "role": "warmup"
+   },
+   {
+    "date": "2026-08-18",
+    "key": "2026-08-18-pm",
+    "prescribed": "PM: 10x800m w/ 200m jog at Sub-T",
+    "role": "subt"
+   },
+   {
+    "date": "2026-08-18",
+    "key": "2026-08-18-pm-cd",
+    "prescribed": "cooldown for the 10x800m",
+    "role": "cooldown"
+   },
+   {
+    "date": "2026-08-19",
+    "key": "2026-08-19",
+    "prescribed": "60-70 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-08-20",
+    "key": "2026-08-20",
+    "prescribed": "60-70 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-08-21",
+    "key": "2026-08-21-am",
+    "prescribed": "AM: 30 min recovery",
+    "role": "recovery"
+   },
+   {
+    "date": "2026-08-21",
+    "key": "2026-08-21-pm-wu",
+    "prescribed": "warmup for the hill sprints + sub-T",
+    "role": "warmup"
+   },
+   {
+    "date": "2026-08-21",
+    "key": "2026-08-21-pm-hills",
+    "prescribed": "PM: 4x6s hill sprints w/ 2-3 min walking recovery",
+    "role": "neuromuscular"
+   },
+   {
+    "date": "2026-08-21",
+    "key": "2026-08-21-pm",
+    "prescribed": "PM: 4x6:00 w/ 1:30 jog at Sub-T",
+    "role": "subt"
+   },
+   {
+    "date": "2026-08-21",
+    "key": "2026-08-21-pm-cd",
+    "prescribed": "cooldown for the hill sprints + sub-T",
+    "role": "cooldown"
+   },
+   {
+    "date": "2026-08-22",
+    "key": "2026-08-22",
+    "prescribed": "30 min recovery",
+    "role": "recovery"
+   },
+   {
+    "date": "2026-08-23",
+    "key": "2026-08-23",
+    "prescribed": "90 min easy/long",
+    "role": "long"
+   }
+  ],
+  "week_start": "2026-08-17",
+  "week_type": "Volume"
+ },
+ "week_start": "2026-08-17"
+}

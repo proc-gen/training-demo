@@ -1,0 +1,67 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "Return of Doubles",
+  "rest_days": [],
+  "runs": [
+   {
+    "date": "2025-02-10",
+    "key": "2025-02-10-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-02-10",
+    "key": "2025-02-10-b",
+    "prescribed": "B - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-02-11",
+    "key": "2025-02-11",
+    "prescribed": "600m, 500m, 400m, 300m, 200m, 100m w/ 200m walk rest",
+    "role": "repetition"
+   },
+   {
+    "date": "2025-02-12",
+    "key": "2025-02-12",
+    "prescribed": "Easy 75 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-02-13",
+    "key": "2025-02-13-a",
+    "prescribed": "A - Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-02-13",
+    "key": "2025-02-13-b",
+    "prescribed": "B - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-02-14",
+    "key": "2025-02-14",
+    "prescribed": "5xMile w/ 200m jog -> substituted: cutter hills (icy, track closed)",
+    "role": "hill_repeats"
+   },
+   {
+    "date": "2025-02-15",
+    "key": "2025-02-15",
+    "prescribed": "Easy 60 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-02-16",
+    "key": "2025-02-16",
+    "prescribed": "Easy 90 min",
+    "role": "long"
+   }
+  ],
+  "week_start": "2025-02-10",
+  "week_type": "Intensity"
+ },
+ "week_start": "2025-02-10"
+}

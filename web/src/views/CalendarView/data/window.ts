@@ -24,7 +24,6 @@
  * midnight, which is the previous day in every western timezone.
  */
 
-import { newestMeasuredDate } from "@/lib/data/measured";
 import type { Payload } from "@/lib/data/payload";
 import { addDays, mondayOf, weekEnding } from "@/lib/data/weekDates";
 
@@ -66,29 +65,54 @@ export function isIsoDate(s: string): boolean {
   return mo >= 1 && mo <= 12 && d >= 1 && d <= daysIn(y, mo);
 }
 
-/** The window the page opens on: the last day of measured data.
+/** The window the page opens on: the last day with a STEP TOTAL.
  *
- * `newestMeasuredDate` lived here until the Trends pace panel became its second
- * consumer; it is `@/lib/data/measured` now, docstring and all.
+ * STEPS, NOT ANY MEASUREMENT -- the athlete's ruling, 2026-10-05. A day record
+ * exists as soon as a night's sleep or HRV lands, which on a Monday morning is
+ * hours before that day's step export; anchoring on it opened the calendar on
+ * a new, almost empty week. A wellness-only day does not move the window. The
+ * SQL (`slices.defaultAnchor`) always said `total_steps is not null`; this
+ * reference said "any day row", and the two agreed only while the newest
+ * wellness-only day happened to share a week with the newest step day. They
+ * disagreed for the first time on 2026-10-05 -- see `slices.test.ts`, which
+ * now pins that case on synthetic records instead of on the published tree.
  *
- * Falls back to the newest week's END where nothing has been measured at all --
- * a fresh athlete with a plan and no exports still gets a grid rather than an
+ * NOT `newestMeasuredDate`, which the Trends pace panel still reads and which
+ * keeps its broader meaning there.
+ *
+ * Falls back to the newest week's END where no step total exists at all -- a
+ * fresh athlete with a plan and no exports still gets a grid rather than an
  * empty state, and the plan is the only thing there is to show them.
  *
  * IT IS THE REFERENCE NOW, NOT THE IMPLEMENTATION (2026-08-29). The anchor is a
  * ROUTE, so the default is resolved in `slices.defaultAnchor` -- in SQL, and
  * normalised to the week's Sunday, because a URL has to name one date where all
- * seven name the same window. `slices.test.ts` asserts the two agree over the
- * committed tree, which is this function's job now: the readable implementation
- * a faster one is proven equal to, the same shape `lib/db/records.ts` has
- * against the index.
+ * seven name the same window. `slices.test.ts` asserts the two agree, which is
+ * this function's job now: the readable implementation a faster one is proven
+ * equal to, the same shape `lib/db/records.ts` has against the index.
  */
 export function defaultLastDay(payload: Payload): string | null {
-  const measured = newestMeasuredDate(payload);
-  if (measured) return measured;
+  const stepped = newestStepDate(payload);
+  if (stepped) return stepped;
   const keys = Object.keys(payload.weeks ?? {}).sort();
   const last = keys[keys.length - 1];
   return last ? addDays(mondayOf(last), 6) : null;
+}
+
+/** The newest date whose day record carries a numeric `total_steps`, or null.
+ *
+ * NUMERIC, because the SQL's `is not null` is what this must equal: a day
+ * record publishes a missing total as `null` (schema 2), and `json_extract`
+ * reads an absent key as NULL too, so both mean "no steps". */
+export function newestStepDate(payload: Payload): string | null {
+  let newest: string | null = null;
+  for (const d of payload.days ?? []) {
+    const date = d?.date;
+    if (typeof date !== "string" || !date) continue;
+    if (typeof d.total_steps !== "number") continue;
+    if (newest === null || date > newest) newest = date;
+  }
+  return newest;
 }
 
 /** The anchor a URL asks for, normalised, or `fallback` where it asks for none.

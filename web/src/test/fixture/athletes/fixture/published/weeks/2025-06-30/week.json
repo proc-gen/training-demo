@@ -1,0 +1,109 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "Block",
+  "rest_days": [],
+  "runs": [
+   {
+    "date": "2025-06-30",
+    "key": "2025-06-30-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-06-30",
+    "key": "2025-06-30-b",
+    "prescribed": "B - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-07-01",
+    "key": "2025-07-01-a",
+    "prescribed": "A - 30 min thirds -> 7.2, 8.2, 9.2 mph",
+    "role": "progression"
+   },
+   {
+    "date": "2025-07-01",
+    "key": "2025-07-01-wu",
+    "prescribed": "warmup",
+    "role": "warmup"
+   },
+   {
+    "date": "2025-07-01",
+    "key": "2025-07-01-b",
+    "prescribed": "B - 12x400m w/ 100m jog -> 8x400, not as hot, but the high humidity hit hard",
+    "role": "subt"
+   },
+   {
+    "date": "2025-07-01",
+    "key": "2025-07-01-b2",
+    "prescribed": "4x200m w/ 200m walk -> 2x200",
+    "role": "repetition"
+   },
+   {
+    "date": "2025-07-01",
+    "key": "2025-07-01-cd",
+    "prescribed": "cooldown",
+    "role": "cooldown"
+   },
+   {
+    "date": "2025-07-02",
+    "key": "2025-07-02",
+    "prescribed": "Easy 60 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-07-03",
+    "key": "2025-07-03-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-07-03",
+    "key": "2025-07-03-b",
+    "prescribed": "B - Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-07-04",
+    "key": "2025-07-04-wu",
+    "prescribed": "race warmup",
+    "role": "warmup"
+   },
+   {
+    "date": "2025-07-04",
+    "key": "2025-07-04",
+    "prescribed": "July 4th Race? -> 38:54 Local 10k",
+    "role": "race"
+   },
+   {
+    "date": "2025-07-04",
+    "key": "2025-07-04-cd",
+    "prescribed": "race cooldown",
+    "role": "cooldown"
+   },
+   {
+    "date": "2025-07-04",
+    "key": "2025-07-04-2",
+    "prescribed": "Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-07-05",
+    "key": "2025-07-05",
+    "prescribed": "Easy 45 min - Also hiked Mt Monadnock",
+    "role": "easy"
+   },
+   {
+    "date": "2025-07-06",
+    "key": "2025-07-06",
+    "prescribed": "Easy 90 min -> Went 66ish for 8 miles as a long recovery after the last couple days",
+    "role": "long"
+   }
+  ],
+  "week_start": "2025-06-30",
+  "week_type": "Race"
+ },
+ "week_start": "2025-06-30"
+}

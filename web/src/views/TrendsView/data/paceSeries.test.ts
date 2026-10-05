@@ -19,7 +19,7 @@ import {
   racePaces,
   trainingPaces,
 } from "@/lib/data/paceRows";
-import { newestMeasuredDate } from "@/lib/data/measured";
+import { newestMeasuredDate } from "./measured";
 import { weekKeys } from "@/lib/data/weeks";
 import type { PaceChart } from "@/lib/data/payload";
 import { addDays } from "./dates";
@@ -64,15 +64,22 @@ describe("the chart series", () => {
     const expected = distinctChartDates();
     expect(all.map((c) => c.date)).toEqual(expected);
     // Non-vacuous, and it must genuinely be fewer than the week count -- weeks
-    // authored ahead carry an earlier week's chart.
-    expect(all.length).toBeGreaterThan(50);
+    // authored ahead carry an earlier week's chart. No count of the record:
+    // the suite reads the FIXTURE athlete, whose size is a function of its cases rather than of history.
+    expect(all.length).toBeGreaterThan(0);
     expect(all.length).toBeLessThan(weekKeys(P!).length);
   });
 
   has(P)("plots every chart on a clean weekly cadence", () => {
+    /* Every gap a whole number of weeks -- every chart closes on a Sunday --
+       and the closest two exactly one apart. The FIXTURE's weeks are not
+       contiguous, so "every gap is 7" described the real record's density,
+       not the cadence; a chart a day off its Sunday still fails here. */
     const ms = all.map((c) => Date.parse(c.date + "T00:00:00Z"));
-    const gaps = new Set(ms.slice(1).map((t, i) => (t - ms[i]) / 86_400_000));
-    expect([...gaps]).toEqual([7]);
+    const gaps = ms.slice(1).map((t, i) => (t - ms[i]) / 86_400_000);
+    expect(gaps.length).toBeGreaterThan(0);
+    for (const g of gaps) expect(g % 7, String(g)).toBe(0);
+    expect(Math.min(...gaps)).toBe(7);
   });
 
   has(P)("sorts oldest first", () => {
@@ -422,7 +429,7 @@ describe("the pace groups", () => {
 describe("the repetition zone", () => {
   has(P)("runs from 800m race pace to 3000m race pace, on every chart", () => {
     const pts = g("speed").points;
-    expect(pts.length).toBeGreaterThan(50);
+    expect(pts.length).toBeGreaterThan(0);
     // The confirmed charts, index for index; anything past `all` is the
     // carried live-week extension, checked below.
     for (let i = 0; i < all.length; i += 1) {
@@ -674,9 +681,10 @@ describe("the executed workouts", () => {
        recovery` carried NO marks until 2026-08-26 -- it was the one group with
        a band and nothing plotted against it -- and its dots come from the
        continuous runs rather than from a rep set. */
-    expect(marks("subt").length).toBeGreaterThan(20);
-    expect(marks("speed").length).toBeGreaterThan(10);
-    expect(marks("easy").length).toBeGreaterThan(300);
+    // Every group, non-empty; no count of the record -- the suite reads the FIXTURE athlete, whose size is a function of its cases rather than of history.
+    expect(marks("subt").length).toBeGreaterThan(0);
+    expect(marks("speed").length).toBeGreaterThan(0);
+    expect(marks("easy").length).toBeGreaterThan(0);
   });
 
   has(P)("keeps the two FAMILIES apart -- no run on a workout group, and back", () => {
@@ -1009,7 +1017,7 @@ describe("the race efforts", () => {
        them -- and the two modes agree on which dots exist because both are
        built from the same races. */
     const raced = raceMarks(P!);
-    expect(raced.length).toBeGreaterThanOrEqual(10);
+    expect(raced.length).toBeGreaterThan(1);
     for (const key of ["time", "pace"]) {
       expect(modeMarks(key).map((m) => m.date)).toEqual(raced.map((m) => m.date));
     }

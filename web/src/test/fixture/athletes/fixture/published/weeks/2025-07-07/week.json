@@ -1,0 +1,85 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "Block",
+  "rest_days": [],
+  "runs": [
+   {
+    "date": "2025-07-07",
+    "key": "2025-07-07",
+    "prescribed": "Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-07-08",
+    "key": "2025-07-08-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-07-08",
+    "key": "2025-07-08-wu",
+    "prescribed": "warmup",
+    "role": "warmup"
+   },
+   {
+    "date": "2025-07-08",
+    "key": "2025-07-08-b",
+    "prescribed": "B - 1xmile w/ 200m jog, 6-8x200m w/ 200m jog",
+    "role": "repetition"
+   },
+   {
+    "date": "2025-07-08",
+    "key": "2025-07-08-cd",
+    "prescribed": "cooldown",
+    "role": "cooldown"
+   },
+   {
+    "date": "2025-07-09",
+    "key": "2025-07-09",
+    "prescribed": "Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-07-10",
+    "key": "2025-07-10-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-07-10",
+    "key": "2025-07-10-b",
+    "prescribed": "B - Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-07-11",
+    "key": "2025-07-11-a",
+    "prescribed": "A - Easy 30 min -> Added 4x1:00 hard w/ 1:00 jog to morning",
+    "role": "easy"
+   },
+   {
+    "date": "2025-07-11",
+    "key": "2025-07-11-b",
+    "prescribed": "B - Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-07-12",
+    "key": "2025-07-12",
+    "prescribed": "Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-07-13",
+    "key": "2025-07-13",
+    "prescribed": "Easy 90 min",
+    "role": "long"
+   }
+  ],
+  "week_start": "2025-07-07",
+  "week_type": "Intensity"
+ },
+ "week_start": "2025-07-07"
+}

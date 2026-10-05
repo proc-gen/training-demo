@@ -1,0 +1,91 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "Block",
+  "rest_days": [],
+  "runs": [
+   {
+    "date": "2025-09-01",
+    "key": "2025-09-01-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-09-01",
+    "key": "2025-09-01-b",
+    "prescribed": "B - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-09-02",
+    "key": "2025-09-02-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-09-02",
+    "key": "2025-09-02-wu",
+    "prescribed": "warmup",
+    "role": "warmup"
+   },
+   {
+    "date": "2025-09-02",
+    "key": "2025-09-02-b",
+    "prescribed": "B - 3x(1xmile w/ 200m jog, 3x200m w/ 200m jog)",
+    "role": "repetition"
+   },
+   {
+    "date": "2025-09-02",
+    "key": "2025-09-02-cd",
+    "prescribed": "cooldown",
+    "role": "cooldown"
+   },
+   {
+    "date": "2025-09-03",
+    "key": "2025-09-03",
+    "prescribed": "Easy 60 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-09-04",
+    "key": "2025-09-04-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-09-04",
+    "key": "2025-09-04-b",
+    "prescribed": "B - Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-09-05",
+    "key": "2025-09-05-a",
+    "prescribed": "A - Easy 30 min -> Ran .25 because my hip chose violence",
+    "role": "easy"
+   },
+   {
+    "date": "2025-09-05",
+    "key": "2025-09-05-b",
+    "prescribed": "B - 60 min w/ 5-10x1:00 w/ 1:00 jog -> not started, hip",
+    "role": "threshold"
+   },
+   {
+    "date": "2025-09-06",
+    "key": "2025-09-06",
+    "prescribed": "Easy 45 min -> 18 min easy because the hip was less violent",
+    "role": "easy"
+   },
+   {
+    "date": "2025-09-07",
+    "key": "2025-09-07",
+    "prescribed": "Easy 90 min -> 3 min easy because violence",
+    "role": "long"
+   }
+  ],
+  "week_start": "2025-09-01",
+  "week_type": "Intensity"
+ },
+ "week_start": "2025-09-01"
+}

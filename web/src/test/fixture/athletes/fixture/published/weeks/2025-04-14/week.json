@@ -1,0 +1,91 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "Maintain Volume",
+  "rest_days": [],
+  "runs": [
+   {
+    "date": "2025-04-14",
+    "key": "2025-04-14-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-04-14",
+    "key": "2025-04-14-b",
+    "prescribed": "B - Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-04-15",
+    "key": "2025-04-15",
+    "prescribed": "8x1000m w/ 400m jog recovery",
+    "role": "threshold"
+   },
+   {
+    "date": "2025-04-16",
+    "key": "2025-04-16-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-04-16",
+    "key": "2025-04-16-b",
+    "prescribed": "B - Easy 75 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-04-17",
+    "key": "2025-04-17-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-04-17",
+    "key": "2025-04-17-b",
+    "prescribed": "B - Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-04-18",
+    "key": "2025-04-18-wu",
+    "prescribed": "warmup",
+    "role": "warmup"
+   },
+   {
+    "date": "2025-04-18",
+    "key": "2025-04-18",
+    "prescribed": "4x1200m w/ 200m jog, 4x600m w/ 200m jog, 4x200m w/ 200m jog",
+    "role": "mixed"
+   },
+   {
+    "date": "2025-04-18",
+    "key": "2025-04-18-cd",
+    "prescribed": "cooldown",
+    "role": "cooldown"
+   },
+   {
+    "date": "2025-04-19",
+    "key": "2025-04-19",
+    "prescribed": "Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-04-19",
+    "key": "2025-04-19-2",
+    "prescribed": "a five-minute tail on the easy day",
+    "role": "easy"
+   },
+   {
+    "date": "2025-04-20",
+    "key": "2025-04-20",
+    "prescribed": "Easy 105 min",
+    "role": "long"
+   }
+  ],
+  "week_start": "2025-04-14",
+  "week_type": "Intensity"
+ },
+ "week_start": "2025-04-14"
+}

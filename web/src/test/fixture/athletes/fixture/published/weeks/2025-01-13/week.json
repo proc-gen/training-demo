@@ -1,0 +1,79 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "Continue Build",
+  "rest_days": [],
+  "runs": [
+   {
+    "date": "2025-01-13",
+    "key": "2025-01-13",
+    "prescribed": "Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-01-14",
+    "key": "2025-01-14-wu",
+    "prescribed": "warmup",
+    "role": "warmup"
+   },
+   {
+    "date": "2025-01-14",
+    "key": "2025-01-14",
+    "prescribed": "600m, 400m, 200m, 200m, 400m, 600m w/ 200m walk rest",
+    "role": "repetition"
+   },
+   {
+    "date": "2025-01-14",
+    "key": "2025-01-14-cd",
+    "prescribed": "cooldown",
+    "role": "cooldown"
+   },
+   {
+    "date": "2025-01-15",
+    "key": "2025-01-15",
+    "prescribed": "Easy 75 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-01-16",
+    "key": "2025-01-16",
+    "prescribed": "Easy 60 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-01-17",
+    "key": "2025-01-17-wu",
+    "prescribed": "warmup",
+    "role": "warmup"
+   },
+   {
+    "date": "2025-01-17",
+    "key": "2025-01-17",
+    "prescribed": "4xMile w/ 200m jog",
+    "role": "subt"
+   },
+   {
+    "date": "2025-01-17",
+    "key": "2025-01-17-cd",
+    "prescribed": "cooldown",
+    "role": "cooldown"
+   },
+   {
+    "date": "2025-01-18",
+    "key": "2025-01-18",
+    "prescribed": "Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-01-19",
+    "key": "2025-01-19",
+    "prescribed": "Easy 90 min",
+    "role": "long"
+   }
+  ],
+  "week_start": "2025-01-13",
+  "week_type": "Intensity"
+ },
+ "week_start": "2025-01-13"
+}

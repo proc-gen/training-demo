@@ -1,0 +1,91 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "Block",
+  "rest_days": [],
+  "runs": [
+   {
+    "date": "2025-08-04",
+    "key": "2025-08-04-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-08-04",
+    "key": "2025-08-04-b",
+    "prescribed": "B - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-08-05",
+    "key": "2025-08-05-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-08-05",
+    "key": "2025-08-05-wu",
+    "prescribed": "warmup",
+    "role": "warmup"
+   },
+   {
+    "date": "2025-08-05",
+    "key": "2025-08-05-b",
+    "prescribed": "B - 2x(1xmile w/ 200m jog, 3x200m w/ 200m jog)",
+    "role": "repetition"
+   },
+   {
+    "date": "2025-08-05",
+    "key": "2025-08-05-cd",
+    "prescribed": "cooldown",
+    "role": "cooldown"
+   },
+   {
+    "date": "2025-08-06",
+    "key": "2025-08-06",
+    "prescribed": "Easy 60 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-08-07",
+    "key": "2025-08-07-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-08-07",
+    "key": "2025-08-07-b",
+    "prescribed": "B - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-08-08",
+    "key": "2025-08-08-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-08-08",
+    "key": "2025-08-08-b",
+    "prescribed": "B - 60 min w/ 5-10x1:00 w/ 1:00 jog -> Did 10",
+    "role": "threshold"
+   },
+   {
+    "date": "2025-08-09",
+    "key": "2025-08-09",
+    "prescribed": "Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-08-10",
+    "key": "2025-08-10",
+    "prescribed": "Easy 90 min",
+    "role": "long"
+   }
+  ],
+  "week_start": "2025-08-04",
+  "week_type": "Intensity"
+ },
+ "week_start": "2025-08-04"
+}

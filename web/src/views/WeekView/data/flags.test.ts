@@ -4,7 +4,8 @@ import fs from "node:fs";
 import path from "node:path";
 
 import type { Flag, Week } from "@/lib/data/payload";
-import { repoRoot } from "@/lib/repo";
+import { publishedDir } from "@/lib/repo";
+import { athleteSlugs } from "@/lib/repository";
 import {
   FLAG_COMPONENT,
   allFlags,
@@ -134,10 +135,10 @@ describe("FLAG_COMPONENT", () => {
   it("maps every token the two graders publish", () => {
     /* THE GUARD THAT MAKES THE FLAGS CARD SAFE TO DELETE. Placement is now what
      * decides visibility, so a grader adding a token would drop it off the page
-     * entirely. Read off the committed `published/` tree rather than a fixture,
-     * because that tree is regenerated from the graders themselves. */
-    const root = repoRoot();
-    const weeksDir = path.join(root, "athletes", "micah", "published", "weeks");
+     * entirely. Read off the FIXTURE athlete's published tree, which is still
+     * regenerated from the graders themselves (`build_web_fixture.py`) -- so a
+     * grader adding a token reaches it on the next rebuild. */
+    const weeksDir = path.join(publishedDir(athleteSlugs()[0]), "weeks");
     const seen = new Set<string>();
     for (const w of fs.readdirSync(weeksDir))
       for (const half of ["adherence.json", "load.json"]) {
@@ -153,8 +154,7 @@ describe("FLAG_COMPONENT", () => {
 
   it("names no token neither grader publishes", () => {
     // Both directions, so the map can neither go stale nor grow silently.
-    const root = repoRoot();
-    const weeksDir = path.join(root, "athletes", "micah", "published", "weeks");
+    const weeksDir = path.join(publishedDir(athleteSlugs()[0]), "weeks");
     const seen = new Set<string>();
     for (const w of fs.readdirSync(weeksDir))
       for (const half of ["adherence.json", "load.json"]) {
@@ -184,8 +184,7 @@ describe("unmappedFlags", () => {
   });
 
   it("is empty for every published week", () => {
-    const root = repoRoot();
-    const weeksDir = path.join(root, "athletes", "micah", "published", "weeks");
+    const weeksDir = path.join(publishedDir(athleteSlugs()[0]), "weeks");
     for (const wk of fs.readdirSync(weeksDir)) {
       const read = (half: string) => {
         const f = path.join(weeksDir, wk, half);

@@ -1,0 +1,73 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "General Prep",
+  "rest_days": [],
+  "runs": [
+   {
+    "date": "2026-07-27",
+    "key": "2026-07-27",
+    "prescribed": "30 min recovery",
+    "role": "recovery"
+   },
+   {
+    "date": "2026-07-28",
+    "key": "2026-07-28-wu",
+    "prescribed": "warmup for the 8x800m",
+    "role": "warmup"
+   },
+   {
+    "date": "2026-07-28",
+    "key": "2026-07-28",
+    "prescribed": "8x800m w/ 200m jog at Sub-T",
+    "role": "subt"
+   },
+   {
+    "date": "2026-07-28",
+    "key": "2026-07-28-cd",
+    "prescribed": "cooldown for the 8x800m",
+    "role": "cooldown"
+   },
+   {
+    "date": "2026-07-29",
+    "key": "2026-07-29",
+    "prescribed": "60-70 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-07-30",
+    "key": "2026-07-30",
+    "prescribed": "15x1:00 w/ 30s jog recovery at Sub-T",
+    "role": "subt"
+   },
+   {
+    "date": "2026-07-31",
+    "key": "2026-07-31-am",
+    "prescribed": "AM: 30 min recovery",
+    "role": "recovery"
+   },
+   {
+    "date": "2026-07-31",
+    "key": "2026-07-31-pm",
+    "prescribed": "PM: 30 min easy run with club people",
+    "role": "easy"
+   },
+   {
+    "date": "2026-08-01",
+    "key": "2026-08-01",
+    "prescribed": "30 min recovery",
+    "role": "recovery"
+   },
+   {
+    "date": "2026-08-02",
+    "key": "2026-08-02",
+    "prescribed": "90 min easy/long",
+    "role": "long"
+   }
+  ],
+  "week_start": "2026-07-27",
+  "week_type": "Volume"
+ },
+ "week_start": "2026-07-27"
+}

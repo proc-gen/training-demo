@@ -3,7 +3,6 @@ import path from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import { registryDir } from "@/lib/repo";
 import {
   applyDay,
   applyWeek,
@@ -14,6 +13,7 @@ import {
   weekFormOf,
 } from "./merge";
 import { runFromTemplate } from "./runTemplates";
+import { FIXTURE_WEEKS_DIR } from "@/test/fixtureManifests";
 
 /* A manifest with everything the merge must NOT touch: provenance prose,
  * `_`-prefixed notes, `runalyze_id`, an unknown key on a run and on a set.
@@ -428,7 +428,7 @@ describe("against the committed tree", () => {
    * existence rather than skip-annotating -- the same posture the route tests
    * take about a checkout where nothing is published. The synthetic cases
    * above run everywhere. */
-  const weeksDir = path.join(registryDir(), "micah", "weeks");
+  const weeksDir = FIXTURE_WEEKS_DIR;
 
   it("the exemplar round-trips structurally through every scope", () => {
     const file = path.join(weeksDir, "2026-08-31.json");
@@ -454,7 +454,7 @@ describe("against the committed tree", () => {
      * `3.0` and inline arrays are value-equal but not byte-equal under
      * `JSON.stringify`. It holds for every manifest already in normalized
      * form, which is everything the editor itself writes. */
-    const file = path.join(weeksDir, "2026-12-07.json");
+    const file = path.join(weeksDir, "2026-10-12.json");
     if (!fs.existsSync(file)) return;
     const raw = fs.readFileSync(file, "utf-8");
     const m = JSON.parse(raw);

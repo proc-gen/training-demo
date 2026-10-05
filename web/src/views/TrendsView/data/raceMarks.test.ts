@@ -15,8 +15,9 @@ const marks = P ? raceMarks(P) : [];
 
 describe("raceMarks over the committed tree", () => {
   has(P)("finds every graded race, oldest week first", () => {
-    // Ten on the record today; a floor, because the athlete keeps racing.
-    expect(marks.length).toBeGreaterThanOrEqual(10);
+    // More than one, so "oldest first" is a claim about an order; no count of
+    // the record -- the suite reads the FIXTURE athlete, whose size is a function of its cases rather than of history.
+    expect(marks.length).toBeGreaterThan(1);
     const dates = marks.map((m) => m.date);
     expect(dates).toEqual([...dates].sort());
   });

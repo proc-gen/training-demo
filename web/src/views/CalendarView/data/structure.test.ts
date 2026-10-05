@@ -3,7 +3,6 @@ import path from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import { registryDir } from "@/lib/repo";
 import {
   addRep,
   addSet,
@@ -26,6 +25,7 @@ import {
   type RepRow,
   type Target,
 } from "./structure";
+import { FIXTURE_WEEKS_DIR } from "@/test/fixtureManifests";
 
 /** `collapse(expand(run))` -- the whole contract in one line. */
 const trip = (run: Json, role = "subt"): Json | { issues: string[] } => {
@@ -836,7 +836,7 @@ describe("against the committed tree", () => {
    * over ~150 specs, grading nothing -- the footing
    * `test_the_real_manifests_all_validate` has. The demo checkout carries
    * `published/` and no `weeks/`, so it guards on existence like `merge.test`. */
-  const weeksDir = path.join(registryDir(), "micah", "weeks");
+  const weeksDir = FIXTURE_WEEKS_DIR;
 
   it("every structured run collapses back to exactly its own keys", () => {
     if (!fs.existsSync(weeksDir)) return;
@@ -865,10 +865,13 @@ describe("against the committed tree", () => {
     }
     /* NON-VACUOUS, and the counts are the features the sweep is FOR: a loop
      * over nothing passes, and so does a loop over 120 uniform sets that never
-     * reaches a group, a range or a mixed-length list. */
-    expect(seen).toBeGreaterThan(100);
-    expect(grouped).toBeGreaterThan(4);
-    expect(ranged).toBeGreaterThan(8);
-    expect(lists).toBeGreaterThan(8);
+     * reaches a group, a range or a mixed-length list. AT LEAST ONE OF EACH
+     * rather than a count of the record: the sweep reads the FIXTURE athlete's
+     * manifests, which are sized by cases, and each feature being present is
+     * the claim. */
+    expect(seen).toBeGreaterThan(0);
+    expect(grouped).toBeGreaterThan(0);
+    expect(ranged).toBeGreaterThan(0);
+    expect(lists).toBeGreaterThan(0);
   });
 });

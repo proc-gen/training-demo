@@ -17,6 +17,8 @@
  * both at once would leave a failure unable to say which half moved.
  */
 
+import fs from "node:fs";
+import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
 
 import { describe, expect, it } from "vitest";
@@ -26,6 +28,7 @@ import { bundleSource } from "../query/bundleSource";
 import { assemblePayload } from "../query/queries";
 import { bundleFor } from "./bundle";
 import { fileSource } from "./fileSource";
+import { publishedDir } from "../repo";
 import { athleteSlugs } from "../repository";
 
 const slug = athleteSlugs()[0];
@@ -86,10 +89,26 @@ describe.skipIf(!slug)("what the transcript carries", () => {
 
   it("is smaller than the tree it transcribes, and not by much", () => {
     /* A sanity bound in both directions. Much smaller means records were
-     * dropped; larger means something is being stored twice. The published
-     * tree is ~6.4 MB and the bundle is its bytes minus the filesystem. */
+     * dropped; larger means something is being stored twice. The bound is
+     * RELATIVE TO THE TREE ON DISK -- every record but `streams/`, which the
+     * bundle deliberately leaves to be fetched one at a time -- so it does not
+     * depend on how much history the tree holds. Characters against bytes is
+     * why it is a band rather than an equality: the prose is full of
+     * em-dashes, one UTF-16 unit and three UTF-8 bytes each. */
     const bytes = Object.values(bundle!).reduce((n, t) => n + t.length, 0);
-    expect(bytes).toBeGreaterThan(3_000_000);
-    expect(bytes).toBeLessThan(12_000_000);
+    const root = publishedDir(slug);
+    let tree = 0;
+    const walk = (dir: string) => {
+      for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+        const full = path.join(dir, e.name);
+        if (e.isDirectory()) {
+          if (path.relative(root, full) !== "streams") walk(full);
+        } else tree += fs.statSync(full).size;
+      }
+    };
+    walk(root);
+    expect(tree).toBeGreaterThan(0);
+    expect(bytes).toBeGreaterThan(tree * 0.8);
+    expect(bytes).toBeLessThanOrEqual(tree);
   });
 });

@@ -1,0 +1,75 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "General Prep",
+  "rest_days": [
+   "2026-07-06"
+  ],
+  "runs": [
+   {
+    "date": "2026-07-07",
+    "key": "2026-07-07-wu",
+    "prescribed": "warmup for the repetition set",
+    "role": "warmup"
+   },
+   {
+    "date": "2026-07-07",
+    "key": "2026-07-07",
+    "prescribed": "400m, 600m, 400m, 200m at Repetition, 1 mile Sub-T, 5x300m in spikes",
+    "role": "mixed"
+   },
+   {
+    "date": "2026-07-07",
+    "key": "2026-07-07-cd",
+    "prescribed": "part of the abandoned sub-T mile, then cooldown",
+    "role": "cooldown"
+   },
+   {
+    "date": "2026-07-07",
+    "key": "2026-07-07-cd2",
+    "prescribed": "cooldown",
+    "role": "cooldown"
+   },
+   {
+    "date": "2026-07-08",
+    "key": "2026-07-08",
+    "prescribed": "50 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-07-09",
+    "key": "2026-07-09",
+    "prescribed": "60 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-07-10",
+    "key": "2026-07-10",
+    "prescribed": "11x~.22 mile hill repeats",
+    "role": "hill_repeats"
+   },
+   {
+    "date": "2026-07-11",
+    "key": "2026-07-11-1",
+    "prescribed": "first half of the 30 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-07-11",
+    "key": "2026-07-11-2",
+    "prescribed": "30 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-07-12",
+    "key": "2026-07-12",
+    "prescribed": "90 min easy/long",
+    "role": "long"
+   }
+  ],
+  "week_start": "2026-07-06",
+  "week_type": "Intensity"
+ },
+ "week_start": "2026-07-06"
+}

@@ -1,0 +1,73 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "Race",
+  "rest_days": [],
+  "runs": [
+   {
+    "date": "2025-05-05",
+    "key": "2025-05-05-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-05-05",
+    "key": "2025-05-05-b",
+    "prescribed": "B - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-05-06",
+    "key": "2025-05-06-1",
+    "prescribed": "first part of the substituted easy 37",
+    "role": "easy"
+   },
+   {
+    "date": "2025-05-06",
+    "key": "2025-05-06-2",
+    "prescribed": "3x1000m w/ 400m jog, 2-4x200m w/ 200m jog -> Easy 37 minutes",
+    "role": "easy"
+   },
+   {
+    "date": "2025-05-07",
+    "key": "2025-05-07",
+    "prescribed": "Easy 60 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-05-08",
+    "key": "2025-05-08",
+    "prescribed": "Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-05-09",
+    "key": "2025-05-09",
+    "prescribed": "Easy 60 min -> Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-05-10",
+    "key": "2025-05-10",
+    "prescribed": "Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-05-11",
+    "key": "2025-05-11-wu",
+    "prescribed": "race warmup",
+    "role": "warmup"
+   },
+   {
+    "date": "2025-05-11",
+    "key": "2025-05-11",
+    "prescribed": "Mountain 15k",
+    "role": "race"
+   }
+  ],
+  "week_start": "2025-05-05",
+  "week_type": "Race"
+ },
+ "week_start": "2025-05-05"
+}

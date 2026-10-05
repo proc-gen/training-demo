@@ -1,0 +1,67 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "Rebuild",
+  "rest_days": [],
+  "runs": [
+   {
+    "date": "2026-06-16",
+    "key": "2026-06-16-wu",
+    "prescribed": "warmup",
+    "role": "warmup"
+   },
+   {
+    "date": "2026-06-16",
+    "key": "2026-06-16",
+    "prescribed": "unplanned -- 1 mile time trial, then recovery on a watch nobody stopped (7:34 at HR 168)",
+    "role": "time_trial"
+   },
+   {
+    "date": "2026-06-16",
+    "key": "2026-06-16-jog",
+    "prescribed": "jog between work blocks",
+    "role": "easy"
+   },
+   {
+    "date": "2026-06-16",
+    "key": "2026-06-16-b2",
+    "prescribed": "unplanned -- work block 2 (15 min at HR 162)",
+    "role": "subt"
+   },
+   {
+    "date": "2026-06-16",
+    "key": "2026-06-16-cd",
+    "prescribed": "cooldown",
+    "role": "cooldown"
+   },
+   {
+    "date": "2026-06-17",
+    "key": "2026-06-17",
+    "prescribed": "unplanned -- easy run (76 min)",
+    "role": "easy"
+   },
+   {
+    "date": "2026-06-18",
+    "key": "2026-06-18",
+    "prescribed": "unplanned -- easy run (57 min)",
+    "role": "easy"
+   },
+   {
+    "date": "2026-06-19",
+    "key": "2026-06-19",
+    "prescribed": "unplanned -- easy run while travelling (43 min)",
+    "role": "easy"
+   },
+   {
+    "date": "2026-06-21",
+    "key": "2026-06-21",
+    "prescribed": "unplanned -- easy run while travelling (34 min)",
+    "role": "easy"
+   }
+  ],
+  "week_start": "2026-06-15",
+  "week_type": "Volume"
+ },
+ "week_start": "2026-06-15"
+}

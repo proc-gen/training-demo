@@ -1,0 +1,91 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "Down",
+  "rest_days": [],
+  "runs": [
+   {
+    "date": "2025-06-09",
+    "key": "2025-06-09-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-06-09",
+    "key": "2025-06-09-b",
+    "prescribed": "B - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-06-10",
+    "key": "2025-06-10-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-06-10",
+    "key": "2025-06-10-wu",
+    "prescribed": "warmup",
+    "role": "warmup"
+   },
+   {
+    "date": "2025-06-10",
+    "key": "2025-06-10-b",
+    "prescribed": "B - 6-8x200m w/ 200m jog",
+    "role": "repetition"
+   },
+   {
+    "date": "2025-06-10",
+    "key": "2025-06-10-cd",
+    "prescribed": "cooldown",
+    "role": "cooldown"
+   },
+   {
+    "date": "2025-06-11",
+    "key": "2025-06-11",
+    "prescribed": "Easy 60 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-06-12",
+    "key": "2025-06-12-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-06-12",
+    "key": "2025-06-12-b",
+    "prescribed": "B - Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-06-13",
+    "key": "2025-06-13",
+    "prescribed": "Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-06-14",
+    "key": "2025-06-14-pre",
+    "prescribed": "82-second pre-race blip",
+    "role": "warmup"
+   },
+   {
+    "date": "2025-06-14",
+    "key": "2025-06-14",
+    "prescribed": "Mountain Race -> 49:03, half cancelled, only half the intended distance",
+    "role": "race"
+   },
+   {
+    "date": "2025-06-15",
+    "key": "2025-06-15",
+    "prescribed": "Easy 30 min",
+    "role": "easy"
+   }
+  ],
+  "week_start": "2025-06-09",
+  "week_type": "Race"
+ },
+ "week_start": "2025-06-09"
+}

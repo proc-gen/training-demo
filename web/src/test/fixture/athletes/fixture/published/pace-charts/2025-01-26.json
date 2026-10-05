@@ -1,0 +1,73 @@
+{
+ "bands": {
+  "easy": {
+   "fast_sec_per_mi": 490,
+   "slow_sec_per_mi": 529
+  },
+  "recovery": {
+   "fast_sec_per_mi": 529,
+   "slow_sec_per_mi": 575
+  },
+  "rep_10min": {
+   "fast_sec_per_mi": 407,
+   "slow_sec_per_mi": 422
+  },
+  "rep_15min": {
+   "fast_sec_per_mi": 417,
+   "slow_sec_per_mi": 433
+  },
+  "rep_1min": {
+   "fast_sec_per_mi": 379,
+   "slow_sec_per_mi": 392
+  },
+  "rep_3min": {
+   "fast_sec_per_mi": 388,
+   "slow_sec_per_mi": 402
+  },
+  "rep_6min": {
+   "fast_sec_per_mi": 397,
+   "slow_sec_per_mi": 412
+  }
+ },
+ "confirmed_by_athlete": true,
+ "effective_vo2max": 56.92,
+ "race_paces": {
+  "10000m": {
+   "sec_per_mi": 357,
+   "seconds": 2219
+  },
+  "1500m": {
+   "sec_per_mi": 309,
+   "seconds": 288
+  },
+  "16093m": {
+   "sec_per_mi": 368,
+   "seconds": 3675
+  },
+  "21097m": {
+   "sec_per_mi": 374,
+   "seconds": 4908
+  },
+  "3000m": {
+   "sec_per_mi": 331,
+   "seconds": 618
+  },
+  "42195m": {
+   "sec_per_mi": 391,
+   "seconds": 10252
+  },
+  "5000m": {
+   "sec_per_mi": 344,
+   "seconds": 1070
+  },
+  "800m": {
+   "sec_per_mi": 293,
+   "seconds": 146
+  },
+  "threshold": {
+   "fast_sec_per_mi": 367,
+   "slow_sec_per_mi": 374
+  }
+ },
+ "week_ending": "2025-01-26"
+}

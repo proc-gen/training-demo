@@ -32,8 +32,15 @@ const wire = bundle ? bundleSource(bundle) : null;
 
 describe.skipIf(!slug)("the file source and the bundle source agree", () => {
   it("carries enough records to be worth comparing", () => {
-    // Every case below is vacuous over an empty bundle.
-    expect(Object.keys(bundle!).length).toBeGreaterThan(1000);
+    // Every case below is vacuous over an empty bundle. The floor is the
+    // catalog's own size -- a record per week's two required files, per day
+    // and per chart -- so it holds for the fixture and for any real tree.
+    const index = file!.index();
+    expect(index.weeks.length).toBeGreaterThan(0);
+    expect(index.days.length).toBeGreaterThan(0);
+    expect(Object.keys(bundle!).length).toBeGreaterThanOrEqual(
+      1 + 2 * index.weeks.length + index.days.length + index.pace_charts.length,
+    );
   });
 
   it("parses the same catalog", () => {

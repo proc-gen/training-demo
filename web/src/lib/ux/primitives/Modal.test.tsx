@@ -4,7 +4,6 @@ import path from "node:path";
 import { cleanup, fireEvent } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { repoRoot } from "@/lib/repo";
 import { wrap } from "@/test/render";
 import { Modal } from "./Modal";
 
@@ -41,7 +40,9 @@ describe("the stylesheet keeps the dialog centred", () => {
    * and the body reads as empty. This file has now had to say *prose is not a
    * declaration* four times; here it cost a correct rule reading as missing. */
   const css = fs
-    .readFileSync(path.join(repoRoot(), "web", "src", "app", "globals.css"), "utf-8")
+    // Beside this file, not under `repoRoot()`: the suite's repo root is the
+    // FIXTURE athlete's (vitest.config.mts), and a stylesheet is app source.
+    .readFileSync(path.resolve(import.meta.dirname, "../../../app/globals.css"), "utf-8")
     .replace(/\/\*[\s\S]*?\*\//g, "");
 
   /** The declarations inside `selector { ... }`, comments already gone. */

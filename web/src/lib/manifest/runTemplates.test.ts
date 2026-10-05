@@ -3,7 +3,6 @@ import path from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import { registryDir } from "@/lib/repo";
 import { runFormOf } from "./merge";
 import {
   nextTemplateId,
@@ -17,6 +16,7 @@ import {
   type Json,
 } from "./runTemplates";
 import { FORM_RUN_KEYS } from "./schema";
+import { FIXTURE_WEEKS_DIR } from "@/test/fixtureManifests";
 
 const workout = (): Json => ({
   key: "2026-09-08-pm",
@@ -321,7 +321,7 @@ describe("against the committed tree", () => {
    * applied to another day. Structural over ~700 runs, grading nothing -- the
    * `structure.test.ts` footing. The demo checkout carries `published/` and no
    * `weeks/`, so it guards on existence. */
-  const weeksDir = path.join(registryDir(), "micah", "weeks");
+  const weeksDir = FIXTURE_WEEKS_DIR;
 
   it("every committed run round-trips through a template", () => {
     if (!fs.existsSync(weeksDir)) return;
@@ -369,9 +369,11 @@ describe("against the committed tree", () => {
     }
     /* NON-VACUOUS, and the counts are the features the sweep is FOR: a loop
        over nothing passes, and so does one that never meets a workout or a
-       reconciled run. */
-    expect(seen).toBeGreaterThan(500);
-    expect(structured).toBeGreaterThan(80);
-    expect(reconciled).toBeGreaterThan(400);
+       reconciled run. AT LEAST ONE OF EACH rather than a count of the record:
+       the sweep reads the FIXTURE athlete's manifests, which are sized by
+       cases, and each feature being present is the claim. */
+    expect(seen).toBeGreaterThan(0);
+    expect(structured).toBeGreaterThan(0);
+    expect(reconciled).toBeGreaterThan(0);
   });
 });

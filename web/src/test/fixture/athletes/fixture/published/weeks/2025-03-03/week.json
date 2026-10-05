@@ -1,0 +1,91 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "Return of Doubles",
+  "rest_days": [],
+  "runs": [
+   {
+    "date": "2025-03-03",
+    "key": "2025-03-03-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-03-03",
+    "key": "2025-03-03-b",
+    "prescribed": "B - Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-03-04",
+    "key": "2025-03-04-wu",
+    "prescribed": "warmup",
+    "role": "warmup"
+   },
+   {
+    "date": "2025-03-04",
+    "key": "2025-03-04",
+    "prescribed": "7-8x800m w/ 500m jog recovery -> Did 8",
+    "role": "critical_velocity"
+   },
+   {
+    "date": "2025-03-04",
+    "key": "2025-03-04-cd",
+    "prescribed": "cooldown",
+    "role": "cooldown"
+   },
+   {
+    "date": "2025-03-05",
+    "key": "2025-03-05",
+    "prescribed": "Easy 75 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-03-06",
+    "key": "2025-03-06-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-03-06",
+    "key": "2025-03-06-b",
+    "prescribed": "B - Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-03-07",
+    "key": "2025-03-07-wu",
+    "prescribed": "warmup",
+    "role": "warmup"
+   },
+   {
+    "date": "2025-03-07",
+    "key": "2025-03-07",
+    "prescribed": "16-20x400m w/ 100m jog -> Did 20",
+    "role": "subt"
+   },
+   {
+    "date": "2025-03-07",
+    "key": "2025-03-07-cd",
+    "prescribed": "cooldown",
+    "role": "cooldown"
+   },
+   {
+    "date": "2025-03-08",
+    "key": "2025-03-08",
+    "prescribed": "Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-03-09",
+    "key": "2025-03-09",
+    "prescribed": "Easy 90 min",
+    "role": "long"
+   }
+  ],
+  "week_start": "2025-03-03",
+  "week_type": "Volume"
+ },
+ "week_start": "2025-03-03"
+}

@@ -1,0 +1,103 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "Return of Doubles",
+  "rest_days": [],
+  "runs": [
+   {
+    "date": "2025-02-17",
+    "key": "2025-02-17-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-02-17",
+    "key": "2025-02-17-b",
+    "prescribed": "B - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-02-18",
+    "key": "2025-02-18-wu",
+    "prescribed": "warmup, on the treadmill",
+    "role": "warmup"
+   },
+   {
+    "date": "2025-02-18",
+    "key": "2025-02-18",
+    "prescribed": "10x300m w/ 100m walk rest -> 200's for the last 3 reps",
+    "role": "repetition"
+   },
+   {
+    "date": "2025-02-18",
+    "key": "2025-02-18-cd",
+    "prescribed": "cooldown",
+    "role": "cooldown"
+   },
+   {
+    "date": "2025-02-19",
+    "key": "2025-02-19",
+    "prescribed": "Easy 75 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-02-20",
+    "key": "2025-02-20-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-02-20",
+    "key": "2025-02-20-b",
+    "prescribed": "B - Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-02-21",
+    "key": "2025-02-21-wu",
+    "prescribed": "warmup",
+    "role": "warmup"
+   },
+   {
+    "date": "2025-02-21",
+    "key": "2025-02-21",
+    "prescribed": "1x1600m w/ 400m jog, 2x200m w/ 200m jog",
+    "role": "repetition"
+   },
+   {
+    "date": "2025-02-21",
+    "key": "2025-02-21-cd",
+    "prescribed": "cooldown",
+    "role": "cooldown"
+   },
+   {
+    "date": "2025-02-22",
+    "key": "2025-02-22",
+    "prescribed": "Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-02-23",
+    "key": "2025-02-23-wu",
+    "prescribed": "race warmup",
+    "role": "warmup"
+   },
+   {
+    "date": "2025-02-23",
+    "key": "2025-02-23",
+    "prescribed": "Regional Indoors - 1 Mile",
+    "role": "race"
+   },
+   {
+    "date": "2025-02-23",
+    "key": "2025-02-23-cd",
+    "prescribed": "race cooldown",
+    "role": "cooldown"
+   }
+  ],
+  "week_start": "2025-02-17",
+  "week_type": "Race"
+ },
+ "week_start": "2025-02-17"
+}

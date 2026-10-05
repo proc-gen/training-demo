@@ -1,0 +1,85 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "Return to Normal",
+  "rest_days": [],
+  "runs": [
+   {
+    "date": "2025-05-26",
+    "key": "2025-05-26-a",
+    "prescribed": "A - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-05-26",
+    "key": "2025-05-26-b",
+    "prescribed": "B - Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-05-27",
+    "key": "2025-05-27-a",
+    "prescribed": "A - Easy 30 min -> 30 min thirds, 7.1, 8.2, 9.3 mph",
+    "role": "progression"
+   },
+   {
+    "date": "2025-05-27",
+    "key": "2025-05-27-wu",
+    "prescribed": "warmup for the strides",
+    "role": "warmup"
+   },
+   {
+    "date": "2025-05-27",
+    "key": "2025-05-27-b",
+    "prescribed": "B - 4-8 laps of 100m on / 200m off -> 13x 40s jog, 20s hard",
+    "role": "neuromuscular"
+   },
+   {
+    "date": "2025-05-27",
+    "key": "2025-05-27-cd",
+    "prescribed": "cooldown",
+    "role": "cooldown"
+   },
+   {
+    "date": "2025-05-28",
+    "key": "2025-05-28",
+    "prescribed": "Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-05-29",
+    "key": "2025-05-29",
+    "prescribed": "Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-05-30",
+    "key": "2025-05-30-a",
+    "prescribed": "A - Easy 30 min -> 30 min thirds, 7.1, 8.2, 9.3 mph",
+    "role": "progression"
+   },
+   {
+    "date": "2025-05-30",
+    "key": "2025-05-30-b",
+    "prescribed": "B - 3-5 sets of 30, 60, 90 w/ equal jog recovery -> 12x1:00 w/ 1:00 jog recovery",
+    "role": "threshold"
+   },
+   {
+    "date": "2025-05-31",
+    "key": "2025-05-31",
+    "prescribed": "Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-06-01",
+    "key": "2025-06-01",
+    "prescribed": "Easy 75 min",
+    "role": "long"
+   }
+  ],
+  "week_start": "2025-05-26",
+  "week_type": "Volume"
+ },
+ "week_start": "2025-05-26"
+}

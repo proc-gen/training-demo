@@ -1,0 +1,55 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "Rebuild",
+  "rest_days": [],
+  "runs": [
+   {
+    "date": "2026-02-02",
+    "key": "2026-02-02",
+    "prescribed": "30 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-02-03",
+    "key": "2026-02-03",
+    "prescribed": "12x2:30 w/ 1:00 jog recovery -> 6.7 & 9.0 mph",
+    "role": "subt"
+   },
+   {
+    "date": "2026-02-04",
+    "key": "2026-02-04",
+    "prescribed": "60 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-02-05",
+    "key": "2026-02-05",
+    "prescribed": "5x6:30 w/ 1:30 jog recovery -> 7:00 @ 8.9 for last rep",
+    "role": "subt"
+   },
+   {
+    "date": "2026-02-06",
+    "key": "2026-02-06",
+    "prescribed": "60 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-02-07",
+    "key": "2026-02-07",
+    "prescribed": "4x9:00 w/ 2:00 jog recovery -> 6.7 & 8.7/8.8 mph",
+    "role": "subt"
+   },
+   {
+    "date": "2026-02-08",
+    "key": "2026-02-08",
+    "prescribed": "90 min easy -> 98 min",
+    "role": "long"
+   }
+  ],
+  "week_start": "2026-02-02",
+  "week_type": "Volume"
+ },
+ "week_start": "2026-02-02"
+}

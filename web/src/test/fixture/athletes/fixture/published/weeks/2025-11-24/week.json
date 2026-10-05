@@ -1,0 +1,43 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "Injury",
+  "rest_days": [],
+  "runs": [
+   {
+    "date": "2025-11-24",
+    "key": "2025-11-24",
+    "prescribed": "unplanned -- rebuild easy run (30 min)",
+    "role": "easy"
+   },
+   {
+    "date": "2025-11-26",
+    "key": "2025-11-26",
+    "prescribed": "unplanned -- easy run while travelling (31 min)",
+    "role": "easy"
+   },
+   {
+    "date": "2025-11-27",
+    "key": "2025-11-27",
+    "prescribed": "unplanned -- Thanksgiving morning easy run (37 min)",
+    "role": "easy"
+   },
+   {
+    "date": "2025-11-29",
+    "key": "2025-11-29",
+    "prescribed": "unplanned -- a fun trail race while travelling (21 min)",
+    "role": "race"
+   },
+   {
+    "date": "2025-11-30",
+    "key": "2025-11-30",
+    "prescribed": "unplanned -- trail run while travelling (30 min)",
+    "role": "easy"
+   }
+  ],
+  "week_start": "2025-11-24",
+  "week_type": "Race"
+ },
+ "week_start": "2025-11-24"
+}

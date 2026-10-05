@@ -1,0 +1,91 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "Continue Build",
+  "rest_days": [],
+  "runs": [
+   {
+    "date": "2025-01-27",
+    "key": "2025-01-27",
+    "prescribed": "Easy 30 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-01-28",
+    "key": "2025-01-28-wu",
+    "prescribed": "warmup",
+    "role": "warmup"
+   },
+   {
+    "date": "2025-01-28",
+    "key": "2025-01-28",
+    "prescribed": "400m, 600m, 400m, 200m w/ 200m walk rest, 5x300m w/ 100m walk rest -> second part cut to 3x300m",
+    "role": "repetition"
+   },
+   {
+    "date": "2025-01-28",
+    "key": "2025-01-28-cd",
+    "prescribed": "cooldown",
+    "role": "cooldown"
+   },
+   {
+    "date": "2025-01-29",
+    "key": "2025-01-29",
+    "prescribed": "Easy 75 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-01-30",
+    "key": "2025-01-30",
+    "prescribed": "Easy 60 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-01-31",
+    "key": "2025-01-31-wu",
+    "prescribed": "warmup",
+    "role": "warmup"
+   },
+   {
+    "date": "2025-01-31",
+    "key": "2025-01-31",
+    "prescribed": "16x400m w/ 100m jog",
+    "role": "subt"
+   },
+   {
+    "date": "2025-01-31",
+    "key": "2025-01-31-cd",
+    "prescribed": "cooldown",
+    "role": "cooldown"
+   },
+   {
+    "date": "2025-02-01",
+    "key": "2025-02-01",
+    "prescribed": "Easy 45 min",
+    "role": "easy"
+   },
+   {
+    "date": "2025-02-02",
+    "key": "2025-02-02-wu",
+    "prescribed": "race warmup",
+    "role": "warmup"
+   },
+   {
+    "date": "2025-02-02",
+    "key": "2025-02-02",
+    "prescribed": "Winter tune-up 10 miler",
+    "role": "race"
+   },
+   {
+    "date": "2025-02-02",
+    "key": "2025-02-02-cd",
+    "prescribed": "race cooldown",
+    "role": "cooldown"
+   }
+  ],
+  "week_start": "2025-01-27",
+  "week_type": "Race"
+ },
+ "week_start": "2025-01-27"
+}

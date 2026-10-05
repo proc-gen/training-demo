@@ -1,0 +1,367 @@
+{
+ "acwr_mech": 0.9494317171991801,
+ "acwr_mech_on": "2026-06-21",
+ "bg_trimp": 29.46023338937069,
+ "ceiling_inputs": {
+  "background_source": "baseline",
+  "background_steps": 2726.0,
+  "background_trimp_budget": 10,
+  "background_window_days": 28,
+  "cadence_source": "measured",
+  "cadence_spm": 169.0,
+  "default_cadence_spm": 172,
+  "margin": 1.05,
+  "run_step_weight": 2.5,
+  "walk_reference_spm": 110
+ },
+ "days": [
+  {
+   "atl": 61.15618513258549,
+   "bg_trimp": 2.9083420873792094,
+   "bg_trimp_hr_rest_source": "measured",
+   "bg_trimp_source": "nominal-cadence",
+   "ceiling": null,
+   "ceiling_background_source": null,
+   "ceiling_background_steps": null,
+   "ceiling_source": null,
+   "completeness": "full",
+   "ctl": 50.544877528343925,
+   "date": "2026-06-15",
+   "pct": null,
+   "prescribed_run_seconds": null,
+   "prescribed_run_steps": null,
+   "role": null,
+   "scored": false,
+   "trimp": 0.0
+  },
+  {
+   "atl": 76.49463884943911,
+   "bg_trimp": 4.507016645475176,
+   "bg_trimp_hr_rest_source": "measured",
+   "bg_trimp_source": "nominal-cadence",
+   "ceiling": null,
+   "ceiling_background_source": null,
+   "ceiling_background_steps": null,
+   "ceiling_source": null,
+   "completeness": "full",
+   "ctl": 53.8920925270256,
+   "date": "2026-06-16",
+   "pct": null,
+   "prescribed_run_seconds": null,
+   "prescribed_run_steps": null,
+   "role": "time_trial",
+   "scored": false,
+   "trimp": 122.51
+  },
+  {
+   "atl": 76.55097913707934,
+   "bg_trimp": 1.7676968348927067,
+   "bg_trimp_hr_rest_source": "measured",
+   "bg_trimp_source": "nominal-cadence",
+   "ceiling": null,
+   "ceiling_background_source": null,
+   "ceiling_background_steps": null,
+   "ceiling_source": null,
+   "completeness": "full",
+   "ctl": 54.953855665303486,
+   "date": "2026-06-17",
+   "pct": null,
+   "prescribed_run_seconds": null,
+   "prescribed_run_steps": null,
+   "role": "easy",
+   "scored": false,
+   "trimp": 76.72
+  },
+  {
+   "atl": 73.1632343528095,
+   "bg_trimp": 7.2136595702207265,
+   "bg_trimp_hr_rest_source": "measured",
+   "bg_trimp_source": "nominal-cadence",
+   "ceiling": null,
+   "ceiling_background_source": null,
+   "ceiling_background_steps": null,
+   "ceiling_source": null,
+   "completeness": "full",
+   "ctl": 55.32809493668472,
+   "date": "2026-06-18",
+   "pct": null,
+   "prescribed_run_seconds": null,
+   "prescribed_run_steps": null,
+   "role": "easy",
+   "scored": false,
+   "trimp": 63.0
+  },
+  {
+   "atl": 67.16742576460712,
+   "bg_trimp": 3.8946320787892215,
+   "bg_trimp_hr_rest_source": "measured",
+   "bg_trimp_source": "nominal-cadence",
+   "ceiling": null,
+   "ceiling_background_source": null,
+   "ceiling_background_steps": null,
+   "ceiling_source": null,
+   "completeness": "full",
+   "ctl": 55.042137032652874,
+   "date": "2026-06-19",
+   "pct": null,
+   "prescribed_run_seconds": null,
+   "prescribed_run_steps": null,
+   "role": "easy",
+   "scored": false,
+   "trimp": 49.18
+  },
+  {
+   "atl": 50.37556932345534,
+   "bg_trimp": 3.4656135196224134,
+   "bg_trimp_hr_rest_source": "measured",
+   "bg_trimp_source": "nominal-cadence",
+   "ceiling": null,
+   "ceiling_background_source": null,
+   "ceiling_background_steps": null,
+   "ceiling_source": null,
+   "completeness": "full",
+   "ctl": 52.482037635785304,
+   "date": "2026-06-20",
+   "pct": null,
+   "prescribed_run_seconds": null,
+   "prescribed_run_steps": null,
+   "role": null,
+   "scored": false,
+   "trimp": 0.0
+  },
+  {
+   "atl": 47.0191769925915,
+   "bg_trimp": 5.703272652991236,
+   "bg_trimp_hr_rest_source": "measured",
+   "bg_trimp_source": "nominal-cadence",
+   "ceiling": null,
+   "ceiling_background_source": null,
+   "ceiling_background_steps": null,
+   "ceiling_source": null,
+   "completeness": "full",
+   "ctl": 51.759617280632504,
+   "date": "2026-06-21",
+   "pct": null,
+   "prescribed_run_seconds": null,
+   "prescribed_run_steps": null,
+   "role": "easy",
+   "scored": false,
+   "trimp": 36.95
+  }
+ ],
+ "fitness": {
+  "activities": 9,
+  "atl_converged": true,
+  "ctl_converged": true,
+  "ctl_warmup_days": 126,
+  "days_covered": 7,
+  "earliest_activity": "2024-08-26",
+  "history_days": 665,
+  "on_date": "2026-06-21",
+  "seed_date": "2024-08-26",
+  "stream_share": 1.0,
+  "trimp_source": "stream",
+  "unpriced": 0
+ },
+ "flags": [
+  {
+   "status": "clear",
+   "token": "steps-data-incomplete"
+  },
+  {
+   "status": "not-evaluable",
+   "token": "recovery-day-not-recovering"
+  },
+  {
+   "status": "not-evaluable",
+   "token": "background-load-spike",
+   "why": "needs a 4-week non-run baseline in history; this week was 0 SE"
+  },
+  {
+   "status": "clear",
+   "token": "hidden-load",
+   "why": "mechanical A:C 0.95 against running-only 0.91 from our TRIMP (optimum 0.8-1.3)"
+  },
+  {
+   "status": "clear",
+   "token": "load-monotony"
+  },
+  {
+   "status": "clear",
+   "token": "resting-hr-rise",
+   "why": "trailing resting-HR mean +0.3 bpm (fires at +5)"
+  },
+  {
+   "status": "clear",
+   "token": "hrv-suppressed"
+  },
+  {
+   "status": "fired",
+   "token": "sleep-debt"
+  },
+  {
+   "status": "clear",
+   "token": "strain-spike",
+   "why": "strain 203,661 SE against a 218,983 SE baseline = 0.93x (fires above 1.5x)"
+  },
+  {
+   "status": "clear",
+   "token": "form-suppressed",
+   "why": "running-only TSB +5 from our TRIMP (fires below -25) with mechanical A:C 0.95 (fires above 1.3)"
+  }
+ ],
+ "integrity": {
+  "earned": 0,
+  "excluded": [
+   "2026-06-15",
+   "2026-06-16",
+   "2026-06-17",
+   "2026-06-18",
+   "2026-06-19",
+   "2026-06-20",
+   "2026-06-21"
+  ],
+  "scored_days": 0,
+  "total": 0
+ },
+ "monotony_mech": 1.549323783846738,
+ "overall": 61.904761904761905,
+ "readiness": {
+  "available": 21,
+  "hrv_baseline": 58,
+  "hrv_baseline_source": "snapshot",
+  "per_day": [
+   {
+    "checks": {
+     "hrv": true,
+     "resting_hr": true,
+     "sleep": false
+    },
+    "date": "2026-06-15",
+    "values": {
+     "hrv": 64.0,
+     "resting_hr": 43.0,
+     "sleep": 6.75
+    },
+    "why": {
+     "hrv": "64 at or above 52.2 (90% of a 58.0 baseline)",
+     "resting_hr": "43 at or below the 47 bpm ceiling",
+     "sleep": "6.75 h below the 7 h floor"
+    }
+   },
+   {
+    "checks": {
+     "hrv": true,
+     "resting_hr": true,
+     "sleep": false
+    },
+    "date": "2026-06-16",
+    "values": {
+     "hrv": 64.0,
+     "resting_hr": 45.0,
+     "sleep": 5.77
+    },
+    "why": {
+     "hrv": "64 at or above 52.2 (90% of a 58.0 baseline)",
+     "resting_hr": "45 at or below the 47 bpm ceiling",
+     "sleep": "5.77 h below the 7 h floor"
+    }
+   },
+   {
+    "checks": {
+     "hrv": false,
+     "resting_hr": false,
+     "sleep": true
+    },
+    "date": "2026-06-17",
+    "values": {
+     "hrv": 52.0,
+     "resting_hr": 48.0,
+     "sleep": 7.23
+    },
+    "why": {
+     "hrv": "52 below 52.2 (90% of a 58.0 baseline)",
+     "resting_hr": "48 above the 47 bpm ceiling",
+     "sleep": "7.23 h at or above the 7 h floor"
+    }
+   },
+   {
+    "checks": {
+     "hrv": true,
+     "resting_hr": true,
+     "sleep": false
+    },
+    "date": "2026-06-18",
+    "values": {
+     "hrv": 58.0,
+     "resting_hr": 45.0,
+     "sleep": 6.77
+    },
+    "why": {
+     "hrv": "58 at or above 52.2 (90% of a 58.0 baseline)",
+     "resting_hr": "45 at or below the 47 bpm ceiling",
+     "sleep": "6.77 h below the 7 h floor"
+    }
+   },
+   {
+    "checks": {
+     "hrv": true,
+     "resting_hr": true,
+     "sleep": false
+    },
+    "date": "2026-06-19",
+    "values": {
+     "hrv": 61.0,
+     "resting_hr": 46.0,
+     "sleep": 5.17
+    },
+    "why": {
+     "hrv": "61 at or above 52.2 (90% of a 58.0 baseline)",
+     "resting_hr": "46 at or below the 47 bpm ceiling",
+     "sleep": "5.17 h below the 7 h floor"
+    }
+   },
+   {
+    "checks": {
+     "hrv": true,
+     "resting_hr": true,
+     "sleep": false
+    },
+    "date": "2026-06-20",
+    "values": {
+     "hrv": 74.0,
+     "resting_hr": 41.0,
+     "sleep": 6.05
+    },
+    "why": {
+     "hrv": "74 at or above 52.2 (90% of a 58.0 baseline)",
+     "resting_hr": "41 at or below the 47 bpm ceiling",
+     "sleep": "6.05 h below the 7 h floor"
+    }
+   },
+   {
+    "checks": {
+     "hrv": true,
+     "resting_hr": true,
+     "sleep": false
+    },
+    "date": "2026-06-21",
+    "values": {
+     "hrv": 62.0,
+     "resting_hr": 46.0,
+     "sleep": 5.2
+    },
+    "why": {
+     "hrv": "62 at or above 52.2 (90% of a 58.0 baseline)",
+     "resting_hr": "46 at or below the 47 bpm ceiling",
+     "sleep": "5.2 h below the 7 h floor"
+    }
+   }
+  ],
+  "resting_hr_ceiling": 47
+ },
+ "shape_days_covered": 7,
+ "shape_days_needed": 7,
+ "strain_mech": 203660.93537232946,
+ "week_start": "2026-06-15"
+}
