@@ -103,10 +103,12 @@ describe("RunFields", () => {
     expect(easy.container.querySelector(".wk-table")).toBeNull();
   });
 
-  it("a workout states no duration and no long-run flag", () => {
-    /* The athlete's instruction: neither is applicable to a session defined by
-     * its reps. A run already CARRYING one still shows it, so nothing on disk
-     * is hidden -- two committed quality runs carry a `prescribed_seconds`. */
+  it("a workout states no duration, and DOES offer the long-run flag", () => {
+    /* The athlete's instruction: a duration is not applicable to a session
+     * defined by its reps. A run already CARRYING one still shows it, so
+     * nothing on disk is hidden -- two committed quality runs carry a
+     * `prescribed_seconds`. The long-run flag was hidden too until 2026-10-16,
+     * when a Sub-T session had to be the week's long run. */
     const labels = (c: HTMLElement) =>
       [...c.querySelectorAll(".edit-fields label.field span")].map(
         (s) => s.textContent,
@@ -121,7 +123,7 @@ describe("RunFields", () => {
       />,
     );
     expect(labels(workout.container)).not.toContain("duration");
-    expect(labels(workout.container)).not.toContain("long run");
+    expect(labels(workout.container)).toContain("long run");
     cleanup();
 
     const carried = wrap(

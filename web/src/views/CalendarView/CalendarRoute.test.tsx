@@ -127,3 +127,35 @@ describe("what must not survive an anchor change", () => {
     expect(cells(container)).toHaveLength(42);
   });
 });
+
+describe("the PT marks", () => {
+  /* `other-training.json` is read by the SERVER route and handed down beside
+     the payload, like `plans`; this pins that it reaches the cells in both
+     modes and that the route sends nothing when it was given nothing. */
+  has(D)("reach the cells in BOTH modes", () => {
+    const end = anchor();
+    for (const mode of ["view", "plan"] as const) {
+      const { container } = wrap(
+        <CalendarRoute
+          end={end}
+          mode={mode}
+          weeks={DEFAULT_WEEKS}
+          today={TODAY}
+          loaded={loaded()}
+          otherTraining={{ [end]: "Lifting\n  squat 3x5" }}
+        />,
+      );
+      const marked = cells(container).filter((c) => c.querySelector(".cal-pt"));
+      expect(marked, mode).toHaveLength(1);
+      expect(marked[0].getAttribute("aria-label"), mode).toContain(end);
+      cleanup();
+    }
+  });
+
+  has(D)("are absent when the route passes none -- the static demo", () => {
+    const { container } = wrap(
+      <CalendarRoute end={anchor()} mode="view" weeks={DEFAULT_WEEKS} today={TODAY} loaded={loaded()} />,
+    );
+    expect(container.querySelector(".cal-pt")).toBeNull();
+  });
+});

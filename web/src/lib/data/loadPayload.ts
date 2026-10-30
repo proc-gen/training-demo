@@ -5,12 +5,33 @@ import { validatePayload, type Loaded } from "./payload";
 import { assemble, resolveSlug } from "../repository";
 import { openIndex } from "../db/open";
 import {
+  CALENDAR_WEEKS,
   calendarSlice,
   shellSlice,
   trendsSlice,
   weekSlice,
   type Shell,
 } from "../query/slices";
+import { readGradedPlans } from "../db/records";
+import {
+  manifestHashes,
+  readManifest,
+  readOtherTrainingFile,
+} from "../manifest/manifestIo";
+import {
+  otherTrainingDays,
+  otherTrainingIn,
+  type OtherTrainingDays,
+} from "../manifest/otherTraining";
+import {
+  gradedHashes,
+  NO_PENDING_PLANS,
+  pendingPlans,
+  windowDates,
+  windowStarts,
+  type PendingPlans,
+} from "../manifest/pending";
+import { addDays, mondayOf } from "./weekDates";
 
 /* RE-EXPORTED, NOT DEFINED. `Loaded` lives beside `Payload` because the
  * static export constructs one in the BROWSER, and this module imports
@@ -91,6 +112,42 @@ export function loadWeek(start: string, athlete?: string): Loaded {
 /** Every week, projected to what a trend panel reads. */
 export function loadTrends(athlete?: string): Loaded {
   return load(athlete, (db) => trendsSlice(db));
+}
+
+/** Which authored weeks have edits not yet graded, and -- for the calendar
+ * window ending on `anchor` -- what each of those weeks' plans now says.
+ *
+ * READ OFF DISK, NOT THE INDEX: the manifests are the authored tier and
+ * `graded-plans.json` is the editor's plumbing, neither of which the index
+ * holds. An athlete that does not resolve has nothing pending -- the calendar
+ * slice beside this reports that error, once. */
+export function loadPendingPlans(anchor: string, athlete?: string): PendingPlans {
+  const got = slugFor(athlete);
+  if (got.error || !got.slug) return NO_PENDING_PLANS;
+  const slug = got.slug;
+  return pendingPlans(
+    manifestHashes(slug),
+    gradedHashes(readGradedPlans(slug)),
+    windowStarts(mondayOf(anchor), CALENDAR_WEEKS, addDays),
+    (start) => readManifest(slug, start),
+  );
+}
+
+/** Lifting/PT text for the calendar window ending on `anchor`, by date.
+ *
+ * READ OFF DISK PER REQUEST, like the pending plans: `other-training.json` is
+ * authored, never published, so neither the index nor the demo holds it -- the
+ * static route passes nothing and no cell shows the mark there. */
+export function loadOtherTraining(
+  anchor: string,
+  athlete?: string,
+): OtherTrainingDays {
+  const got = slugFor(athlete);
+  if (got.error || !got.slug) return {};
+  return otherTrainingIn(
+    otherTrainingDays(readOtherTrainingFile(got.slug)),
+    windowDates(mondayOf(anchor), CALENDAR_WEEKS, addDays),
+  );
 }
 
 /** The calendar window ending on `anchor`, plus the record-wide bar scale. */

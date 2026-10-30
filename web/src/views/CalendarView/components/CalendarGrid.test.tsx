@@ -220,3 +220,73 @@ describe("deciding which days are done", () => {
     expect(marks(container)).toEqual([]);
   });
 });
+
+describe("CalendarGrid -- weeks edited since the last regrade", () => {
+  const labels = (c: HTMLElement) => [...c.querySelectorAll(".cal-label")];
+
+  it("marks nothing by default", () => {
+    expect(grid().container.querySelector(".cal-pending")).toBeNull();
+  });
+
+  it("marks exactly the pending week's label, in words", () => {
+    const { container } = grid({ pending: new Set(["2026-08-03"]) });
+    const [first, second] = labels(container);
+    expect(first.querySelector(".cal-pending")).toBeNull();
+    expect(second.querySelector(".cal-pending")!.textContent).toBe("not graded");
+  });
+
+  it("says where to go in its tooltip", () => {
+    const { container } = grid({ pending: new Set(["2026-07-27"]) });
+    expect(container.querySelector(".cal-pending")!.getAttribute("title")).toContain(
+      "Regrade",
+    );
+  });
+
+  it("marks in BOTH modes -- View's scores describe the old plan", () => {
+    for (const mode of ["view", "plan"] as const) {
+      const { container } = grid({ mode, pending: new Set(["2026-07-27"]) });
+      expect(container.querySelectorAll(".cal-pending"), mode).toHaveLength(1);
+      cleanup();
+    }
+  });
+
+  it("ignores a pending week outside the window", () => {
+    const { container } = grid({ pending: new Set(["2026-10-12"]) });
+    expect(container.querySelector(".cal-pending")).toBeNull();
+  });
+
+  it("sits between the date and the week's pencil", () => {
+    const { container } = grid({ pending: new Set(["2026-07-27"]) });
+    const label = labels(container)[0];
+    const kids = [...label.children].map((k) => k.className);
+    expect(kids[0]).toBe("cal-pending");
+    expect(label.textContent!.startsWith("7/27")).toBe(true);
+  });
+});
+
+describe("CalendarGrid -- the PT mark", () => {
+  const marked = (c: HTMLElement) =>
+    [...c.querySelectorAll(".cal-slot")]
+      .filter((s) => s.querySelector(".cal-pt"))
+      .map((s) => s.querySelector(".cal-cell")!.getAttribute("aria-label")!.split(" · ")[0]);
+
+  it("marks nothing by default", () => {
+    expect(grid().container.querySelector(".cal-pt")).toBeNull();
+  });
+
+  it("marks exactly the dates that carry text, in BOTH modes", () => {
+    for (const mode of ["view", "plan"] as const) {
+      const { container } = grid({
+        mode,
+        otherTraining: { "2026-07-28": "PT", "2026-08-09": "Lifting" },
+      });
+      expect(marked(container), mode).toEqual(["Tue 2026-07-28", "Sun 2026-08-09"]);
+      cleanup();
+    }
+  });
+
+  it("ignores a date outside the window", () => {
+    const { container } = grid({ otherTraining: { "2026-10-12": "PT" } });
+    expect(container.querySelector(".cal-pt")).toBeNull();
+  });
+});

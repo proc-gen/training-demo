@@ -5,7 +5,7 @@
  "bg_trimp": null,
  "ceiling_inputs": {
   "background_source": "baseline",
-  "background_steps": 1559.5,
+  "background_steps": 1522.0,
   "background_trimp_budget": 10,
   "background_window_days": 28,
   "cadence_source": "measured",
@@ -43,7 +43,7 @@
   {
    "status": "clear",
    "token": "resting-hr-rise",
-   "why": "trailing resting-HR mean +1.4 bpm (fires at +5)"
+   "why": "trailing resting-HR mean +0.1 bpm (fires at +5)"
   },
   {
    "status": "clear",
@@ -74,7 +74,7 @@
  "overall": null,
  "readiness": {
   "available": 0,
-  "hrv_baseline": 66,
+  "hrv_baseline": 63,
   "hrv_baseline_source": "snapshot",
   "per_day": [],
   "resting_hr_ceiling": 47

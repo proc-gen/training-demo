@@ -1143,6 +1143,22 @@ details.prose > summary {
 .cal-head { color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; }
 .cal-label { color: var(--text-muted); font-size: 0.76rem; align-self: center; font-variant-numeric: tabular-nums; }
 
+/* A WEEK EDITED SINCE THE LAST REGRADE. A word, not a colour alone: the cells
+   beside it are drawn from the new plan without their tint, and the scores in
+   View still describe the old one. Outlined in the warning hue rather than
+   filled, so it reads as a note about the row and not as a verdict on it. */
+.cal-pending {
+  display: inline-block;
+  margin-left: 0.35rem;
+  padding: 0.05rem 0.3rem;
+  border: 1px solid var(--warning);
+  border-radius: 3px;
+  color: var(--text);
+  font-size: 0.66rem;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
 /* A CELL IS A BUTTON, so everything a button brings has to be undone: the
    agent stylesheet's font, its centred text and its own border. `text-align`
    and `font: inherit` are the two that are invisible until they are not --
@@ -1226,6 +1242,9 @@ details.prose > summary {
    session went well. The WORD `completed` is in the cell's `aria-label`, so
    nothing here is carried by colour or by a glyph alone. */
 .cal-done { margin-left: 0.3rem; color: var(--success-text); font-weight: 700; }
+/* A day carrying lifting/PT text. Muted and small: a fact about the day, never
+   a verdict, so it takes no status colour. */
+.cal-pt { margin-left: 0.3rem; color: var(--text-muted); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.03em; }
 .cal-cell .v { font-size: 0.78rem; font-variant-numeric: tabular-nums; font-weight: 600; }
 
 /* WHAT THE DAY IS FOR. One line per run, each clipped to the cell -- a

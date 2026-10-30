@@ -10,10 +10,64 @@
     "key": "2026-11-09",
     "prescribed": "30 min recovery",
     "role": "recovery"
+   },
+   {
+    "date": "2026-11-10",
+    "key": "2026-11-10",
+    "prescribed": "AM: 30 min recovery",
+    "role": "recovery"
+   },
+   {
+    "date": "2026-11-10",
+    "key": "2026-11-10-2",
+    "prescribed": "PM: 3x10:00 w/ 2:00 jog at Sub-T",
+    "role": "subt"
+   },
+   {
+    "date": "2026-11-11",
+    "key": "2026-11-11",
+    "prescribed": "60-75 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-11-12",
+    "key": "2026-11-12",
+    "prescribed": "AM: 40 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-11-12",
+    "key": "2026-11-12-2",
+    "prescribed": "PM: 50 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-11-13",
+    "key": "2026-11-13",
+    "prescribed": "AM: 30 min recovery",
+    "role": "recovery"
+   },
+   {
+    "date": "2026-11-13",
+    "key": "2026-11-13-2",
+    "prescribed": "PM: 8x4:00 w/ 1:00 jog at Sub-T",
+    "role": "subt"
+   },
+   {
+    "date": "2026-11-14",
+    "key": "2026-11-14",
+    "prescribed": "30-45 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-11-15",
+    "key": "2026-11-15",
+    "prescribed": "XC Meet 10k (National NE or National Local)",
+    "role": "race"
    }
   ],
   "week_start": "2026-11-09",
-  "week_type": "Volume"
+  "week_type": "Race"
  },
  "week_start": "2026-11-09"
 }

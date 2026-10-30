@@ -12,6 +12,7 @@
  */
 
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 
 import { describe, expect, it } from "vitest";
@@ -20,6 +21,7 @@ import {
   MissingRecord,
   assembleFromRecords,
   readChart,
+  readGradedPlans,
   readIndex,
   readOptionalText,
   sourceStamp,
@@ -102,5 +104,47 @@ describe.skipIf(!slug)("assembling from the files", () => {
     };
     expect(Object.keys(p.weeks)).toEqual(index.weeks);
     expect(p.days).toHaveLength(index.days.length);
+  });
+});
+
+describe("readGradedPlans", () => {
+  /* A scratch tree: the published fixture is scrubbed by the export's rules,
+   * which leave this record behind, so the real cases need their own files. */
+  const scratch = () => fs.mkdtempSync(path.join(os.tmpdir(), "graded-plans-"));
+
+  it("reads the record where it exists", () => {
+    const base = scratch();
+    try {
+      fs.writeFileSync(
+        path.join(base, "graded-plans.json"),
+        '{"weeks": {"2026-10-12": "abc"}}\n',
+      );
+      expect(readGradedPlans("x", base)).toEqual({ weeks: { "2026-10-12": "abc" } });
+    } finally {
+      fs.rmSync(base, { recursive: true, force: true });
+    }
+  });
+
+  it("is null where it is absent -- every week then reads pending", () => {
+    const base = scratch();
+    try {
+      expect(readGradedPlans("x", base)).toBeNull();
+    } finally {
+      fs.rmSync(base, { recursive: true, force: true });
+    }
+  });
+
+  it("is null, not a throw, where it is not JSON", () => {
+    const base = scratch();
+    try {
+      fs.writeFileSync(path.join(base, "graded-plans.json"), "{not json");
+      expect(readGradedPlans("x", base)).toBeNull();
+    } finally {
+      fs.rmSync(base, { recursive: true, force: true });
+    }
+  });
+
+  it.skipIf(!slug)("is null on the published fixture, which never carries it", () => {
+    expect(readGradedPlans(slug)).toBeNull();
   });
 });

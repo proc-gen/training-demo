@@ -63,7 +63,7 @@ describe("runPublish", () => {
     expect(fs.existsSync(path.join(seen, "athletes"))).toBe(true);
   });
 
-  it("a non-zero exit carries the stderr tail and says the manifest is written", async () => {
+  it("a non-zero exit carries the stderr tail and says the manifests are written", async () => {
     const got = await runPublish(async () => ({
       code: 1,
       stderr: "Traceback ...\nKeyError: 'role'",
@@ -72,7 +72,7 @@ describe("runPublish", () => {
     expect(got.ok).toBe(false);
     if (!got.ok) {
       expect(got.error).toContain("exited 1");
-      expect(got.error).toContain("manifest is written");
+      expect(got.error).toContain("manifests are written");
       expect(got.stderr).toContain("KeyError");
     }
   });

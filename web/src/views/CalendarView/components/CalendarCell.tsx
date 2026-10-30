@@ -58,6 +58,12 @@ import type { CalendarMode } from "../data/mode";
  * session was missed is marked exactly like one whose session was run, because
  * the mark is about the calendar and the score is about the training.
  * `data/dayDone.ts` states both halves.
+ *
+ * THE `PT` MARK SAYS THE DAY CARRIES LIFTING OR PT TEXT -- `other-training.json`,
+ * which no grader reads -- in BOTH modes, at the athlete's request: it is a
+ * record of what was done, and the place a routine is planned around. It
+ * arrives as a prop like `done`; the text itself is in the tooltip, line for
+ * line, because the cell cannot hold a routine.
  */
 export function CalendarCell({
   date,
@@ -71,6 +77,7 @@ export function CalendarCell({
   mode,
   rest,
   done,
+  otherTraining = "",
 }: {
   /** THE DATE IS ITS OWN PROP, not `d.date`. A window states its own dates, and
    *  a day the export has not covered -- every day of a week authored two
@@ -100,6 +107,8 @@ export function CalendarCell({
    *  than a status: `data/dayDone.ts` carries both halves of that distinction,
    *  and the grid decides it so this component reads no dates. */
   done: boolean;
+  /** The date's lifting/PT text, `""` for none. Display only, both modes. */
+  otherTraining?: string;
 }) {
   const plan = mode === "plan";
   const se = m?.se ?? null;
@@ -111,6 +120,22 @@ export function CalendarCell({
 
   const tokens = dayEmphasis(runs);
   const phrase = emphasisPhrase(tokens);
+
+  /* THE ROUTINE, ONE LINE PER LINE -- its newlines are the content -- under a
+     heading so it cannot be read as a prescription. The same block in both
+     modes. */
+  const ptLines = otherTraining ? (
+    <>
+      <div className="line">
+        <b>PT / other training</b>
+      </div>
+      {otherTraining.split("\n").map((l, i) => (
+        <div className="line" key={`pt-${i}`}>
+          {l}
+        </div>
+      ))}
+    </>
+  ) : null;
 
   const handlers = useTip(() => (
     <>
@@ -160,6 +185,7 @@ export function CalendarCell({
           {!rest && !prescriptions.some((e) => e.text || e.alts.length) ? (
             <div className="line">nothing scheduled</div>
           ) : null}
+          {ptLines}
         </>
       ) : (
         <>
@@ -177,6 +203,7 @@ export function CalendarCell({
           ) : null}
           {d?.resting_hr ? <TipRow k="resting HR" v={d.resting_hr} /> : null}
           {d?.sleep_hours ? <TipRow k="sleep" v={`${d.sleep_hours} h`} /> : null}
+          {ptLines}
         </>
       )}
     </>
@@ -196,6 +223,7 @@ export function CalendarCell({
        here, in the label the cell already composes. */
     plan && done ? "completed" : "",
     plan && rest ? "rest day" : "",
+    otherTraining ? "PT / other training" : "",
     phrase,
     /* Each session's words, and -- Plan mode only, like everywhere else the
        alternates appear -- an `Alt:` phrase per stand-in, so the label says
@@ -219,6 +247,12 @@ export function CalendarCell({
         {plan && done ? (
           <b className="cal-done" aria-hidden="true">
             ✓
+          </b>
+        ) : null}
+        {/* `aria-hidden` for the ✓'s reason: the label carries the words. */}
+        {otherTraining ? (
+          <b className="cal-pt" aria-hidden="true">
+            PT
           </b>
         ) : null}
       </span>

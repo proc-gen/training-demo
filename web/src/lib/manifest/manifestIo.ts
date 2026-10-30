@@ -1,5 +1,5 @@
 /* The authored tier, opened: `athletes/<slug>/weeks/<week-start>.json`, and
- * `athletes/<slug>/run-templates.json` beside it.
+ * `athletes/<slug>/run-templates.json` and `other-training.json` beside it.
  *
  * THE EDITOR'S ONE FILESYSTEM MODULE, and the fourth entry in
  * `tests/test_web_segregation.py`'s `FS_ALLOWED`. It reads and writes the
@@ -7,7 +7,7 @@
  * alone; a manifest is the graders' INPUT, so touching it here puts nothing in
  * the index that the publish/unpublish round trip cannot see.
  *
- * TWO FILES, ONE MODULE, DELIBERATELY. Run templates are the same tier written
+ * THREE FILES, ONE MODULE, DELIBERATELY. The other two are the same tier written
  * the same way, and a second module would mean a fifth entry on that allowlist
  * plus a second copy of the atomic write below. `FS_ALLOWED` grows by a file
  * only where a genuinely different thing is being opened.
@@ -28,6 +28,7 @@
  * that wrote into `athletes/` would be editing the measurements it grades.
  */
 
+import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -75,6 +76,23 @@ export function listWeeks(slug: string, root = registryDir()): string[] {
     .filter((f) => f.endsWith(".json") && isWeekStart(f.slice(0, -5)))
     .map((f) => f.slice(0, -5))
     .sort();
+}
+
+/** `{week_start: sha256 hex}` of every authored manifest's BYTES -- the
+ * left-hand side of `pending.pendingWeeks`. The bytes, not parsed JSON, because
+ * `publish.manifest_hashes` hashes the file and the two must agree to the bit;
+ * a re-serialisation here would be a second canonical form to keep equal. */
+export function manifestHashes(
+  slug: string,
+  root = registryDir(),
+): Record<string, string> {
+  const dir = weeksDir(slug, root);
+  const out: Record<string, string> = {};
+  for (const start of listWeeks(slug, root)) {
+    const bytes = fs.readFileSync(path.join(dir, `${start}.json`));
+    out[start] = createHash("sha256").update(bytes).digest("hex");
+  }
+  return out;
 }
 
 /** The parsed manifest, or null when nobody has authored that week -- which is
@@ -150,4 +168,34 @@ export function writeRunTemplateFile(
   root = registryDir(),
 ): void {
   writeAtomically(templatesFile(slug, root), file);
+}
+
+/* ---------------------------------------------------------- other training
+ *
+ * `athletes/<slug>/other-training.json` -- lifting and PT, keyed by date. The
+ * same authored tier and read by no grader; it is its own file precisely so
+ * that editing it moves no manifest hash (`otherTraining.ts`).
+ */
+
+function otherTrainingFile(slug: string, root: string): string {
+  return path.join(athleteDir(slug, root), "other-training.json");
+}
+
+/** The parsed file, or `{"days": {}}` where nobody has written one -- an
+ *  absent file is an empty list, the `readRunTemplateFile` posture. */
+export function readOtherTrainingFile(
+  slug: string,
+  root = registryDir(),
+): Record<string, unknown> {
+  const file = otherTrainingFile(slug, root);
+  if (!fs.existsSync(file)) return { days: {} };
+  return JSON.parse(fs.readFileSync(file, "utf-8")) as Record<string, unknown>;
+}
+
+export function writeOtherTrainingFile(
+  slug: string,
+  file: Record<string, unknown>,
+  root = registryDir(),
+): void {
+  writeAtomically(otherTrainingFile(slug, root), file);
 }

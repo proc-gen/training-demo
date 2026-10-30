@@ -5,6 +5,7 @@ import { useState } from "react";
 
 import type { Payload } from "@/lib/data/payload";
 import { mondayOf, weekEnding } from "@/lib/data/weekDates";
+import { NO_PENDING_PLANS, type PendingPlans } from "@/lib/manifest/pending";
 import { PaceRail } from "@/lib/paces/PaceRail";
 import {
   alternatesByKey,
@@ -21,12 +22,14 @@ import { CalendarGrid } from "./components/CalendarGrid";
 import { DayCard } from "./components/DayCard";
 import { DayEditorModal } from "./components/DayEditorModal";
 import { ManageTemplatesButton } from "./components/ManageTemplatesButton";
+import { RegradeButton } from "./components/RegradeButton";
 import { TemplateManagerModal } from "./components/TemplateManagerModal";
 import { WeekEditorModal } from "./components/WeekEditorModal";
 import {
   calendarDays,
   dayByDate,
   loadByDate,
+  overlayPlans,
   restDates,
   runsByDate,
   weekFor,
@@ -112,6 +115,8 @@ export function CalendarView({
   mode,
   weeks,
   today,
+  plans = NO_PENDING_PLANS,
+  otherTraining,
 }: {
   payload: Payload;
   /** The window's last day -- a Sunday, and the route's own segment. */
@@ -127,6 +132,13 @@ export function CalendarView({
    *  it deliberately is not derived in the browser either: `data/dayDone.ts`
    *  carries the reasoning, and `runStatus.ts` carries the hook it replaced. */
   today: string | null;
+  /** Weeks whose plan was edited since the last regrade, and -- for those in
+   *  the window -- what each plan says now. Read off disk by the server route;
+   *  absent in the static demo, which has no plans to edit. */
+  plans?: PendingPlans;
+  /** Date -> lifting/PT text in the window, for the cells' `PT` mark in both
+   *  modes. Read off disk by the server route; absent in the static demo. */
+  otherTraining?: Readonly<Record<string, string>>;
 }) {
   const router = useRouter();
   const plan = mode === "plan";
@@ -152,7 +164,8 @@ export function CalendarView({
   /* THE PLAN EDITOR (2026-09-03): a pencil on every day cell and one beside
    * each week label, per the athlete's design. Which editor is open is view
    * state like `selected`; a successful save calls `router.refresh()` so the
-   * server re-reads the slice from the index the publish just moved. Editing
+   * server re-reads which weeks are pending and what their plans now say --
+   * a save writes the manifest and no longer publishes. Editing
    * a PAST day is deliberately no different from a future one -- the
    * athlete's explicit choice, with the tracked diff as the review artifact. */
   const [editing, setEditing] = useState<
@@ -167,9 +180,15 @@ export function CalendarView({
 
   const meta = loadByDate(payload);
   const byDate = dayByDate(days);
-  const runs = runsByDate(payload);
+  /* PLAN MODE DRAWS AN EDITED WEEK FROM ITS NEW PLAN. A save no longer
+     publishes, so the graded record still says what the plan USED to; the
+     overlay is what the athlete just typed, drawn without the grader's tint
+     until the Regrade. View mode is the record and stays on the graded one. */
+  const drawn = plan ? overlayPlans(payload, plans.overlays) : payload;
+  const runs = runsByDate(drawn);
   const rows = weekRowsEnding(lastDay, weeks);
-  const rest = restDates(payload);
+  const rest = restDates(drawn);
+  const pending = new Set(plans.pending);
 
   /* Date -> each of its runs' prescriptions, in run order -- with each run's
      pre-authored ALTERNATES riding along for Plan mode's `Alt:` lines. Built
@@ -178,7 +197,7 @@ export function CalendarView({
      list. */
   const prescriptions = new Map<string, PlanEntry[]>();
   for (const [date, list] of runs) {
-    const week = weekFor(payload, date);
+    const week = weekFor(drawn, date);
     const byKey = week ? prescriptionByKey(week) : null;
     const altsByKey = week ? alternatesByKey(week) : null;
     prescriptions.set(
@@ -288,23 +307,37 @@ export function CalendarView({
           maxSteps={maxSteps}
           selected={selected}
           onSelect={(date) => setSelected((v) => (v === date ? null : date))}
-          authored={new Set(Object.keys(payload.weeks ?? {}))}
+          /* A week CREATED since the last regrade has no published record yet
+             and is still authored -- it is pending, which only a manifest on
+             disk can be. */
+          authored={new Set([...Object.keys(payload.weeks ?? {}), ...pending])}
           onEditDay={(date) => setEditing({ kind: "day", date })}
           onEditWeek={(start) => setEditing({ kind: "week", start })}
           mode={mode}
           restDays={rest}
           today={today}
+          pending={pending}
+          otherTraining={otherTraining}
         />
 
         {plan ? (
           <>
+            {/* PLAN MODE ONLY, like the pencils' purpose: a save writes the
+                plan and stops, and this grades everything edited since, once. */}
+            <RegradeButton
+              pending={plans.pending}
+              onDone={() => router.refresh()}
+            />
             <Note>
               What the plan asks for, and nothing that was measured. A tinted
               cell is the session&apos;s emphasis rather than a verdict, and a
               day that is two things is split between both. A ✓ marks a day the
-              plan states something for that is today or earlier. Hover any cell
+              plan states something for that is today or earlier, and PT a day
+              with lifting or PT notes. Hover any cell
               for its whole prescription — the lines in the cell are clipped —
-              and use the pencil to edit the day or the week.
+              and use the pencil to edit the day or the week. Saving does not
+              grade: a week marked <i>not graded</i> shows its new plan
+              untinted until you press Regrade.
             </Note>
             {/* PLAN MODE ONLY. A template is a PRESCRIPTION, so it belongs
                 beside the prescriptions; View is the record and has nothing to

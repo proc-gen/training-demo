@@ -1,1 +1,101 @@
-[]
+[
+ {
+  "activity_id": "215500085",
+  "avg_hr": "123",
+  "date": "2026-10-12",
+  "hr_rest": "43",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "1801",
+  "trimp": "31.37",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "215749233",
+  "avg_hr": "124",
+  "date": "2026-10-13",
+  "hr_rest": "44",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "1801",
+  "trimp": "31.72",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "215885835",
+  "avg_hr": "121",
+  "date": "2026-10-13",
+  "hr_rest": "44",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "2700",
+  "trimp": "44.04",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "216152223",
+  "avg_hr": "122",
+  "date": "2026-10-14",
+  "hr_rest": "45",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "3247",
+  "trimp": "54.21",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "216413135",
+  "avg_hr": "143",
+  "date": "2026-10-15",
+  "hr_rest": "47",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "4015",
+  "trimp": "115.03",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "216565331",
+  "avg_hr": "126",
+  "date": "2026-10-16",
+  "hr_rest": "47",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "1801",
+  "trimp": "32.21",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "216675513",
+  "avg_hr": "128",
+  "date": "2026-10-16",
+  "hr_rest": "47",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "11",
+  "seconds": "2580",
+  "trimp": "49.54",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "216806641",
+  "avg_hr": "127",
+  "date": "2026-10-17",
+  "hr_rest": "44",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "1801",
+  "trimp": "34.45",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "217106123",
+  "avg_hr": "137",
+  "date": "2026-10-18",
+  "hr_rest": "43",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "4728",
+  "trimp": "116.36",
+  "trimp_source": "stream"
+ }
+]

@@ -112,7 +112,7 @@ export async function runPublish(
   if (got.code !== 0) {
     return {
       ok: false,
-      error: `publish.py exited ${got.code} -- the manifest is written; fix and re-save, or run it by hand`,
+      error: `publish.py exited ${got.code} -- the manifests are written; fix them and regrade, or run it by hand`,
       stderr: got.stderr,
     };
   }

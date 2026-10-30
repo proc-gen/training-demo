@@ -1,1 +1,123 @@
-[]
+[
+ {
+  "activity_id": "217310461",
+  "avg_hr": "126",
+  "date": "2026-10-19",
+  "hr_rest": "42",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "2",
+  "seconds": "1801",
+  "trimp": "34.33",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "217567551",
+  "avg_hr": "123",
+  "date": "2026-10-20",
+  "hr_rest": "43",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "2",
+  "seconds": "1800",
+  "trimp": "31.36",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "217719277",
+  "avg_hr": "122",
+  "date": "2026-10-20",
+  "hr_rest": "43",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "1032",
+  "trimp": "17.30",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "217719287",
+  "avg_hr": "155",
+  "date": "2026-10-20",
+  "hr_rest": "43",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "2161",
+  "trimp": "80.56",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "217719291",
+  "avg_hr": "132",
+  "date": "2026-10-20",
+  "hr_rest": "43",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "857",
+  "trimp": "18.69",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "217950107",
+  "avg_hr": "118",
+  "date": "2026-10-21",
+  "hr_rest": "46",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "3743",
+  "trimp": "54.46",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "218083183",
+  "avg_hr": "129",
+  "date": "2026-10-22",
+  "hr_rest": "42",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "2701",
+  "trimp": "55.12",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "218193965",
+  "avg_hr": "129",
+  "date": "2026-10-22",
+  "hr_rest": "42",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "2710",
+  "trimp": "54.96",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "218330783",
+  "avg_hr": "152",
+  "date": "2026-10-23",
+  "hr_rest": "44",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "5061",
+  "trimp": "179.24",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "218549923",
+  "avg_hr": "123",
+  "date": "2026-10-24",
+  "hr_rest": "46",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "1821",
+  "trimp": "30.69",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "218786711",
+  "avg_hr": "128",
+  "date": "2026-10-25",
+  "hr_rest": "44",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "2401",
+  "trimp": "46.45",
+  "trimp_source": "stream"
+ }
+]

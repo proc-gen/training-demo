@@ -48,14 +48,15 @@ export const FORM_WEEK_KEYS = [
   "week_note",
 ] as const;
 
-/** The day-level keys that are NOT a run: one date's rest flag and its note.
+/** The day-level keys that are NOT a run: one date's rest flag, its note and
+ * its other training (lifting, PT -- free text, multi-line, read by no grader).
  *
  * They reach the manifest at WEEK level -- `rest_days` is a list of dates,
  * `notes` a map keyed by one -- so the day save states the fact and
  * `applyDay` rolls it up. Named here beside the other allowlists so the
  * editor's whole write surface is one file.
  */
-export const FORM_DAY_META_KEYS = ["rest", "note"] as const;
+export const FORM_DAY_META_KEYS = ["rest", "note", "other_training"] as const;
 
 /** Run-level keys the editor owns. `key` identifies the run; `runalyze_id` is
  * reconciliation and is preserved read-only.
@@ -472,9 +473,13 @@ const daySave = z
      * OPTIONAL key could not express the difference between "the athlete
      * cleared the note" and "this caller has no opinion" -- which is exactly
      * the distinction `applyKeys` makes for every other form-owned key.
-     * `note: ""` is the cleared state and deletes `notes[date]`. */
+     * `note: ""` is the cleared state and deletes `notes[date]`.
+     *
+     * `other_training` IS REQUIRED FOR THE SAME REASON, and `""` deletes
+     * `other_training[date]`. Newlines are allowed and kept: it is a list. */
     rest: z.boolean(),
     note: z.string(),
+    other_training: z.string(),
   })
   .superRefine((save, ctx) => {
     if (mondayOf(save.date) !== save.week_start) {
@@ -512,7 +517,17 @@ const weekSave = z.object({
 
 export type RunForm = z.infer<typeof runForm>;
 export type WeekForm = z.infer<typeof weekForm>;
-export type Save = z.infer<typeof daySave> | z.infer<typeof weekSave>;
+/* THE REGRADE. No week, no form: it publishes everything pending at once,
+ * which is the whole point of saves no longer publishing one by one. */
+const publishSave = z.object({
+  athlete: z.string().optional(),
+  scope: z.literal("publish"),
+});
+
+export type Save =
+  | z.infer<typeof daySave>
+  | z.infer<typeof weekSave>
+  | z.infer<typeof publishSave>;
 
 /** The POST body, checked. Issues are sentences, one per problem.
  *
@@ -528,13 +543,20 @@ export function parseSave(
     typeof body === "object" && body !== null
       ? (body as Record<string, unknown>).scope
       : undefined;
-  if (scope !== "day" && scope !== "week" && scope !== "create") {
+  if (
+    scope !== "day" &&
+    scope !== "week" &&
+    scope !== "create" &&
+    scope !== "publish"
+  ) {
     return {
       ok: false,
-      issues: ['scope must be "day", "week" or "create"'],
+      issues: ['scope must be "day", "week", "create" or "publish"'],
     };
   }
-  const got = (scope === "day" ? daySave : weekSave).safeParse(body);
+  const got = (
+    scope === "day" ? daySave : scope === "publish" ? publishSave : weekSave
+  ).safeParse(body);
   if (got.success) return { ok: true, save: got.data };
   return {
     ok: false,

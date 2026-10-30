@@ -621,6 +621,14 @@ const Facts = z.looseObject({
 
 export const Adherence = z.looseObject({
   week_start: str,
+  /** WHICH HEART-RATE CEILINGS THE WEEK WAS SCORED AGAINST, as the date of the
+   *  `snapshots/hr-ceilings/` file (2026-10-20). Stored by the grader, never
+   *  derived: those files are not published the way pace charts are, so there
+   *  is nothing on the read side to join against. No component reads it yet --
+   *  the per-run `ceiling` / `hr_ceiling` strings already carry the numbers --
+   *  it is here so the record can say a 2025 sub-T was judged against 162/166
+   *  and not against the ceilings in force today. */
+  hr_ceilings_week_ending: str.optional(),
   /* `week_type` AND `phase` LEFT THIS RECORD ON 2026-08-29. The MANIFEST
    * authors them and `week.json` carries the manifest -- which is where
    * `WeekCard` has always read them from. These were the third and fourth

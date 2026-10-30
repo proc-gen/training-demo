@@ -583,3 +583,91 @@ describe("CalendarCell in Plan mode", () => {
   });
 });
 
+/* ---------------------------------------------------------- the PT mark
+ *
+ * A day carrying lifting/PT text (`other-training.json`) says so, in BOTH
+ * modes, at the athlete's request. The text arrives already looked up, like
+ * `done`; the cell reads no file. */
+describe("CalendarCell, the PT mark", () => {
+  const ROUTINE = "Mobo-board 2&4: 2x10\n  Dead hang: 60s\n\nChinups: 8, 5";
+  const hover = (c: HTMLElement) =>
+    fireEvent.mouseEnter(el(c), { clientX: 1, clientY: 1 });
+  const MODES = ["view", "plan"] as const;
+
+  for (const mode of MODES) {
+    it(`draws the mark in ${mode.toUpperCase()} mode when the day has text`, () => {
+      const { container } = cell({ mode, otherTraining: ROUTINE });
+      expect(container.querySelector(".cal-pt")!.textContent).toBe("PT");
+    });
+
+    it(`draws nothing in ${mode.toUpperCase()} mode when the day has none`, () => {
+      expect(cell({ mode, otherTraining: "" }).container.querySelector(".cal-pt")).toBeNull();
+      cleanup();
+      expect(cell({ mode }).container.querySelector(".cal-pt")).toBeNull();
+    });
+
+    it(`puts the WORDS in the ${mode} label, so the mark is not glyph-only`, () => {
+      const { container } = cell({ mode, otherTraining: ROUTINE });
+      expect(container.querySelector(".cal-pt")!.getAttribute("aria-hidden")).toBe("true");
+      expect(el(container).getAttribute("aria-label")).toContain("PT / other training");
+    });
+
+    it(`leaves the ${mode} label alone without text`, () => {
+      expect(el(cell({ mode }).container).getAttribute("aria-label")).not.toContain(
+        "PT / other training",
+      );
+    });
+
+    it(`gives the ${mode} tooltip the routine LINE FOR LINE under a heading`, () => {
+      const { container } = cell({ mode, otherTraining: ROUTINE });
+      hover(container);
+      const tip = container.querySelector(".tooltip")!;
+      expect(tip.textContent).toContain("PT / other training");
+      const lines = [...tip.querySelectorAll(".line")].map((l) => l.textContent);
+      // Every line of the text is its own line, blank and indented ones kept.
+      for (const l of ROUTINE.split("\n")) expect(lines).toContain(l);
+      const at = lines.indexOf("PT / other training");
+      expect(lines.slice(at + 1, at + 1 + 4)).toEqual(ROUTINE.split("\n"));
+    });
+
+    it(`keeps the ${mode} tooltip free of the heading without text`, () => {
+      const { container } = cell({ mode });
+      hover(container);
+      expect(container.querySelector(".tooltip")!.textContent).not.toContain(
+        "PT / other training",
+      );
+    });
+
+    it(`sits inside the ${mode} date, where the edit pencil is not`, () => {
+      const { container } = cell({ mode, otherTraining: ROUTINE });
+      expect(container.querySelector(".cal-cell .d .cal-pt")).toBeTruthy();
+    });
+  }
+
+  it("sits AFTER the ✓ when the day carries both", () => {
+    const { container } = cell({ mode: "plan", done: true, otherTraining: "PT" });
+    const marks = [...container.querySelectorAll(".d b")].map((b) => b.className);
+    expect(marks).toEqual(["cal-done", "cal-pt"]);
+  });
+
+  it("does not turn a Plan cell into a button or a View cell into anything else", () => {
+    const plan = cell({ mode: "plan", otherTraining: "PT" });
+    expect(plan.container.querySelector("button.cal-cell")).toBeNull();
+    cleanup();
+    const view = cell({ mode: "view", otherTraining: "PT" });
+    expect(view.container.querySelector("button.cal-cell")).toBeTruthy();
+  });
+
+  it("keeps the Plan tooltip's prescriptions above the routine", () => {
+    const { container } = cell({
+      mode: "plan",
+      prescriptions: plan("PM: 3x10:00 at Sub-T"),
+      otherTraining: "PT",
+    });
+    hover(container);
+    const text = container.querySelector(".tooltip")!.textContent!;
+    expect(text.indexOf("PM: 3x10:00 at Sub-T")).toBeLessThan(
+      text.indexOf("PT / other training"),
+    );
+  });
+});

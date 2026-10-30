@@ -10,6 +10,7 @@
 import { cleanup, fireEvent } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
+import { ROLES } from "@/lib/manifest/vocab";
 import { wrap } from "@/test/render";
 import { expandRun, type Json, type Structure } from "../data/structure";
 import { RunFormFields } from "./RunFormFields";
@@ -66,15 +67,52 @@ describe("what it draws, and what it deliberately does not", () => {
     expect(labels(container)).toContain("long run");
   });
 
-  it("drops the duration and the long-run flag on a WORKOUT", () => {
+  it("drops the duration on a WORKOUT", () => {
     /* A session defined by its rep count is not prescribed a clock, and
        `prescribed_seconds` on one would start scoring it against a duration
        criterion nobody prescribed. */
     const { container } = form({ role: "repetition" });
     expect(labels(container)).not.toContain("duration");
     expect(labels(container)).not.toContain("miles");
-    expect(labels(container)).not.toContain("long run");
     expect(container.querySelector(".wk-table")).toBeTruthy();
+  });
+
+  describe("the long-run flag is offered on EVERY role", () => {
+    /* The athlete, 2026-10-16: a Friday Sub-T session is also the week's long
+       run because of travel. `is_long` is which run is the long one, not how
+       a run is scored, and the grader honours it on any role. */
+    for (const role of ROLES) {
+      it(`shows it on ${role}`, () => {
+        expect(labels(form({ role }).container)).toContain("long run");
+      });
+    }
+
+    it("ticking it on a workout writes is_long: true", () => {
+      const onRun = vi.fn();
+      const { container } = form({ role: "subt", reps: 10 }, { onRun });
+      const box = field(container, "long run") as HTMLInputElement;
+      expect(box.checked).toBe(false);
+      fireEvent.click(box);
+      expect(onRun).toHaveBeenLastCalledWith(
+        expect.objectContaining({ role: "subt", is_long: true }),
+      );
+    });
+
+    it("unticking it removes the key rather than writing false", () => {
+      const onRun = vi.fn();
+      const { container } = form({ role: "subt", is_long: true }, { onRun });
+      const box = field(container, "long run") as HTMLInputElement;
+      expect(box.checked).toBe(true);
+      fireEvent.click(box);
+      const last = onRun.mock.calls.at(-1)![0] as Json;
+      expect("is_long" in last).toBe(false);
+    });
+
+    it("the duration stays hidden on a workout though the flag shows", () => {
+      const { container } = form({ role: "vo2max" });
+      expect(labels(container)).toContain("long run");
+      expect(labels(container)).not.toContain("duration");
+    });
   });
 
   it("SHOWS a key the run already carries, whatever its role says", () => {

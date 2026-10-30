@@ -1,0 +1,73 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "General Prep",
+  "rest_days": [],
+  "runs": [
+   {
+    "date": "2026-11-16",
+    "key": "2026-11-16",
+    "prescribed": "30 min recovery",
+    "role": "recovery"
+   },
+   {
+    "date": "2026-11-17",
+    "key": "2026-11-17",
+    "prescribed": "AM: 30 min recovery",
+    "role": "recovery"
+   },
+   {
+    "date": "2026-11-17",
+    "key": "2026-11-17-2",
+    "prescribed": "PM: 3x5x200m w/ 200m jog between reps and 400m between sets, 1x200m at the end",
+    "role": "mixed"
+   },
+   {
+    "date": "2026-11-18",
+    "key": "2026-11-18",
+    "prescribed": "60-75 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-11-19",
+    "key": "2026-11-19",
+    "prescribed": "AM: 40 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-11-19",
+    "key": "2026-11-19-2",
+    "prescribed": "PM: 50 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-11-20",
+    "key": "2026-11-20",
+    "prescribed": "AM: 30 min recovery",
+    "role": "recovery"
+   },
+   {
+    "date": "2026-11-20",
+    "key": "2026-11-20-2",
+    "prescribed": "PM: 10x3:00 w/ 1:00 jog at Sub-T",
+    "role": "subt"
+   },
+   {
+    "date": "2026-11-21",
+    "key": "2026-11-21",
+    "prescribed": "30-45 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-11-22",
+    "key": "2026-11-22",
+    "prescribed": "105 min easy/long",
+    "role": "long"
+   }
+  ],
+  "week_start": "2026-11-16",
+  "week_type": "Intensity"
+ },
+ "week_start": "2026-11-16"
+}

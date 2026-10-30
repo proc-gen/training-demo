@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { RUN_TEMPLATE_RUN_KEYS } from "./runTemplates";
 import {
+  FORM_DAY_META_KEYS,
   FORM_RUN_KEYS,
   FORM_WEEK_KEYS,
   isIsoDate,
@@ -35,6 +36,7 @@ const daySave = (over: Record<string, unknown> = {}) => ({
   ],
   rest: false,
   note: "",
+  other_training: "",
   ...over,
 });
 
@@ -242,6 +244,24 @@ describe("what it refuses, with a sentence each", () => {
     expect(issues(noNote).join(" ")).toContain("note");
   });
 
+  it("a day save missing its other training, or stating a non-string", () => {
+    /* REQUIRED FOR THE SAME REASON as the note: `""` is the cleared state, and
+     * an optional key could not say so. */
+    const { other_training: _o, ...noOther } = daySave();
+    expect(issues(noOther).join(" ")).toContain("other_training");
+    for (const bad of [5, null, ["squat"], { a: "b" }, true]) {
+      expect(issues(daySave({ other_training: bad })).join(" ")).toContain(
+        "other_training",
+      );
+    }
+  });
+
+  it("other training accepts empty, one line and many lines", () => {
+    for (const ok of ["", "squat 3x5", "Lifting\n  squat\n\nPT\n  bands"]) {
+      expect(issues(daySave({ other_training: ok }))).toEqual([]);
+    }
+  });
+
   it("a fractional or negative mileage budget", () => {
     /* The athlete states a weekly mileage budget as a whole number; a decimal
      * would be a precision the plan does not have. */
@@ -300,6 +320,12 @@ describe("the editor's write surface", () => {
       "planned_miles",
       "week_note",
     ]);
+    // Nor other training: a day statement, written by the day save alone.
+    expect(FORM_WEEK_KEYS).not.toContain("other_training");
+  });
+
+  it("the DAY's non-run keys are rest, note and other training", () => {
+    expect([...FORM_DAY_META_KEYS]).toEqual(["rest", "note", "other_training"]);
   });
 
   it("the RUN form owns `template_id`, because the editor stamps it", () => {
@@ -362,5 +388,36 @@ describe("isIsoDate", () => {
     expect(isIsoDate("2026-00-10")).toBe(false);
     expect(isIsoDate("2026-01-32")).toBe(false);
     expect(isIsoDate("not-a-date")).toBe(false);
+  });
+});
+
+describe("the publish scope -- the Regrade button's save", () => {
+  it("accepts a bare publish", () => {
+    const got = parseSave({ scope: "publish" });
+    expect(got.ok).toBe(true);
+    if (got.ok) expect(got.save.scope).toBe("publish");
+  });
+
+  it("accepts a publish naming an athlete", () => {
+    const got = parseSave({ scope: "publish", athlete: "fixture" });
+    expect(got.ok && got.save.athlete).toBe("fixture");
+  });
+
+  it("refuses a non-string athlete", () => {
+    expect(parseSave({ scope: "publish", athlete: 3 }).ok).toBe(false);
+  });
+
+  it("names publish among the scopes when the scope is wrong", () => {
+    const got = parseSave({ scope: "banana" });
+    expect(got.ok).toBe(false);
+    if (!got.ok) expect(got.issues.join(" ")).toContain('"publish"');
+  });
+
+  it("ignores fields a publish does not use", () => {
+    /* The branch is picked by scope, so a day body with scope "publish" is a
+     * publish -- and carries none of the day's checks. That is fine: the
+     * route never writes on a publish, so nothing in the body is used. */
+    const got = parseSave({ scope: "publish", week_start: "nope", runs: 3 });
+    expect(got.ok).toBe(true);
   });
 });

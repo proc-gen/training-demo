@@ -142,8 +142,9 @@ function mergeRun(original: Json | undefined, form: Json): Json {
   return out;
 }
 
-/** One date's rest flag and note, as the day editor states them. */
-export type DayMeta = { rest: boolean; note: string };
+/** One date's rest flag, note and other training, as the day editor states
+ * them. Only the first two land in the manifest -- see `applyDayMeta`. */
+export type DayMeta = { rest: boolean; note: string; other_training: string };
 
 /** The date's own two week-level facts, rolled up onto the manifest.
  *
@@ -174,6 +175,12 @@ function applyDayMeta(out: Json, date: string, meta: DayMeta): void {
   if (meta.note) notes[date] = meta.note;
   else delete notes[date];
   out.notes = notes;
+
+  /* OTHER TRAINING IS NOT WRITTEN HERE, though `DayMeta` carries it. It lives
+   * in `other-training.json` (`otherTraining.ts`), outside the manifest, so
+   * that writing down a PT routine moves no manifest hash and asks for no
+   * regrade; the route writes it. A manifest that still carried the old key
+   * would keep it verbatim, like any key the form does not own. */
 }
 
 /** One date's runs replaced; every other date's untouched, in place.
@@ -262,13 +269,43 @@ export function weekFormOf(manifest: Json): Json {
   return out;
 }
 
-/** The date's own two facts, as the day editor should show them -- so that
+/** The date's own facts, as the day editor should show them -- so that
  * `applyDay(m, d, runs.map(runFormOf), dayMetaOf(m, d))` is the exact no-op
  * `runFormOf` and `weekFormOf` already promise for their own scopes. */
-export function dayMetaOf(manifest: Json, date: string): DayMeta {
+export function dayMetaOf(
+  manifest: Json,
+  date: string,
+  otherTraining = "",
+): DayMeta {
   const rest = Array.isArray(manifest.rest_days)
     ? (manifest.rest_days as unknown[]).includes(date)
     : false;
   const note = isObj(manifest.notes) ? manifest.notes[date] : undefined;
-  return { rest, note: typeof note === "string" ? note : "" };
+  return {
+    rest,
+    note: typeof note === "string" ? note : "",
+    /* NOT THE MANIFEST'S -- `other-training.json`'s, handed in by the caller
+     * that read it (`otherTrainingOf`). */
+    other_training: otherTraining,
+  };
+}
+
+/** The other-training text as typed, made storable without losing its shape.
+ *
+ * NEWLINES ARE THE POINT -- a routine is a list, one exercise a line -- so this
+ * is NOT `trim()`, which would also eat the first line's indentation. Line
+ * endings become LF (a paste from Windows carries CRLF), each line loses its
+ * trailing whitespace, and blank lines at either END go. Blank lines and
+ * indentation INSIDE stay. Idempotent, and whitespace-only becomes `""`, the
+ * cleared state. */
+export function cleanOtherTraining(text: string): string {
+  const lines = text
+    .replace(/\r\n?/g, "\n")
+    .split("\n")
+    .map((l) => l.replace(/\s+$/, ""));
+  let a = 0;
+  let b = lines.length;
+  while (a < b && lines[a] === "") a++;
+  while (b > a && lines[b - 1] === "") b--;
+  return lines.slice(a, b).join("\n");
 }

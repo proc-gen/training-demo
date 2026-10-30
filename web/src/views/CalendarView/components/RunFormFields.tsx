@@ -188,14 +188,19 @@ export function RunFormFields({
   const role = typeof run.role === "string" ? run.role : "";
   const showTable = STRUCTURE_ROLES.has(role) || hasStructure(run);
   const showMiles = MILEAGE_ROLES.has(role) || "prescribed_miles" in run;
-  /* A WORKOUT STATES NEITHER. The athlete's instruction: a duration and a
-     long-run flag are not applicable to a session defined by its reps, and
-     `prescribed_seconds` on a quality run would start scoring it against a
-     duration criterion nobody prescribed. A run already CARRYING one still
-     shows it -- the escape `showMiles` takes -- so nothing on disk is hidden;
-     two committed quality runs carry a duration and none carries `is_long`. */
+  /* A WORKOUT STATES NO DURATION. The athlete's instruction: a duration is
+     not applicable to a session defined by its reps, and `prescribed_seconds`
+     on a quality run would start scoring it against a duration criterion
+     nobody prescribed. A run already CARRYING one still shows it -- the
+     escape `showMiles` takes -- so nothing on disk is hidden.
+
+     THE LONG-RUN FLAG IS ON EVERY ROLE, and the athlete reversed its half of
+     that instruction (2026-10-16) for a Friday Sub-T session that is also the
+     week's long run because of travel. Which run is the long one is a
+     different question from how a run is scored: `is_long` feeds
+     `long_run_share` and the long emphasis whatever the role, and the role
+     still picks the ceiling. */
   const showDuration = !showTable || "prescribed_seconds" in run;
-  const showLong = !showTable || run.is_long === true;
 
   return (
     <>
@@ -273,16 +278,14 @@ export function RunFormFields({
             />
           </label>
         ) : null}
-        {showLong ? (
-          <label className="field edit-check">
-            <span>long run</span>
-            <input
-              type="checkbox"
-              checked={run.is_long === true}
-              onChange={(e) => up("is_long", e.target.checked || undefined)}
-            />
-          </label>
-        ) : null}
+        <label className="field edit-check">
+          <span>long run</span>
+          <input
+            type="checkbox"
+            checked={run.is_long === true}
+            onChange={(e) => up("is_long", e.target.checked || undefined)}
+          />
+        </label>
       </div>
 
       {showTable ? (

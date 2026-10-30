@@ -1,26 +1,5 @@
 {
  "hr": {
-  "abort_ceiling": 166,
-  "easy": 137,
-  "long_tiers": [
-   {
-    "ceiling": 137,
-    "through_moving_seconds": 3600
-   },
-   {
-    "ceiling": 140,
-    "through_moving_seconds": 7200
-   },
-   {
-    "ceiling": 143,
-    "through_moving_seconds": null
-   }
-  ],
-  "recovery": 130,
-  "recovery_drop_bpm": 5,
-  "subt_rep_avg": 162,
-  "subt_rep_peak": 166,
-  "threshold": 173,
   "watch_alarm": 145
  },
  "load": {
@@ -41,7 +20,7 @@
   "hr_rest": 44,
   "sex": "male"
  },
- "updated": "2026-08-05",
+ "updated": "2026-10-20",
  "vo2max": {
   "correction_factor": 1.013,
   "elevation_adjustment": false,

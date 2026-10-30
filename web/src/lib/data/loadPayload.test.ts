@@ -10,7 +10,7 @@
 
 import { describe, expect, it, vi } from "vitest";
 
-import { loadPayload } from "./loadPayload";
+import { loadOtherTraining, loadPayload, loadPendingPlans } from "./loadPayload";
 
 describe("loadPayload", () => {
   it("returns the parsed payload when the records are present", () => {
@@ -84,5 +84,35 @@ describe("when the published shape is wrong", () => {
     }
     vi.doUnmock("../repository");
     vi.resetModules();
+  });
+});
+
+describe("loadPendingPlans", () => {
+  it("is nothing pending for an athlete that does not resolve", () => {
+    expect(loadPendingPlans("2026-10-11", "definitely-not-an-athlete")).toEqual({
+      pending: [],
+      overlays: {},
+    });
+  });
+
+  it("is nothing pending on the published fixture, which holds no manifests", () => {
+    /* The suite's registry is the published fixture (`vitest.config.mts`):
+     * `published/` and nothing else, so there is no plan to be pending. The
+     * comparison itself is `pending.test.ts`'s, over pure inputs. */
+    expect(loadPendingPlans("2026-10-11")).toEqual({ pending: [], overlays: {} });
+  });
+});
+
+describe("loadOtherTraining", () => {
+  it("is empty for an athlete that does not resolve", () => {
+    expect(loadOtherTraining("2026-10-11", "definitely-not-an-athlete")).toEqual({});
+  });
+
+  it("is empty on the published fixture, which holds no authored files", () => {
+    /* `other-training.json` is AUTHORED and never published, so the fixture
+     * registry -- `published/` and nothing else -- has none, exactly like the
+     * demo. The lookup is `otherTraining.test.ts`'s and the window is
+     * `pending.test.ts`'s, both over pure inputs. */
+    expect(loadOtherTraining("2026-10-11")).toEqual({});
   });
 });

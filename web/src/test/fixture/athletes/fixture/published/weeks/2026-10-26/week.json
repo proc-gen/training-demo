@@ -1,0 +1,79 @@
+{
+ "adherence_error": null,
+ "load_error": null,
+ "manifest": {
+  "phase": "General Prep",
+  "rest_days": [],
+  "runs": [
+   {
+    "date": "2026-10-26",
+    "key": "2026-10-26",
+    "prescribed": "30 min recovery",
+    "role": "recovery"
+   },
+   {
+    "date": "2026-10-27",
+    "key": "2026-10-27",
+    "prescribed": "AM: 30 min recovery",
+    "role": "recovery"
+   },
+   {
+    "date": "2026-10-27",
+    "key": "2026-10-27-2-wu",
+    "prescribed": "warmup for the repetition session",
+    "role": "warmup"
+   },
+   {
+    "date": "2026-10-27",
+    "key": "2026-10-27-2",
+    "prescribed": "PM: 4x4x200m w/ 200m jog between reps and 400m between sets",
+    "role": "repetition"
+   },
+   {
+    "date": "2026-10-27",
+    "key": "2026-10-27-2-cd",
+    "prescribed": "cooldown for the repetition session",
+    "role": "cooldown"
+   },
+   {
+    "date": "2026-10-28",
+    "key": "2026-10-28",
+    "prescribed": "60-75 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-10-29",
+    "key": "2026-10-29",
+    "prescribed": "AM: 40 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-10-29",
+    "key": "2026-10-29-2",
+    "prescribed": "PM: 50 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-10-30",
+    "key": "2026-10-30",
+    "prescribed": "10x3:00 w/ 1:00 jog at Sub-T",
+    "role": "subt"
+   },
+   {
+    "date": "2026-10-31",
+    "key": "2026-10-31",
+    "prescribed": "30-45 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-11-01",
+    "key": "2026-11-01",
+    "prescribed": "90 min easy/long",
+    "role": "long"
+   }
+  ],
+  "week_start": "2026-10-26",
+  "week_type": "Intensity"
+ },
+ "week_start": "2026-10-26"
+}

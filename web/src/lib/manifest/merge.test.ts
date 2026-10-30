@@ -6,6 +6,7 @@ import { describe, expect, it } from "vitest";
 import {
   applyDay,
   applyWeek,
+  cleanOtherTraining,
   dayMetaOf,
   newWeekTemplate,
   runFormOf,
@@ -136,7 +137,7 @@ describe("the day's own two week-level facts", () => {
       m,
       date,
       m.runs.filter((r) => r.date === date).map(runFormOf),
-      meta,
+      { other_training: "", ...meta },
     ) as typeof m;
 
   it("ticking rest adds the date, sorted; unticking removes it", () => {
@@ -184,13 +185,22 @@ describe("the day's own two week-level facts", () => {
 
   it("dayMetaOf reads what applyDay wrote, both ways", () => {
     const m = manifest();
-    expect(dayMetaOf(m, "2026-09-09")).toEqual({ rest: true, note: "" });
+    expect(dayMetaOf(m, "2026-09-09")).toEqual({
+      rest: true,
+      note: "",
+      other_training: "",
+    });
     expect(dayMetaOf(m, "2026-09-08")).toEqual({
       rest: false,
       note: "calf tight",
+      other_training: "",
     });
     const out = day(m, "2026-09-13", { rest: true, note: "windy" });
-    expect(dayMetaOf(out, "2026-09-13")).toEqual({ rest: true, note: "windy" });
+    expect(dayMetaOf(out, "2026-09-13")).toEqual({
+      rest: true,
+      note: "windy",
+      other_training: "",
+    });
   });
 
   it("omitting the meta touches neither key -- the merge stays separable", () => {
@@ -653,5 +663,144 @@ describe("which original a submitted set is built on", () => {
     f[1].sets = [setsOf(f)[1]];
     merged(m, f);
     expect(JSON.stringify(m)).toBe(before);
+  });
+});
+
+describe("other training is NOT the manifest's -- the merge never writes it", () => {
+  /* It lives in `other-training.json` (`otherTraining.ts`) so that writing a
+   * PT routine moves no manifest hash and asks for no regrade -- the athlete:
+   * *"it requires regrading the week even though it's not used for any
+   * calculations."* `DayMeta` still carries it, because the day save posts one
+   * body; `applyDay` must ignore that field completely. */
+
+  const ROUTINE = "Lifting\n  squat 3x5 @ 185\n\nPT\n  clamshells 3x15";
+
+  const save = (m: Record<string, unknown>, date: string, text: string) =>
+    applyDay(
+      m,
+      date,
+      ((m.runs as Record<string, unknown>[]) ?? [])
+        .filter((r) => r.date === date)
+        .map(runFormOf),
+      { ...dayMetaOf(m, date), other_training: text },
+    ) as Record<string, unknown>;
+
+  it("a routine on a day save leaves the manifest IDENTICAL to an untouched save", () => {
+    const m = manifest();
+    for (const date of ["2026-09-07", "2026-09-08", "2026-09-11", "2026-09-13"]) {
+      expect(save(m, date, ROUTINE)).toEqual(save(m, date, ""));
+      expect(save(m, date, ROUTINE)).toEqual(m);
+    }
+  });
+
+  it("serializes to the SAME BYTES with or without a routine -- the hash is what matters", () => {
+    const m = manifest();
+    expect(serializeManifest(save(m, "2026-09-08", ROUTINE))).toBe(
+      serializeManifest(save(m, "2026-09-08", "")),
+    );
+  });
+
+  it("never creates the old key", () => {
+    expect("other_training" in save(manifest(), "2026-09-08", ROUTINE)).toBe(false);
+  });
+
+  it("a stray copy of the old key is kept VERBATIM, like any key the form does not own", () => {
+    const stray = { ...manifest(), other_training: { "2026-09-08": "squat" } };
+    expect(save(stray, "2026-09-08", "").other_training).toEqual({
+      "2026-09-08": "squat",
+    });
+    expect(save(stray, "2026-09-08", "deadlift").other_training).toEqual({
+      "2026-09-08": "squat",
+    });
+  });
+
+  it("never touches the note", () => {
+    const m = manifest();
+    expect(save(m, "2026-09-08", "left knee PT").notes).toEqual(m.notes);
+  });
+
+  it("does not mutate its input", () => {
+    const m = manifest();
+    const before = JSON.stringify(m);
+    save(m, "2026-09-08", ROUTINE);
+    expect(JSON.stringify(m)).toBe(before);
+  });
+
+  it("dayMetaOf takes the text from its CALLER, never from the manifest", () => {
+    const stray = { ...manifest(), other_training: { "2026-09-08": "squat" } };
+    expect(dayMetaOf(stray, "2026-09-08").other_training).toBe("");
+    expect(dayMetaOf(stray, "2026-09-08", ROUTINE).other_training).toBe(ROUTINE);
+    expect(dayMetaOf(manifest(), "2026-09-08", "PT").other_training).toBe("PT");
+  });
+
+  it("dayMetaOf with a routine still reads the rest flag and note off the manifest", () => {
+    const m = manifest();
+    const plain = dayMetaOf(m, "2026-09-08");
+    expect(dayMetaOf(m, "2026-09-08", "PT")).toEqual({
+      ...plain,
+      other_training: "PT",
+    });
+  });
+
+  it("a week save leaves it alone -- it is not on FORM_WEEK_KEYS", () => {
+    const stray = { ...manifest(), other_training: { "2026-09-08": "squat" } };
+    expect(applyWeek(stray, weekFormOf(stray))).toEqual(stray);
+  });
+});
+
+describe("cleanOtherTraining", () => {
+  it("keeps internal newlines, blank lines and indentation", () => {
+    const t = "Lifting\n  squat 3x5\n\nPT\n\tclamshells";
+    expect(cleanOtherTraining(t)).toBe(t);
+  });
+
+  it("keeps the FIRST line's indentation -- this is not trim()", () => {
+    expect(cleanOtherTraining("  squat\n  bench")).toBe("  squat\n  bench");
+  });
+
+  it("turns CRLF and a lone CR into LF", () => {
+    expect(cleanOtherTraining("a\r\nb\rc\nd")).toBe("a\nb\nc\nd");
+    expect(cleanOtherTraining("a\r\n\r\nb")).toBe("a\n\nb");
+  });
+
+  it("strips trailing whitespace from every line", () => {
+    expect(cleanOtherTraining("a  \nb\t\nc  ")).toBe("a\nb\nc");
+  });
+
+  it("drops blank lines at both ends, including whitespace-only ones", () => {
+    expect(cleanOtherTraining("\n \n squat\n\n  \n")).toBe(" squat");
+    expect(cleanOtherTraining("\r\n\r\nsquat\r\n")).toBe("squat");
+  });
+
+  it("whitespace-only and empty become the cleared state", () => {
+    for (const t of ["", " ", "\n", "\n\n\t \r\n", "   \n   "]) {
+      expect(cleanOtherTraining(t)).toBe("");
+    }
+  });
+
+  it("a single line is untouched", () => {
+    expect(cleanOtherTraining("squat 3x5")).toBe("squat 3x5");
+  });
+
+  it("is idempotent", () => {
+    for (const t of [
+      "",
+      "a",
+      "  a  \r\n\r\n b \n\n",
+      "\n\nLifting\r\n  squat  \n\n\nPT\n",
+      "\t\tx\n",
+    ]) {
+      const once = cleanOtherTraining(t);
+      expect(cleanOtherTraining(once)).toBe(once);
+    }
+  });
+
+  it("leaves no CR and no leading or trailing newline in any output", () => {
+    for (const t of ["\r", "a\r", "\ra", "a\r\n", "\r\n a \r\n", "x\n\r\ny"]) {
+      const out = cleanOtherTraining(t);
+      expect(out).not.toMatch(/\r/);
+      expect(out.startsWith("\n")).toBe(false);
+      expect(out.endsWith("\n")).toBe(false);
+    }
   });
 });

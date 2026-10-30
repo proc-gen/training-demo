@@ -6,6 +6,9 @@ import { DayEditorModal } from "./DayEditorModal";
 
 afterEach(cleanup);
 
+/** Multi-line on purpose: the newlines are the content. */
+const ROUTINE = "Lifting\n  squat 3x5\n\nPT\n  clamshells 3x15";
+
 const manifest = () => ({
   week_start: "2026-09-07",
   _comment: "prose",
@@ -24,11 +27,17 @@ const manifest = () => ({
   notes: { "2026-09-08": "calf tight" },
 });
 
+/* `other-training.json`'s entries for the week, which the route hands back
+ * BESIDE the manifest -- the manifest holds no `other_training` since
+ * 2026-10-16, so writing a routine moves no manifest hash. */
+const otherTraining = () => ({ "2026-09-08": ROUTINE });
+
 const meta = (c: HTMLElement) => ({
   rest: c.querySelector<HTMLInputElement>(
     ".edit-fields input[type=checkbox]",
   )!,
   note: c.querySelector<HTMLInputElement>(".edit-fields input.wide")!,
+  other: c.querySelector<HTMLTextAreaElement>(".edit-wide textarea")!,
 });
 
 /** One saved prescription, so the picker has something to offer. */
@@ -74,7 +83,10 @@ function fake(opts: { missing?: boolean; templates?: unknown[] } = {}) {
     if (missing) {
       return Response.json({ error: "nobody has authored" }, { status: 404 });
     }
-    return Response.json({ manifest: manifest() }, { status: 200 });
+    return Response.json(
+      { manifest: manifest(), other_training: otherTraining() },
+      { status: 200 },
+    );
   }) as unknown as typeof fetch;
   return { fetcher, posts };
 }
@@ -442,7 +454,11 @@ describe("the mode decides which controls render", () => {
 
     expect(JSON.stringify(view.posts[0])).toBe(JSON.stringify(plan.posts[0]));
     // Non-vacuous: the body really does carry both halves.
-    expect(plan.posts[0]).toMatchObject({ note: "calf tight", rest: false });
+    expect(plan.posts[0]).toMatchObject({
+      note: "calf tight",
+      rest: false,
+      other_training: ROUTINE,
+    });
     expect((plan.posts[0].runs as unknown[]).length).toBe(2);
   });
 
@@ -466,5 +482,94 @@ describe("the mode decides which controls render", () => {
       ).toBeTruthy();
       cleanup();
     }
+  });
+});
+
+describe("other training -- lifting, PT", () => {
+  /* Its own date-keyed map, never part of `notes`: the complaint flag scans
+   * `notes`, and the athlete asked that nothing grade this. View mode only,
+   * like the note, because it records what was done. */
+
+  const open = (mode: "view" | "plan", date = "2026-09-08") => {
+    const { fetcher, posts } = fake();
+    const r = wrap(
+      <DayEditorModal
+        weekStart="2026-09-07"
+        date={date}
+        mode={mode}
+        onClose={() => {}}
+        onSaved={() => {}}
+        fetcher={fetcher}
+      />,
+    );
+    return { ...r, posts };
+  };
+
+  it("VIEW draws a TEXTAREA seeded with the saved text, newlines intact", async () => {
+    const { container } = open("view");
+    await waitFor(() => expect(meta(container).other).toBeTruthy());
+    expect(meta(container).other.tagName).toBe("TEXTAREA");
+    expect(meta(container).other.value).toBe(ROUTINE);
+    expect(meta(container).other.value.split("\n")).toHaveLength(5);
+    expect(container.textContent).toContain("other training");
+  });
+
+  it("PLAN does not draw it, and still posts it UNCHANGED", async () => {
+    /* Omitting it would delete it -- `applyDayMeta` drops the date when the
+     * value is empty. The mode gates rendering, never what is posted. */
+    const { container, posts } = open("plan");
+    await waitFor(() =>
+      expect(container.querySelectorAll(".edit-run").length).toBe(2),
+    );
+    expect(container.querySelector("textarea")).toBeNull();
+    fireEvent.click(screen.getByText("Save"));
+    await waitFor(() => expect(posts).toHaveLength(1));
+    expect(posts[0]).toMatchObject({ other_training: ROUTINE });
+  });
+
+  it("a date with none opens empty and posts the cleared state", async () => {
+    const { container, posts } = open("view", "2026-09-09");
+    await waitFor(() => expect(meta(container).other).toBeTruthy());
+    expect(meta(container).other.value).toBe("");
+    fireEvent.click(screen.getByText("Save"));
+    await waitFor(() => expect(posts).toHaveLength(1));
+    expect(posts[0]).toMatchObject({ other_training: "" });
+  });
+
+  it("an edit reaches the save with its line breaks, edges cleaned", async () => {
+    const { container, posts } = open("view");
+    await waitFor(() => expect(meta(container).other).toBeTruthy());
+    fireEvent.blur(meta(container).other, {
+      target: { value: "\r\n  bench 3x8  \r\n\r\n  rows 3x10\r\n\r\n" },
+    });
+    fireEvent.click(screen.getByText("Save"));
+    await waitFor(() => expect(posts).toHaveLength(1));
+    expect(posts[0]).toMatchObject({
+      other_training: "  bench 3x8\n\n  rows 3x10",
+      // The neighbours are untouched.
+      note: "calf tight",
+      rest: false,
+    });
+  });
+
+  it("clearing it posts the cleared state and leaves the note alone", async () => {
+    const { container, posts } = open("view");
+    await waitFor(() => expect(meta(container).other).toBeTruthy());
+    fireEvent.blur(meta(container).other, { target: { value: " \n \n" } });
+    fireEvent.click(screen.getByText("Save"));
+    await waitFor(() => expect(posts).toHaveLength(1));
+    expect(posts[0]).toMatchObject({ other_training: "", note: "calf tight" });
+  });
+
+  it("editing the NOTE never folds into it, nor it into the note", async () => {
+    const { container, posts } = open("view");
+    await waitFor(() => expect(meta(container).note).toBeTruthy());
+    fireEvent.blur(meta(container).note, { target: { value: "legs heavy" } });
+    fireEvent.click(screen.getByText("Save"));
+    await waitFor(() => expect(posts).toHaveLength(1));
+    expect(posts[0]).toMatchObject({
+      note: "legs heavy",
+      other_training: ROUTINE,
+    });
   });
 });

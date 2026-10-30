@@ -2,7 +2,12 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import { dayMetaOf, runFormOf, type DayMeta } from "@/lib/manifest/merge";
+import {
+  cleanOtherTraining,
+  dayMetaOf,
+  runFormOf,
+  type DayMeta,
+} from "@/lib/manifest/merge";
 import { runFromTemplate } from "@/lib/manifest/runTemplates";
 import { Modal } from "@/lib/ux/primitives/Modal";
 import { newRunKey } from "../data/formModel";
@@ -41,6 +46,16 @@ import { SaveBar } from "./SaveBar";
  * keyed by one -- so they were authored in the WEEK dialog and belonged here.
  * The athlete: rest *"belongs to the individual day and will roll up to the
  * week"*. `applyDay` does the roll-up; nothing about the storage moved.
+ *
+ * A THIRD JOINED THEM, AND IT IS NOT A NOTE: `other_training`, free text for
+ * lifting and PT, MULTI-LINE because a routine is a list. It is its own
+ * date-keyed map rather than part of `notes` because `notes` is scanned for
+ * complaint words by `unilateral-complaint` -- "left knee PT" would fire a
+ * flag -- and the athlete asked that nothing grade it. It is not in the
+ * manifest at all: `other-training.json` holds it, so editing a routine moves
+ * no manifest hash and asks for no regrade. The route hands the week's entries
+ * back beside the manifest and writes the file on save; the dialog posts it in
+ * the same body as everything else. Drawn in View mode beside the note.
  *
  * ============================================================================
  * THE MODE DECIDES WHICH CONTROLS RENDER -- NEVER WHAT IS POSTED.
@@ -100,7 +115,11 @@ export function DayEditorModal({
   );
   /** The date's own two week-level facts, seeded by `dayMetaOf` so that saving
    * an untouched day is the exact no-op `runFormOf` already promises. */
-  const [meta, setMeta] = useState<DayMeta>({ rest: false, note: "" });
+  const [meta, setMeta] = useState<DayMeta>({
+    rest: false,
+    note: "",
+    other_training: "",
+  });
   const [outcome, setOutcome] = useState<SaveOutcome | null>(null);
   /** Per run key: a workout shape the manifest cannot hold. The run keeps its
    * last good value while one stands, so the save must REFUSE rather than post
@@ -128,7 +147,9 @@ export function DayEditorModal({
           ? (got.manifest.runs as Record<string, unknown>[])
           : [];
         setRuns(all.filter((r) => r.date === date).map(runFormOf));
-        setMeta(dayMetaOf(got.manifest, date));
+        setMeta(
+          dayMetaOf(got.manifest, date, got.other_training[date] ?? ""),
+        );
         setManifestKeys(
           new Set(
             all.map((r) => r.key).filter((k): k is string => typeof k === "string"),
@@ -267,6 +288,26 @@ export function DayEditorModal({
               </label>
             )}
           </div>
+          {/* OTHER TRAINING -- lifting, PT. View only, like the note: it
+              records what was done. A TEXTAREA, unlike every other prose field
+              here, because its newlines are the content and are stored as
+              typed; `cleanOtherTraining` only normalises the edges. */}
+          {plan ? null : (
+            <label className="edit-wide">
+              <span>other training</span>
+              <textarea
+                rows={6}
+                placeholder="lifting, PT exercises…"
+                defaultValue={meta.other_training}
+                onBlur={(e) =>
+                  setMeta((m) => ({
+                    ...m,
+                    other_training: cleanOtherTraining(e.target.value),
+                  }))
+                }
+              />
+            </label>
+          )}
 
           {/* THE SESSIONS. Plan edits them; View lists them in the plan's own
               words, so the reader can see which day they are annotating without

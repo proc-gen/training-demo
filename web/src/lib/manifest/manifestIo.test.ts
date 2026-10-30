@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -7,9 +8,12 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import {
   isWeekStart,
   listWeeks,
+  manifestHashes,
   readManifest,
+  readOtherTrainingFile,
   readRunTemplateFile,
   writeManifest,
+  writeOtherTrainingFile,
   writeRunTemplateFile,
 } from "./manifestIo";
 
@@ -152,5 +156,97 @@ describe("the run templates file", () => {
     expect(() => writeRunTemplateFile("a/b", { run_templates: [] }, root)).toThrow(
       /slug/,
     );
+  });
+});
+
+describe("the other training file", () => {
+  it("reads as `{days: {}}` where nobody has written one", () => {
+    expect(readOtherTrainingFile("a", root)).toEqual({ days: {} });
+  });
+
+  it("round-trips what it was handed, newlines intact", () => {
+    const file = {
+      _comment: "prose",
+      days: { "2026-10-12": "Lifting\n  squat 3x5\n\nPT" },
+    };
+    writeOtherTrainingFile("a", file, root);
+    expect(readOtherTrainingFile("a", root)).toEqual(file);
+  });
+
+  it("writes the manifests' own format: 2-space, LF, trailing newline", () => {
+    writeOtherTrainingFile("a", { days: { "2026-10-12": "PT\nbands" } }, root);
+    const text = fs.readFileSync(
+      path.join(root, "a", "other-training.json"),
+      "utf-8",
+    );
+    expect(text).toBe('{\n  "days": {\n    "2026-10-12": "PT\\nbands"\n  }\n}\n');
+  });
+
+  it("sits at the athlete root and NOT under weeks/ -- or it would be hashed as a week", () => {
+    writeOtherTrainingFile("a", { days: {} }, root);
+    expect(fs.existsSync(path.join(root, "a", "other-training.json"))).toBe(true);
+    expect(fs.existsSync(path.join(root, "a", "weeks"))).toBe(false);
+  });
+
+  it("WRITING IT MOVES NO MANIFEST HASH -- the reason it is its own file", () => {
+    writeManifest("a", "2026-10-12", manifest("2026-10-12"), root);
+    const before = manifestHashes("a", root);
+    writeOtherTrainingFile("a", { days: { "2026-10-12": "PT" } }, root);
+    writeOtherTrainingFile("a", { days: {} }, root);
+    expect(manifestHashes("a", root)).toEqual(before);
+    expect(listWeeks("a", root)).toEqual(["2026-10-12"]);
+  });
+
+  it("leaves no .tmp behind", () => {
+    writeOtherTrainingFile("a", { days: {} }, root);
+    expect(fs.readdirSync(path.join(root, "a"))).toEqual(["other-training.json"]);
+  });
+
+  it("refuses a slug with a separator rather than normalising it", () => {
+    expect(() => readOtherTrainingFile("../x", root)).toThrow(/slug/);
+    expect(() => writeOtherTrainingFile("a/b", { days: {} }, root)).toThrow(/slug/);
+  });
+});
+
+describe("manifestHashes", () => {
+  it("is empty for an athlete with no weeks directory", () => {
+    expect(manifestHashes("nobody", root)).toEqual({});
+  });
+
+  it("is the sha256 of each manifest's BYTES, as publish.py hashes it", () => {
+    writeManifest("a", "2026-09-07", manifest("2026-09-07"), root);
+    const file = path.join(root, "a", "weeks", "2026-09-07.json");
+    const want = createHash("sha256").update(fs.readFileSync(file)).digest("hex");
+    expect(manifestHashes("a", root)).toEqual({ "2026-09-07": want });
+  });
+
+  it("matches a known digest, so the algorithm cannot drift", () => {
+    fs.mkdirSync(path.join(root, "a", "weeks"), { recursive: true });
+    fs.writeFileSync(path.join(root, "a", "weeks", "2026-09-07.json"), "abc");
+    expect(manifestHashes("a", root)).toEqual({
+      "2026-09-07":
+        "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+    });
+  });
+
+  it("moves when the file is rewritten with different content", () => {
+    writeManifest("a", "2026-09-07", manifest("2026-09-07"), root);
+    const before = manifestHashes("a", root);
+    writeManifest("a", "2026-09-07", { ...manifest("2026-09-07"), phase: "B" }, root);
+    expect(manifestHashes("a", root)).not.toEqual(before);
+  });
+
+  it("does not move when the same manifest is written again", () => {
+    writeManifest("a", "2026-09-07", manifest("2026-09-07"), root);
+    const before = manifestHashes("a", root);
+    writeManifest("a", "2026-09-07", manifest("2026-09-07"), root);
+    expect(manifestHashes("a", root)).toEqual(before);
+  });
+
+  it("covers exactly the weeks listWeeks lists", () => {
+    writeManifest("a", "2026-09-14", manifest("2026-09-14"), root);
+    writeManifest("a", "2026-09-07", manifest("2026-09-07"), root);
+    fs.writeFileSync(path.join(root, "a", "weeks", "notes.txt"), "x");
+    expect(Object.keys(manifestHashes("a", root))).toEqual(listWeeks("a", root));
   });
 });

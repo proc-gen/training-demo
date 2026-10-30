@@ -12,10 +12,58 @@
     "role": "recovery"
    },
    {
+    "date": "2026-11-24",
+    "key": "2026-11-24",
+    "prescribed": "AM: 30 min recovery",
+    "role": "recovery"
+   },
+   {
+    "date": "2026-11-24",
+    "key": "2026-11-24-2",
+    "prescribed": "PM: 5x6:00 w/ 1:30 jog at Sub-T",
+    "role": "subt"
+   },
+   {
+    "date": "2026-11-25",
+    "key": "2026-11-25",
+    "prescribed": "60-75 min easy",
+    "role": "easy"
+   },
+   {
     "date": "2026-11-26",
     "key": "2026-11-26",
-    "prescribed": "Thanksgiving 5 miler",
+    "prescribed": "AM: Thanksgiving 5 miler",
     "role": "race"
+   },
+   {
+    "date": "2026-11-26",
+    "key": "2026-11-26-2",
+    "prescribed": "PM: 30 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-11-27",
+    "key": "2026-11-27",
+    "prescribed": "AM: 40 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-11-27",
+    "key": "2026-11-27-2",
+    "prescribed": "PM: 50 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-11-28",
+    "key": "2026-11-28",
+    "prescribed": "30-45 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-11-29",
+    "key": "2026-11-29",
+    "prescribed": "105 min easy/long",
+    "role": "long"
    }
   ],
   "week_start": "2026-11-23",

@@ -4,15 +4,11 @@ import type { SaveOutcome } from "../hooks/useManifestEditor";
 
 /** The save button and what came back from it.
  *
- * A SAVE IS A REGRADE: the route writes the manifest, runs `publish.py`
- * (~14 s) and reads the graders' verdicts back -- so the busy state says
- * "grading" rather than "saving", because that is what the wait IS.
- *
- * THE GRADER'S ERRORS ARE THE POINT OF THE READBACK. `publish.py` is the deep
- * validator; a manifest it refused is WRITTEN (never rolled back) and its
- * error record is what renders here, at the point of save, instead of waiting
- * to be found on the week card -- the WeekBanners contract brought to the
- * form. A clean save says so in one line.
+ * A SAVE WRITES THE MANIFEST AND STOPS. It used to run `publish.py` too, ~14 s
+ * per click, and the athlete asked for one Regrade on the Calendar instead --
+ * so the week is PENDING after a save, and the clean-save line says where the
+ * grading went. The graders' refusals are `RegradeButton`'s to show now, named
+ * by week, because that is when they are found.
  *
  * THE BUTTON AND THE STATUS SIT BOTTOM RIGHT; THE BANNERS DO NOT (2026-09-03,
  * the athlete). Two separate reasons, and they pull in opposite directions:
@@ -45,13 +41,6 @@ export function SaveBar({
    *  and said, in the same place a grader's refusal is said. */
   blocked?: string[];
 }) {
-  const graderErrors =
-    outcome?.ok === true
-      ? [outcome.grader.adherence_error, outcome.grader.load_error].filter(
-          (e): e is string => typeof e === "string" && e.length > 0,
-        )
-      : [];
-
   return (
     <div className="edit-savebar">
       {outcome && !outcome.ok ? (
@@ -66,18 +55,6 @@ export function SaveBar({
             </ul>
           ) : null}
           {outcome.stderr ? <pre>{outcome.stderr}</pre> : null}
-        </div>
-      ) : null}
-
-      {outcome?.ok && graderErrors.length ? (
-        <div className="banner stop">
-          <b>Saved, but the grader refused the week. </b>
-          The manifest is written; fix it and save again.
-          <ul>
-            {graderErrors.map((e) => (
-              <li key={e}>{e}</li>
-            ))}
-          </ul>
         </div>
       ) : null}
 
@@ -99,12 +76,19 @@ export function SaveBar({
             banner above, and repeating it beside the button would be the same
             fact twice at two widths. */}
         {saving ? (
-          <p className="muted">Grading the week…</p>
-        ) : outcome?.ok && !graderErrors.length ? (
-          <p className="muted">
-            Saved and regraded in {outcome.seconds}s. The page reflects it on
-            the next refresh.
-          </p>
+          <p className="muted">Saving…</p>
+        ) : outcome?.ok ? (
+          /* `pending: false` is a save that moved no manifest -- the lifting
+             and PT text lives in its own file -- on a week already graded.
+             Asking for a regrade there would be asking for nothing. */
+          outcome.pending === false ? (
+            <p className="muted">Saved.</p>
+          ) : (
+            <p className="muted">
+              Saved. Not graded yet -- use Regrade on the Calendar when you are
+              done editing.
+            </p>
+          )
         ) : null}
 
         <button

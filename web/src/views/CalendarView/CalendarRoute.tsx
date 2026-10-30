@@ -1,4 +1,5 @@
 import type { Loaded } from "@/lib/data/payload";
+import type { PendingPlans } from "@/lib/manifest/pending";
 import { CalendarView } from "./CalendarView";
 import type { CalendarMode } from "./data/mode";
 
@@ -22,6 +23,8 @@ export function CalendarRoute({
   weeks,
   today,
   loaded,
+  plans,
+  otherTraining,
 }: {
   /** The window's last day -- a Sunday, normalised from `?end=`. */
   end: string;
@@ -36,6 +39,11 @@ export function CalendarRoute({
    *  carry. */
   today: string | null;
   loaded: (Loaded & { ok: true; maxSteps: number }) | { ok: false; error: string };
+  /** Weeks edited since the last regrade -- the server route reads them off
+   *  disk; the static route has none to pass. */
+  plans?: PendingPlans;
+  /** Date -> lifting/PT text in the window. Server route only, like `plans`. */
+  otherTraining?: Readonly<Record<string, string>>;
 }) {
   if (!loaded.ok) {
     return (
@@ -65,6 +73,8 @@ export function CalendarRoute({
       mode={mode}
       weeks={weeks}
       today={today}
+      plans={plans}
+      otherTraining={otherTraining}
     />
   );
 }

@@ -7,7 +7,7 @@ import { SaveBar } from "./SaveBar";
 afterEach(cleanup);
 
 describe("SaveBar", () => {
-  it("saves on click and says GRADING while it waits -- that is what the wait is", () => {
+  it("saves on click and says SAVING while it waits -- nothing is graded now", () => {
     const onSave = vi.fn();
     const idle = wrap(<SaveBar saving={false} outcome={null} onSave={onSave} />);
     const button = idle.container.querySelector("button")!;
@@ -24,8 +24,9 @@ describe("SaveBar", () => {
     // own element beside it now, so there is one place for "what is
     // happening" and one fixed-width control.
     expect(b.textContent).toBe("Save");
-    expect(busy.container.querySelector(".edit-saverow p")!.textContent)
-      .toContain("Grading");
+    const status = busy.container.querySelector(".edit-saverow p")!.textContent;
+    expect(status).toContain("Saving");
+    expect(status).not.toContain("Grading");
   });
 
   it("the button is a BUTTON, and the row that holds it is the last thing", () => {
@@ -77,43 +78,53 @@ describe("SaveBar", () => {
     expect(container.querySelector("pre")!.textContent).toContain("Traceback");
   });
 
-  it("a save the GRADER refused says the manifest is written and shows why", () => {
+  it("a clean save says it is NOT graded yet, and where the grading went", () => {
     const { container } = wrap(
-      <SaveBar
-        saving={false}
-        outcome={{
-          ok: true,
-          seconds: 13.6,
-          grader: {
-            found: true,
-            adherence_error: "grade_week.py exited 1: unknown role",
-            load_error: null,
-          },
-        }}
-        onSave={() => {}}
-      />,
-    );
-    const banner = container.querySelector(".banner.stop")!;
-    expect(banner.textContent).toContain("manifest is written");
-    expect(banner.textContent).toContain("unknown role");
-  });
-
-  it("a clean save is one quiet sentence with the duration", () => {
-    const { container } = wrap(
-      <SaveBar
-        saving={false}
-        outcome={{
-          ok: true,
-          seconds: 13.6,
-          grader: { found: true, adherence_error: null, load_error: null },
-        }}
-        onSave={() => {}}
-      />,
+      <SaveBar saving={false} outcome={{ ok: true }} onSave={() => {}} />,
     );
     expect(container.querySelector(".banner.stop")).toBeNull();
     // Beside the button, which is where the athlete asked for it.
-    expect(container.querySelector(".edit-saverow p.muted")!.textContent)
-      .toContain("13.6");
+    const line = container.querySelector(".edit-saverow p.muted")!.textContent!;
+    expect(line).toContain("Saved");
+    expect(line).toContain("Not graded yet");
+    expect(line).toContain("Regrade");
+    // No duration: a save starts no process, so there is none to report.
+    expect(line).not.toMatch(/\d+(\.\d+)?s\b/);
+  });
+
+  it("a save that left the week GRADED says only that it saved", () => {
+    /* `pending: false` -- a routine-only save on a graded week. The lifting
+       and PT text lives outside the manifest, so there is nothing to regrade
+       and the athlete is not sent to look for the button. */
+    const { container } = wrap(
+      <SaveBar saving={false} outcome={{ ok: true, pending: false }} onSave={() => {}} />,
+    );
+    const line = container.querySelector(".edit-saverow p.muted")!.textContent!;
+    expect(line).toBe("Saved.");
+    expect(container.querySelectorAll(".banner")).toHaveLength(0);
+  });
+
+  it("an explicit pending save still asks for the Regrade", () => {
+    const { container } = wrap(
+      <SaveBar saving={false} outcome={{ ok: true, pending: true }} onSave={() => {}} />,
+    );
+    const line = container.querySelector(".edit-saverow p.muted")!.textContent!;
+    expect(line).toContain("Not graded yet");
+    expect(line).toContain("Regrade");
+  });
+
+  it("a clean save raises no banner at all -- refusals are the Regrade's", () => {
+    const { container } = wrap(
+      <SaveBar saving={false} outcome={{ ok: true }} onSave={() => {}} />,
+    );
+    expect(container.querySelectorAll(".banner")).toHaveLength(0);
+  });
+
+  it("is quiet before anything has been saved", () => {
+    const { container } = wrap(
+      <SaveBar saving={false} outcome={null} onSave={() => {}} />,
+    );
+    expect(container.querySelector(".edit-saverow p")).toBeNull();
   });
 
   it("says nothing beside the button when a banner already said it", () => {

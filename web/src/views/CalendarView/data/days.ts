@@ -34,6 +34,65 @@ export function dayByDate(days: Day[]): Map<string, Day> {
   return byDate;
 }
 
+/** The payload with each PENDING week's plan drawn from its manifest -- what
+ * Plan mode's grid reads.
+ *
+ * A SAVE NO LONGER PUBLISHES, so a week edited since the last Regrade has a
+ * published record describing the OLD plan. `overlays` is the new one, already
+ * projected to the published manifest's shape (`lib/manifest/pending.ts`), so
+ * `prescriptionByKey`, `alternatesByKey` and `restDates` read it unchanged.
+ *
+ * ITS RUN LIST IS REBUILT FROM THE PLAN, in the order `run_ordinals` gives --
+ * date, then position within the date in manifest order -- because the
+ * grader's `results`/`planned` are the old plan's rows. Each row carries
+ * `emphasis: []`: the long/race/quality tint is the grader's
+ * `session_emphasis`, and an ungraded week is drawn without it rather than
+ * with a browser guess at it. No `status` either -- Plan mode never shows one.
+ *
+ * PLAN MODE ONLY. View mode, the day card and the week totals are the record,
+ * and the record is what was graded.
+ */
+export function overlayPlans(
+  payload: Payload,
+  overlays: Record<string, unknown>,
+): Payload {
+  const starts = Object.keys(overlays);
+  if (!starts.length) return payload;
+  const weeks = { ...(payload.weeks ?? {}) };
+  for (const start of starts) {
+    const manifest = overlays[start];
+    if (typeof manifest !== "object" || manifest === null) continue;
+    const runs = (manifest as { runs?: unknown }).runs;
+    const ordinals = new Map<string, number>();
+    const planned: RunResult[] = [];
+    for (const r of Array.isArray(runs) ? runs : []) {
+      if (typeof r !== "object" || r === null) continue;
+      const { key, date, role } = r as Record<string, unknown>;
+      if (typeof date !== "string") continue;
+      const ordinal = ordinals.get(date) ?? 0;
+      ordinals.set(date, ordinal + 1);
+      planned.push({
+        key: typeof key === "string" ? key : undefined,
+        date,
+        role: typeof role === "string" ? role : undefined,
+        ordinal,
+        emphasis: [],
+      } as RunResult);
+    }
+    const prior = weeks[start];
+    weeks[start] = {
+      ...(prior ?? { week_start: start }),
+      manifest: manifest as Week["manifest"],
+      adherence: {
+        ...(prior?.adherence ?? { week_start: start }),
+        results: [],
+        planned,
+      },
+    } as Week;
+  }
+  return { ...payload, weeks };
+}
+
 /** Date -> its runs, completed and planned together, in report order.
  *
  * BOTH LISTS, through `sortedRuns` -- the same function the Week tab's table

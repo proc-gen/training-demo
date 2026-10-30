@@ -8,10 +8,13 @@ import {
   isOverCeiling,
   loadByDate,
   maxSteps,
+  overlayPlans,
+  restDates,
   runsByDate,
   weekFor,
   weekTotals,
 } from "./days";
+import { prescriptionByKey } from "@/lib/run/data/runs";
 
 const day = (over: Partial<Day>): Day =>
   ({ date: "2026-07-27", ...over }) as Day;
@@ -301,5 +304,147 @@ describe("weekTotals", () => {
     }
     // No count of the record -- the suite reads the FIXTURE athlete, whose size is a function of its cases rather than of history.
     expect(checked).toBeGreaterThan(0);
+  });
+});
+
+describe("overlayPlans", () => {
+  /* A graded week whose published plan is the OLD one: a tempo Tuesday that
+     the athlete has since moved to Wednesday and made an easy run. */
+  const graded = (): Payload =>
+    payload({
+      weeks: {
+        "2026-10-12": {
+          week_start: "2026-10-12",
+          manifest: {
+            week_start: "2026-10-12",
+            rest_days: ["2026-10-12"],
+            runs: [{ key: "t", date: "2026-10-13", role: "tempo", prescribed: "old" }],
+          },
+          adherence: {
+            week_start: "2026-10-12",
+            results: [],
+            planned: [
+              {
+                key: "t",
+                date: "2026-10-13",
+                role: "tempo",
+                ordinal: 0,
+                status: "pending",
+                emphasis: ["quality"],
+              },
+            ],
+          },
+          load: { days: [] },
+        },
+        "2026-10-05": {
+          week_start: "2026-10-05",
+          manifest: { week_start: "2026-10-05", runs: [] },
+        },
+      } as unknown as Payload["weeks"],
+    });
+
+  const edited = {
+    week_start: "2026-10-12",
+    rest_days: ["2026-10-18"],
+    runs: [
+      { key: "w2", date: "2026-10-14", role: "easy", prescribed: "PM" },
+      { key: "w1", date: "2026-10-14", role: "easy", prescribed: "AM" },
+      { key: "f", date: "2026-10-16", role: "long", prescribed: "long" },
+    ],
+  };
+
+  it("returns the payload itself when nothing is pending", () => {
+    const p = graded();
+    expect(overlayPlans(p, {})).toBe(p);
+  });
+
+  it("does not mutate the payload it was given", () => {
+    const p = graded();
+    const before = JSON.stringify(p);
+    overlayPlans(p, { "2026-10-12": edited });
+    expect(JSON.stringify(p)).toBe(before);
+  });
+
+  it("replaces the pending week's manifest with the edited plan", () => {
+    const got = overlayPlans(graded(), { "2026-10-12": edited });
+    expect(got.weeks["2026-10-12"].manifest).toEqual(edited);
+  });
+
+  it("rebuilds its run list from the plan -- the old Tuesday is gone", () => {
+    const runs = runsByDate(overlayPlans(graded(), { "2026-10-12": edited }));
+    expect(runs.has("2026-10-13")).toBe(false);
+    expect(runs.get("2026-10-14")!.map((r) => r.key)).toEqual(["w2", "w1"]);
+    expect(runs.get("2026-10-16")!.map((r) => r.key)).toEqual(["f"]);
+  });
+
+  it("orders a date's runs by manifest position, as run_ordinals does", () => {
+    const runs = runsByDate(overlayPlans(graded(), { "2026-10-12": edited }));
+    expect(runs.get("2026-10-14")!.map((r) => r.ordinal)).toEqual([0, 1]);
+    expect(runs.get("2026-10-16")![0].ordinal).toBe(0);
+  });
+
+  it("draws NO tint on an ungraded run -- the grader's rule is not guessed", () => {
+    const runs = runsByDate(overlayPlans(graded(), { "2026-10-12": edited }));
+    for (const list of runs.values()) {
+      for (const r of list) expect(r.emphasis).toEqual([]);
+    }
+  });
+
+  it("states no status on an ungraded run", () => {
+    const runs = runsByDate(overlayPlans(graded(), { "2026-10-12": edited }));
+    expect(runs.get("2026-10-16")![0].status).toBeUndefined();
+  });
+
+  it("feeds the edited prescriptions and rest days to the existing readers", () => {
+    const got = overlayPlans(graded(), { "2026-10-12": edited });
+    const week = weekFor(got, "2026-10-14")!;
+    expect(prescriptionByKey(week).get("w1")).toBe("AM");
+    expect(prescriptionByKey(week).has("t")).toBe(false);
+    expect([...restDates(got)]).toEqual(["2026-10-18"]);
+  });
+
+  it("leaves a week that is not pending exactly as published", () => {
+    const p = graded();
+    const got = overlayPlans(p, { "2026-10-12": edited });
+    expect(got.weeks["2026-10-05"]).toBe(p.weeks["2026-10-05"]);
+  });
+
+  it("keeps the rest of the week record -- the load grade is untouched", () => {
+    const got = overlayPlans(graded(), { "2026-10-12": edited });
+    expect(got.weeks["2026-10-12"].load).toEqual({ days: [] });
+  });
+
+  it("adds a week that has been CREATED and never graded", () => {
+    const got = overlayPlans(graded(), {
+      "2026-10-19": {
+        week_start: "2026-10-19",
+        runs: [{ key: "n", date: "2026-10-20", role: "easy", prescribed: "new" }],
+      },
+    });
+    expect(got.weeks["2026-10-19"].week_start).toBe("2026-10-19");
+    expect(runsByDate(got).get("2026-10-20")!.map((r) => r.key)).toEqual(["n"]);
+  });
+
+  it("an emptied plan leaves the week with no runs, not the old ones", () => {
+    const got = overlayPlans(graded(), {
+      "2026-10-12": { week_start: "2026-10-12", runs: [] },
+    });
+    expect([...runsByDate(got).keys()]).toEqual([]);
+  });
+
+  it("skips a run row with no date, and one that is not an object", () => {
+    const got = overlayPlans(graded(), {
+      "2026-10-12": {
+        week_start: "2026-10-12",
+        runs: [null, "x", { key: "nodate" }, { key: "ok", date: "2026-10-15" }],
+      },
+    });
+    expect([...runsByDate(got).values()].flat().map((r) => r.key)).toEqual(["ok"]);
+  });
+
+  it("ignores an overlay that is not an object", () => {
+    const p = graded();
+    const got = overlayPlans(p, { "2026-10-12": null });
+    expect(got.weeks["2026-10-12"]).toBe(p.weeks["2026-10-12"]);
   });
 });

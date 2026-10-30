@@ -10,6 +10,8 @@ import { EditDayButton } from "./EditDayButton";
 import { EditWeekButton } from "./EditWeekButton";
 
 const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const NONE: ReadonlySet<string> = new Set();
+const NO_OTHER_TRAINING: Readonly<Record<string, string>> = {};
 
 /** The Monday-based grid of week rows.
  *
@@ -45,6 +47,8 @@ export function CalendarGrid({
   mode,
   restDays,
   today,
+  pending = NONE,
+  otherTraining = NO_OTHER_TRAINING,
 }: {
   rows: { start: string; days: string[] }[];
   byDate: Map<string, Day>;
@@ -56,8 +60,9 @@ export function CalendarGrid({
   maxSteps: number;
   selected: string | null;
   onSelect: (date: string) => void;
-  /** Week starts with a PUBLISHED record -- the label toggle between "edit"
-   *  and "author"; the editor itself re-checks against the authored file. */
+  /** Week starts with a published record OR a pending manifest -- the label
+   *  toggle between "edit" and "author"; the editor itself re-checks against
+   *  the authored file. */
   authored: Set<string>;
   onEditDay: (date: string) => void;
   onEditWeek: (start: string) => void;
@@ -67,6 +72,12 @@ export function CalendarGrid({
   restDays: Set<string>;
   /** The date Plan mode marks up to -- see `data/dayDone.ts`. */
   today: string | null;
+  /** Week starts whose plan was edited since the last regrade. The label
+   *  SAYS so in a word, in both modes: View's scores describe the old plan,
+   *  and Plan mode draws the new one without its tint. */
+  pending?: ReadonlySet<string>;
+  /** Date -> lifting/PT text, for the cell's `PT` mark. Both modes. */
+  otherTraining?: Readonly<Record<string, string>>;
 }) {
   /* THE `planned` HALF OF THE MARK IS DECIDED HERE, because this is where both
      halves of "the plan states something" are already in hand: a run row on the
@@ -89,6 +100,14 @@ export function CalendarGrid({
         <div className="cal-row" key={row.start}>
           <span className="cal-label">
             {shortDate(row.start)}
+            {pending.has(row.start) ? (
+              <span
+                className="cal-pending"
+                title="Edited since the last regrade -- use Regrade below the calendar"
+              >
+                not graded
+              </span>
+            ) : null}
             <EditWeekButton
               start={row.start}
               authored={authored.has(row.start)}
@@ -109,6 +128,7 @@ export function CalendarGrid({
                 mode={mode}
                 rest={restDays.has(date)}
                 done={done(date)}
+                otherTraining={otherTraining[date] ?? ""}
               />
               <EditDayButton date={date} onEdit={() => onEditDay(date)} />
             </span>

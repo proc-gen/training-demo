@@ -92,6 +92,29 @@ export function readIndex(slug: string): Index {
   return readJson(slug, "index.json") as Index;
 }
 
+/** `published/graded-plans.json` -- the sha256 of each manifest as last
+ * graded -- or null where it is absent or unreadable.
+ *
+ * NOT PART OF THE INDEX. It is the plan editor's plumbing rather than a
+ * record any view renders, so it is read straight off disk when the Calendar
+ * asks which weeks are pending. Null is the safe answer to a broken record:
+ * `pending.gradedHashes` turns it into "every week is pending".
+ *
+ * `base` is injectable so the absent/malformed cases can be tested against a
+ * scratch tree -- the published fixture never carries this record. */
+export function readGradedPlans(
+  slug: string,
+  base = publishedDir(slug),
+): unknown {
+  const file = path.join(base, "graded-plans.json");
+  if (!fs.existsSync(file)) return null;
+  try {
+    return JSON.parse(fs.readFileSync(file, "utf-8"));
+  } catch {
+    return null;
+  }
+}
+
 /** One row of the chart table, by its `week_ending`. Null for no key.
  *
  * THE CHART IS A TABLE (2026-08-29). It used to be embedded whole in every

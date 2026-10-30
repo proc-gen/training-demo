@@ -4,7 +4,12 @@ import { CalendarClientRoute } from "@/views/CalendarView/CalendarClientRoute";
 import { EmptyState } from "@/lib/ux/primitives/EmptyState";
 import { CalendarRoute } from "@/views/CalendarView/CalendarRoute";
 import { STATIC_DATA } from "@/lib/data/staticData";
-import { loadCalendar, loadShell } from "@/lib/data/loadPayload";
+import {
+  loadCalendar,
+  loadOtherTraining,
+  loadPendingPlans,
+  loadShell,
+} from "@/lib/data/loadPayload";
 import { isoDate } from "@/lib/data/weekDates";
 import { resolveMode } from "@/views/CalendarView/data/mode";
 import { resolveAnchor, resolveWeeks } from "@/views/CalendarView/data/window";
@@ -126,6 +131,13 @@ export default async function Page({ searchParams }: PageProps<"/calendar">) {
       weeks={weeks}
       today={today}
       loaded={loadCalendar(end)}
+      /* WHICH WEEKS HAVE EDITS NOT YET GRADED, read off disk on every request
+         -- a save writes the manifest and stops, so the published records
+         alone cannot say. Below the static branch: the demo has no plans. */
+      plans={loadPendingPlans(end)}
+      /* Lifting/PT text for the window, for the cells' `PT` mark -- authored,
+         never published, so it is read off disk here too. */
+      otherTraining={loadOtherTraining(end)}
     />
   );
 }

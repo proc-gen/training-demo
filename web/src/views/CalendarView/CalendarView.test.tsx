@@ -157,15 +157,21 @@ describe("CalendarView", () => {
    * the tail of that split is `2026-09-13&weeks=6`, which `Date` reads as NaN —
    * and a NaN difference is not equal to anything, so the case fails rather than
    * passing wrongly. Still worth parsing properly: the next parameter would do
-   * the same to whoever added it. */
+   * the same to whoever added it.
+   *
+   * COUNTED IN UTC, NOT LOCAL TIME. The anchor is a calendar date and the step
+   * is a count of calendar days, but local-time millisecond arithmetic across
+   * the autumn clock change reads a seven-day step as 7.04 days -- which is what
+   * happened the day the fixture first reached November (2026-10-30). `Z` pins
+   * both ends to a zone that has no such hour. */
   const steppedBack = () => {
     expect(push).toHaveBeenCalledTimes(1);
     const to = new URL(push.mock.calls[0][0] as string, "https://x").searchParams.get(
       "end",
     )!;
     return (
-      (new Date(anchor() + "T12:00:00").getTime() -
-        new Date(to + "T12:00:00").getTime()) /
+      (new Date(anchor() + "T12:00:00Z").getTime() -
+        new Date(to + "T12:00:00Z").getTime()) /
       86400000
     );
   };
@@ -518,5 +524,161 @@ describe("CalendarView, the paces rail", () => {
     const { container } = wrap(view(D!));
     expect(container.querySelector(".page-main .cal-weeks")).toBeTruthy();
     expect(container.querySelector(".page-main .rail")).toBeNull();
+  });
+});
+
+describe("CalendarView, weeks edited since the last regrade", () => {
+  /* HAND-BUILT AND PINNED, the rule the case above learned: the window ends
+     2026-08-30, so it holds 2026-08-24's week whatever the committed record
+     has grown to. The graded plan is a tempo Tuesday; the athlete has since
+     made it an easy Wednesday. */
+  const graded = {
+    days: [],
+    weeks: {
+      "2026-08-24": {
+        week_start: "2026-08-24",
+        manifest: {
+          week_start: "2026-08-24",
+          runs: [{ key: "t", date: "2026-08-25", role: "tempo", prescribed: "OLD tempo" }],
+        },
+        adherence: {
+          results: [],
+          planned: [
+            {
+              key: "t",
+              date: "2026-08-25",
+              ordinal: 0,
+              status: "pending",
+              emphasis: ["quality"],
+            },
+          ],
+        },
+      },
+    },
+  } as unknown as Payload;
+
+  const plans = {
+    pending: ["2026-08-24", "2026-09-28"],
+    overlays: {
+      "2026-08-24": {
+        week_start: "2026-08-24",
+        rest_days: ["2026-08-30"],
+        runs: [{ key: "e", date: "2026-08-26", role: "easy", prescribed: "NEW easy" }],
+      },
+    },
+  };
+
+  const render = (mode: "view" | "plan", withPlans = true) =>
+    wrap(
+      <CalendarView
+        payload={graded}
+        lastDay="2026-08-30"
+        maxSteps={1}
+        mode={mode}
+        weeks={DEFAULT_WEEKS}
+        today={TODAY}
+        plans={withPlans ? plans : undefined}
+      />,
+    ).container;
+
+  const cellFor = (c: HTMLElement, date: string) =>
+    cells(c).find((el) => el.getAttribute("aria-label")?.includes(date))!;
+
+  it("Plan mode draws the NEW plan's words", () => {
+    const c = render("plan");
+    expect(c.textContent).toContain("NEW easy");
+    expect(c.textContent).not.toContain("OLD tempo");
+    expect(cellFor(c, "2026-08-26").textContent).toContain("NEW easy");
+  });
+
+  it("Plan mode draws the new plan's rest day", () => {
+    expect(cellFor(render("plan"), "2026-08-30").textContent).toContain("rest");
+  });
+
+  it("Plan mode draws an edited run WITHOUT the grader's tint", () => {
+    const cell = cellFor(render("plan"), "2026-08-26");
+    expect(cell.className).not.toMatch(/emph-/);
+  });
+
+  it("...where the SAME week, not pending, carries the graded tint", () => {
+    /* Non-vacuity for the case above: the class it looks for is real. */
+    const cell = cellFor(render("plan", false), "2026-08-25");
+    expect(cell.className).toContain("emph-quality");
+  });
+
+  it("View mode stays on the graded record", () => {
+    const c = render("view");
+    expect(c.textContent).toContain("OLD tempo");
+    expect(c.textContent).not.toContain("NEW easy");
+  });
+
+  it("marks the edited week's label in both modes", () => {
+    for (const mode of ["view", "plan"] as const) {
+      const c = render(mode);
+      expect(c.querySelectorAll(".cal-pending"), mode).toHaveLength(1);
+      cleanup();
+    }
+  });
+
+  it("offers Regrade in Plan mode, counting EVERY pending week, not just the window's", () => {
+    const c = render("plan");
+    const bar = c.querySelector(".regrade-bar")!;
+    expect(bar.textContent).toContain("2 weeks have changes not yet graded");
+    expect(bar.querySelector("button")!.textContent).toBe("Regrade");
+  });
+
+  it("offers no Regrade in View mode -- it is the record", () => {
+    expect(render("view").querySelector(".regrade-bar")).toBeNull();
+  });
+
+  it("with no plans passed -- the static demo -- draws the graded record", () => {
+    const c = render("plan", false);
+    expect(c.textContent).toContain("OLD tempo");
+    expect(c.querySelector(".cal-pending")).toBeNull();
+    expect(c.querySelector(".regrade-bar button")!.hasAttribute("disabled")).toBe(true);
+  });
+
+  it("treats a week created since the last regrade as AUTHORED", () => {
+    /* No published record exists for it yet; the pencil must still edit it,
+       not offer to create it a second time. */
+    const c = wrap(
+      <CalendarView
+        payload={{ days: [], weeks: {} } as unknown as Payload}
+        lastDay="2026-08-30"
+        maxSteps={1}
+        mode="plan"
+        weeks={DEFAULT_WEEKS}
+        today={TODAY}
+        plans={{
+          pending: ["2026-08-24"],
+          overlays: {
+            "2026-08-24": {
+              week_start: "2026-08-24",
+              runs: [{ key: "n", date: "2026-08-25", role: "easy", prescribed: "brand new" }],
+            },
+          },
+        }}
+      />,
+    ).container;
+    expect(c.textContent).toContain("brand new");
+    const label = [...c.querySelectorAll(".cal-label")].find((l) =>
+      l.textContent?.startsWith("8/24"),
+    )!;
+    const unauthored = wrap(
+      <CalendarView
+        payload={{ days: [], weeks: {} } as unknown as Payload}
+        lastDay="2026-08-30"
+        maxSteps={1}
+        mode="plan"
+        weeks={DEFAULT_WEEKS}
+        today={TODAY}
+      />,
+    ).container;
+    const bare = [...unauthored.querySelectorAll(".cal-label")].find((l) =>
+      l.textContent?.startsWith("8/24"),
+    )!;
+    expect(label.querySelector("button")!.getAttribute("aria-label")).not.toBe(
+      bare.querySelector("button")!.getAttribute("aria-label"),
+    );
   });
 });

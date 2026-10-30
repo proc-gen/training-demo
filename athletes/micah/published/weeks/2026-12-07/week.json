@@ -12,10 +12,46 @@
     "role": "recovery"
    },
    {
-    "date": "2026-12-13",
-    "key": "2026-12-13",
+    "date": "2026-12-08",
+    "key": "2026-12-08",
+    "prescribed": "AM: 30 min recovery",
+    "role": "recovery"
+   },
+   {
+    "date": "2026-12-08",
+    "key": "2026-12-08-2",
+    "prescribed": "PM: 2k @ T, 3 min standing rest, 5x400m @ 10k w/ 200m jog recovery",
+    "role": "mixed"
+   },
+   {
+    "date": "2026-12-09",
+    "key": "2026-12-09",
+    "prescribed": "45-60 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-12-10",
+    "key": "2026-12-10",
+    "prescribed": "30-45 min easy",
+    "role": "easy"
+   },
+   {
+    "date": "2026-12-11",
+    "key": "2026-12-11",
+    "prescribed": "30 min recovery",
+    "role": "recovery"
+   },
+   {
+    "date": "2026-12-12",
+    "key": "2026-12-12",
     "prescribed": "National Club XC Nats 10k",
     "role": "race"
+   },
+   {
+    "date": "2026-12-13",
+    "key": "2026-12-13",
+    "prescribed": "105 min easy/long",
+    "role": "long"
    }
   ],
   "week_start": "2026-12-07",
