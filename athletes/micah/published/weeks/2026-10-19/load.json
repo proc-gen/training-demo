@@ -1,6 +1,7 @@
 {
  "acwr_mech": null,
  "acwr_mech_on": null,
+ "bg_trimp": 59.8636277997605,
  "ceiling_inputs": {
   "background_source": "baseline",
   "background_steps": 1556.0,
@@ -129,23 +130,23 @@
    "trimp": 30.69
   },
   {
-   "atl": 79.30977485132709,
-   "bg_trimp": 7.947023527164336,
+   "atl": 79.54727485132709,
+   "bg_trimp": 8.447333227509999,
    "bg_trimp_hr_rest_source": "measured",
    "bg_trimp_source": "cadence-profile",
-   "ceiling": 22558.04060720789,
+   "ceiling": 22209.42361865087,
    "ceiling_background_source": "budget",
-   "ceiling_background_steps": 5233.040607207893,
+   "ceiling_background_steps": 4884.423618650872,
    "ceiling_source": "prescribed",
    "completeness": "full",
-   "ctl": 81.81768394887095,
+   "ctl": 81.86186999538258,
    "date": "2026-10-25",
-   "pct": 100.0,
+   "pct": 98.91957784897056,
    "prescribed_run_seconds": 2250.0,
    "prescribed_run_steps": 6600.0,
    "role": "easy",
    "scored": true,
-   "trimp": 46.45
+   "trimp": 47.4
   }
  ],
  "fitness": {
@@ -159,7 +160,6 @@
   "on_date": "2026-10-25",
   "seed_date": "2024-08-01",
   "stream_share": 1.0,
-  "trimp": 603.16,
   "trimp_source": "stream",
   "unpriced": 0
  },
@@ -207,11 +207,11 @@
   {
    "status": "not-evaluable",
    "token": "form-suppressed",
-   "why": "running-only TSB +3, mechanical A:C -- — needs both"
+   "why": "running-only TSB +2, mechanical A:C -- — needs both"
   }
  ],
  "integrity": {
-  "earned": 192619.0,
+  "earned": 192376.42361865088,
   "excluded": [
    "2026-10-19"
   ],
@@ -341,12 +341,12 @@
     "date": "2026-10-25",
     "values": {
      "hrv": 64.0,
-     "resting_hr": 44.0,
+     "resting_hr": 42.0,
      "sleep": 7.07
     },
     "why": {
      "hrv": "64 at or above 56.7 (90% of a 63.0 baseline)",
-     "resting_hr": "44 at or below the 47 bpm ceiling",
+     "resting_hr": "42 at or below the 47 bpm ceiling",
      "sleep": "7.07 h at or above the 7 h floor"
     }
    }

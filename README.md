@@ -15,12 +15,14 @@ live in a **private** repository. A script there writes this one:
 
 ```
 athletes/<slug>/published/   the read model -- directories are tables, files are rows
-web/                         the Next.js app, copied from the private repo, unmodified
-                             except for the two lines that make a static export possible
+web/                         the Next.js app, copied from the private repo without its
+                             tests, unmodified except for the lines that make a static
+                             export possible
 ```
 
 Nothing here is edited by hand, so a pull request against it would be
-overwritten by the next export.
+overwritten by the next export. The test suite stays in the private repo: this
+mirror is for viewing, and what it has to prove is that it builds.
 
 ## Running it locally
 
@@ -28,7 +30,7 @@ overwritten by the next export.
 cd web
 npm install
 npm run dev      # then open the printed URL
-npm run check    # typecheck + lint + tests, and not one subprocess
+npm run build    # the static export, into web/out
 ```
 
 A built copy is served from `/training-demo`, because a GitHub Pages project site
@@ -37,15 +39,11 @@ basePath otherwise applies to `next dev` too, and the URL Next prints on startup
 would 404. `next.config.ts` is a function of the build phase for that one
 reason.
 
-Run `npm run dev` or `npm run build` before `npm run check` on a fresh clone:
-Next generates the route types the layout uses during a build, and the
-typecheck cannot see them until it has.
-
 ## How it is deployed
 
-`.github/workflows/pages.yml` runs the checks, builds a static export
-(`output: "export"`, `basePath: "/training-demo"`) and publishes `web/out` to
-GitHub Pages on every push.
+`.github/workflows/pages.yml` builds a static export (`output: "export"`,
+`basePath: "/training-demo"`) and publishes `web/out` to GitHub Pages on every
+push. The build typechecks; nothing else runs.
 
 ## What is in the app
 

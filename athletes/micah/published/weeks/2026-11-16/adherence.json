@@ -309,11 +309,11 @@
     "sets": [
      {
       "band": null,
-      "band_display": "4:30-5:21/mi",
+      "band_display": "4:31-5:23/mi",
       "band_how": "repetition",
       "band_sec_per_mi": [
-       269.95328,
-       321.04672
+       270.95328,
+       323.04672
       ],
       "ceiling": "800m-3000m pace",
       "ceiling_kind": "pace",
@@ -332,11 +332,11 @@
       "reps": 15,
       "reps_per_group": 5,
       "scored_on": "pace",
-      "target_display": "0:35-0:39 ±1s · 4:38-5:13/mi",
+      "target_display": "0:35-0:39 ±1s · 4:39-5:15/mi",
       "target_pace": null,
       "target_sec_per_mi": [
-       278,
-       313
+       279,
+       315
       ],
       "target_seconds": [
        35,
@@ -346,11 +346,11 @@
      },
      {
       "band": null,
-      "band_display": "4:30-5:21/mi",
+      "band_display": "4:31-5:23/mi",
       "band_how": "repetition",
       "band_sec_per_mi": [
-       269.95328,
-       321.04672
+       270.95328,
+       323.04672
       ],
       "ceiling": "800m-3000m pace",
       "ceiling_kind": "pace",
@@ -369,11 +369,11 @@
       "reps": 1,
       "reps_per_group": null,
       "scored_on": "pace",
-      "target_display": "0:35-0:39 ±1s · 4:38-5:13/mi",
+      "target_display": "0:35-0:39 ±1s · 4:39-5:15/mi",
       "target_pace": null,
       "target_sec_per_mi": [
-       278,
-       313
+       279,
+       315
       ],
       "target_seconds": [
        35,
@@ -635,14 +635,14 @@
       "reps": 10,
       "reps_per_group": null,
       "scored_on": "hr",
-      "target_display": "6:08-6:22/mi",
+      "target_display": "6:10-6:23/mi",
       "target_pace": null,
       "target_sec_per_mi": null,
       "target_seconds": null,
       "target_tolerance_seconds": null
      }
     ],
-    "target_display": "6:08-6:22/mi",
+    "target_display": "6:10-6:23/mi",
     "target_sec_per_mi": null,
     "target_seconds": null,
     "target_tolerance_seconds": null

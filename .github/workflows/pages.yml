@@ -37,15 +37,11 @@ jobs:
       # The lockfile is committed, so the build resolves the same tree twice.
       - run: npm ci
 
-      # BUILD FIRST, and the order is not cosmetic. Next 16 generates the route
-      # types -- `LayoutProps<"/">`, which layout.tsx uses -- into `.next/types`
-      # during a build, so on a fresh clone `tsc --noEmit` fails with
-      # "Cannot find name 'LayoutProps'" until one has run. Writes web/out/,
-      # under basePath /training-demo.
+      # The one check. `next build` typechecks every file in the project and
+      # renders the exported records into web/out/, under basePath /training-demo.
+      # There is no lint and no test step: the tests stay in the private repo,
+      # and a view-only mirror has nothing else to prove.
       - run: npm run build
-
-      # typecheck + lint + both vitest projects, against the committed records.
-      - run: npm run check
 
       - uses: actions/configure-pages@v5
 

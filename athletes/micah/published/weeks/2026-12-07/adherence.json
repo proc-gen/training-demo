@@ -299,11 +299,11 @@
     "sets": [
      {
       "band": null,
-      "band_display": "5:49-5:55/mi",
+      "band_display": "5:50-5:56/mi",
       "band_how": "threshold",
       "band_sec_per_mi": [
-       349,
-       355
+       350,
+       356
       ],
       "ceiling": "172",
       "ceiling_kind": "hr",
@@ -324,25 +324,25 @@
       "reps": 1,
       "reps_per_group": null,
       "scored_on": "hr",
-      "target_display": "7:14-7:21 · 5:49-5:55/mi",
+      "target_display": "7:15-7:22 · 5:50-5:56/mi",
       "target_pace": null,
       "target_sec_per_mi": [
-       349,
-       355
+       350,
+       356
       ],
       "target_seconds": [
-       434,
-       441
+       435,
+       442
       ],
       "target_tolerance_seconds": null
      },
      {
       "band": null,
-      "band_display": "5:18-5:46/mi",
+      "band_display": "5:20-5:48/mi",
       "band_how": "critical_velocity",
       "band_sec_per_mi": [
-       317.95328,
-       346.04672
+       319.95328,
+       348.04672
       ],
       "ceiling": "5000m-10000m pace",
       "ceiling_kind": "pace",
@@ -361,15 +361,15 @@
       "reps": 5,
       "reps_per_group": null,
       "scored_on": "pace",
-      "target_display": "1:21-1:24 ±2s · 5:26-5:38/mi",
+      "target_display": "1:22-1:25 ±2s · 5:28-5:40/mi",
       "target_pace": null,
       "target_sec_per_mi": [
-       326,
-       338
+       328,
+       340
       ],
       "target_seconds": [
-       81,
-       84
+       82,
+       85
       ],
       "target_tolerance_seconds": 2
      }
@@ -546,7 +546,7 @@
    "ordinal": 0,
    "planned": {
     "band": "10000m",
-    "band_display": "35:03 @ 5:38/mi",
+    "band_display": "35:11 @ 5:40/mi",
     "band_is_reference": true,
     "ceiling": "none (race)",
     "ceiling_kind": "none",

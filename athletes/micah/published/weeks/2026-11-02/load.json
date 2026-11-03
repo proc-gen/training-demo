@@ -1,25 +1,59 @@
 {
  "acwr_mech": null,
  "acwr_mech_on": null,
- "acwr_run": null,
- "bg_trimp": null,
  "ceiling_inputs": {
   "background_source": "baseline",
-  "background_steps": 1522.0,
+  "background_steps": 2095.0,
   "background_trimp_budget": 10,
   "background_window_days": 28,
   "cadence_source": "measured",
-  "cadence_spm": 176.0,
+  "cadence_spm": 177.0,
   "default_cadence_spm": 172,
   "margin": 1.05,
   "run_step_weight": 2.5,
   "walk_reference_spm": 110
  },
- "days": [],
- "fitness": null,
+ "days": [
+  {
+   "atl": 84.33155838469783,
+   "bg_trimp": 10.862053511718376,
+   "bg_trimp_hr_rest_source": "measured",
+   "bg_trimp_source": "cadence-profile",
+   "ceiling": 19570.60419219854,
+   "ceiling_background_source": "budget",
+   "ceiling_background_steps": 5631.8541921985425,
+   "ceiling_source": "prescribed",
+   "completeness": "in-progress",
+   "ctl": 85.04999108891582,
+   "date": "2026-11-02",
+   "nonrun_steps": null,
+   "pct": null,
+   "prescribed_run_seconds": 1800.0,
+   "prescribed_run_steps": 5310.0,
+   "role": "recovery",
+   "run_steps": null,
+   "scored": false,
+   "total_steps": null,
+   "trimp": 35.83
+  }
+ ],
+ "fitness": {
+  "activities": 1,
+  "atl_converged": true,
+  "ctl_converged": true,
+  "ctl_warmup_days": 126,
+  "days_covered": 1,
+  "earliest_activity": "2024-08-01",
+  "history_days": 824,
+  "on_date": "2026-11-02",
+  "seed_date": "2024-08-01",
+  "stream_share": 1.0,
+  "trimp_source": "stream",
+  "unpriced": 0
+ },
  "flags": [
   {
-   "status": "clear",
+   "status": "fired",
    "token": "steps-data-incomplete"
   },
   {
@@ -34,7 +68,7 @@
   {
    "status": "not-evaluable",
    "token": "hidden-load",
-   "why": "mechanical A:C --, running-only -- — needs both"
+   "why": "mechanical A:C --, running-only 0.99 — needs both"
   },
   {
    "status": "not-evaluable",
@@ -43,14 +77,14 @@
   {
    "status": "clear",
    "token": "resting-hr-rise",
-   "why": "trailing resting-HR mean +0.1 bpm (fires at +5)"
+   "why": "trailing resting-HR mean -0.4 bpm (fires at +5)"
   },
   {
    "status": "clear",
    "token": "hrv-suppressed"
   },
   {
-   "status": "not-evaluable",
+   "status": "clear",
    "token": "sleep-debt"
   },
   {
@@ -61,26 +95,47 @@
   {
    "status": "not-evaluable",
    "token": "form-suppressed",
-   "why": "running-only TSB --, mechanical A:C -- — needs both"
+   "why": "running-only TSB +1, mechanical A:C -- — needs both"
   }
  ],
  "integrity": {
   "earned": 0,
-  "excluded": [],
+  "excluded": [
+   "2026-11-02"
+  ],
   "scored_days": 0,
   "total": 0
  },
  "monotony_mech": null,
- "overall": null,
+ "overall": 66.66666666666667,
  "readiness": {
-  "available": 0,
-  "hrv_baseline": 63,
+  "available": 3,
+  "hrv_baseline": 65,
   "hrv_baseline_source": "snapshot",
-  "per_day": [],
+  "per_day": [
+   {
+    "checks": {
+     "hrv": true,
+     "resting_hr": true,
+     "sleep": false
+    },
+    "date": "2026-11-02",
+    "values": {
+     "hrv": 61.0,
+     "resting_hr": 46.0,
+     "sleep": 6.7
+    },
+    "why": {
+     "hrv": "61 at or above 58.5 (90% of a 65.0 baseline)",
+     "resting_hr": "46 at or below the 47 bpm ceiling",
+     "sleep": "6.7 h below the 7 h floor"
+    }
+   }
+  ],
   "resting_hr_ceiling": 47
  },
  "shape_days_covered": 0,
- "shape_days_needed": 0,
+ "shape_days_needed": 1,
  "strain_mech": null,
  "week_start": "2026-11-02"
 }

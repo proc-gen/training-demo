@@ -119,5 +119,27 @@
   "seconds": "921",
   "trimp": "26.73",
   "trimp_source": "stream"
+ },
+ {
+  "activity_id": "220386975",
+  "avg_hr": "131",
+  "date": "2026-10-31",
+  "hr_rest": "44",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "0",
+  "seconds": "2298",
+  "trimp": "48.25",
+  "trimp_source": "stream"
+ },
+ {
+  "activity_id": "220564457",
+  "avg_hr": "134",
+  "date": "2026-11-01",
+  "hr_rest": "43",
+  "hr_rest_source": "measured",
+  "null_hr_seconds": "4",
+  "seconds": "5407",
+  "trimp": "121.77",
+  "trimp_source": "stream"
  }
 ]

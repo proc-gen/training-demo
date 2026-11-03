@@ -1,19 +1,14 @@
 {
  "facts": {
   "doubles": 0,
-  "easy_seconds": 0,
-  "elapsed_days": 0,
-  "graded_through": null,
+  "easy_seconds": 1801,
+  "elapsed_days": 1,
+  "graded_through": "2026-11-02",
   "long_run_miles": 0.0,
-  "long_run_share": 0,
-  "miles": 0.0,
+  "long_run_share": 0.0,
+  "miles": 3.492106100373817,
   "non_run_days": [],
   "plan_miles_unpriceable": [
-   [
-    "2026-11-02",
-    "2026-11-02",
-    "30 min recovery"
-   ],
    [
     "2026-11-03",
     "2026-11-03",
@@ -66,17 +61,17 @@
   "planned_seconds": null,
   "planned_seconds_week": null,
   "prescribed_dates": 7,
-  "prescribed_dates_due": 0,
-  "projected_miles": 0.0,
-  "projected_seconds": 30450.0,
+  "prescribed_dates_due": 1,
+  "projected_miles": 3.492106100373817,
+  "projected_seconds": 30451.0,
   "quality_days": 0,
   "quality_seconds": 0,
-  "quality_share": 0,
+  "quality_share": 0.0,
   "remaining_planned_miles": 0.0,
-  "remaining_planned_seconds": 30450.0,
+  "remaining_planned_seconds": 28650.0,
   "rest_days": 0,
-  "running_days": 0,
-  "seconds": 0,
+  "running_days": 1,
+  "seconds": 1801,
   "volume_vs_plan": null,
   "walk_recovery_runs": 0,
   "walk_recovery_seconds": 0
@@ -96,19 +91,14 @@
  "hr_ceilings_week_ending": "2026-10-04",
  "judged_facts": {
   "doubles": 0,
-  "easy_seconds": 0,
-  "elapsed_days": 0,
-  "graded_through": null,
+  "easy_seconds": 1801,
+  "elapsed_days": 1,
+  "graded_through": "2026-11-02",
   "long_run_miles": 0.0,
-  "long_run_share": 0,
-  "miles": 0.0,
+  "long_run_share": 0.0,
+  "miles": 3.492106100373817,
   "non_run_days": [],
   "plan_miles_unpriceable": [
-   [
-    "2026-11-02",
-    "2026-11-02",
-    "30 min recovery"
-   ],
    [
     "2026-11-03",
     "2026-11-03",
@@ -161,67 +151,22 @@
   "planned_seconds": null,
   "planned_seconds_week": null,
   "prescribed_dates": 7,
-  "prescribed_dates_due": 0,
-  "projected_miles": 0.0,
-  "projected_seconds": 30450.0,
+  "prescribed_dates_due": 1,
+  "projected_miles": 3.492106100373817,
+  "projected_seconds": 30451.0,
   "quality_days": 0,
   "quality_seconds": 0,
-  "quality_share": 0,
+  "quality_share": 0.0,
   "remaining_planned_miles": 0.0,
-  "remaining_planned_seconds": 30450.0,
+  "remaining_planned_seconds": 28650.0,
   "rest_days": 0,
-  "running_days": 0,
-  "seconds": 0,
+  "running_days": 1,
+  "seconds": 1801,
   "volume_vs_plan": null,
   "walk_recovery_runs": 0,
   "walk_recovery_seconds": 0
  },
  "planned": [
-  {
-   "cadence": null,
-   "date": "2026-11-02",
-   "detail": null,
-   "deviation_reason": null,
-   "earned": null,
-   "emphasis": [],
-   "hr_avg": null,
-   "hr_max": null,
-   "key": "2026-11-02",
-   "km": null,
-   "miss_forgiven": false,
-   "ordinal": 0,
-   "planned": {
-    "band": "recovery",
-    "band_is_reference": true,
-    "ceiling": "130",
-    "ceiling_kind": "hr",
-    "ceiling_tiers": [
-     [
-      null,
-      130
-     ]
-    ],
-    "criterion": "hr",
-    "hr_ceiling": null,
-    "prescribed": "30 min recovery",
-    "prescribed_miles": null,
-    "prescribed_seconds": 1800,
-    "role": "recovery",
-    "sets": null,
-    "target_display": null,
-    "target_sec_per_mi": null,
-    "target_seconds": null,
-    "target_tolerance_seconds": null
-   },
-   "prescribed_denominator": 1800.0,
-   "prescribed_denominator_source": "prescribed",
-   "role": "recovery",
-   "runalyze_id": null,
-   "seconds": null,
-   "session": null,
-   "status": "pending",
-   "total": null
-  },
   {
    "cadence": null,
    "date": "2026-11-03",
@@ -323,14 +268,14 @@
       "reps": 5,
       "reps_per_group": null,
       "scored_on": "hr",
-      "target_display": "6:17-6:31/mi",
+      "target_display": "6:18-6:32/mi",
       "target_pace": null,
       "target_sec_per_mi": null,
       "target_seconds": null,
       "target_tolerance_seconds": null
      }
     ],
-    "target_display": "6:17-6:31/mi",
+    "target_display": "6:18-6:32/mi",
     "target_sec_per_mi": null,
     "target_seconds": null,
     "target_tolerance_seconds": null
@@ -583,14 +528,14 @@
       "reps": 10,
       "reps_per_group": null,
       "scored_on": "hr",
-      "target_display": "6:08-6:22/mi",
+      "target_display": "6:10-6:23/mi",
       "target_pace": null,
       "target_sec_per_mi": null,
       "target_seconds": null,
       "target_tolerance_seconds": null
      }
     ],
-    "target_display": "6:08-6:22/mi",
+    "target_display": "6:10-6:23/mi",
     "target_sec_per_mi": null,
     "target_seconds": null,
     "target_tolerance_seconds": null
@@ -708,19 +653,128 @@
    "total": null
   }
  ],
- "results": [],
+ "results": [
+  {
+   "cadence": 176,
+   "date": "2026-11-02",
+   "detail": {
+    "laps": [
+     {
+      "cad": 177,
+      "dist_km": 1.609,
+      "dur": 509,
+      "hr_avg": 122,
+      "hr_max": 134,
+      "index": 1,
+      "start": 0
+     },
+     {
+      "cad": 176,
+      "dist_km": 1.609,
+      "dur": 513,
+      "hr_avg": 132,
+      "hr_max": 145,
+      "index": 2,
+      "start": 509
+     },
+     {
+      "cad": 176,
+      "dist_km": 1.609,
+      "dur": 515,
+      "hr_avg": 133,
+      "hr_max": 144,
+      "index": 3,
+      "start": 1022
+     },
+     {
+      "cad": 175,
+      "dist_km": 0.792,
+      "dur": 263,
+      "hr_avg": 134,
+      "hr_max": 149,
+      "index": 4,
+      "start": 1537
+     }
+    ]
+   },
+   "distance": null,
+   "duration": {
+    "actual": 1801,
+    "factor": 1.0,
+    "pct": 0.05555555555555555,
+    "prescribed": [
+     1800.0,
+     1800.0
+    ],
+    "reason": null
+   },
+   "duration_factor": 1.0,
+   "earned": 1075.0,
+   "emphasis": [],
+   "excursions": {
+    "above_seconds": 726,
+    "excursions": 11,
+    "longest_above_seconds": 174,
+    "sustained_above_seconds": 460
+   },
+   "hr_avg": 130,
+   "hr_max": 149,
+   "hr_pace_response": {
+    "block_seconds": 180,
+    "blocks": 10,
+    "r": 0.6670462052979795
+   },
+   "hr_pct": 59.68906163242643,
+   "key": "2026-11-02",
+   "km": 5.62,
+   "ordinal": 0,
+   "planned": {
+    "band": "recovery",
+    "band_is_reference": true,
+    "ceiling": "130",
+    "ceiling_kind": "hr",
+    "ceiling_tiers": [
+     [
+      null,
+      130
+     ]
+    ],
+    "criterion": "hr",
+    "hr_ceiling": null,
+    "prescribed": "30 min recovery",
+    "prescribed_miles": null,
+    "prescribed_seconds": 1800,
+    "role": "recovery",
+    "sets": null,
+    "target_display": null,
+    "target_sec_per_mi": null,
+    "target_seconds": null,
+    "target_tolerance_seconds": null
+   },
+   "role": "recovery",
+   "runalyze_id": 220789679,
+   "score_bucket": "easy",
+   "seconds": 1801,
+   "session": null,
+   "status": "completed",
+   "total": 1801,
+   "volume_km": 5.62,
+   "volume_seconds": 1801,
+   "volume_source": "file"
+  }
+ ],
  "scores": {
   "easy": {
-   "earned": 0,
-   "total": 0
+   "earned": 1075.0,
+   "total": 1801
   },
   "recorded": {
-   "earned": 0,
-   "total": 0
+   "earned": 1075.0,
+   "total": 1801
   },
   "week": {
-   "earned": 0,
-   "total": 0
+   "earned": 1075.0,
+   "total": 1801
   },
   "workout": {
    "earned": 0,
@@ -737,11 +791,11 @@
   },
   "pct": null,
   "why": {
-   "long_run_share": "no day of this week is over yet, so this check left the denominator",
-   "quality_days_met": "no day of this week is over yet, so this check left the denominator",
+   "long_run_share": "the week's long run is not prescribed until after 2026-11-02, so this check does not apply yet and left the denominator",
+   "quality_days_met": "the plan's quality day(s) (2026-11-03, 2026-11-06) all fall after 2026-11-02, so this check does not apply yet and left the denominator",
    "rest_days_met": "the plan schedules no rest day, so this check does not apply and left the denominator",
-   "volume_miles_vs_plan": "no day of this week is over yet, so this check left the denominator",
-   "volume_vs_plan": "no day of this week is over yet, so this check left the denominator"
+   "volume_miles_vs_plan": "the manifest states no planned_miles, so there is nothing to compare the week's running distance against",
+   "volume_vs_plan": "the manifest states no planned_time_seconds, so there is nothing to compare the week's running time against"
   }
  },
  "week_end": "2026-11-08",

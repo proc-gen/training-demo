@@ -1,4 +1,4 @@
-<!-- GENERATED MIRROR. This file is written by `scripts/export_demo.py` in a private repository; edits here are overwritten by the next export. -->
+<!-- GENERATED MIRROR. This file is written by `scripts/export_demo.py` in a private repository; edits here are overwritten by the next export. The tests are not mirrored, so `npm run check` and every test this file names apply to the private repo. -->
 
 # The training report card
 
